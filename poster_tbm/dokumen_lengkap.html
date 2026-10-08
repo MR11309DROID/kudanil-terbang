@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 15mm;
+  }
+  @page :first {
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+    color: #1e293b;
+    background: #ffffff;
+    line-height: 1.6;
+  }
+  
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    page-break-after: always;
+    position: relative;
+  }
+  
+  .poster-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    height: 297mm;
+  }
+  .poster-page img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  .text-page {
+    padding: 20mm 20mm 15mm 20mm;
+  }
+  
+  .header-badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  
+  h1 {
+    font-size: 20px;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+    font-weight: 800;
+  }
+  
+  .subtitle {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 12px;
+  }
+  
+  .section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ea580c;
+    margin: 16px 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  p, li {
+    font-size: 12px;
+    color: #334155;
+  }
+  
+  .step-card {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  
+  .step-num {
+    display: inline-block;
+    background: #ea580c;
+    color: white;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: bold;
+    margin-right: 6px;
+  }
+  
+  .step-title {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 12.5px;
+  }
+  
+  .step-desc {
+    font-size: 11.5px;
+    color: #475569;
+    margin: 3px 0 0 26px;
+  }
+  
+  .rules-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-top: 14px;
+  }
+  
+  .rules-box ul {
+    margin: 4px 0 0 0;
+    padding-left: 18px;
+  }
+  
+  .rules-box li {
+    font-size: 11.5px;
+    margin-bottom: 3px;
+  }
+  
+  .footer-note {
+    margin-top: 20px;
+    font-size: 11px;
+    font-style: italic;
+    color: #64748b;
+    text-align: center;
+    border-top: 1px dashed #cbd5e1;
+    padding-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- HALAMAN 1: POSTER -->
+  <div class="page poster-page">
+    <img src="poster_tbm.jpg" alt="Poster TBM" />
+  </div>
+
+  <!-- HALAMAN 2: TEKS PROSEDUR LENGKAP -->
+  <div class="page text-page">
+    <span class="header-badge">Teks Prosedur Bahasa Indonesia</span>
+    <h1>Prosedur Berkunjung dan Meminjam Buku di Taman Bacaan Masyarakat (TBM)</h1>
+    <div class="subtitle">Panduan langkah-langkah alur kunjungan, peminjaman, serta tata tertib literasi.</div>
+
+    <div class="section-title">🎯 1. Tujuan</div>
+    <p>Memberikan petunjuk yang teratur dan jelas bagi masyarakat, anak-anak, dan pelajar dalam memanfaatkan fasilitas Taman Bacaan Masyarakat (TBM) agar proses membaca dan meminjam buku berjalan tertib, nyaman, serta koleksi buku tetap terawat.</p>
+
+    <div class="section-title">🧰 2. Syarat & Perlengkapan</div>
+    <ul style="margin: 0; padding-left: 18px;">
+      <li>Membawa Kartu Identitas Diri (Kartu Pelajar, KIA, atau KTP).</li>
+      <li>Membawa alat tulis untuk pengisian presensi/buku tamu.</li>
+      <li>Membawa tas atau map pelindung buku agar buku tidak rusak saat dibawa pulang.</li>
+    </ul>
+
+    <div class="section-title">📋 3. Langkah-Langkah Prosedur</div>
+    
+    <div class="step-card">
+      <div><span class="step-num">1</span><span class="step-title">Isi Buku Tamu</span></div>
+      <div class="step-desc">Pengunjung wajib mengisi daftar hadir di meja depan dengan mencantumkan nama lengkap, jam kunjungan, dan asal sekolah/instansi.</div>
+    </div>
+
+    <div class="step-card">
+      <div><span class="step-num">2</span><span class="step-title">Pilih Buku di Rak</span></div>
+      <div class="step-desc">Telusuri rak buku sesuai kategori yang diminati. Ambil buku dengan hati-hati tanpa mengacak susunan rak, dan bawa ke area baca atau meja peminjaman.</div>
+    </div>
+
+    <div class="step-card">
+      <div><span class="step-num">3</span><span class="step-title">Tunjukkan Kartu ke Petugas</span></div>
+      <div class="step-desc">Serahkan buku yang hendak dipinjam kepada petugas piket TBM bersama dengan kartu identitas diri atau kartu anggota.</div>
+    </div>
+
+    <div class="step-card">
+      <div><span class="step-num">4</span><span class="step-title">Catat Peminjaman</span></div>
+      <div class="step-desc">Petugas akan mencatat judul buku, kode registrasi, serta memberi cap tanggal batas pengembalian pada slip peminjaman.</div>
+    </div>
+
+    <div class="step-card">
+      <div><span class="step-num">5</span><span class="step-title">Rawat & Kembalikan Tepat Waktu</span></div>
+      <div class="step-desc">Jaga buku agar tidak basah, terlipat, atau terkena coretan. Kembalikan buku tepat waktu agar dapat dimanfaatkan oleh pengunjung lainnya.</div>
+    </div>
+
+    <div class="rules-box">
+      <strong style="font-size: 12px; color: #0f172a;">📌 Tata Tertib & Ketentuan Tambahan:</strong>
+      <ul>
+        <li>Batas peminjaman maksimal 2 eksemplar buku selama 7 hari kalender.</li>
+        <li>Dilarang makan atau minum di dekat rak koleksi dan buku bacaan.</li>
+        <li>Menjaga ketenangan dan kebersihan lingkungan taman bacaan bersama-sama.</li>
+      </ul>
+    </div>
+
+    <div class="footer-note">
+      "Buku adalah jembatan ilmu. Rawatlah bukumu, luaskan wawasanmu."
+    </div>
+  </div>
+
+</body>
+</html>
