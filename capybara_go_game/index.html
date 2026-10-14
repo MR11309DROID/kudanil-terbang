@@ -72,44 +72,48 @@
       </div>
     </div>
     
-    <!-- Top Header Bar (Currencies & Quick Controls) -->
-    <header id="game-header">
-      <div class="header-top-row">
-        <div class="header-day-info">
-          <span id="header-chapter-name">Chapter 1</span>
-          <span id="header-day-badge" class="badge-gold">Day 1 / 60</span>
+    <!-- Top Header Bar (Menu Mode Profile & Currencies) -->
+    <header id="game-header" class="menu-hub-header">
+      <!-- Player Profile Card (Matches Authentic Capybara Go) -->
+      <div class="player-profile-pill" id="player-profile-card">
+        <div class="player-avatar-wrap">
+          <img src="assets/ui/menu/menu_avatar.png" alt="Avatar" class="player-avatar-img">
         </div>
-        <div class="header-controls">
-          <button id="btn-speed" class="ctrl-btn" title="Toggle Speed">1X ▶</button>
-          <button id="btn-menu-settings" class="ctrl-btn" title="Pengaturan">⚙️</button>
+        <div class="player-info-col">
+          <div class="player-name-row">
+            <span id="player-profile-name" class="player-name-text">Capy13126397</span>
+          </div>
+          <div class="player-title-row">
+            <span id="player-profile-title" class="player-title-badge">Apprentice - 1</span>
+            <span class="player-notif-dot"></span>
+          </div>
+          <div class="player-power-badge">
+            <span class="power-sword-icon">⚔️</span>
+            <span id="player-profile-power" class="power-val-text">6690</span>
+          </div>
         </div>
       </div>
 
-      <!-- Chapter Day Progress Bar -->
-      <div class="day-progress-track">
-        <div id="header-day-progress" class="day-progress-fill" style="width: 0%;"></div>
-        <div class="milestone-marker m-20" title="Mini Boss Day 20">💀</div>
-        <div class="milestone-marker m-40" title="Elite Boss Day 40">⚔️</div>
-        <div class="milestone-marker m-60" title="Final Boss Day 60">👑</div>
-      </div>
-
-      <!-- Currencies Bar -->
-      <div class="currencies-row">
-        <div class="currency-pill">
-          <img src="assets/items/loot/loot_001.png" alt="Gold" class="cur-icon">
-          <span id="header-gold">0</span>
+      <!-- Currencies Bar (Energy, Gems, Gold with + buttons) -->
+      <div class="menu-currencies-row">
+        <!-- Energy Pill -->
+        <div class="menu-cur-pill cur-energy" title="Energy">
+          <div class="cur-notif-badge">!</div>
+          <span class="cur-bolt-icon">⚡</span>
+          <span id="header-energy" class="cur-num">37/30</span>
+          <button class="cur-add-btn" id="btn-add-energy" title="Refill Energy">+</button>
         </div>
-        <div class="currency-pill">
-          <img src="assets/items/pickups/pickup_001.png" alt="Gems" class="cur-icon">
-          <span id="header-gems">0</span>
+        <!-- Gems Pill -->
+        <div class="menu-cur-pill cur-gems" title="Gems">
+          <span class="cur-gem-icon">💎</span>
+          <span id="header-gems" class="cur-num">130</span>
+          <button class="cur-add-btn" id="btn-add-gems" title="Get Gems">+</button>
         </div>
-        <div class="currency-pill">
-          <img src="assets/ui/capybara_cartoon_kit/bars/energy_fill.png" alt="Energy" class="cur-icon">
-          <span id="header-energy">30/30</span>
-        </div>
-        <div class="currency-pill">
-          <img src="assets/items/loot/loot_003.png" alt="Keys" class="cur-icon">
-          <span id="header-keys">0</span>
+        <!-- Gold Pill -->
+        <div class="menu-cur-pill cur-gold" title="Gold">
+          <span class="cur-gold-icon">🪙</span>
+          <span id="header-gold" class="cur-num">1,143</span>
+          <button class="cur-add-btn" id="btn-add-gold" title="Get Gold">+</button>
         </div>
       </div>
     </header>
@@ -124,7 +128,35 @@
         <div id="stage-viewport">
           <canvas id="stage-canvas" width="440" height="350"></canvas>
 
-          <!-- Authentic Floating Top Overlay (Settings Icon + Day Milestone Track + Gem Counter) -->
+          <!-- ================= AUTHENTIC MENU STAGE OVERLAY ================= -->
+          <div id="menu-stage-overlay" class="menu-stage-overlay">
+            <!-- Top Center: Chapter Title with Navigation & Longest Survived -->
+            <div class="menu-chapter-select-wrap">
+              <div class="menu-chapter-title-pill">
+                <button id="btn-menu-chapter-prev" class="menu-ch-arrow-btn" title="Previous Chapter">‹</button>
+                <span id="menu-chapter-name" class="menu-chapter-title-text">1.Gale Town</span>
+                <button id="btn-menu-chapter-next" class="menu-ch-arrow-btn" title="Next Chapter">›</button>
+              </div>
+              <div class="menu-longest-survived-pill">
+                <span class="longest-label">Longest Survived: </span>
+                <span id="menu-longest-days" class="longest-val">39 days</span>
+              </div>
+            </div>
+
+            <!-- Upper Left Floating Widgets: Hamburger Drawer & Newbie Gifts -->
+            <div class="menu-left-widgets">
+              <button id="btn-menu-drawer" class="btn-menu-drawer" title="Pengaturan & Menu">
+                <img src="assets/ui/menu/btn_hamburger.png" alt="Menu" class="drawer-icon-img">
+                <span class="widget-notif-dot">!</span>
+              </button>
+              <div class="newbie-gifts-widget" id="btn-newbie-gifts" title="Newbie Gifts">
+                <img src="assets/ui/menu/btn_newbie_gifts.png" alt="Newbie Gifts" class="newbie-gifts-img">
+                <div class="newbie-timer-badge">6d 23h</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Authentic Floating Top Overlay (In-Run Settings + Day Milestone Track + Gem Counter) -->
           <div class="stage-floating-header">
             <!-- Settings Gear Button (Matches Image 1 style) -->
             <button id="btn-stage-settings" class="stage-settings-btn" title="Settings">
@@ -375,10 +407,27 @@
         </div>
 
 
-        <!-- Adventure State: Select Chapter (When Idle) -->
-        <div id="adventure-start-panel" class="panel-window" style="display: none;">
-          <h2 class="panel-title">Choose Your Journey</h2>
-          <div id="chapter-list-container" class="chapter-list"></div>
+        <!-- Adventure State: Authentic Capybara Go Menu Hub (Lawn & Start Section) -->
+        <div id="adventure-start-panel" class="menu-lawn-action-panel">
+          <!-- Milestone Reward Chest (Day 40) -->
+          <div class="menu-milestone-chest-wrap" id="btn-milestone-chest" title="Milestone Reward (Day 40)">
+            <div class="milestone-chest-glow"></div>
+            <img src="assets/ui/menu/milestone_chest.png" alt="Milestone Chest" class="milestone-chest-img">
+            <div class="milestone-chest-tag">40 days</div>
+          </div>
+
+          <!-- Giant Chunky Cartoon Start Button -->
+          <button id="btn-start-run" class="btn-menu-start-game" title="Mulai Petualangan">
+            <div class="btn-start-top-bevel"></div>
+            <div class="btn-start-content">
+              <span class="btn-start-text">Start</span>
+              <div class="btn-start-energy-tag">
+                <span class="tag-bolt">⚡</span>
+                <span class="tag-x">x</span>
+                <span class="tag-cost">5</span>
+              </div>
+            </div>
+          </button>
         </div>
 
         <!-- Adventure State: Active Run Event Deck & Next Day Button (Matches Image 1) -->
@@ -594,27 +643,43 @@
 
     </main>
 
-    <!-- Bottom Navigation Bar -->
-    <nav id="bottom-nav">
-      <button class="nav-tab-btn active" data-tab="adventure">
-        <span class="nav-icon">🗺️</span>
-        <span class="nav-label">Adventure</span>
+    <!-- Authentic Capybara Go! Bottom Navigation Bar -->
+    <nav id="bottom-nav" class="bottom-nav-authentic">
+      <button class="nav-tab-btn" data-tab="chests" title="Shop">
+        <div class="nav-tab-icon-wrap">
+          <img src="assets/ui/menu/nav_shop.png" alt="Shop" class="nav-tab-img">
+          <span class="nav-tab-badge">!</span>
+        </div>
+        <span class="nav-tab-label">Shop</span>
       </button>
-      <button class="nav-tab-btn" data-tab="equipment">
-        <span class="nav-icon">🛡️</span>
-        <span class="nav-label">Hero</span>
+
+      <button class="nav-tab-btn" data-tab="equipment" title="Hero">
+        <div class="nav-tab-icon-wrap">
+          <img src="assets/ui/menu/nav_hero.png" alt="Hero" class="nav-tab-img">
+        </div>
+        <span class="nav-tab-label">Hero</span>
       </button>
-      <button class="nav-tab-btn" data-tab="talents">
-        <span class="nav-icon">🌟</span>
-        <span class="nav-label">Talents</span>
+
+      <button class="nav-tab-btn active" data-tab="adventure" title="Adventure">
+        <div class="nav-tab-icon-wrap tab-adventure-prominent">
+          <img src="assets/ui/menu/nav_adventure.png" alt="Adventure" class="nav-tab-img nav-adventure-img">
+        </div>
+        <span class="nav-tab-label">Adventure</span>
       </button>
-      <button class="nav-tab-btn" data-tab="chests">
-        <span class="nav-icon">📦</span>
-        <span class="nav-label">Chests</span>
+
+      <button class="nav-tab-btn" data-tab="talents" title="Talents">
+        <div class="nav-tab-icon-wrap">
+          <img src="assets/ui/menu/nav_talents.png" alt="Talents" class="nav-tab-img">
+          <span class="nav-tab-badge">!</span>
+        </div>
+        <span class="nav-tab-label">Talents</span>
       </button>
-      <button class="nav-tab-btn" data-tab="bestiary">
-        <span class="nav-icon">📖</span>
-        <span class="nav-label">Codex</span>
+
+      <button class="nav-tab-btn" data-tab="bestiary" title="Dungeon">
+        <div class="nav-tab-icon-wrap">
+          <img src="assets/ui/menu/nav_locked.png" alt="Dungeon" class="nav-tab-img">
+        </div>
+        <span class="nav-tab-label">Dungeon</span>
       </button>
     </nav>
 

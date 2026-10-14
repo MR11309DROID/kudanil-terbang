@@ -186,6 +186,138 @@ class UIManager {
         this.handleTravelBtnClick();
       });
     }
+
+    // Authentic Menu Hub Event Listeners
+    this.initMenuEventListeners();
+  }
+
+  initMenuEventListeners() {
+    // 1. Giant Start Button
+    const btnStart = document.getElementById("btn-start-run");
+    if (btnStart) {
+      btnStart.addEventListener("click", () => {
+        Sound.playSfx("confirm");
+        const chapterId = Character.selectedChapter || 1;
+        if (chapterId > Character.unlockedChapters) {
+          this.showToast("Chapter ini masih terkunci! Selesaikan chapter sebelumnya.");
+          return;
+        }
+        if (Character.energy < 5) {
+          this.showToast("Energi tidak cukup! Butuh 5 ⚡");
+          return;
+        }
+        Character.energy -= 5;
+        Character.save();
+        this.renderHeader();
+
+        if (this.engine.startChapter(chapterId)) {
+          const feed = document.getElementById("event-cards-feed");
+          if (feed) feed.innerHTML = "";
+          this.renderAdventureScreen();
+          this.engine.travelNextDay();
+        }
+      });
+    }
+
+    // 2. Chapter Previous / Next Arrows
+    const btnPrev = document.getElementById("btn-menu-chapter-prev");
+    const btnNext = document.getElementById("btn-menu-chapter-next");
+
+    if (btnPrev) {
+      btnPrev.addEventListener("click", (e) => {
+        e.stopPropagation();
+        Sound.playSfx("click");
+        const cur = Character.selectedChapter || 1;
+        if (cur > 1) {
+          Character.selectedChapter = cur - 1;
+          Character.save();
+          this.renderMenuHub();
+        }
+      });
+    }
+
+    if (btnNext) {
+      btnNext.addEventListener("click", (e) => {
+        e.stopPropagation();
+        Sound.playSfx("click");
+        const cur = Character.selectedChapter || 1;
+        if (cur < GameData.chapters.length) {
+          Character.selectedChapter = cur + 1;
+          Character.save();
+          this.renderMenuHub();
+        }
+      });
+    }
+
+    // 3. Hamburger Drawer Button (Opens Settings Modal)
+    const btnDrawer = document.getElementById("btn-menu-drawer");
+    if (btnDrawer) {
+      btnDrawer.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const modal = document.getElementById("modal-settings");
+        if (modal) {
+          Sound.playSfx("click");
+          modal.style.display = "flex";
+        }
+      });
+    }
+
+    // 4. Newbie Gifts Widget
+    const btnNewbie = document.getElementById("btn-newbie-gifts");
+    if (btnNewbie) {
+      btnNewbie.addEventListener("click", (e) => {
+        e.stopPropagation();
+        Sound.playSfx("click");
+        this.showToast("🎁 Hadiah Pemula: Hari ke-1 telah diklaim! Hadiah berikutnya dalam 6h 23j.");
+      });
+    }
+
+    // 5. Milestone Chest Widget
+    const btnMilestone = document.getElementById("btn-milestone-chest");
+    if (btnMilestone) {
+      btnMilestone.addEventListener("click", (e) => {
+        e.stopPropagation();
+        Sound.playSfx("click");
+        this.showToast("🎁 Milestone Hari 40: Bertahan hingga Hari 40 untuk klaim 500 🪙 & 50 💎!");
+      });
+    }
+
+    // 6. Currency Plus Buttons
+    const btnAddEnergy = document.getElementById("btn-add-energy");
+    if (btnAddEnergy) {
+      btnAddEnergy.addEventListener("click", (e) => {
+        e.stopPropagation();
+        Sound.playSfx("pickup");
+        Character.energy = Math.min(50, Character.energy + 10);
+        Character.save();
+        this.renderHeader();
+        this.showToast("+10 ⚡ Energi berhasil ditambahkan!");
+      });
+    }
+
+    const btnAddGems = document.getElementById("btn-add-gems");
+    if (btnAddGems) {
+      btnAddGems.addEventListener("click", (e) => {
+        e.stopPropagation();
+        Sound.playSfx("pickup");
+        Character.gems += 50;
+        Character.save();
+        this.renderHeader();
+        this.showToast("+50 💎 Gems berhasil ditambahkan!");
+      });
+    }
+
+    const btnAddGold = document.getElementById("btn-add-gold");
+    if (btnAddGold) {
+      btnAddGold.addEventListener("click", (e) => {
+        e.stopPropagation();
+        Sound.playSfx("pickup");
+        Character.gold += 500;
+        Character.save();
+        this.renderHeader();
+        this.showToast("+500 🪙 Koin berhasil ditambahkan!");
+      });
+    }
   }
 
   initSettingsModal() {
@@ -703,6 +835,15 @@ class UIManager {
     if (elEnergy) elEnergy.textContent = `${Character.energy}/${Character.maxEnergy}`;
     if (elKeys) elKeys.textContent = Character.keys;
 
+    // Player profile pill in menu mode
+    const pName = document.getElementById("player-profile-name");
+    const pTitle = document.getElementById("player-profile-title");
+    const pPower = document.getElementById("player-profile-power");
+
+    if (pName) pName.textContent = Character.playerName || "Capy13126397";
+    if (pTitle) pTitle.textContent = Character.playerTitle || "Apprentice - 1";
+    if (pPower) pPower.textContent = Character.getCombatPower().toLocaleString();
+
     // Header Day indicator if in run
     const headerDay = document.getElementById("header-day-badge");
     const headerChapter = document.getElementById("header-chapter-name");
@@ -721,6 +862,43 @@ class UIManager {
       if (headerDay) headerDay.textContent = "Home Hub";
       if (headerChapter) headerChapter.textContent = "Select Chapter";
       if (dayProgress) dayProgress.style.width = "0%";
+    }
+  }
+
+  renderMenuHub() {
+    const chapterId = Character.selectedChapter || 1;
+    const ch = GameData.chapters.find(c => c.id === chapterId) || GameData.chapters[0];
+    const isUnlocked = chapterId <= Character.unlockedChapters;
+
+    const elChName = document.getElementById("menu-chapter-name");
+    const elLongest = document.getElementById("menu-longest-days");
+    const btnStart = document.getElementById("btn-start-run");
+
+    if (elChName) {
+      elChName.textContent = `${ch.id}.${ch.name}${!isUnlocked ? " 🔒" : ""}`;
+    }
+
+    if (elLongest) {
+      const days = (Character.longestSurvived && Character.longestSurvived[chapterId]) || (chapterId === 1 ? 39 : 0);
+      elLongest.textContent = `${days} days`;
+    }
+
+    if (btnStart) {
+      const textSpan = btnStart.querySelector(".btn-start-text");
+      const energyTag = btnStart.querySelector(".btn-start-energy-tag");
+      if (!isUnlocked) {
+        if (textSpan) textSpan.textContent = "Locked 🔒";
+        if (energyTag) energyTag.style.display = "none";
+        btnStart.style.filter = "grayscale(0.8)";
+      } else {
+        if (textSpan) textSpan.textContent = "Start";
+        if (energyTag) energyTag.style.display = "flex";
+        btnStart.style.filter = "none";
+      }
+    }
+
+    if (this.engine && this.engine.renderer) {
+      this.engine.renderer.setMenuMode(true);
     }
   }
 
@@ -751,11 +929,14 @@ class UIManager {
       if (idlePanel) idlePanel.style.display = "flex";
       if (activePanel) activePanel.style.display = "none";
       if (runStatsBar) runStatsBar.style.display = "none";
-      this.renderChapterSelection();
+      this.renderMenuHub();
       return;
     }
 
     if (container) container.classList.add("in-run");
+    if (this.engine && this.engine.renderer) {
+      this.engine.renderer.setMenuMode(false);
+    }
     if (idlePanel) idlePanel.style.display = "none";
     if (activePanel) activePanel.style.display = "flex";
     if (runStatsBar) runStatsBar.style.display = "flex";

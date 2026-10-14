@@ -13,13 +13,18 @@ class CharacterManager {
       speed: 1.0
     };
 
-    this.gold = 500;
-    this.gems = 150;
-    this.energy = 30;
+    this.gold = 1143;
+    this.gems = 130;
+    this.energy = 37;
     this.maxEnergy = 30;
     this.keys = 3;
     this.accountLevel = 1;
     this.accountExp = 0;
+
+    this.playerName = "Capy13126397";
+    this.playerTitle = "Apprentice - 1";
+    this.longestSurvived = { 1: 39, 2: 20, 3: 15, 4: 10, 5: 1 };
+    this.selectedChapter = 1;
 
     this.equipped = {
       weapon: null,
@@ -48,6 +53,11 @@ class CharacterManager {
 
     this.load();
     this.ensureStarterGear();
+  }
+
+  getCombatPower() {
+    const stats = this.getEffectiveStats();
+    return Math.round(stats.atk * 12 + stats.hp * 3.2 + stats.def * 14 + (stats.critRate * 4000) + (this.accountLevel * 250) + 4200);
   }
 
   ensureStarterGear() {
@@ -284,6 +294,10 @@ class CharacterManager {
       keys: this.keys,
       accountLevel: this.accountLevel,
       accountExp: this.accountExp,
+      playerName: this.playerName,
+      playerTitle: this.playerTitle,
+      longestSurvived: this.longestSurvived,
+      selectedChapter: this.selectedChapter,
       equipped: this.equipped,
       inventory: this.inventory,
       talents: this.talents,
@@ -307,6 +321,10 @@ class CharacterManager {
       if (s.keys !== undefined) this.keys = s.keys;
       if (s.accountLevel !== undefined) this.accountLevel = s.accountLevel;
       if (s.accountExp !== undefined) this.accountExp = s.accountExp;
+      if (s.playerName) this.playerName = s.playerName;
+      if (s.playerTitle) this.playerTitle = s.playerTitle;
+      if (s.longestSurvived) this.longestSurvived = Object.assign({ 1: 39 }, s.longestSurvived);
+      if (s.selectedChapter !== undefined) this.selectedChapter = s.selectedChapter;
       if (s.equipped) this.equipped = s.equipped;
       if (s.inventory) this.inventory = s.inventory;
       if (s.talents) this.talents = s.talents;

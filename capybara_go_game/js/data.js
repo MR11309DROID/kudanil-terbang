@@ -3,7 +3,7 @@ const GameData = {
   chapters: [
     {
       id: 1,
-      name: "Whispering Woods",
+      name: "Gale Town",
       description: "A lush, serene woodland teeming with mysterious fauna.",
       bg: "assets/backgrounds/panoramas/village_road_bg.png",
       enemies: ["sprout", "slime_green", "mushroom_red", "flower_red"],

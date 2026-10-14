@@ -222,6 +222,21 @@ class StageRenderer {
     else this.playerState.fps = 10;
   }
 
+  setMenuMode(isMenu) {
+    this.isMenuMode = !!isMenu;
+    if (this.isMenuMode) {
+      this.clearEnemy();
+      this.removeTreasureChest();
+      this.playerState.x = Math.round(this.width * 0.52);
+      this.playerState.offsetY = 0;
+      this.setPlayerAnim("idle", true);
+    } else {
+      this.playerState.x = this.homePlayerX;
+      this.playerState.offsetY = 0;
+      this.setPlayerAnim("idle", true);
+    }
+  }
+
   spawnEnemy(enemyData, isBoss = false) {
     let img = this.enemyImages[enemyData.sprite];
     if (!img) {
