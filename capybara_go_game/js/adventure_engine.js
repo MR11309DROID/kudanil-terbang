@@ -71,7 +71,14 @@ class AdventureEngine {
     // 1. Check Milestone Boss Day (Days 20, 40, 60)
     if (chapter.bossDays && chapter.bossDays[day]) {
       const bossKey = chapter.bossDays[day];
-      const bossData = GameData.bosses[bossKey];
+      const rawBoss = GameData.bosses[bossKey];
+      const chapterMult = 1 + ((chapter.id || 1) - 1) * 0.40;
+      const bossData = {
+        ...rawBoss,
+        hp: Math.round(rawBoss.hp * chapterMult),
+        atk: Math.round(rawBoss.atk * (1 + ((chapter.id || 1) - 1) * 0.18)),
+        def: Math.round(rawBoss.def * (1 + ((chapter.id || 1) - 1) * 0.20))
+      };
       this.currentEvent = {
         type: "boss",
         title: `👑 Day ${day}: Boss Milestone!`,
@@ -87,12 +94,15 @@ class AdventureEngine {
       const enemyPool = chapter.enemies;
       const enemyKey = enemyPool[Math.floor(Math.random() * enemyPool.length)];
       const raw = GameData.enemies[enemyKey];
+      const dayFactor = 1 + (day - 1) * 0.035;
+      const chapterMult = 1 + ((chapter.id || 1) - 1) * 0.30;
       const eliteData = {
         ...raw,
         name: `Elite ${raw.name}`,
-        hp: Math.round(raw.hp * 1.8),
-        atk: Math.round(raw.atk * 1.5),
-        exp: Math.round(raw.exp * 2.2),
+        hp: Math.round(raw.hp * dayFactor * chapterMult * 2.2),
+        atk: Math.round(raw.atk * (1 + (day - 1) * 0.015) * (1 + ((chapter.id || 1) - 1) * 0.15) * 1.25),
+        def: Math.round((raw.def + Math.floor(day / 6) + ((chapter.id || 1) - 1) * 3) * 1.3),
+        exp: Math.round(raw.exp * 2.5),
         gold: Math.round(raw.gold * 2.5),
         scale: raw.scale * 1.15
       };
@@ -165,7 +175,15 @@ class AdventureEngine {
       run.consecutiveCombat = (run.consecutiveCombat || 0) + 1;
       const enemyPool = chapter.enemies;
       const enemyKey = enemyPool[Math.floor(Math.random() * enemyPool.length)];
-      const enemyData = GameData.enemies[enemyKey];
+      const raw = GameData.enemies[enemyKey];
+      const dayFactor = 1 + (day - 1) * 0.035;
+      const chapterMult = 1 + ((chapter.id || 1) - 1) * 0.30;
+      const enemyData = {
+        ...raw,
+        hp: Math.round(raw.hp * dayFactor * chapterMult),
+        atk: Math.round(raw.atk * (1 + (day - 1) * 0.012) * (1 + ((chapter.id || 1) - 1) * 0.15)),
+        def: Math.round(raw.def + Math.floor(day / 8) + ((chapter.id || 1) - 1) * 2)
+      };
 
       this.currentEvent = {
         type: "combat",

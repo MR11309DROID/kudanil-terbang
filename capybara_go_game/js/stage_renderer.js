@@ -3873,8 +3873,8 @@ class StageRenderer {
 
   renderEnemyHpBar(x, y, e) {
     const ctx = this.ctx;
-    const barW = e.isBoss ? 90 : 54;
-    const barH = e.isBoss ? 8 : 7;
+    const barW = e.isBoss ? 110 : 72;
+    const barH = e.isBoss ? 9 : 8;
     const pct = Math.max(0, Math.min(1, e.currentHp / e.maxHp));
 
     // Smooth lag catchup
@@ -3920,6 +3920,16 @@ class StageRenderer {
       ctx.roundRect(x - barW / 2, y, barW * pct, barH, 3.5);
       ctx.fill();
     }
+
+    // Numeric HP readout under the bar
+    ctx.font = `bold ${e.isBoss ? 10 : 9}px 'Fredoka', 'Nunito', sans-serif`;
+    ctx.strokeStyle = "rgba(0,0,0,0.9)";
+    ctx.lineWidth = 2.5;
+    const hpText = `${Math.max(0, Math.round(e.currentHp))} / ${e.maxHp}`;
+    ctx.strokeText(hpText, x, y + barH + 9);
+    ctx.fillStyle = e.isBoss ? "#fef08a" : "#f1f5f9";
+    ctx.fillText(hpText, x, y + barH + 9);
+
     ctx.restore();
   }
 
