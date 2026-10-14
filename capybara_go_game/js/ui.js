@@ -257,6 +257,58 @@ class UIManager {
       btnClose.addEventListener("click", () => closeModal());
     }
 
+    const btnToMenu = document.getElementById("btn-settings-to-menu");
+    if (btnToMenu) {
+      btnToMenu.addEventListener("click", () => {
+        Sound.playSfx("confirm");
+        closeModal();
+
+        // 1. If currently inside an active run, gracefully end and clean up run
+        if (Character.activeRun) {
+          if (this.battle && this.battle.inBattle) {
+            this.battle.inBattle = false;
+            if (this.engine && this.engine.renderer) {
+              this.engine.renderer.inBattle = false;
+              this.engine.renderer.clearEnemy();
+            }
+          }
+          if (this.engine) {
+            this.engine.hasPendingChest = false;
+            this.engine.autoTravel = false;
+            const autoBtn = document.getElementById("btn-auto-travel");
+            if (autoBtn) autoBtn.classList.remove("active");
+            if (this.engine.renderer) {
+              this.engine.renderer.removeTreasureChest();
+              this.engine.renderer.setPlayerAnim("idle", true);
+              this.engine.renderer.playerState.x = this.engine.renderer.homePlayerX;
+              this.engine.renderer.playerState.offsetY = 0;
+            }
+          }
+          Character.endRun(false);
+        }
+
+        // 2. Dismiss any open submodals (treasure chest, skill choice, etc.)
+        const chestModal = document.getElementById("modal-treasure-chest");
+        if (chestModal) {
+          chestModal.style.display = "none";
+          chestModal.classList.remove("open");
+        }
+        const skillModal = document.getElementById("modal-skill-choice");
+        if (skillModal) {
+          skillModal.style.display = "none";
+          skillModal.classList.remove("open");
+        }
+
+        // 3. Switch to Adventure tab in Main Menu / Home Hub mode
+        this.switchTab("adventure");
+        this.renderAdventureScreen();
+        this.renderHeader();
+        this.setTravelButtonState("ready", "Start Adventure");
+        Sound.playMusic("menu");
+        this.showToast("Kembali ke Menu Utama 🏠");
+      });
+    }
+
     if (modal) {
       modal.addEventListener("click", (e) => {
         if (e.target === modal) {

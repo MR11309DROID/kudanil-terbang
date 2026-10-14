@@ -4062,9 +4062,44 @@ body {
   background: #ffffff;
 }
 
+.settings-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-settings-menu {
+  width: 100%;
+  padding: 11px 0;
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  border: 2px solid #0369a1;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #075985, 0 6px 12px rgba(2, 132, 199, 0.35);
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.btn-settings-menu:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-settings-menu:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #075985;
+}
+
 .btn-settings-confirm {
   width: 100%;
-  padding: 10px 0;
+  padding: 11px 0;
   font-size: 14px;
   font-weight: 800;
   border-radius: 12px;
