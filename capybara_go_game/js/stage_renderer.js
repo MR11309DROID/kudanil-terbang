@@ -81,6 +81,9 @@ class StageRenderer {
     this.chestState = null;
     this.chestDustPuffs = [];
 
+    // Active Combat Skill Special Animations (Meteor, Dragon Breath, Lightning, Black Hole, etc.)
+    this.skillCombatEffects = [];
+
     // 3D Depth Elements
     this.init3DDepthEngine();
 
@@ -756,6 +759,18 @@ class StageRenderer {
       }
     }
 
+    // Update Skill Combat Effects
+    for (let i = this.skillCombatEffects.length - 1; i >= 0; i--) {
+      const fx = this.skillCombatEffects[i];
+      const elapsed = now - fx.startTime;
+      const progress = Math.min(1, elapsed / fx.duration);
+      if (fx.update) fx.update(progress, elapsed);
+      if (progress >= 1) {
+        if (fx.onComplete) fx.onComplete();
+        this.skillCombatEffects.splice(i, 1);
+      }
+    }
+
     // Update Projectile Spark Particles
     for (let i = this.projectileSparks.length - 1; i >= 0; i--) {
       const sp = this.projectileSparks[i];
@@ -944,6 +959,7 @@ class StageRenderer {
     }
     ctx.restore();
     this.renderProjectiles();
+    this.renderSkillCombatEffects();
 
     // ================= 9. HIT EFFECTS & FLOATING TEXTS =================
     ctx.save();
@@ -1218,7 +1234,18 @@ class StageRenderer {
       ctx.filter = "brightness(2.4)";
     }
 
+    const now = performance.now();
+    const run = window.Character && window.Character.activeRun;
+    const runSkills = (run && run.skills) ? run.skills : [];
+
+    // Layer 1: Render Behind-Capy Skill Attachments (Wings, Demon Avatar, Healing Mandala, Singularity)
+    this.renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now);
+
+    // Layer 2: Render Capybara Character Sprite (Clean, Crisp & Cute - Zero AI morphing/glitches)
     ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
+
+    // Layer 3: Render In-Front Skill Attachments (Halo, Dragon Head, Shields, Grimoire, Weapons, Cyclones)
+    this.renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now);
 
     ctx.restore();
 
@@ -1302,6 +1329,1141 @@ class StageRenderer {
     }
 
     ctx.restore();
+  }
+
+  // --- Skill Idle Visual Attachments (Authentic 60FPS Procedural & Vector Auras) ---
+
+  renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now) {
+    if (!runSkills || runSkills.length === 0) return;
+
+    const hasSkill = (term) => runSkills.some(s => {
+      if (typeof term === "number") return s.id === term;
+      const t = term.toLowerCase();
+      return (s.key && s.key.toLowerCase().includes(t)) || (s.name && s.name.toLowerCase().includes(t));
+    });
+
+    // 1. Mythic: Angel Blessing (Golden Feathered Wings Flapping on Capybara's Back)
+    if (hasSkill("angel") || hasSkill("blessing")) {
+      const flap = Math.sin(now * 0.0035);
+      
+      // Left Wing
+      ctx.save();
+      ctx.translate(-drawW * 0.18, -drawH * 0.58);
+      ctx.rotate(-0.35 + flap * 0.28);
+      ctx.shadowColor = "#fde047";
+      ctx.shadowBlur = 14;
+      ctx.fillStyle = "#fef08a";
+      ctx.strokeStyle = "#eab308";
+      ctx.lineWidth = 1.5;
+      for (let f = 0; f < 4; f++) {
+        const fx = -f * 7;
+        const fy = -f * 8;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(-15 + fx, -20 + fy, -28 + fx * 1.2, -32 + fy);
+        ctx.quadraticCurveTo(-18 + fx, -10 + fy, 0, 0);
+        ctx.fill();
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Right Wing
+      ctx.save();
+      ctx.translate(drawW * 0.06, -drawH * 0.58);
+      ctx.rotate(0.35 - flap * 0.28);
+      ctx.shadowColor = "#fde047";
+      ctx.shadowBlur = 14;
+      ctx.fillStyle = "#fef08a";
+      ctx.strokeStyle = "#eab308";
+      ctx.lineWidth = 1.5;
+      for (let f = 0; f < 4; f++) {
+        const fx = f * 7;
+        const fy = -f * 8;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(15 + fx, -20 + fy, 28 + fx * 1.2, -32 + fy);
+        ctx.quadraticCurveTo(18 + fx, -10 + fy, 0, 0);
+        ctx.fill();
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // 2. Mythic: Demon Form (Dark Shadow Avatar with Horns & Glowing Red Eyes Hovering Behind)
+    if (hasSkill("demon")) {
+      ctx.save();
+      const demonBob = Math.sin(now * 0.003) * 3;
+      ctx.translate(-drawW * 0.05, -drawH * 0.65 + demonBob);
+      ctx.globalAlpha = 0.82;
+      ctx.shadowColor = "#ef4444";
+      ctx.shadowBlur = 18;
+
+      const demonGrad = ctx.createLinearGradient(0, -50, 0, 30);
+      demonGrad.addColorStop(0, "rgba(20, 10, 30, 0.95)");
+      demonGrad.addColorStop(0.5, "rgba(88, 28, 135, 0.9)");
+      demonGrad.addColorStop(1, "rgba(220, 38, 38, 0.4)");
+      ctx.fillStyle = demonGrad;
+
+      ctx.beginPath();
+      // Left Horn
+      ctx.moveTo(-10, -25);
+      ctx.bezierCurveTo(-25, -45, -35, -50, -28, -62);
+      ctx.bezierCurveTo(-22, -50, -18, -35, -5, -30);
+      ctx.lineTo(5, -30);
+      // Right Horn
+      ctx.bezierCurveTo(18, -35, 22, -50, 28, -62);
+      ctx.bezierCurveTo(35, -50, 25, -45, 10, -25);
+      // Shoulders
+      ctx.bezierCurveTo(30, -15, 38, 10, 25, 30);
+      ctx.lineTo(-25, 30);
+      ctx.bezierCurveTo(-38, 10, -30, -15, -10, -25);
+      ctx.closePath();
+      ctx.fill();
+
+      // Glowing Crimson Eyes
+      ctx.fillStyle = "#ff1744";
+      ctx.shadowColor = "#ff1744";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.ellipse(-10, -32, 4, 1.8, -0.3, 0, Math.PI * 2);
+      ctx.ellipse(10, -32, 4, 1.8, 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // 3. Legendary: Healing Aura (Radiant Holy Circle Rotating on Ground at Feet)
+    if (hasSkill("healing_aura") || hasSkill("healing aura")) {
+      ctx.save();
+      ctx.translate(0, 0);
+      ctx.scale(1, 0.42);
+      ctx.shadowColor = "#4ade80";
+      ctx.shadowBlur = 14;
+      ctx.strokeStyle = "rgba(74, 222, 128, 0.8)";
+      ctx.lineWidth = 2.5;
+      const rot = (now * 0.001) % (Math.PI * 2);
+      ctx.rotate(rot);
+      ctx.beginPath();
+      ctx.arc(0, 0, drawW * 0.52, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.fillStyle = "#fef08a";
+      for (let a = 0; a < 4; a++) {
+        const ang = (Math.PI / 2) * a;
+        ctx.beginPath();
+        ctx.arc(Math.cos(ang) * drawW * 0.52, Math.sin(ang) * drawW * 0.52, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // 4. Mythic: Black Hole (Cosmic Gravitational Singularity Floating Behind/Above)
+    if (hasSkill("black_hole") || hasSkill("black hole")) {
+      ctx.save();
+      const bhBob = Math.sin(now * 0.002) * 3;
+      ctx.translate(-drawW * 0.28, -drawH - 6 + bhBob);
+      ctx.shadowColor = "#a855f7";
+      ctx.shadowBlur = 18;
+
+      ctx.save();
+      ctx.scale(1, 0.45);
+      ctx.rotate(now * 0.0035);
+      const accGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, 18);
+      accGrad.addColorStop(0, "rgba(168, 85, 247, 0.95)");
+      accGrad.addColorStop(0.6, "rgba(99, 102, 241, 0.5)");
+      accGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = accGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, 18, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      ctx.fillStyle = "#09090b";
+      ctx.strokeStyle = "#c084fc";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(0, 0, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 5. Legendary: Fireball (Back Orbit of 3D Orbiting Fireballs)
+    if (hasSkill("fireball")) {
+      const orbAngle = (now * 0.0035);
+      const z1 = Math.sin(orbAngle);
+      const z2 = Math.sin(orbAngle + Math.PI);
+      const drawOrb = (ang) => {
+        const ox = Math.cos(ang) * drawW * 0.48;
+        const oy = -drawH * 0.45 + Math.sin(ang) * 12;
+        ctx.save();
+        ctx.translate(ox, oy);
+        ctx.shadowColor = "#f97316";
+        ctx.shadowBlur = 14;
+        const fGrad = ctx.createRadialGradient(0, 0, 1, 0, 0, 6);
+        fGrad.addColorStop(0, "#ffffff");
+        fGrad.addColorStop(0.4, "#fde047");
+        fGrad.addColorStop(1, "#ea580c");
+        ctx.fillStyle = fGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      };
+      if (z1 < 0) drawOrb(orbAngle);
+      if (z2 < 0) drawOrb(orbAngle + Math.PI);
+    }
+
+    // 6. Common / Legendary: Bow / Multi Arrow (Recurve Bow Strapped to Back)
+    if (hasSkill("bow") || hasSkill("multi_arrow") || hasSkill("multi arrow")) {
+      ctx.save();
+      ctx.translate(-drawW * 0.16, -drawH * 0.52);
+      ctx.rotate(0.65);
+      ctx.shadowColor = "#78350f";
+      ctx.shadowBlur = 6;
+      ctx.strokeStyle = "#92400e";
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(0, 0, 18, -Math.PI * 0.4, Math.PI * 0.4);
+      ctx.stroke();
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(-Math.PI * 0.4) * 18, Math.sin(-Math.PI * 0.4) * 18);
+      ctx.lineTo(Math.cos(Math.PI * 0.4) * 18, Math.sin(Math.PI * 0.4) * 18);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now) {
+    if (!runSkills || runSkills.length === 0) return;
+
+    const hasSkill = (term) => runSkills.some(s => {
+      if (typeof term === "number") return s.id === term;
+      const t = term.toLowerCase();
+      return (s.key && s.key.toLowerCase().includes(t)) || (s.name && s.name.toLowerCase().includes(t));
+    });
+
+    // 1. Mythic: Angel Blessing (Golden Radiant Halo Floating Overhead)
+    if (hasSkill("angel") || hasSkill("blessing")) {
+      const haloBob = Math.sin(now * 0.0028) * 3;
+      ctx.save();
+      ctx.translate(0, -drawH - 10 + haloBob);
+      ctx.rotate(-0.06);
+      ctx.shadowColor = "#fde047";
+      ctx.shadowBlur = 16;
+      ctx.strokeStyle = "#facc15";
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 18, 5, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 2. Mythic: Dragon Roar (Ethereal Fiery Dragon Head Floating Overhead Diagonally)
+    if (hasSkill("dragon")) {
+      ctx.save();
+      const dragonBob = Math.sin(now * 0.0025) * 4;
+      ctx.translate(drawW * 0.22, -drawH - 12 + dragonBob);
+      ctx.rotate(0.12);
+      ctx.shadowColor = "#f97316";
+      ctx.shadowBlur = 16;
+
+      const dragonGrad = ctx.createLinearGradient(-20, -20, 30, 20);
+      dragonGrad.addColorStop(0, "rgba(255, 240, 180, 0.95)");
+      dragonGrad.addColorStop(0.4, "rgba(249, 115, 22, 0.9)");
+      dragonGrad.addColorStop(1, "rgba(220, 38, 38, 0.3)");
+      ctx.fillStyle = dragonGrad;
+
+      ctx.beginPath();
+      ctx.moveTo(18, 0);
+      ctx.lineTo(28, 4);
+      ctx.lineTo(15, 12);
+      ctx.lineTo(8, 6);
+      ctx.lineTo(-12, 14);
+      ctx.lineTo(-20, 2);
+      ctx.lineTo(-30, -8);
+      ctx.lineTo(-14, -8);
+      ctx.lineTo(-22, -22);
+      ctx.lineTo(-8, -12);
+      ctx.lineTo(6, -8);
+      ctx.closePath();
+      ctx.fill();
+
+      // Golden Eye
+      ctx.fillStyle = "#fef08a";
+      ctx.shadowColor = "#fef08a";
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.ellipse(6, -2, 2.5, 1.2, 0.1, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Drifting flame wisps
+      const flameFlicker = Math.sin(now * 0.015) * 3;
+      ctx.fillStyle = "rgba(251, 146, 60, 0.85)";
+      ctx.beginPath();
+      ctx.arc(28 + flameFlicker, 4, 3.5, 0, Math.PI * 2);
+      ctx.arc(36 + flameFlicker * 1.5, 2, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // 3. Mythic: Blood Blade (Cursed Crimson Greatsword Hovering Beside Capy with Dripping Blood)
+    if (hasSkill("blood_blade") || hasSkill("blood blade")) {
+      ctx.save();
+      const bloodBob = Math.sin(now * 0.003) * 3.5;
+      ctx.translate(drawW * 0.38, -drawH * 0.55 + bloodBob);
+      ctx.rotate(0.35);
+      ctx.shadowColor = "#dc2626";
+      ctx.shadowBlur = 14;
+
+      const bGrad = ctx.createLinearGradient(0, -32, 0, 20);
+      bGrad.addColorStop(0, "#fee2e2");
+      bGrad.addColorStop(0.3, "#ef4444");
+      bGrad.addColorStop(0.8, "#991b1b");
+      bGrad.addColorStop(1, "#450a0a");
+      ctx.fillStyle = bGrad;
+      ctx.strokeStyle = "#ff4444";
+      ctx.lineWidth = 1.2;
+
+      ctx.beginPath();
+      ctx.moveTo(0, 16);
+      ctx.lineTo(2, 6);
+      ctx.lineTo(6, 6);
+      ctx.lineTo(4, -30);
+      ctx.bezierCurveTo(8, -15, 6, 2, 0, 6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      const dripY = (now * 0.04) % 18;
+      ctx.fillStyle = "#dc2626";
+      ctx.beginPath();
+      ctx.arc(3, 10 + dripY, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // 4. Legendary: Flaming Sword (Blazing Fiery Blade Hovering Beside Capy)
+    if (hasSkill("flaming_sword") || hasSkill("flaming sword")) {
+      ctx.save();
+      const flameBob = Math.sin(now * 0.0032) * 3.5;
+      ctx.translate(drawW * 0.36, -drawH * 0.55 + flameBob);
+      ctx.rotate(0.32);
+      ctx.shadowColor = "#f97316";
+      ctx.shadowBlur = 15;
+
+      const sGrad = ctx.createLinearGradient(0, -30, 0, 15);
+      sGrad.addColorStop(0, "#ffffff");
+      sGrad.addColorStop(0.3, "#fde047");
+      sGrad.addColorStop(0.7, "#f97316");
+      sGrad.addColorStop(1, "#ea580c");
+      ctx.fillStyle = sGrad;
+
+      ctx.beginPath();
+      ctx.moveTo(0, 14);
+      ctx.lineTo(2, 4);
+      ctx.lineTo(5, 4);
+      ctx.lineTo(2, -28);
+      ctx.lineTo(0, -32);
+      ctx.lineTo(-2, -28);
+      ctx.lineTo(-5, 4);
+      ctx.lineTo(-2, 4);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(253, 224, 71, 0.85)";
+      const fShift = Math.sin(now * 0.018) * 2;
+      ctx.beginPath();
+      ctx.arc(fShift, -15, 3.5, 0, Math.PI * 2);
+      ctx.arc(-fShift, -24, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // 5. Legendary: Thunder Hammer (Heavy Warhammer with Electric Lightning Arcs)
+    if (hasSkill("thunder_hammer") || hasSkill("thunder hammer")) {
+      ctx.save();
+      const thBob = Math.sin(now * 0.0028) * 3.5;
+      ctx.translate(drawW * 0.36, -drawH * 0.52 + thBob);
+      ctx.rotate(0.25);
+      ctx.shadowColor = "#38bdf8";
+      ctx.shadowBlur = 14;
+
+      ctx.fillStyle = "#78350f";
+      ctx.fillRect(-2, -5, 4, 22);
+
+      ctx.fillStyle = "#64748b";
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(-10, -22, 20, 17, 3);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.strokeStyle = "#fef08a";
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = "#fef08a";
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      const zPhase = Math.floor(now * 0.02) % 4;
+      if (zPhase === 0) {
+        ctx.moveTo(-11, -18); ctx.lineTo(-16, -22); ctx.lineTo(-12, -26); ctx.lineTo(-18, -30);
+      } else if (zPhase === 1) {
+        ctx.moveTo(11, -15); ctx.lineTo(17, -20); ctx.lineTo(13, -25); ctx.lineTo(19, -28);
+      } else {
+        ctx.moveTo(0, -23); ctx.lineTo(-4, -30); ctx.lineTo(4, -34);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 6. Legendary: Guardian Shield (Golden Winged Aegis with Cross Emblem)
+    if (hasSkill("guardian_shield") || hasSkill("guardian shield")) {
+      ctx.save();
+      const gsBob = Math.sin(now * 0.0027) * 3;
+      ctx.translate(drawW * 0.34, -drawH * 0.45 + gsBob);
+      ctx.shadowColor = "#fbbf24";
+      ctx.shadowBlur = 14;
+
+      const gsGrad = ctx.createLinearGradient(-12, -18, 12, 18);
+      gsGrad.addColorStop(0, "#fef08a");
+      gsGrad.addColorStop(0.5, "#f59e0b");
+      gsGrad.addColorStop(1, "#b45309");
+      ctx.fillStyle = gsGrad;
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1.5;
+
+      ctx.beginPath();
+      ctx.moveTo(0, -18);
+      ctx.lineTo(14, -12);
+      ctx.lineTo(12, 6);
+      ctx.lineTo(0, 18);
+      ctx.lineTo(-12, 6);
+      ctx.lineTo(-14, -12);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Wings
+      ctx.fillStyle = "#fef9c3";
+      ctx.beginPath();
+      ctx.moveTo(-14, -8); ctx.lineTo(-22, -15); ctx.lineTo(-16, 2); ctx.closePath();
+      ctx.moveTo(14, -8); ctx.lineTo(22, -15); ctx.lineTo(16, 2); ctx.closePath();
+      ctx.fill();
+
+      // Cross
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(-2, -9, 4, 16);
+      ctx.fillRect(-7, -4, 14, 4);
+      ctx.restore();
+    } else if (hasSkill("shield")) {
+      // Common Shield (Cyan Translucent Energy Aegis)
+      ctx.save();
+      const csBob = Math.sin(now * 0.0025) * 2.5;
+      ctx.translate(drawW * 0.32, -drawH * 0.42 + csBob);
+      ctx.shadowColor = "#38bdf8";
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
+      ctx.strokeStyle = "#bae6fd";
+      ctx.lineWidth = 2.0;
+
+      ctx.beginPath();
+      ctx.moveTo(0, -15);
+      ctx.lineTo(12, -8);
+      ctx.lineTo(10, 8);
+      ctx.lineTo(0, 15);
+      ctx.lineTo(-10, 8);
+      ctx.lineTo(-12, -8);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 7. Legendary: Magic Book (Open Mystical Grimoire with Fluttering Pages & Stars)
+    if (hasSkill("magic_book") || hasSkill("magic book")) {
+      ctx.save();
+      const mbBob = Math.sin(now * 0.0022) * 4;
+      ctx.translate(-drawW * 0.32, -drawH * 0.45 + mbBob);
+      ctx.rotate(-0.15);
+      ctx.shadowColor = "#c084fc";
+      ctx.shadowBlur = 15;
+
+      ctx.fillStyle = "#581c87";
+      ctx.strokeStyle = "#e9d5ff";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.roundRect(-14, -10, 28, 20, 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#f5f3ff";
+      ctx.beginPath();
+      ctx.moveTo(-1, -8); ctx.lineTo(-12, -7); ctx.lineTo(-12, 7); ctx.lineTo(-1, 8);
+      ctx.lineTo(12, 7); ctx.lineTo(12, -7); ctx.lineTo(1, -8);
+      ctx.fill();
+
+      // Magic Runes
+      ctx.fillStyle = "#a855f7";
+      ctx.fillRect(-9, -3, 6, 1.5);
+      ctx.fillRect(-9, 1, 6, 1.5);
+      ctx.fillRect(3, -3, 6, 1.5);
+      ctx.fillRect(3, 1, 6, 1.5);
+
+      // Star sparkle
+      const starScale = 0.8 + Math.sin(now * 0.006) * 0.3;
+      ctx.fillStyle = "#ffffff";
+      ctx.shadowColor = "#c084fc";
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(0, -15, 2.5 * starScale, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // 8. Legendary: Fireball (Front Orbit of 3D Orbiting Fireballs)
+    if (hasSkill("fireball")) {
+      const orbAngle = (now * 0.0035);
+      const z1 = Math.sin(orbAngle);
+      const z2 = Math.sin(orbAngle + Math.PI);
+      const drawOrb = (ang) => {
+        const ox = Math.cos(ang) * drawW * 0.48;
+        const oy = -drawH * 0.45 + Math.sin(ang) * 12;
+        ctx.save();
+        ctx.translate(ox, oy);
+        ctx.shadowColor = "#f97316";
+        ctx.shadowBlur = 14;
+        const fGrad = ctx.createRadialGradient(0, 0, 1, 0, 0, 6);
+        fGrad.addColorStop(0, "#ffffff");
+        fGrad.addColorStop(0.4, "#fde047");
+        fGrad.addColorStop(1, "#ea580c");
+        ctx.fillStyle = fGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      };
+      if (z1 >= 0) drawOrb(orbAngle);
+      if (z2 >= 0) drawOrb(orbAngle + Math.PI);
+    }
+
+    // 9. Legendary / Common: Tornado / Vortex (Mini Twisters Flanking Capy)
+    if (hasSkill("tornado") || hasSkill("vortex")) {
+      ctx.save();
+      ctx.strokeStyle = "rgba(186, 230, 253, 0.75)";
+      ctx.lineWidth = 1.5;
+      const swirl = (now * 0.015);
+      [-drawW * 0.42, drawW * 0.42].forEach(offsetSide => {
+        ctx.beginPath();
+        for (let l = 0; l < 4; l++) {
+          const ly = -l * 5;
+          const lw = 4 + l * 3.5;
+          const lx = offsetSide + Math.sin(swirl + l) * 3;
+          ctx.ellipse(lx, ly, lw, 2, 0, 0, Math.PI * 2);
+        }
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+
+    // 10. Common: Bomb (Round Bomb with Sparking Fuse)
+    if (hasSkill("bomb")) {
+      ctx.save();
+      ctx.translate(drawW * 0.38, -6);
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(0, 0, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillRect(-2, -9, 4, 3);
+
+      ctx.strokeStyle = "#f59e0b";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.moveTo(0, -9);
+      ctx.quadraticCurveTo(3, -13, 1, -15);
+      ctx.stroke();
+
+      ctx.fillStyle = "#ef4444";
+      ctx.beginPath();
+      ctx.arc(1 + (Math.random() * 2 - 1), -15 + (Math.random() * 2 - 1), 1.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // 11. Legendary / Common: Earthquake / Rock (Floating Jagged Stone Shards near feet)
+    if (hasSkill("earthquake") || hasSkill("rock")) {
+      ctx.save();
+      ctx.fillStyle = "#78716c";
+      ctx.strokeStyle = "#a8a29e";
+      ctx.lineWidth = 1.0;
+      const stoneBob = Math.sin(now * 0.004) * 2;
+      [
+        { x: -drawW * 0.35, y: -8 + stoneBob, s: 4 },
+        { x: drawW * 0.32, y: -10 - stoneBob, s: 5 },
+        { x: 0, y: -4 + stoneBob * 0.5, s: 3.5 }
+      ].forEach(st => {
+        ctx.beginPath();
+        ctx.arc(st.x, st.y, st.s, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+  }
+
+  // --- Dynamic Skill Combat Animations (Meteor Strike, Dragon Roar, Singularity, etc.) ---
+
+  renderSkillCombatEffects() {
+    const ctx = this.ctx;
+    ctx.save();
+    for (const fx of this.skillCombatEffects) {
+      if (fx.render) fx.render(ctx);
+    }
+    ctx.restore();
+  }
+
+  launchMeteorStrike(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 380 / speedMult;
+    const startX = targetX + 160;
+    const startY = -90;
+    let hitTriggered = false;
+
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: duration + 250,
+      update: (progress) => {
+        if (progress >= (duration / (duration + 250)) && !hitTriggered) {
+          hitTriggered = true;
+          this.playerState.shake = 1.8;
+          if (this.enemyState) {
+            this.enemyState.shake = 2.5;
+            this.enemyState.flashWhite = 1.0;
+          }
+          Sound.playSfx("magicBurst");
+          Sound.playSfx("attackHeavy");
+          this.addVisualEffect("critBurst", targetX, targetY - 30, 2.2);
+          this.addMagicImpactSparks(targetX, targetY - 30, ["#f97316", "#ef4444", "#fde047", "#ffffff"]);
+          if (onHit) onHit();
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const p = Math.min(1, elapsed / duration);
+
+        if (p < 1) {
+          // Descending Meteor
+          const mx = startX + (targetX - startX) * p;
+          const my = startY + (targetY - startY) * p;
+
+          // Fiery Smoke Tail
+          ctx.save();
+          const tGrad = ctx.createLinearGradient(mx, my, mx + 50, my - 60);
+          tGrad.addColorStop(0, "rgba(253, 224, 71, 0.9)");
+          tGrad.addColorStop(0.3, "rgba(249, 115, 22, 0.7)");
+          tGrad.addColorStop(0.8, "rgba(120, 53, 15, 0.4)");
+          tGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+          ctx.fillStyle = tGrad;
+          ctx.beginPath();
+          ctx.moveTo(mx - 15, my - 5);
+          ctx.lineTo(mx + 60, my - 70);
+          ctx.lineTo(mx + 70, my - 50);
+          ctx.lineTo(mx + 5, my + 15);
+          ctx.closePath();
+          ctx.fill();
+
+          // Blazing Meteor Core
+          ctx.shadowColor = "#f97316";
+          ctx.shadowBlur = 24;
+          const mGrad = ctx.createRadialGradient(mx, my, 2, mx, my, 18);
+          mGrad.addColorStop(0, "#ffffff");
+          mGrad.addColorStop(0.3, "#fde047");
+          mGrad.addColorStop(0.7, "#ea580c");
+          mGrad.addColorStop(1, "#78350f");
+          ctx.fillStyle = mGrad;
+          ctx.beginPath();
+          ctx.arc(mx, my, 18, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else {
+          // Ground Fiery Shockwave Ring
+          const postP = Math.min(1, (elapsed - duration) / 250);
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, 1 - postP);
+          ctx.strokeStyle = "#f97316";
+          ctx.lineWidth = 4 * (1 - postP);
+          ctx.shadowColor = "#fde047";
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.ellipse(targetX, targetY, 70 * postP, 25 * postP, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      },
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
+  }
+
+  launchDragonBreath(startX, startY, targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 340 / speedMult;
+    let hitTriggered = false;
+
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: duration + 100,
+      update: (progress) => {
+        if (progress >= 0.5 && !hitTriggered) {
+          hitTriggered = true;
+          Sound.playSfx("bossRoar");
+          if (this.enemyState) {
+            this.enemyState.flashWhite = 0.8;
+            this.enemyState.shake = 1.8;
+          }
+          this.addVisualEffect("critBurst", targetX, targetY - 20, 1.8);
+          this.addMagicImpactSparks(targetX, targetY - 20, ["#f97316", "#ef4444", "#fde047"]);
+          if (onHit) onHit();
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const p = Math.min(1, elapsed / duration);
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, 1 - Math.pow(p - 0.5, 2) * 3);
+        const coneGrad = ctx.createLinearGradient(startX, startY, targetX, targetY);
+        coneGrad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
+        coneGrad.addColorStop(0.2, "rgba(253, 224, 71, 0.9)");
+        coneGrad.addColorStop(0.7, "rgba(249, 115, 22, 0.8)");
+        coneGrad.addColorStop(1, "rgba(220, 38, 38, 0.2)");
+        ctx.fillStyle = coneGrad;
+        ctx.shadowColor = "#f97316";
+        ctx.shadowBlur = 20;
+
+        const spread = 35 * Math.sin(p * Math.PI);
+        ctx.beginPath();
+        ctx.moveTo(startX + 20, startY);
+        ctx.lineTo(targetX + 15, targetY - spread);
+        ctx.lineTo(targetX + 15, targetY + spread);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      },
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
+  }
+
+  launchBlackHole(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 400 / speedMult;
+    let hitTriggered = false;
+
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: duration + 150,
+      update: (progress) => {
+        if (progress >= 0.7 && !hitTriggered) {
+          hitTriggered = true;
+          Sound.playSfx("magicBurst");
+          if (this.enemyState) {
+            this.enemyState.flashWhite = 1.0;
+            this.enemyState.shake = 2.0;
+          }
+          this.addVisualEffect("critBurst", targetX, targetY - 25, 2.0);
+          this.addMagicImpactSparks(targetX, targetY - 25, ["#c084fc", "#9333ea", "#38bdf8", "#000000"]);
+          if (onHit) onHit();
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const p = Math.min(1, elapsed / duration);
+
+        ctx.save();
+        ctx.translate(targetX, targetY - 25);
+        const radius = Math.sin(p * Math.PI) * 28;
+
+        ctx.save();
+        ctx.rotate(now * 0.01);
+        ctx.strokeStyle = "rgba(192, 132, 252, 0.75)";
+        ctx.lineWidth = 2.0;
+        ctx.shadowColor = "#a855f7";
+        ctx.shadowBlur = 18;
+        for (let a = 0; a < 3; a++) {
+          ctx.beginPath();
+          ctx.arc(0, 0, Math.max(2, radius * (0.4 + a * 0.3)), a * 1.5, a * 1.5 + Math.PI);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        ctx.fillStyle = "#030712";
+        ctx.beginPath();
+        ctx.arc(0, 0, Math.max(2, radius * 0.5), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#c084fc";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+      },
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
+  }
+
+  launchThunderHammerStrike(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 240 / speedMult;
+    let hitTriggered = false;
+
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: duration + 100,
+      update: (progress) => {
+        if (progress >= 0.4 && !hitTriggered) {
+          hitTriggered = true;
+          Sound.playSfx("lightning");
+          if (this.enemyState) {
+            this.enemyState.flashWhite = 1.0;
+            this.enemyState.shake = 1.8;
+          }
+          this.addVisualEffect("critBurst", targetX, targetY - 25, 1.8);
+          this.addMagicImpactSparks(targetX, targetY - 25, ["#fde047", "#38bdf8", "#ffffff"]);
+          if (onHit) onHit();
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const p = Math.min(1, elapsed / duration);
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, 1 - p);
+        ctx.strokeStyle = "#fef08a";
+        ctx.lineWidth = 3.5;
+        ctx.shadowColor = "#38bdf8";
+        ctx.shadowBlur = 18;
+
+        ctx.beginPath();
+        ctx.moveTo(targetX + 15, -40);
+        ctx.lineTo(targetX - 10, targetY * 0.25);
+        ctx.lineTo(targetX + 18, targetY * 0.55);
+        ctx.lineTo(targetX - 6, targetY * 0.8);
+        ctx.lineTo(targetX, targetY);
+        ctx.stroke();
+
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+      },
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
+  }
+
+  launchTornado(startX, startY, targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 280 / speedMult;
+    let hitTriggered = false;
+
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: duration + 100,
+      update: (progress) => {
+        if (progress >= 0.9 && !hitTriggered) {
+          hitTriggered = true;
+          Sound.playSfx("attackLight");
+          if (this.enemyState) {
+            this.enemyState.shake = 1.5;
+            this.enemyState.offsetY = -12;
+            setTimeout(() => { if (this.enemyState) this.enemyState.offsetY = 0; }, 140);
+          }
+          this.addVisualEffect("critBurst", targetX, targetY - 25, 1.4);
+          this.addMagicImpactSparks(targetX, targetY - 25, ["#bae6fd", "#e0f2fe", "#ffffff"]);
+          if (onHit) onHit();
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const p = Math.min(1, elapsed / duration);
+        const cx = startX + (targetX - startX) * p;
+        const cy = targetY - 25;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.strokeStyle = "rgba(186, 230, 253, 0.85)";
+        ctx.lineWidth = 2.0;
+        ctx.shadowColor = "#38bdf8";
+        ctx.shadowBlur = 12;
+        const swirl = now * 0.02;
+
+        for (let l = 0; l < 6; l++) {
+          const ly = (l - 3) * 7;
+          const lw = 8 + (l + 1) * 4.5;
+          ctx.beginPath();
+          ctx.ellipse(Math.sin(swirl + l) * 4, ly, lw, 3.5, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      },
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
+  }
+
+  launchFireball(startX, startY, targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 250 / speedMult;
+    let hitTriggered = false;
+
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: duration + 100,
+      update: (progress) => {
+        if (progress >= 1 && !hitTriggered) {
+          hitTriggered = true;
+          Sound.playSfx("magicBurst");
+          if (this.enemyState) {
+            this.enemyState.flashWhite = 0.8;
+            this.enemyState.shake = 1.5;
+          }
+          this.addVisualEffect("critBurst", targetX, targetY - 20, 1.6);
+          this.addMagicImpactSparks(targetX, targetY - 20, ["#f97316", "#ef4444", "#fde047"]);
+          if (onHit) onHit();
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const p = Math.min(1, elapsed / duration);
+        const fx = startX + (targetX - startX) * p;
+        const fy = startY + (targetY - startY) * p - Math.sin(p * Math.PI) * 15;
+
+        ctx.save();
+        ctx.translate(fx, fy);
+        ctx.shadowColor = "#f97316";
+        ctx.shadowBlur = 18;
+        const fGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, 12);
+        fGrad.addColorStop(0, "#ffffff");
+        fGrad.addColorStop(0.3, "#fde047");
+        fGrad.addColorStop(0.8, "#ea580c");
+        fGrad.addColorStop(1, "rgba(220, 38, 38, 0)");
+        ctx.fillStyle = fGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, 12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      },
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
+  }
+
+  launchWaterWave(startX, startY, targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 280 / speedMult;
+    let hitTriggered = false;
+
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: duration + 100,
+      update: (progress) => {
+        if (progress >= 0.9 && !hitTriggered) {
+          hitTriggered = true;
+          Sound.playSfx("hit");
+          if (this.enemyState) {
+            this.enemyState.shake = 1.4;
+          }
+          this.addVisualEffect("iceShatter", targetX, targetY - 20, 1.3);
+          this.addMagicImpactSparks(targetX, targetY - 20, ["#38bdf8", "#0284c7", "#bae6fd", "#ffffff"]);
+          if (onHit) onHit();
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const p = Math.min(1, elapsed / duration);
+        const wx = startX + (targetX - startX) * p;
+
+        ctx.save();
+        ctx.fillStyle = "rgba(56, 189, 248, 0.75)";
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2.0;
+        ctx.shadowColor = "#0284c7";
+        ctx.shadowBlur = 14;
+
+        ctx.beginPath();
+        ctx.moveTo(wx - 25, targetY);
+        ctx.quadraticCurveTo(wx, targetY - 45, wx + 15, targetY - 35);
+        ctx.quadraticCurveTo(wx + 25, targetY - 15, wx + 20, targetY);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      },
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
+  }
+
+  launchBombToss(startX, startY, targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 320 / speedMult;
+    let hitTriggered = false;
+
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: duration + 100,
+      update: (progress) => {
+        if (progress >= 1 && !hitTriggered) {
+          hitTriggered = true;
+          Sound.playSfx("attackHeavy");
+          if (this.enemyState) {
+            this.enemyState.flashWhite = 0.9;
+            this.enemyState.shake = 1.8;
+          }
+          this.addVisualEffect("critBurst", targetX, targetY - 20, 1.8);
+          this.addMagicImpactSparks(targetX, targetY - 20, ["#f97316", "#ef4444", "#fde047"]);
+          if (onHit) onHit();
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const p = Math.min(1, elapsed / duration);
+        const bx = startX + (targetX - startX) * p;
+        const by = startY + (targetY - startY) * p - Math.sin(p * Math.PI) * 65;
+
+        ctx.save();
+        ctx.translate(bx, by);
+        ctx.rotate(now * 0.015);
+        ctx.fillStyle = "#1e293b";
+        ctx.strokeStyle = "#94a3b8";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(0, 0, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#ef4444";
+        ctx.beginPath();
+        ctx.arc(0, -9, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      },
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
+  }
+
+  launchMultiArrow(startX, startY, targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const arrows = [-12, 0, 12];
+    let hitsCount = 0;
+
+    arrows.forEach((yOff, idx) => {
+      setTimeout(() => {
+        const duration = 200 / speedMult;
+        this.skillCombatEffects.push({
+          startTime: performance.now(),
+          duration: duration,
+          update: (progress) => {
+            if (progress >= 1) {
+              Sound.playSfx("hit");
+              this.addVisualEffect("hitSpark", targetX, targetY + yOff - 20, 0.8);
+              hitsCount++;
+              if (hitsCount === arrows.length) {
+                if (onHit) onHit();
+                if (onComplete) onComplete();
+              }
+            }
+          },
+          render: (ctx) => {
+            const now = performance.now();
+            const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+            const p = Math.min(1, elapsed / duration);
+            const ax = startX + (targetX - startX) * p;
+            const ay = startY + (targetY + yOff - startY) * p;
+
+            ctx.save();
+            ctx.translate(ax, ay);
+            ctx.strokeStyle = "#38bdf8";
+            ctx.lineWidth = 2.0;
+            ctx.shadowColor = "#38bdf8";
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.moveTo(-16, 0);
+            ctx.lineTo(8, 0);
+            ctx.lineTo(4, -4);
+            ctx.moveTo(8, 0);
+            ctx.lineTo(4, 4);
+            ctx.stroke();
+            ctx.restore();
+          }
+        });
+      }, idx * 55 / speedMult);
+    });
+  }
+
+  launchEarthquake(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 300 / speedMult;
+    let hitTriggered = false;
+
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: duration + 100,
+      update: (progress) => {
+        if (progress >= 0.5 && !hitTriggered) {
+          hitTriggered = true;
+          Sound.playSfx("attackHeavy");
+          if (this.enemyState) {
+            this.enemyState.flashWhite = 0.8;
+            this.enemyState.shake = 1.8;
+          }
+          this.addVisualEffect("hitSpark", targetX, targetY - 20, 1.4);
+          if (onHit) onHit();
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const p = Math.min(1, elapsed / duration);
+        const spikeHeight = Math.sin(p * Math.PI) * 35;
+
+        ctx.save();
+        ctx.fillStyle = "#78716c";
+        ctx.strokeStyle = "#d6d3d1";
+        ctx.lineWidth = 1.5;
+
+        [-20, -5, 10, 22].forEach((sx, idx) => {
+          const h = spikeHeight * (0.7 + (idx % 2) * 0.3);
+          ctx.beginPath();
+          ctx.moveTo(targetX + sx - 6, targetY);
+          ctx.lineTo(targetX + sx, targetY - h);
+          ctx.lineTo(targetX + sx + 6, targetY);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        });
+        ctx.restore();
+      },
+      onComplete: () => {
+        if (onComplete) onComplete();
+      }
+    });
   }
 
   renderEnemy() {

@@ -184,24 +184,93 @@ class BattleSystem {
       r.addFloatingText(e.poisonDoT, r.enemyState.x, r.groundY - 40, "poison");
     }
 
-    // Check Thunderbolt perk (proc every X turns - Magic Hit)
-    const thunderSkill = c.skills.find(s => s.procEvery && this.turnCount % s.procEvery === 0);
-    if (thunderSkill && r.enemyState) {
-      const boltDmg = Math.round(c.atk * thunderSkill.dmgMult);
-      e.hp -= boltDmg;
-      r.enemyState.currentHp = Math.max(0, e.hp);
-      r.enemyState.flashWhite = 1.0;
-      r.enemyState.shake = 1.5;
-      Sound.playSfx("lightning");
-      r.addVisualEffect("critBurst", r.enemyState.x, r.groundY - 45, 1.5);
-      r.addMagicImpactSparks(r.enemyState.x, r.groundY - 45, ["#fde047", "#38bdf8", "#ffffff"]);
-      r.addFloatingText(boltDmg, r.enemyState.x, r.groundY - 60, "crit");
+    // Turn 1 Opener Skills (Dragon Roar & Bomb)
+    if (this.turnCount === 1 && r.enemyState) {
+      const dragonOpener = c.skills.find(s => (s.key === "mythic_02_dragon_roar" || (s.name && s.name.includes("Dragon"))) && s.startCombatDmg);
+      if (dragonOpener && r.launchDragonBreath) {
+        const roarDmg = Math.round(c.atk * dragonOpener.startCombatDmg);
+        r.launchDragonBreath(r.playerState.x, r.groundY - 50, r.enemyState.x, r.groundY - 50, () => {
+          e.hp -= roarDmg;
+          r.enemyState.currentHp = Math.max(0, e.hp);
+          r.addFloatingText(roarDmg, r.enemyState.x, r.groundY - 60, "crit");
+        }, null, this.speedMultiplier);
+      }
+      const bombOpener = c.skills.find(s => (s.key === "common_10_bomb" || (s.name && s.name.includes("Bomb"))) && s.startCombatDmg);
+      if (bombOpener && r.launchBombToss) {
+        const bombDmg = Math.round(c.atk * bombOpener.startCombatDmg);
+        r.launchBombToss(r.playerState.x, r.groundY - 50, r.enemyState.x, r.groundY - 20, () => {
+          e.hp -= bombDmg;
+          r.enemyState.currentHp = Math.max(0, e.hp);
+          r.addFloatingText(bombDmg, r.enemyState.x, r.groundY - 55, "crit");
+        }, null, this.speedMultiplier);
+      }
     }
 
-    // Check Rage Ultimate (True Magic Hit!)
+    // Periodic Skill Procs (Black Hole singularity every 3 turns)
+    const blackHoleSkill = c.skills.find(s => (s.key === "mythic_03_black_hole" || (s.name && s.name.includes("Black Hole"))) && this.turnCount % (s.procEvery || 3) === 0);
+    if (blackHoleSkill && r.enemyState && r.launchBlackHole) {
+      const bhDmg = Math.round(c.atk * (blackHoleSkill.dmgMult || 3.0));
+      r.launchBlackHole(r.enemyState.x, r.groundY - 25, () => {
+        e.hp -= bhDmg;
+        r.enemyState.currentHp = Math.max(0, e.hp);
+        r.addFloatingText(bhDmg, r.enemyState.x, r.groundY - 60, "crit");
+      }, null, this.speedMultiplier);
+    }
+
+    // Periodic Skill Procs (Thunder Hammer & Lightning bolts every 3 turns)
+    const thunderSkill = c.skills.find(s => (s.key === "legendary_02_thunder_hammer" || s.effect === "thunder" || (s.name && s.name.includes("Thunder"))) && this.turnCount % (s.procEvery || 3) === 0);
+    if (thunderSkill && r.enemyState) {
+      const boltDmg = Math.round(c.atk * (thunderSkill.dmgMult || 2.2));
+      if (r.launchThunderHammerStrike) {
+        r.launchThunderHammerStrike(r.enemyState.x, r.groundY - 45, () => {
+          e.hp -= boltDmg;
+          r.enemyState.currentHp = Math.max(0, e.hp);
+          r.addFloatingText(boltDmg, r.enemyState.x, r.groundY - 60, "crit");
+        }, null, this.speedMultiplier);
+      } else {
+        e.hp -= boltDmg;
+        r.enemyState.currentHp = Math.max(0, e.hp);
+        Sound.playSfx("lightning");
+        r.addVisualEffect("critBurst", r.enemyState.x, r.groundY - 45, 1.5);
+        r.addMagicImpactSparks(r.enemyState.x, r.groundY - 45, ["#fde047", "#38bdf8", "#ffffff"]);
+        r.addFloatingText(boltDmg, r.enemyState.x, r.groundY - 60, "crit");
+      }
+    }
+
+    // Periodic Skill Procs (Fireball splash every 2 turns)
+    const fireballSkill = c.skills.find(s => (s.key === "legendary_08_fireball" || (s.name && s.name.includes("Fireball"))) && this.turnCount % (s.procEvery || 2) === 0);
+    if (fireballSkill && r.enemyState && r.launchFireball) {
+      const fbDmg = Math.round(c.atk * (fireballSkill.dmgMult || 2.2));
+      r.launchFireball(r.playerState.x + 30, r.groundY - 45, r.enemyState.x, r.groundY - 45, () => {
+        e.hp -= fbDmg;
+        r.enemyState.currentHp = Math.max(0, e.hp);
+        r.addFloatingText(fbDmg, r.enemyState.x, r.groundY - 55, "crit");
+      }, null, this.speedMultiplier);
+    }
+
+    // Check Rage Ultimate (True Magic Hit / Meteor Strike!)
     if (c.rage >= 100) {
       c.rage = 0;
       Sound.playSfx("magicBurst");
+
+      const meteorSkill = c.skills.find(s => s.key === "mythic_05_meteor_strike" || (s.name && s.name.includes("Meteor")));
+      if (meteorSkill && r.launchMeteorStrike) {
+        r.setPlayerAnim("skill", false);
+        const ultMult = meteorSkill.ultMult || 5.0;
+        const dmg = Math.round(c.atk * ultMult);
+        r.launchMeteorStrike(r.enemyState.x, r.groundY - 20, () => {
+          e.hp -= dmg;
+          if (r.enemyState) {
+            r.enemyState.currentHp = Math.max(0, e.hp);
+            r.addFloatingText(dmg, r.enemyState.x, r.groundY - 65, "crit");
+          }
+          this.syncPlayerRunStats();
+        }, () => {
+          r.setPlayerAnim("idle", true);
+          callback();
+        }, this.speedMultiplier);
+        return;
+      }
 
       r.performPlayerUltimate(
         // On Impact
@@ -492,10 +561,13 @@ class BattleSystem {
     const reviveSkill = c.skills.find(s => s.reviveOnce);
     if (reviveSkill && !run.reviveUsed) {
       run.reviveUsed = true;
-      c.hp = Math.round(c.maxHp * 0.5);
+      const reviveRatio = reviveSkill.reviveHpRatio || 0.5;
+      c.hp = Math.round(c.maxHp * reviveRatio);
       Sound.playSfx("magicBurst");
-      r.addVisualEffect("critBurst", r.playerState.x, r.groundY - 45, 2.0);
-      r.addFloatingText("PHOENIX REVIVE!", r.playerState.x, r.groundY - 60, "heal");
+      r.addVisualEffect("critBurst", r.playerState.x, r.groundY - 45, 2.2);
+      r.addMagicImpactSparks(r.playerState.x, r.groundY - 45, ["#fde047", "#fef08a", "#ffffff"]);
+      const reviveName = reviveSkill.name ? `${reviveSkill.name.toUpperCase()} REVIVE!` : "ANGEL REVIVE!";
+      r.addFloatingText(reviveName, r.playerState.x, r.groundY - 60, "heal");
       r.setPlayerAnim("idle", true);
       this.syncPlayerRunStats();
       this.nextTurn();

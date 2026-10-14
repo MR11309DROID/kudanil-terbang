@@ -488,7 +488,7 @@ class UIManager {
         <span class="treasure-card-tag ${tagClass}">${tagText}</span>
         <span class="treasure-card-check">✔</span>
         <div class="treasure-card-icon">
-          <img src="${sk.icon}" alt="${sk.name}" style="width: 28px; height: 28px; object-fit: contain;">
+          <img src="${sk.icon}" alt="${sk.name}" style="width: 34px; height: 34px; object-fit: contain; border-radius: 6px;">
         </div>
         <h4 class="treasure-card-title">${sk.name}</h4>
         <p class="treasure-card-desc">${sk.desc}</p>
