@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css2?family=Lilita+One&display=swap' rel='stylesheet'>
+<style>
+body { background: #1a1a24; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+.test-svg { width: 340px; height: 130px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); }
+</style>
+</head>
+<body>
+<svg class='test-svg' viewBox='0 0 340 120'>
+  <defs>
+    <path id='arc-path' d='M 25,82 Q 170,42 315,82' fill='none'/>
+    <linearGradient id='big-fill' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0%' stop-color='#FFFFFF'/>
+      <stop offset='25%' stop-color='#FFF8B5'/>
+      <stop offset='60%' stop-color='#FFCA28'/>
+      <stop offset='100%' stop-color='#F57C00'/>
+    </linearGradient>
+  </defs>
+  <!-- Deep 3D bevel bottom -->
+  <text font-family='Lilita One, sans-serif' font-size='56' fill='#450a0a' stroke='#450a0a' stroke-width='14' stroke-linejoin='round'>
+    <textPath href='#arc-path' startOffset='50%' text-anchor='middle'>Big Win</textPath>
+  </text>
+  <!-- 3D extrusion mid -->
+  <text dy='-4' font-family='Lilita One, sans-serif' font-size='56' fill='#991b1b' stroke='#991b1b' stroke-width='10' stroke-linejoin='round'>
+    <textPath href='#arc-path' startOffset='50%' text-anchor='middle'>Big Win</textPath>
+  </text>
+  <!-- Dark outline -->
+  <text dy='-8' font-family='Lilita One, sans-serif' font-size='56' fill='#3e0c00' stroke='#3e0c00' stroke-width='7' stroke-linejoin='round'>
+    <textPath href='#arc-path' startOffset='50%' text-anchor='middle'>Big Win</textPath>
+  </text>
+  <!-- Golden gradient body -->
+  <text dy='-8' font-family='Lilita One, sans-serif' font-size='56' fill='url(#big-fill)'>
+    <textPath href='#arc-path' startOffset='50%' text-anchor='middle'>Big Win</textPath>
+  </text>
+</svg>
+</body>
+</html>

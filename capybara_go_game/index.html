@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Capybara Go! — Mobile Adventure RPG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Fredoka:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Centered Mobile Frame Device Wrapper -->
+  <div id="game-container">
+    
+    <!-- ================= CAPYBARA GO! AUTHENTIC LOADING SCREEN (HABBY STYLE) ================= -->
+    <div id="loading-screen" class="loading-overlay">
+      <!-- Background Splash Key Art -->
+      <div class="loading-bg" style="background-image: url('assets/ui/loading_screen_art.jpg');"></div>
+      <div class="loading-vignette"></div>
+
+      <!-- Top Status Badges (Server & Version) -->
+      <div class="loading-top-info">
+        <div class="loading-badge"><span class="status-dot"></span> Server: Global-AS01</div>
+        <div class="loading-badge">v1.2.4 (Build 8902)</div>
+      </div>
+
+      <!-- Floating Sparkles FX -->
+      <div class="loading-sparkles">
+        <span class="sparkle sp-1">✨</span>
+        <span class="sparkle sp-2">⭐</span>
+        <span class="sparkle sp-3">✨</span>
+        <span class="sparkle sp-4">🌟</span>
+      </div>
+
+      <!-- Bottom Interactive Deck -->
+      <div class="loading-bottom-deck">
+        <!-- Status Label & Percentage -->
+        <div class="loading-status-wrap">
+          <span id="loading-status-text" class="loading-status-text">Checking for update...</span>
+          <span id="loading-percentage" class="loading-percent-text">0%</span>
+        </div>
+
+        <!-- Progress Bar with Running Capybara Mascot -->
+        <div class="loading-bar-container">
+          <div class="loading-bar-frame">
+            <div id="loading-bar-fill" class="loading-bar-fill" style="width: 0%;">
+              <div class="loading-bar-gleam"></div>
+            </div>
+            <!-- Animated Running Mascot -->
+            <div id="loading-mascot-runner" class="loading-mascot" style="left: 0%;">
+              <img id="loading-mascot-img" src="assets/characters/player/run/frame_01.png" alt="Capybara" class="mascot-img">
+            </div>
+          </div>
+        </div>
+
+        <!-- Tap to Start Interactive Prompt (Flashes when 100%) -->
+        <div id="loading-tap-prompt" class="loading-tap-prompt" style="display: none;">
+          <button id="btn-start-game" class="btn-tap-start">
+            <span class="tap-icon">🐾</span>
+            <span class="tap-text">TAP TO START</span>
+            <span class="tap-icon">✨</span>
+          </button>
+          <span class="tap-subtext">Click anywhere to start your journey</span>
+        </div>
+
+        <!-- Publisher Footer -->
+        <div class="loading-footer">
+          <span class="habby-logo-text">HABBY</span>
+          <span class="habby-slogan">Gaming is a hobby that makes you happy</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Top Header Bar (Currencies & Quick Controls) -->
+    <header id="game-header">
+      <div class="header-top-row">
+        <div class="header-day-info">
+          <span id="header-chapter-name">Chapter 1</span>
+          <span id="header-day-badge" class="badge-gold">Day 1 / 60</span>
+        </div>
+        <div class="header-controls">
+          <button id="btn-speed" class="ctrl-btn" title="Toggle Speed">1X ▶</button>
+          <button id="btn-menu-settings" class="ctrl-btn" title="Pengaturan">⚙️</button>
+        </div>
+      </div>
+
+      <!-- Chapter Day Progress Bar -->
+      <div class="day-progress-track">
+        <div id="header-day-progress" class="day-progress-fill" style="width: 0%;"></div>
+        <div class="milestone-marker m-20" title="Mini Boss Day 20">💀</div>
+        <div class="milestone-marker m-40" title="Elite Boss Day 40">⚔️</div>
+        <div class="milestone-marker m-60" title="Final Boss Day 60">👑</div>
+      </div>
+
+      <!-- Currencies Bar -->
+      <div class="currencies-row">
+        <div class="currency-pill">
+          <img src="assets/items/loot/loot_001.png" alt="Gold" class="cur-icon">
+          <span id="header-gold">0</span>
+        </div>
+        <div class="currency-pill">
+          <img src="assets/items/pickups/pickup_001.png" alt="Gems" class="cur-icon">
+          <span id="header-gems">0</span>
+        </div>
+        <div class="currency-pill">
+          <img src="assets/ui/capybara_cartoon_kit/bars/energy_fill.png" alt="Energy" class="cur-icon">
+          <span id="header-energy">30/30</span>
+        </div>
+        <div class="currency-pill">
+          <img src="assets/items/loot/loot_003.png" alt="Keys" class="cur-icon">
+          <span id="header-keys">0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Screens Viewport -->
+    <main id="game-body">
+      
+      <!-- ================= TAB 1: ADVENTURE (60-DAY RUN) ================= -->
+      <div id="tab-adventure" class="tab-page active">
+        
+        <!-- Upper Stage Canvas (Visual Scene, Capybara, Enemies, Parallax) -->
+        <div id="stage-viewport">
+          <canvas id="stage-canvas" width="440" height="350"></canvas>
+
+          <!-- Authentic Floating Top Overlay (Settings Icon + Day Milestone Track + Gem Counter) -->
+          <div class="stage-floating-header">
+            <!-- Settings Gear Button (Matches Image 1 style) -->
+            <button id="btn-stage-settings" class="stage-settings-btn" title="Settings">
+              <svg class="svg-gear-icon" viewBox="0 0 28 28">
+                <!-- Dark cartoon outline pass -->
+                <g fill="#071b2d" stroke="#071b2d" stroke-width="3.2" stroke-linejoin="round">
+                  <rect x="4" y="10.5" width="20" height="7" rx="3.5" ry="3.5"/>
+                  <rect x="4" y="10.5" width="20" height="7" rx="3.5" ry="3.5" transform="rotate(60 14 14)"/>
+                  <rect x="4" y="10.5" width="20" height="7" rx="3.5" ry="3.5" transform="rotate(120 14 14)"/>
+                  <circle cx="14" cy="14" r="6.8"/>
+                </g>
+                <!-- Pure white interior pass -->
+                <g fill="#ffffff">
+                  <rect x="4" y="10.5" width="20" height="7" rx="3.5" ry="3.5"/>
+                  <rect x="4" y="10.5" width="20" height="7" rx="3.5" ry="3.5" transform="rotate(60 14 14)"/>
+                  <rect x="4" y="10.5" width="20" height="7" rx="3.5" ry="3.5" transform="rotate(120 14 14)"/>
+                  <circle cx="14" cy="14" r="6.8"/>
+                </g>
+                <!-- Center circular hole with outline -->
+                <circle cx="14" cy="14" r="2.8" fill="#34b4e8" stroke="#071b2d" stroke-width="1.8"/>
+              </svg>
+            </button>
+
+            <!-- Floating Day Progress Milestone Capsule (Matches Image 1) -->
+            <div class="stage-day-capsule">
+              <span class="stage-day-label">Day</span>
+              <div class="stage-milestone-track">
+                <!-- Dark rail line -->
+                <div class="stage-rail-line"></div>
+                <!-- Progress fill on rail -->
+                <div id="stage-milestone-fill" class="stage-milestone-fill" style="width: 25%;"></div>
+
+                <!-- Node 1: Current Day (Hero badge with top red pointer arrow) -->
+                <div id="node-day-current" class="stage-node node-current active" title="Current Day">
+                  <div class="node-pointer-arrow"></div>
+                  <div class="node-circle-body">
+                    <svg viewBox="0 0 24 24" class="node-svg-icon">
+                      <!-- Crossed Chunky Cartoon Broadswords matching Image 1 -->
+                      <g fill="#ffffff">
+                        <!-- Left-slanting sword -->
+                        <path d="M5,18 L9,14 L17,6 C17.8,5.2 19,5.2 19.8,6 C20.6,6.8 20.6,8 19.8,8.8 L11.8,16.8 L7.8,20.8 C7.2,21.4 6.2,21.4 5.6,20.8 L4.8,20 C4.2,19.4 4.4,18.6 5,18 Z"/>
+                        <!-- Guard / crossbars -->
+                        <path d="M6,14.5 L10.5,19 L9.2,20.3 L4.7,15.8 Z"/>
+                        <!-- Right-slanting sword -->
+                        <path d="M19,18 L15,14 L7,6 C6.2,5.2 5,5.2 4.2,6 C3.4,6.8 3.4,8 4.2,8.8 L12.2,16.8 L16.2,20.8 C16.8,21.4 17.8,21.4 18.4,20.8 L19.2,20 C19.8,19.4 19.6,18.6 19,18 Z"/>
+                        <!-- Guard / crossbars -->
+                        <path d="M18,14.5 L13.5,19 L14.8,20.3 L19.3,15.8 Z"/>
+                      </g>
+                    </svg>
+                  </div>
+                  <span id="node-day-start" class="node-num">1</span>
+                </div>
+
+                <!-- Node 2: Next Major Encounter (Purple Skull Boss) -->
+                <div id="node-day-mid1" class="stage-node node-boss" title="Mini-Boss Encounter">
+                  <div class="node-circle-body">
+                    <svg viewBox="0 0 24 24" class="node-svg-icon">
+                      <!-- Authentic Capybara Go Skull (Pointed angry slanted eyes, wide cranial cranium) -->
+                      <path d="M12,4.5 C7.2,4.5 5,7.8 5,11.8 C5,14.2 6.5,16.2 8.6,16.8 L8.6,19.5 C8.6,20.2 9.2,20.8 10,20.8 L14,20.8 C14.8,20.8 15.4,20.2 15.4,19.5 L15.4,16.8 C17.5,16.2 19,14.2 19,11.8 C19,7.8 16.8,4.5 12,4.5 Z" fill="#ffffff"/>
+                      <!-- Angry almond tilted eye sockets -->
+                      <polygon points="7.2,13.2 10.6,11.5 10.8,14.5 8.2,15.2" fill="#7535b0"/>
+                      <polygon points="16.8,13.2 13.4,11.5 13.2,14.5 15.8,15.2" fill="#7535b0"/>
+                      <!-- Triangle nose hole -->
+                      <polygon points="12,14.2 11.2,15.8 12.8,15.8" fill="#7535b0"/>
+                      <!-- Tooth slot vertical slit -->
+                      <rect x="11.4" y="18.2" width="1.2" height="2.6" fill="#7535b0" rx="0.5"/>
+                    </svg>
+                  </div>
+                  <span id="node-day-event" class="node-num">10</span>
+                </div>
+
+                <!-- Node 3: Advanced Battle Encounter (Bronze Swords) -->
+                <div id="node-day-mid2" class="stage-node node-combat" title="Combat Milestone">
+                  <div class="node-circle-body">
+                    <svg viewBox="0 0 24 24" class="node-svg-icon">
+                      <g fill="#ffffff">
+                        <path d="M5,18 L9,14 L17,6 C17.8,5.2 19,5.2 19.8,6 C20.6,6.8 20.6,8 19.8,8.8 L11.8,16.8 L7.8,20.8 C7.2,21.4 6.2,21.4 5.6,20.8 L4.8,20 C4.2,19.4 4.4,18.6 5,18 Z"/>
+                        <path d="M6,14.5 L10.5,19 L9.2,20.3 L4.7,15.8 Z"/>
+                        <path d="M19,18 L15,14 L7,6 C6.2,5.2 5,5.2 4.2,6 C3.4,6.8 3.4,8 4.2,8.8 L12.2,16.8 L16.2,20.8 C16.8,21.4 17.8,21.4 18.4,20.8 L19.2,20 C19.8,19.4 19.6,18.6 19,18 Z"/>
+                        <path d="M18,14.5 L13.5,19 L14.8,20.3 L19.3,15.8 Z"/>
+                      </g>
+                    </svg>
+                  </div>
+                  <span id="node-day-battle" class="node-num">15</span>
+                </div>
+
+                <div class="stage-dots">•••</div>
+
+                <!-- Node 4: Chapter Final Boss Milestone (Purple Skull Boss) -->
+                <div id="node-day-final" class="stage-node node-boss" title="Chapter Boss">
+                  <div class="node-circle-body">
+                    <svg viewBox="0 0 24 24" class="node-svg-icon">
+                      <path d="M12,4.5 C7.2,4.5 5,7.8 5,11.8 C5,14.2 6.5,16.2 8.6,16.8 L8.6,19.5 C8.6,20.2 9.2,20.8 10,20.8 L14,20.8 C14.8,20.8 15.4,20.2 15.4,19.5 L15.4,16.8 C17.5,16.2 19,14.2 19,11.8 C19,7.8 16.8,4.5 12,4.5 Z" fill="#ffffff"/>
+                      <polygon points="7.2,13.2 10.6,11.5 10.8,14.5 8.2,15.2" fill="#7535b0"/>
+                      <polygon points="16.8,13.2 13.4,11.5 13.2,14.5 15.8,15.2" fill="#7535b0"/>
+                      <polygon points="12,14.2 11.2,15.8 12.8,15.8" fill="#7535b0"/>
+                      <rect x="11.4" y="18.2" width="1.2" height="2.6" fill="#7535b0" rx="0.5"/>
+                    </svg>
+                  </div>
+                  <span id="node-day-boss" class="node-num">20</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mini Gold & Gem Counters (Only pop in during loot animations) -->
+            <div class="stage-top-right-group">
+              <div id="stage-gold-pill" class="stage-top-gold-pill" title="Current Run Gold">
+                <span class="gold-mini-icon">🪙</span>
+                <span id="stage-gold-num">0</span>
+              </div>
+              <div id="stage-gems-pill" class="stage-top-gem-pill" title="Current Gems">
+                <span class="gem-mini-icon">💎</span>
+                <span id="stage-gems-num">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Authentic Top In-Run Blessing Skills Bar (Matches Reference Image) -->
+          <div id="stage-skills-wrapper" class="stage-skills-wrapper">
+            <div id="run-active-skills" class="run-active-skills-row"></div>
+          </div>
+
+          <!-- Battle In-Stage HUD (Round indicator and Speed button) -->
+          <div id="stage-battle-hud" class="stage-battle-hud" style="display: none;">
+            <div id="stage-round-pill" class="stage-round-pill">
+              <span id="stage-round-text">Round 1/30</span>
+            </div>
+            <button id="stage-speed-btn" class="stage-speed-btn" title="Toggle Speed">x1</button>
+          </div>
+
+          <!-- Authentic FIGHT! & Boss Encounter Combat Intro Splash (Matches Reference Screenshot) -->
+          <div id="stage-fight-splash" class="stage-fight-splash" style="display: none;">
+            <!-- Warning Hazard Stripes Band (Shown for Boss / Elite) -->
+            <div class="boss-warning-stripes-band">
+              <div class="hazard-stripe-line top"></div>
+              <div class="hazard-chevrons-stream"></div>
+              <div class="hazard-stripe-line bottom"></div>
+            </div>
+
+            <!-- Diamond Warning Emblem (Black Diamond + Red/Orange Border + White Cartoon Skull) -->
+            <div class="boss-diamond-emblem">
+              <div class="diamond-shape-outer">
+                <div class="diamond-shape-inner">
+                  <svg viewBox="0 0 48 48" class="boss-emblem-skull">
+                    <!-- Wide Cartoon Cranium -->
+                    <path d="M24,6 C13.5,6 9,13.5 9,22 C9,27 12,30.5 16.5,31.8 L16.5,37.5 C16.5,39 17.8,40 19.5,40 L28.5,40 C30.2,40 31.5,39 31.5,37.5 L31.5,31.8 C36,30.5 39,27 39,22 C39,13.5 34.5,6 24,6 Z" fill="#ffffff" stroke="#121624" stroke-width="2.5" stroke-linejoin="round"/>
+                    <!-- Large Black Eye Holes -->
+                    <ellipse cx="17.5" cy="23.5" rx="4.2" ry="5.8" fill="#121624"/>
+                    <ellipse cx="30.5" cy="23.5" rx="4.2" ry="5.8" fill="#121624"/>
+                    <!-- Nose Cavity Slot -->
+                    <polygon points="24,28 22,31.5 26,31.5" fill="#121624"/>
+                    <!-- Tooth Separations -->
+                    <line x1="21" y1="36" x2="21" y2="40" stroke="#121624" stroke-width="2"/>
+                    <line x1="27" y1="36" x2="27" y2="40" stroke="#121624" stroke-width="2"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- "FIGHT!" Main Comic Banner (Authentic Game Asset) -->
+            <img src="assets/ui/fight_banner.png" alt="FIGHT!" class="fight-banner-img">
+
+            <!-- Subtitle ("Elite incoming!!" / "Boss incoming!!") -->
+            <div id="boss-incoming-subtitle" class="boss-incoming-subtitle">Elite incoming!!</div>
+          </div>
+        </div>
+
+        <!-- ================= CAPYBARA GO IN-RUN STATS BAR (MATCHES IMAGE 1) ================= -->
+        <div id="run-stats-bar" class="run-stats-bar" style="display: none;">
+          <!-- 1. EXP Block -->
+          <div class="stat-unit unit-exp" title="Hero Adventure Level">
+            <span class="stat-floating-label">EXP</span>
+            <div class="stat-capsule-track">
+              <!-- Protruding Hexagon EXP Badge -->
+              <div class="icon-protruding badge-exp-hex">
+                <svg viewBox="0 0 28 32" class="svg-hex-badge">
+                  <polygon points="14,1 27,8.5 27,23.5 14,31 1,23.5 1,8.5" fill="#14532d" stroke="#112211" stroke-width="2"/>
+                  <polygon points="14,3 25,9.5 25,22.5 14,29 3,22.5 3,9.5" fill="#15803d" stroke="#86efac" stroke-width="2"/>
+                  <text x="14" y="21" font-family="'Lilita One', 'Fredoka', sans-serif" font-size="11" font-weight="900" fill="#ffffff" stroke="#000000" stroke-width="2.5" paint-order="stroke fill" text-anchor="middle">EXP</text>
+                </svg>
+              </div>
+              <div id="stat-exp-fill" class="stat-fill fill-exp" style="width: 70%;"></div>
+              <span id="stat-level-text" class="stat-track-text">Lv.1</span>
+            </div>
+          </div>
+
+          <!-- 2. HP Block -->
+          <div class="stat-unit unit-hp" title="Health Points">
+            <span class="stat-floating-label">HP</span>
+            <div class="stat-capsule-track">
+              <!-- Protruding Cute Pink Heart & Percentage -->
+              <div class="icon-protruding badge-hp-heart">
+                <svg viewBox="0 0 28 26" class="svg-heart-icon">
+                  <path d="M14,24 C14,24 2,16 2,8 C2,3.5 5.5,1 9.5,1 C12,1 13.5,2.5 14,4 C14.5,2.5 16,1 18.5,1 C22.5,1 26,3.5 26,8 C26,16 14,24 14,24 Z" fill="#ff4d6d" stroke="#3b0813" stroke-width="2"/>
+                  <!-- White Specular Crescent Highlight -->
+                  <path d="M6,4.5 C4.5,6 4,8 4.5,9 C5,8 6,6 8,5.5 C8,5 7,4.5 6,4.5 Z" fill="#ffffff" opacity="0.85"/>
+                </svg>
+                <span id="stat-hp-pct" class="hp-pct-tag">100%</span>
+              </div>
+              <div id="stat-hp-ghost" class="stat-fill fill-hp-ghost" style="width: 100%;"></div>
+              <div id="stat-hp-fill" class="stat-fill fill-hp" style="width: 100%;"></div>
+              <span id="stat-hp-num" class="stat-track-text hp-num-val">408/408</span>
+            </div>
+          </div>
+
+          <!-- 3. ATK Block -->
+          <div class="stat-unit unit-atk" title="Attack Power">
+            <span class="stat-floating-label">ATK</span>
+            <div class="stat-capsule-track">
+              <!-- Protruding Sword Icon -->
+              <div class="icon-protruding badge-atk-sword">
+                <svg viewBox="0 0 26 28" class="svg-sword-icon">
+                  <g transform="rotate(-25 13 14)">
+                    <!-- Blade -->
+                    <polygon points="13,1 17,6 16,17 10,17 9,6" fill="#f8fafc" stroke="#1e293b" stroke-width="1.8"/>
+                    <polygon points="13,1 17,6 16,17 13,17" fill="#cbd5e1"/>
+                    <!-- Crossguard -->
+                    <rect x="7" y="17" width="12" height="3" rx="1.5" fill="#facc15" stroke="#78350f" stroke-width="1.5"/>
+                    <!-- Grip -->
+                    <rect x="11.5" y="20" width="3" height="4" fill="#92400e" stroke="#451a03" stroke-width="1"/>
+                    <!-- Pommel -->
+                    <circle cx="13" cy="25" r="2.2" fill="#facc15" stroke="#78350f" stroke-width="1.2"/>
+                  </g>
+                </svg>
+              </div>
+              <span id="stat-atk-num" class="stat-track-text stat-num-val">107</span>
+            </div>
+          </div>
+
+          <!-- 4. DEF Block -->
+          <div class="stat-unit unit-def" title="Defense">
+            <span class="stat-floating-label">DEF</span>
+            <div class="stat-capsule-track">
+              <!-- Protruding Royal Blue Crown Shield -->
+              <div class="icon-protruding badge-def-shield">
+                <svg viewBox="0 0 26 28" class="svg-shield-icon">
+                  <!-- Outer white border & dark edge -->
+                  <path d="M13,2 C18,3 23,2 24,5 C24,14 18,22 13,26 C8,22 2,14 2,5 C3,2 8,3 13,2 Z" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+                  <!-- Inner Royal Blue Shield -->
+                  <path d="M13,4.5 C17,5.5 20.5,4.5 21.5,7 C21.5,14 16.5,20.5 13,23.5 C9.5,20.5 4.5,14 4.5,7 C5.5,4.5 9,5.5 13,4.5 Z" fill="#2563eb"/>
+                  <!-- White Crown Insignia -->
+                  <path d="M8,15 L9,10 L11,13 L13,9 L15,13 L17,10 L18,15 Z" fill="#ffffff"/>
+                </svg>
+              </div>
+              <span id="stat-def-num" class="stat-track-text stat-num-val">25</span>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Adventure State: Select Chapter (When Idle) -->
+        <div id="adventure-start-panel" class="panel-window" style="display: none;">
+          <h2 class="panel-title">Choose Your Journey</h2>
+          <div id="chapter-list-container" class="chapter-list"></div>
+        </div>
+
+        <!-- Adventure State: Active Run Event Deck & Next Day Button (Matches Image 1) -->
+        <div id="adventure-active-panel" class="adventure-run-container" style="display: none;">
+          <!-- Event Cards Stream -->
+          <div id="adventure-event-deck" class="adventure-event-deck">
+            <div id="event-cards-feed" class="event-cards-feed"></div>
+          </div>
+
+          <!-- Bottom Action Deck (Matches Video / Screenshot) -->
+          <div class="adventure-bottom-deck">
+            <!-- Authentic Capsule Button (Matches User Screenshot) -->
+            <button id="btn-travel-next" class="btn-capsule-travel state-ready">
+              <div class="btn-capsule-rim">
+                <div class="btn-capsule-core">
+                  <div class="btn-capsule-highlight"></div>
+                  <span id="next-day-btn-text" class="btn-capsule-text">Next Day</span>
+                </div>
+              </div>
+            </button>
+          </div>
+
+          <!-- Authentic Capybara Go! Win Escalation Banner (From Video Project 1) -->
+          <div id="fortune-win-banner" class="fortune-win-banner state-minor-win" style="display: none;">
+            <!-- Golden Shockwave Ring on escalation -->
+            <div class="win-shockwave-ring"></div>
+            
+            <!-- Rotating Sunburst Rays (Crisp SVG) -->
+            <div class="win-sunburst-wrap">
+              <svg class="win-sunburst-svg" viewBox="0 0 400 400">
+                <g class="sunburst-blades-group">
+                  <polygon points="200,200 178,0 222,0" class="sunburst-blade" />
+                  <polygon points="200,200 278,20 312,48" class="sunburst-blade" />
+                  <polygon points="200,200 352,90 380,122" class="sunburst-blade" />
+                  <polygon points="200,200 400,178 400,222" class="sunburst-blade" />
+                  <polygon points="200,200 380,278 352,312" class="sunburst-blade" />
+                  <polygon points="200,200 312,352 278,380" class="sunburst-blade" />
+                  <polygon points="200,200 222,400 178,400" class="sunburst-blade" />
+                  <polygon points="200,200 122,380 88,352" class="sunburst-blade" />
+                  <polygon points="200,200 48,312 20,278" class="sunburst-blade" />
+                  <polygon points="200,200 0,222 0,178" class="sunburst-blade" />
+                  <polygon points="200,200 20,122 48,88" class="sunburst-blade" />
+                  <polygon points="200,200 88,48 122,20" class="sunburst-blade" />
+                </g>
+              </svg>
+              <div class="win-center-glow"></div>
+            </div>
+
+            <!-- Sparkling 4-point Diamond Stars -->
+            <div class="win-sparkles-wrap">
+              <span class="win-diamond-star sp-1">✦</span>
+              <span class="win-diamond-star sp-2">✦</span>
+              <span class="win-diamond-star sp-3">✦</span>
+              <span class="win-diamond-star sp-4">✦</span>
+              <span class="win-diamond-star sp-5">✦</span>
+            </div>
+
+            <!-- Arched 3D Vector Text Banner (Matches Minor Win -> Big Win) -->
+            <div class="win-title-wrap">
+              <svg id="win-text-svg" class="win-text-svg" viewBox="0 0 340 115">
+                <defs>
+                  <!-- Smooth Arched Baseline Curve -->
+                  <path id="win-arc-curve" d="M 18,88 Q 170,36 322,88" fill="none" />
+
+                  <!-- Minor Win Cyan Fill Gradient -->
+                  <linearGradient id="svg-minor-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="20%" stop-color="#e0f7fa" />
+                    <stop offset="55%" stop-color="#38bdf8" />
+                    <stop offset="100%" stop-color="#0284c7" />
+                  </linearGradient>
+
+                  <!-- Big Win Golden Fill Gradient -->
+                  <linearGradient id="svg-big-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="20%" stop-color="#fef08a" />
+                    <stop offset="55%" stop-color="#facc15" />
+                    <stop offset="85%" stop-color="#f59e0b" />
+                    <stop offset="100%" stop-color="#d97706" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Pass 1: Deep 3D Shadow Extrusion (y+6) -->
+                <text id="win-text-shadow" class="svg-win-layer layer-shadow" dy="6">
+                  <textPath href="#win-arc-curve" startOffset="50%" text-anchor="middle">Minor Win</textPath>
+                </text>
+
+                <!-- Pass 2: 3D Bevel Rim (y+3) -->
+                <text id="win-text-bevel" class="svg-win-layer layer-bevel" dy="3">
+                  <textPath href="#win-arc-curve" startOffset="50%" text-anchor="middle">Minor Win</textPath>
+                </text>
+
+                <!-- Pass 3: Dark Stroke Outline (y+0) -->
+                <text id="win-text-stroke" class="svg-win-layer layer-stroke" dy="0">
+                  <textPath href="#win-arc-curve" startOffset="50%" text-anchor="middle">Minor Win</textPath>
+                </text>
+
+                <!-- Pass 4: Bright Foreground Gradient (y+0) -->
+                <text id="win-text-front" class="svg-win-layer layer-front" dy="0">
+                  <textPath href="#win-arc-curve" startOffset="50%" text-anchor="middle">Minor Win</textPath>
+                </text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Dramatic In-Game Fortune Banner Animation Splash (Matches Video 0:40-0:50) -->
+          <div id="fortune-splash-overlay" class="fortune-splash-overlay" style="display: none;">
+            <div class="fortune-burst-light"></div>
+            <div id="fortune-splash-badge" class="fortune-splash-badge">
+              <div id="fortune-splash-icon" class="fortune-splash-icon">⭐</div>
+              <div id="fortune-splash-title" class="fortune-splash-title">MAJOR FORTUNE</div>
+              <div id="fortune-splash-sub" class="fortune-splash-sub">A blessing shines upon your path!</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= TAB 2: EQUIPMENT / HERO ================= -->
+      <div id="tab-equipment" class="tab-page">
+        <div class="hero-stats-panel">
+          <h2 class="panel-title">Hero Equipment</h2>
+          
+          <!-- 6-Slot Paperdoll -->
+          <div class="paperdoll-container">
+            <div class="paperdoll-col">
+              <div id="slot-weapon" class="paperdoll-slot" title="Weapon Slot"></div>
+              <div id="slot-armor" class="paperdoll-slot" title="Armor Slot"></div>
+              <div id="slot-helmet" class="paperdoll-slot" title="Helmet Slot"></div>
+            </div>
+            
+            <div class="paperdoll-center">
+              <img src="assets/characters/player/idle/frame_01.png" alt="Capybara Hero" class="hero-avatar-large">
+              <div class="hero-title-badge">Capybara Knight</div>
+            </div>
+
+            <div class="paperdoll-col">
+              <div id="slot-boots" class="paperdoll-slot" title="Boots Slot"></div>
+              <div id="slot-ring" class="paperdoll-slot" title="Ring Slot"></div>
+              <div id="slot-amulet" class="paperdoll-slot" title="Amulet Slot"></div>
+            </div>
+          </div>
+
+          <!-- Attributes Grid -->
+          <div class="stats-summary-grid">
+            <div class="stat-cell"><span class="stat-name">💖 Max HP:</span> <strong id="stat-hp">350</strong></div>
+            <div class="stat-cell"><span class="stat-name">⚔️ Attack:</span> <strong id="stat-atk">45</strong></div>
+            <div class="stat-cell"><span class="stat-name">🛡️ Defense:</span> <strong id="stat-def">12</strong></div>
+            <div class="stat-cell"><span class="stat-name">🎯 Crit:</span> <strong id="stat-crit">10%</strong></div>
+            <div class="stat-cell"><span class="stat-name">💨 Dodge:</span> <strong id="stat-dodge">5%</strong></div>
+            <div class="stat-cell"><span class="stat-name">🩸 Lifesteal:</span> <strong id="stat-lifesteal">0%</strong></div>
+          </div>
+        </div>
+
+        <!-- Inventory Backpack -->
+        <div class="backpack-panel">
+          <h3 class="backpack-title">Inventory Backpack</h3>
+          <div id="inventory-grid" class="inventory-grid"></div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 3: TALENTS ================= -->
+      <div id="tab-talents" class="tab-page">
+        <div class="talents-panel">
+          <h2 class="panel-title">Ancient Capybara Talents</h2>
+          <p class="panel-subtitle">Permanent blessings that persist across all chapter adventures.</p>
+          <div id="talents-list-container" class="talents-list"></div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 4: CHESTS / GACHA ================= -->
+      <div id="tab-chests" class="tab-page">
+        <div class="chests-panel">
+          <h2 class="panel-title">Treasure Vault</h2>
+          <p class="panel-subtitle">Open mystery chests to obtain powerful gear and precious relics!</p>
+          
+          <div class="chests-container">
+            <!-- Wooden Chest -->
+            <div class="chest-card wood-chest">
+              <div class="chest-card-img-wrap">
+                <img src="assets/items/loot/loot_003.png" alt="Wooden Chest" class="chest-card-img">
+              </div>
+              <h3 class="chest-name">Wooden Mystery Chest</h3>
+              <p class="chest-desc">Drops 2 items (Common, Uncommon, Rare)</p>
+              <button id="btn-open-wood-chest" class="btn-game btn-blue">
+                Open (1 🗝️ or 150 🪙)
+              </button>
+            </div>
+
+            <!-- Royal Golden Chest -->
+            <div class="chest-card royal-chest">
+              <div class="chest-card-img-wrap">
+                <img src="assets/items/loot/loot_007.png" alt="Royal Chest" class="chest-card-img glow-pulse">
+              </div>
+              <h3 class="chest-name">Royal Golden Chest</h3>
+              <p class="chest-desc">Drops 3 items (High chance for Epic & Legendary!)</p>
+              <button id="btn-open-royal-chest" class="btn-game btn-gold">
+                Open (60 💎)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 5: BESTIARY ================= -->
+      <div id="tab-bestiary" class="tab-page">
+        <div class="bestiary-panel">
+          <h2 class="panel-title">Wild Bestiary & Codex</h2>
+          <p class="panel-subtitle">Catalog of encountered forest monsters and dangerous bosses.</p>
+          <div id="bestiary-grid" class="bestiary-grid"></div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav id="bottom-nav">
+      <button class="nav-tab-btn active" data-tab="adventure">
+        <span class="nav-icon">🗺️</span>
+        <span class="nav-label">Adventure</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="equipment">
+        <span class="nav-icon">🛡️</span>
+        <span class="nav-label">Hero</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="talents">
+        <span class="nav-icon">🌟</span>
+        <span class="nav-label">Talents</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="chests">
+        <span class="nav-icon">📦</span>
+        <span class="nav-label">Chests</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="bestiary">
+        <span class="nav-icon">📖</span>
+        <span class="nav-label">Codex</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- ================= MODALS & POPUPS ================= -->
+
+  <!-- Roguelike 3-Card Skill Level-Up Modal (Matches Authentic Capybara Go Image 1) -->
+  <div id="modal-skill-choice" class="modal-overlay modal-choose-skill-overlay">
+    <div class="choose-skill-modal-content">
+      <!-- Top Mascot & Banner Header Group -->
+      <div class="choose-skill-header-group">
+        <!-- Twinkling Sparkle Stars (Matches Screenshot) -->
+        <div class="choose-skill-sparkles">
+          <span class="sparkle sp-1">✦</span>
+          <span class="sparkle sp-2">✦</span>
+          <span class="sparkle sp-3">✦</span>
+          <span class="sparkle sp-4">✦</span>
+        </div>
+        <!-- Master Graphic: Authentic Vector Capybara Mascot + "Choose skill" Plaque -->
+        <img src="assets/ui/choose_skill_header.png?v=9" class="choose-skill-header-img" alt="Choose skill">
+      </div>
+
+      <!-- 3-Card Choice Vertical Stack -->
+      <div id="skill-cards-container" class="skill-cards-authentic-grid"></div>
+    </div>
+  </div>
+
+  <!-- Item Detail & Upgrade Modal -->
+  <div id="modal-item-detail" class="modal-overlay">
+    <div class="modal-card panel-navy">
+      <div class="item-detail-top">
+        <img id="item-modal-icon" src="" class="item-detail-icon" alt="Item">
+        <div class="item-detail-meta">
+          <h3 id="item-modal-name" class="item-modal-title">Item Name</h3>
+          <div id="item-modal-rarity" class="item-modal-rarity">Common Weapon</div>
+          <div id="item-modal-lvl" class="item-modal-lvl">Level 1</div>
+        </div>
+      </div>
+      <div id="item-modal-stats" class="item-detail-stats"></div>
+      <div class="item-modal-actions">
+        <button id="btn-item-upgrade" class="btn-game btn-gold">Upgrade</button>
+        <button id="btn-item-equip" class="btn-game btn-blue">Equip</button>
+        <button id="btn-item-close" class="btn-game btn-slate">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gacha Loot Reveal Modal -->
+  <div id="modal-gacha-result" class="modal-overlay">
+    <div class="modal-card panel-reward gacha-reveal-card">
+      <h2 id="gacha-chest-title" class="modal-title">Chest Opened!</h2>
+      <div id="gacha-loot-container" class="gacha-loot-grid"></div>
+      <button id="btn-gacha-claim" class="btn-game btn-gold btn-claim-large">Claim Treasures ✨</button>
+    </div>
+  </div>
+
+  <!-- Run Summary (Victory / Defeat) Modal -->
+  <div id="modal-run-summary" class="modal-overlay">
+    <div class="modal-card panel-navy">
+      <h2 id="summary-title" class="modal-title">Chapter Clear</h2>
+      <div id="summary-text" class="summary-body"></div>
+      <button id="summary-claim-btn" class="btn-game btn-gold">Continue 🐾</button>
+    </div>
+  </div>
+
+  <!-- Settings Modal (Pengaturan Suara & Game) -->
+  <div id="modal-settings" class="modal-overlay" style="display: none;">
+    <div class="modal-card panel-navy settings-modal-card">
+      <div class="settings-modal-header">
+        <h2 class="modal-title">⚙️ Pengaturan</h2>
+        <button id="btn-settings-close-x" class="settings-close-x" title="Close">✕</button>
+      </div>
+
+      <div class="settings-list">
+        <!-- Master Sound -->
+        <div class="setting-item-card">
+          <div class="setting-info">
+            <span class="setting-name">🔊 Suara Utama</span>
+            <span class="setting-sub">Aktifkan atau senyapkan seluruh audio game</span>
+          </div>
+          <button id="toggle-sound-master" class="setting-switch-btn active" data-setting="master">
+            <span class="switch-knob"></span>
+            <span class="switch-label">ON</span>
+          </button>
+        </div>
+
+        <!-- BGM Music -->
+        <div class="setting-item-card">
+          <div class="setting-info">
+            <span class="setting-name">🎵 Musik Latar (BGM)</span>
+            <span class="setting-sub">Musik petualangan, menu, dan pertarungan</span>
+          </div>
+          <button id="toggle-sound-bgm" class="setting-switch-btn active" data-setting="bgm">
+            <span class="switch-knob"></span>
+            <span class="switch-label">ON</span>
+          </button>
+        </div>
+
+        <!-- SFX Effects -->
+        <div class="setting-item-card">
+          <div class="setting-info">
+            <span class="setting-name">⚔️ Efek Suara (SFX)</span>
+            <span class="setting-sub">Suara tebasan pedang, koin, dan tombol</span>
+          </div>
+          <button id="toggle-sound-sfx" class="setting-switch-btn active" data-setting="sfx">
+            <span class="switch-knob"></span>
+            <span class="switch-label">ON</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-modal-actions">
+        <button id="btn-settings-close" class="btn-game btn-gold btn-settings-confirm">Simpan & Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= AUTHENTIC TREASURE CHEST MODAL (MATCHES VIDEO PROJECT 2) ================= -->
+  <div id="modal-treasure-chest" class="modal-overlay treasure-modal-overlay" style="display: none;">
+    <div class="treasure-modal-card">
+      <!-- Rotating Sunburst Rays (God rays) -->
+      <div class="treasure-sunburst-wrap">
+        <svg class="treasure-sunburst-svg" viewBox="0 0 500 500">
+          <g transform="translate(250, 250)">
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(22.5)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(45)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(67.5)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(90)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(112.5)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(135)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(157.5)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(180)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(202.5)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(225)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(247.5)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(270)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(292.5)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(315)" />
+            <polygon class="treasure-sunburst-blade" points="0,0 -26,-250 26,-250" transform="rotate(337.5)" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Twinkling Star Sparkles -->
+      <div class="treasure-sparkles-wrap">
+        <span class="treasure-sparkle sp-1">✦</span>
+        <span class="treasure-sparkle sp-2">✦</span>
+        <span class="treasure-sparkle sp-3">✦</span>
+        <span class="treasure-sparkle sp-4">✦</span>
+        <span class="treasure-sparkle sp-5">✦</span>
+      </div>
+
+      <!-- Stage 1: Closed Chest Screen ("You find treasure") -->
+      <div id="treasure-phase-find" class="treasure-content-phase">
+        <h2 class="treasure-main-title">You find treasure</h2>
+        
+        <div class="treasure-chest-display-wrap">
+          <img id="treasure-img-closed" src="assets/ui/chest_golden_closed.svg" alt="Golden Treasure Chest" class="treasure-chest-hero-img">
+        </div>
+
+        <button id="btn-treasure-open" class="btn-game btn-gold btn-treasure-open-action">Open</button>
+      </div>
+
+      <!-- Stage 2: Open Chest & Cards Gained Screen ("Congrats on gaining") -->
+      <div id="treasure-phase-open" class="treasure-content-phase" style="display: none;">
+        <h2 class="treasure-gaining-title">Congrats on gaining</h2>
+
+        <!-- Cards Slide Up Stack Container -->
+        <div id="treasure-cards-container" class="treasure-cards-stack">
+          <!-- Dynamically populated with 3 authentic skill cards -->
+        </div>
+
+        <!-- Open Chest at bottom with upward conical light beam -->
+        <div class="treasure-chest-opened-wrap">
+          <div class="treasure-conical-light-beam"></div>
+          <img id="treasure-img-open" src="assets/ui/chest_golden_open.svg" alt="Open Golden Chest" class="treasure-chest-open-hero-img">
+        </div>
+
+        <button id="btn-treasure-claim" class="btn-game btn-gold btn-treasure-claim-action">Claim All ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flying Coins Overlay Container (Video Project 1 Coin Fountain Full Screen Overlay) -->
+  <div id="flying-coins-container" class="flying-coins-container"></div>
+
+  <!-- Toast Notification Pill -->
+  <div id="game-toast" class="toast-pill"></div>
+
+  <!-- Game Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/character.js"></script>
+  <script src="js/stage_renderer.js"></script>
+  <script src="js/battle_system.js"></script>
+  <script src="js/gacha.js"></script>
+  <script src="js/adventure_engine.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/loading_screen.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

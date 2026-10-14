@@ -1,0 +1,55 @@
+{
+  "format": "nine-slice margins in source pixel units",
+  "panels": {
+    "panel_navy_window_9slice.png": {
+      "path": "panels/panel_navy_window_9slice.png",
+      "border": [
+        18,
+        18,
+        18,
+        18
+      ],
+      "note": "Keep corners fixed; stretch center edges."
+    },
+    "panel_navy_card_9slice.png": {
+      "path": "panels/panel_navy_card_9slice.png",
+      "border": [
+        17,
+        17,
+        17,
+        17
+      ],
+      "note": "Keep corners fixed; stretch center edges."
+    },
+    "panel_parchment_dialog_9slice.png": {
+      "path": "panels/panel_parchment_dialog_9slice.png",
+      "border": [
+        18,
+        18,
+        18,
+        18
+      ],
+      "note": "Keep corners fixed; stretch center edges."
+    },
+    "panel_reward_gold_9slice.png": {
+      "path": "panels/panel_reward_gold_9slice.png",
+      "border": [
+        18,
+        18,
+        18,
+        18
+      ],
+      "note": "Keep corners fixed; stretch center edges."
+    },
+    "panel_tooltip_dark_9slice.png": {
+      "path": "panels/panel_tooltip_dark_9slice.png",
+      "border": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "note": "Keep corners fixed; stretch center edges."
+    }
+  }
+}

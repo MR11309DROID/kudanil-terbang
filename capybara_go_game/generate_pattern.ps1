@@ -1,0 +1,41 @@
+$svg = @'
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="80" viewBox="0 0 110 80">
+  <defs>
+    <!-- Capybara Head Definition -->
+    <g id="capy-head">
+      <!-- Head Base Silhouette -->
+      <path d="M 12 36 C 10 26, 12 16, 18 10 C 18 6, 20 4, 23 5 C 26 6, 26 9, 25 12 C 30 10, 36 10, 42 12 C 50 14, 56 18, 58 24 C 59 31, 57 37, 51 39 C 44 42, 34 41, 25 40 C 19 39, 14 38, 12 36 Z" 
+            fill="rgba(255, 255, 255, 0.04)" 
+            stroke="rgba(255, 255, 255, 0.06)" 
+            stroke-width="1.2" 
+            stroke-linejoin="round" />
+      
+      <!-- Darker Muzzle Patch -->
+      <path d="M 45 16 C 51 19, 56 23, 56 28 C 56 34, 51 38, 46 37 C 42 35, 41 27, 42 21 Z" 
+            fill="rgba(0, 0, 0, 0.12)" />
+
+      <!-- Cute Sleepy Eye -->
+      <circle cx="33" cy="21" r="1.6" fill="rgba(0, 0, 0, 0.25)" />
+
+      <!-- Tiny Nostril -->
+      <circle cx="53" cy="27" r="1.1" fill="rgba(0, 0, 0, 0.22)" />
+      
+      <!-- Ear inner line -->
+      <path d="M 21 8 C 23 7, 24 9, 23 11" stroke="rgba(0, 0, 0, 0.15)" stroke-width="1" fill="none" />
+    </g>
+  </defs>
+
+  <!-- Deep Dark Slate Background Tile -->
+  <rect width="110" height="80" fill="#1b1e26" />
+
+  <!-- Staggered Capybara Heads (Brick Pattern) -->
+  <!-- Top-Left Head -->
+  <use href="#capy-head" x="2" y="4" />
+  
+  <!-- Offset Head (Row 2, centered between columns) -->
+  <use href="#capy-head" x="57" y="44" />
+</svg>
+'@
+
+Set-Content -Path "C:\Users\ThinkPad\.gemini\antigravity\scratch\capybara_go_game\assets\ui\capybara_pattern_test.svg" -Value $svg -Encoding utf8
+Write-Output "SVG generated."

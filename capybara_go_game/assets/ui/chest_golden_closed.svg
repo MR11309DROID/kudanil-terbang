@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" width="200" height="180">
+  <defs>
+    <!-- Gold Trim Gradients -->
+    <linearGradient id="goldTopGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fffde7"/>
+      <stop offset="25%" stop-color="#fef08a"/>
+      <stop offset="60%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="goldBrightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#fef08a"/>
+      <stop offset="70%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="goldShadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+
+    <!-- Crimson Velvet Gradients -->
+    <linearGradient id="velvetGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="30%" stop-color="#dc2626"/>
+      <stop offset="75%" stop-color="#b91c1c"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </linearGradient>
+    <linearGradient id="innerShadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#991b1b"/>
+      <stop offset="100%" stop-color="#5b1111"/>
+    </linearGradient>
+
+    <!-- Magenta Crown Jewel Gradient -->
+    <linearGradient id="pinkJewelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fbcfe8"/>
+      <stop offset="25%" stop-color="#f472b6"/>
+      <stop offset="65%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#be185d"/>
+    </linearGradient>
+
+    <!-- Filter for crisp drop shadows and glints -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- 1. Ground Drop Shadow -->
+  <ellipse cx="100" cy="166" rx="72" ry="11" fill="rgba(15, 23, 42, 0.48)"/>
+
+  <!-- 2. Main Box Outer Crimson Base -->
+  <rect x="34" y="94" width="132" height="66" rx="8" fill="url(#velvetGrad)" stroke="#220e03" stroke-width="4.5" stroke-linejoin="round"/>
+
+  <!-- Side Handles (Left and Right) -->
+  <!-- Left Handle -->
+  <rect x="22" y="104" width="14" height="24" rx="4" fill="url(#goldShadeGrad)" stroke="#220e03" stroke-width="3.5"/>
+  <rect x="24" y="108" width="8" height="16" rx="2" fill="#d97706"/>
+  <!-- Right Handle -->
+  <rect x="164" y="104" width="14" height="24" rx="4" fill="url(#goldShadeGrad)" stroke="#220e03" stroke-width="3.5"/>
+  <rect x="168" y="108" width="8" height="16" rx="2" fill="#d97706"/>
+
+  <!-- 3. Arched Lid Background (Crimson Padded Center) -->
+  <path d="M 34,92 L 34,58 C 34,36 54,26 100,26 C 146,26 166,36 166,58 L 166,92 Z" 
+        fill="url(#velvetGrad)" stroke="#220e03" stroke-width="4.5" stroke-linejoin="round"/>
+
+  <!-- Lid Left Curved Gold Arch Trim -->
+  <path d="M 32,92 L 32,58 C 32,36 46,27 68,27 C 76,27 74,42 66,56 L 66,92 Z" 
+        fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Inner bevel line on left arch -->
+  <path d="M 46,88 L 46,58 C 46,44 54,36 62,35" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.6"/>
+
+  <!-- Lid Right Curved Gold Arch Trim -->
+  <path d="M 168,92 L 168,58 C 168,36 154,27 132,27 C 124,27 126,42 134,56 L 134,92 Z" 
+        fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Side Arched Recess (Cutout window on side matching authentic game 3D model) -->
+  <path d="M 148,84 L 148,58 C 148,46 154,42 160,42 L 160,84 Z" fill="url(#innerShadeGrad)" stroke="#220e03" stroke-width="2.5"/>
+
+  <!-- Upper Lid Golden Rivets / Studs -->
+  <!-- Left Stud -->
+  <circle cx="50" cy="54" r="6" fill="url(#goldBrightGrad)" stroke="#220e03" stroke-width="3"/>
+  <circle cx="48" cy="52" r="1.8" fill="#ffffff" opacity="0.9"/>
+  <!-- Right Stud -->
+  <circle cx="150" cy="54" r="6" fill="url(#goldBrightGrad)" stroke="#220e03" stroke-width="3"/>
+  <circle cx="148" cy="52" r="1.8" fill="#ffffff" opacity="0.9"/>
+
+  <!-- 4. Middle Horizontal Dividing Gold Belt -->
+  <rect x="28" y="86" width="144" height="22" rx="5" fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="4" stroke-linejoin="round"/>
+  <line x1="32" y1="89" x2="168" y2="89" stroke="#ffffff" stroke-width="2" opacity="0.7"/>
+  <line x1="32" y1="104" x2="168" y2="104" stroke="#78350f" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- 5. Lower Box Vertical Footing Brackets (Left & Right) -->
+  <!-- Left Bottom Bracket -->
+  <rect x="30" y="122" width="34" height="42" rx="6" fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="4" stroke-linejoin="round"/>
+  <line x1="33" y1="125" x2="61" y2="125" stroke="#ffffff" stroke-width="1.8" opacity="0.7"/>
+  <circle cx="47" cy="144" r="6.5" fill="url(#goldBrightGrad)" stroke="#220e03" stroke-width="3"/>
+  <circle cx="45" cy="142" r="1.8" fill="#ffffff" opacity="0.95"/>
+
+  <!-- Right Bottom Bracket -->
+  <rect x="136" y="122" width="34" height="42" rx="6" fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="4" stroke-linejoin="round"/>
+  <line x1="139" y1="125" x2="167" y2="125" stroke="#ffffff" stroke-width="1.8" opacity="0.7"/>
+  <circle cx="153" cy="144" r="6.5" fill="url(#goldBrightGrad)" stroke="#220e03" stroke-width="3"/>
+  <circle cx="151" cy="142" r="1.8" fill="#ffffff" opacity="0.95"/>
+
+  <!-- Bottom Connecting Bar -->
+  <rect x="64" y="136" width="72" height="18" fill="url(#goldShadeGrad)" stroke="#220e03" stroke-width="3.5" stroke-linejoin="round"/>
+
+  <!-- 6. THE ROYAL GOLD & MAGENTA CROWN EMBLEM (Centerpiece) -->
+  <!-- Outer Gold Crown Body -->
+  <path d="M 54,80 
+           L 70,126 C 70,128 78,131 100,131 C 122,131 130,128 130,126 
+           L 146,80 
+           L 126,98 
+           L 100,64 
+           L 74,98 Z" 
+        fill="url(#goldBrightGrad)" stroke="#220e03" stroke-width="4.5" stroke-linejoin="round"/>
+  
+  <!-- Crown Top Edge Bevel Highlights -->
+  <path d="M 58,82 L 74,99 L 100,67 L 126,99 L 142,82" fill="none" stroke="#ffffff" stroke-width="2.2" opacity="0.85"/>
+
+  <!-- Crown Magenta/Pink Inset Core (Radiant Jewel) -->
+  <path d="M 64,90 
+           L 74,120 C 76,122 84,124 100,124 C 116,124 124,122 126,120 
+           L 136,90 
+           L 122,102 
+           L 100,76 
+           L 78,102 Z" 
+        fill="url(#pinkJewelGrad)" stroke="#831843" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Core Highlight Glint -->
+  <polygon points="68,93 72,108 77,105 73,95" fill="#ffffff" opacity="0.6"/>
+
+  <!-- 7. Four-Point Star Sparkles (Authentic Glints) -->
+  <!-- Sparkle Top Left -->
+  <g transform="translate(68, 62) scale(0.9)">
+    <path d="M 0,-10 Q 0,0 10,0 Q 0,0 0,10 Q 0,0 -10,0 Q 0,0 0,-10 Z" fill="#ffffff"/>
+  </g>
+  <!-- Sparkle Crown Edge -->
+  <g transform="translate(138, 126) scale(0.8)">
+    <path d="M 0,-8 Q 0,0 8,0 Q 0,0 0,8 Q 0,0 -8,0 Q 0,0 0,-8 Z" fill="#ffffff"/>
+  </g>
+  <!-- Sparkle Left Floating -->
+  <g transform="translate(18, 115) scale(0.9)">
+    <path d="M 0,-10 Q 0,0 10,0 Q 0,0 0,10 Q 0,0 -10,0 Q 0,0 0,-10 Z" fill="#fffbeb"/>
+  </g>
+</svg>

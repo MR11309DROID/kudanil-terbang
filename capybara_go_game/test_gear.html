@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { background: #222; display: flex; align-items: center; justify-content: center; height: 100vh; gap: 20px; }
+.stage-settings-btn {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(180deg, #6fe0fc 0%, #3bb9e8 50%, #1a9fd6 100%);
+  border: 2.2px solid #071b2d;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3.5px 0 #071b2d, 0 5px 8px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  box-sizing: border-box;
+}
+.stage-settings-btn::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 80%);
+  pointer-events: none;
+}
+.svg-gear-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+  overflow: visible;
+}
+</style>
+</head>
+<body>
+<button class='stage-settings-btn'>
+  <svg class='svg-gear-icon' viewBox='0 0 28 28'>
+    <g fill='#071b2d' stroke='#071b2d' stroke-width='3.2' stroke-linejoin='round'>
+      <rect x='4' y='10.5' width='20' height='7' rx='3.5' ry='3.5'/>
+      <rect x='4' y='10.5' width='20' height='7' rx='3.5' ry='3.5' transform='rotate(60 14 14)'/>
+      <rect x='4' y='10.5' width='20' height='7' rx='3.5' ry='3.5' transform='rotate(120 14 14)'/>
+      <circle cx='14' cy='14' r='6.8'/>
+    </g>
+    <g fill='#ffffff'>
+      <rect x='4' y='10.5' width='20' height='7' rx='3.5' ry='3.5'/>
+      <rect x='4' y='10.5' width='20' height='7' rx='3.5' ry='3.5' transform='rotate(60 14 14)'/>
+      <rect x='4' y='10.5' width='20' height='7' rx='3.5' ry='3.5' transform='rotate(120 14 14)'/>
+      <circle cx='14' cy='14' r='6.8'/>
+    </g>
+    <circle cx='14' cy='14' r='2.8' fill='#34b4e8' stroke='#071b2d' stroke-width='1.8'/>
+  </svg>
+</button>
+</body>
+</html>

@@ -1,0 +1,25 @@
+# Ignore large binaries (exceeds GitHub 100MB limit)
+*.exe
+ffmpeg.exe
+capybara_go_game/ffmpeg.exe
+
+# Scratch & temporary unpacking folders
+1row_package/
+capybara-go/
+capybara_assets/
+capybara_go/
+capybara_go_unpacked/
+capybara_magic_slices_final/
+clean_frames/
+clean_slices/
+cleaned_extracted/
+magic_slices_raw/
+preview_area/
+row_slices_extracted/
+
+# Scratch extraction scripts and dumps in root
+*.ps1
+!capybara_go_game/*.ps1
+thumb_*.png
+zip_entries.txt
+capybara_tycoon_brawler_v2.html

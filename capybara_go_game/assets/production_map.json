@@ -1,0 +1,1212 @@
+{
+  "player_aligned_frames": [
+    {
+      "action": "attack",
+      "frame": 1,
+      "path": "characters/player/attack/frame_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "attack_01.png"
+    },
+    {
+      "action": "attack",
+      "frame": 2,
+      "path": "characters/player/attack/frame_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "attack_02.png"
+    },
+    {
+      "action": "attack",
+      "frame": 3,
+      "path": "characters/player/attack/frame_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "attack_03.png"
+    },
+    {
+      "action": "attack",
+      "frame": 4,
+      "path": "characters/player/attack/frame_04.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "attack_04.png"
+    },
+    {
+      "action": "attack",
+      "frame": 5,
+      "path": "characters/player/attack/frame_05.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "attack_05.png"
+    },
+    {
+      "action": "attack",
+      "frame": 6,
+      "path": "characters/player/attack/frame_06.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "attack_06.png"
+    },
+    {
+      "action": "attack",
+      "frame": 7,
+      "path": "characters/player/attack/frame_07.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "attack_07.png"
+    },
+    {
+      "action": "attack",
+      "frame": 8,
+      "path": "characters/player/attack/frame_08.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "attack_08.png"
+    },
+    {
+      "action": "attack",
+      "frame": 9,
+      "path": "characters/player/attack/frame_09.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "attack_09.png"
+    },
+    {
+      "action": "die",
+      "frame": 1,
+      "path": "characters/player/die/frame_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "die_01.png"
+    },
+    {
+      "action": "die",
+      "frame": 2,
+      "path": "characters/player/die/frame_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "die_02.png"
+    },
+    {
+      "action": "die",
+      "frame": 3,
+      "path": "characters/player/die/frame_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "die_03.png"
+    },
+    {
+      "action": "die",
+      "frame": 4,
+      "path": "characters/player/die/frame_04.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "die_04.png"
+    },
+    {
+      "action": "die",
+      "frame": 5,
+      "path": "characters/player/die/frame_05.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "die_05.png"
+    },
+    {
+      "action": "die",
+      "frame": 6,
+      "path": "characters/player/die/frame_06.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "die_06.png"
+    },
+    {
+      "action": "die",
+      "frame": 7,
+      "path": "characters/player/die/frame_07.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "die_07.png"
+    },
+    {
+      "action": "hurt",
+      "frame": 1,
+      "path": "characters/player/hurt/frame_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "hurt_01.png"
+    },
+    {
+      "action": "hurt",
+      "frame": 2,
+      "path": "characters/player/hurt/frame_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "hurt_02.png"
+    },
+    {
+      "action": "hurt",
+      "frame": 3,
+      "path": "characters/player/hurt/frame_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "hurt_03.png"
+    },
+    {
+      "action": "hurt",
+      "frame": 4,
+      "path": "characters/player/hurt/frame_04.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "hurt_04.png"
+    },
+    {
+      "action": "hurt",
+      "frame": 5,
+      "path": "characters/player/hurt/frame_05.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "hurt_05.png"
+    },
+    {
+      "action": "hurt",
+      "frame": 6,
+      "path": "characters/player/hurt/frame_06.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "hurt_06.png"
+    },
+    {
+      "action": "hurt",
+      "frame": 7,
+      "path": "characters/player/hurt/frame_07.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "hurt_07.png"
+    },
+    {
+      "action": "hurt",
+      "frame": 8,
+      "path": "characters/player/hurt/frame_08.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "hurt_08.png"
+    },
+    {
+      "action": "hurt",
+      "frame": 9,
+      "path": "characters/player/hurt/frame_09.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "hurt_09.png"
+    },
+    {
+      "action": "idle",
+      "frame": 1,
+      "path": "characters/player/idle/frame_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "idle_01.png"
+    },
+    {
+      "action": "idle",
+      "frame": 2,
+      "path": "characters/player/idle/frame_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "idle_02.png"
+    },
+    {
+      "action": "idle",
+      "frame": 3,
+      "path": "characters/player/idle/frame_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "idle_03.png"
+    },
+    {
+      "action": "idle",
+      "frame": 4,
+      "path": "characters/player/idle/frame_04.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "idle_04.png"
+    },
+    {
+      "action": "idle",
+      "frame": 5,
+      "path": "characters/player/idle/frame_05.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "idle_05.png"
+    },
+    {
+      "action": "idle",
+      "frame": 6,
+      "path": "characters/player/idle/frame_06.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "idle_06.png"
+    },
+    {
+      "action": "idle",
+      "frame": 7,
+      "path": "characters/player/idle/frame_07.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "idle_07.png"
+    },
+    {
+      "action": "idle",
+      "frame": 8,
+      "path": "characters/player/idle/frame_08.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "idle_08.png"
+    },
+    {
+      "action": "idle",
+      "frame": 9,
+      "path": "characters/player/idle/frame_09.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "idle_09.png"
+    },
+    {
+      "action": "run",
+      "frame": 1,
+      "path": "characters/player/run/frame_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "run_01.png"
+    },
+    {
+      "action": "run",
+      "frame": 2,
+      "path": "characters/player/run/frame_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "run_02.png"
+    },
+    {
+      "action": "run",
+      "frame": 3,
+      "path": "characters/player/run/frame_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "run_03.png"
+    },
+    {
+      "action": "run",
+      "frame": 4,
+      "path": "characters/player/run/frame_04.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "run_04.png"
+    },
+    {
+      "action": "run",
+      "frame": 5,
+      "path": "characters/player/run/frame_05.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "run_05.png"
+    },
+    {
+      "action": "run",
+      "frame": 6,
+      "path": "characters/player/run/frame_06.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "run_06.png"
+    },
+    {
+      "action": "run",
+      "frame": 7,
+      "path": "characters/player/run/frame_07.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "run_07.png"
+    },
+    {
+      "action": "run",
+      "frame": 8,
+      "path": "characters/player/run/frame_08.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "run_08.png"
+    },
+    {
+      "action": "run",
+      "frame": 9,
+      "path": "characters/player/run/frame_09.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "run_09.png"
+    },
+    {
+      "action": "skill",
+      "frame": 1,
+      "path": "characters/player/skill/frame_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "skill_01.png"
+    },
+    {
+      "action": "skill",
+      "frame": 2,
+      "path": "characters/player/skill/frame_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "skill_02.png"
+    },
+    {
+      "action": "skill",
+      "frame": 3,
+      "path": "characters/player/skill/frame_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "skill_03.png"
+    },
+    {
+      "action": "skill",
+      "frame": 4,
+      "path": "characters/player/skill/frame_04.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "skill_04.png"
+    },
+    {
+      "action": "skill",
+      "frame": 5,
+      "path": "characters/player/skill/frame_05.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "skill_05.png"
+    },
+    {
+      "action": "skill",
+      "frame": 6,
+      "path": "characters/player/skill/frame_06.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "skill_06.png"
+    },
+    {
+      "action": "skill",
+      "frame": 7,
+      "path": "characters/player/skill/frame_07.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "skill_07.png"
+    },
+    {
+      "action": "skill",
+      "frame": 8,
+      "path": "characters/player/skill/frame_08.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "skill_08.png"
+    },
+    {
+      "action": "skill",
+      "frame": 9,
+      "path": "characters/player/skill/frame_09.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "skill_09.png"
+    },
+    {
+      "action": "walk",
+      "frame": 1,
+      "path": "characters/player/walk/frame_01.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "walk_01.png"
+    },
+    {
+      "action": "walk",
+      "frame": 2,
+      "path": "characters/player/walk/frame_02.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "walk_02.png"
+    },
+    {
+      "action": "walk",
+      "frame": 3,
+      "path": "characters/player/walk/frame_03.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "walk_03.png"
+    },
+    {
+      "action": "walk",
+      "frame": 4,
+      "path": "characters/player/walk/frame_04.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "walk_04.png"
+    },
+    {
+      "action": "walk",
+      "frame": 5,
+      "path": "characters/player/walk/frame_05.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "walk_05.png"
+    },
+    {
+      "action": "walk",
+      "frame": 6,
+      "path": "characters/player/walk/frame_06.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "walk_06.png"
+    },
+    {
+      "action": "walk",
+      "frame": 7,
+      "path": "characters/player/walk/frame_07.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "walk_07.png"
+    },
+    {
+      "action": "walk",
+      "frame": 8,
+      "path": "characters/player/walk/frame_08.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "walk_08.png"
+    },
+    {
+      "action": "walk",
+      "frame": 9,
+      "path": "characters/player/walk/frame_09.png",
+      "size": [
+        64,
+        64
+      ],
+      "source": "walk_09.png"
+    }
+  ],
+  "enemy_roster": [
+    {
+      "id": "slime_green",
+      "source": "enemy_001.png",
+      "path": "characters/enemies/roster/slime_green.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Green slime; representative from a cluster of similar slime crops."
+    },
+    {
+      "id": "mushroom_red",
+      "source": "enemy_011.png",
+      "path": "characters/enemies/roster/mushroom_red.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Red-capped mushroom creature."
+    },
+    {
+      "id": "blue_flyer",
+      "source": "enemy_013.png",
+      "path": "characters/enemies/roster/blue_flyer.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Small blue winged enemy."
+    },
+    {
+      "id": "flower_red",
+      "source": "enemy_020.png",
+      "path": "characters/enemies/roster/flower_red.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Red flower creature."
+    },
+    {
+      "id": "bee",
+      "source": "enemy_024.png",
+      "path": "characters/enemies/roster/bee.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Bee creature."
+    },
+    {
+      "id": "stone_golem",
+      "source": "enemy_029.png",
+      "path": "characters/enemies/roster/stone_golem.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Small stone golem."
+    },
+    {
+      "id": "sprout",
+      "source": "enemy_037.png",
+      "path": "characters/enemies/roster/sprout.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Sprout/plant creature."
+    },
+    {
+      "id": "purple_boar",
+      "source": "enemy_047.png",
+      "path": "characters/enemies/roster/purple_boar.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Purple boar-like creature."
+    },
+    {
+      "id": "pink_flower",
+      "source": "enemy_042.png",
+      "path": "characters/enemies/roster/pink_flower.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Pink flower creature."
+    },
+    {
+      "id": "cactus_mimic",
+      "source": "enemy_045.png",
+      "path": "characters/enemies/roster/cactus_mimic.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "status": "curated representative sprite",
+      "description": "Tall plant/cactus-like creature."
+    }
+  ],
+  "boss_sprites_and_illustrations": [
+    {
+      "source": "boss_blue_knight.png",
+      "path": "characters/bosses/boss_blue_knight.png",
+      "status": "individual boss sprite",
+      "canvas": [
+        128,
+        128
+      ]
+    },
+    {
+      "source": "boss_capbara_king.png",
+      "path": "characters/bosses/boss_capbara_king.png",
+      "status": "individual boss sprite",
+      "canvas": [
+        128,
+        128
+      ]
+    },
+    {
+      "source": "boss_crown_warrior.png",
+      "path": "characters/bosses/boss_crown_warrior.png",
+      "status": "individual boss sprite",
+      "canvas": [
+        128,
+        128
+      ]
+    },
+    {
+      "source": "boss_forest_treant.png",
+      "path": "illustrations/boss_key_art/forest_treant_group_illustration.png",
+      "status": "composite illustration - not a standalone boss sprite"
+    },
+    {
+      "source": "boss_purple_mage.png",
+      "path": "characters/bosses/boss_purple_mage.png",
+      "status": "individual boss sprite",
+      "canvas": [
+        128,
+        128
+      ]
+    },
+    {
+      "source": "boss_skeleton_guard.png",
+      "path": "characters/bosses/boss_skeleton_guard.png",
+      "status": "individual boss sprite",
+      "canvas": [
+        128,
+        128
+      ]
+    }
+  ],
+  "backgrounds": [
+    {
+      "source": "stage_01_grassland_panorama.png",
+      "path": "illustrations/key_art/grassland_scene_with_baked_in_hero.png",
+      "status": "key art; hero is baked into the background, not a clean gameplay background"
+    },
+    {
+      "source": "stage_02_desert_panorama.png",
+      "path": "backgrounds/panoramas/desert_ruins_parallax.png",
+      "status": "border-trimmed panoramic scene",
+      "size": [
+        1326,
+        335
+      ],
+      "background_is_opaque": true
+    },
+    {
+      "source": "stage_03_snow_panorama.png",
+      "path": "backgrounds/panoramas/snow_mountain_parallax.png",
+      "status": "border-trimmed panoramic scene",
+      "size": [
+        1326,
+        332
+      ],
+      "background_is_opaque": true
+    },
+    {
+      "source": "stage_04_volcano_panorama.png",
+      "path": "backgrounds/panoramas/volcano_lava_parallax.png",
+      "status": "border-trimmed panoramic scene",
+      "size": [
+        1326,
+        341
+      ],
+      "background_is_opaque": true
+    },
+    {
+      "source": "stage_05_castle_meadow_panorama.png",
+      "path": "backgrounds/panoramas/meadow_castle_parallax.png",
+      "status": "border-trimmed panoramic scene",
+      "size": [
+        1326,
+        251
+      ],
+      "background_is_opaque": true
+    },
+    {
+      "source": "stage_06_night_castle_panorama.png",
+      "path": "backgrounds/panoramas/moonlit_castle_parallax.png",
+      "status": "border-trimmed panoramic scene",
+      "size": [
+        1326,
+        236
+      ],
+      "background_is_opaque": true
+    },
+    {
+      "source": "stage_07_forest_battle_bg.png",
+      "path": "../qa/background_review_only/stage_07_forest_thumbnail_crop.png",
+      "status": "thumbnail crop from atlas; do not use as full-resolution stage background",
+      "size": [
+        190,
+        143
+      ]
+    },
+    {
+      "source": "stage_08_desert_battle_bg.png",
+      "path": "../qa/background_review_only/stage_08_desert_thumbnail_crop.png",
+      "status": "thumbnail crop from atlas; do not use as full-resolution stage background",
+      "size": [
+        194,
+        143
+      ]
+    },
+    {
+      "source": "stage_09_snow_battle_bg.png",
+      "path": "../qa/background_review_only/stage_09_snow_thumbnail_crop.png",
+      "status": "thumbnail crop from atlas; do not use as full-resolution stage background",
+      "size": [
+        197,
+        143
+      ]
+    },
+    {
+      "source": "stage_10_volcano_battle_bg.png",
+      "path": "../qa/background_review_only/stage_10_volcano_thumbnail_crop.png",
+      "status": "thumbnail crop from atlas; do not use as full-resolution stage background",
+      "size": [
+        190,
+        128
+      ]
+    },
+    {
+      "source": "stage_11_night_battle_bg.png",
+      "path": "../qa/background_review_only/stage_11_night_thumbnail_crop.png",
+      "status": "thumbnail crop from atlas; do not use as full-resolution stage background",
+      "size": [
+        194,
+        128
+      ]
+    },
+    {
+      "source": "stage_12_castle_battle_bg.png",
+      "path": "../qa/background_review_only/stage_12_castle_thumbnail_crop.png",
+      "status": "thumbnail crop from atlas; do not use as full-resolution stage background",
+      "size": [
+        197,
+        128
+      ]
+    },
+    {
+      "source": "stage_13_sea_battle_bg.png",
+      "path": "../qa/background_review_only/stage_13_sea_thumbnail_crop.png",
+      "status": "thumbnail crop from atlas; do not use as full-resolution stage background",
+      "size": [
+        190,
+        131
+      ]
+    },
+    {
+      "source": "stage_14_sky_islands_battle_bg.png",
+      "path": "../qa/background_review_only/stage_14_sky_islands_thumbnail_crop.png",
+      "status": "thumbnail crop from atlas; do not use as full-resolution stage background",
+      "size": [
+        194,
+        131
+      ]
+    },
+    {
+      "source": "stage_15_dungeon_battle_bg.png",
+      "path": "../qa/background_review_only/stage_15_dungeon_thumbnail_crop.png",
+      "status": "thumbnail crop from atlas; do not use as full-resolution stage background",
+      "size": [
+        197,
+        131
+      ]
+    }
+  ],
+  "terrain_pieces": [
+    {
+      "source": "terrain_tile_01.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_01.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        46,
+        37
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_02.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_02.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        48,
+        37
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_03.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_03.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        50,
+        38
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_04.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_04.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        48,
+        39
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_05.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_05.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        77,
+        41
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_06.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_06.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        70,
+        41
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_07.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_07.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        51,
+        34
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_08.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_08.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        36,
+        35
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_09.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_09.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        41,
+        35
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_10.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_10.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        34,
+        35
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_11.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_11.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        32,
+        30
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_12.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_12.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        46,
+        37
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_13.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_13.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        48,
+        37
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_14.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_14.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        51,
+        40
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_15.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_15.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        50,
+        40
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_16.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_16.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        54,
+        33
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_17.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_17.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        55,
+        37
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_18.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_18.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        37,
+        37
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_19.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_19.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        53,
+        37
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_20.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_20.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        50,
+        33
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_21.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_21.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        52,
+        33
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    },
+    {
+      "source": "terrain_tile_22.png",
+      "path": "environment/terrain_pieces_64/terrain_tile_22.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "source_size": [
+        55,
+        33
+      ],
+      "status": "padded standalone terrain/platform piece; not guaranteed seamless"
+    }
+  ],
+  "notes": [
+    "The player frames use a shared 64x64 transparent canvas.",
+    "The curated roster intentionally uses representative enemy archetypes; legacy enemy crops are not all unique species.",
+    "Enemy attack/hurt/die sequences in the legacy section are procedural prototypes, not bespoke hand-drawn pose animation.",
+    "The UI kit is manually authored as individual transparent PNG components, with nine-slice metadata.",
+    "Terrain pieces are padded to 64x64, but a full seamless autotile mask library is not included yet.",
+    "Hero skin/costume variants remain deferred as requested."
+  ]
+}

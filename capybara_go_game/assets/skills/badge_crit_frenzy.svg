@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76 84" width="76" height="84">
+  <defs>
+    <!-- Slate-Lavender Badge Gradient -->
+    <linearGradient id="frenzyBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c5cee0"/>
+      <stop offset="60%" stop-color="#a6b2c7"/>
+      <stop offset="100%" stop-color="#93a0b7"/>
+    </linearGradient>
+
+    <!-- Boxing Gloves Gradient -->
+    <linearGradient id="gloveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff4757"/>
+      <stop offset="100%" stop-color="#c0392b"/>
+    </linearGradient>
+
+    <!-- Capy Face Gradient -->
+    <linearGradient id="capyMiniFace" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8be7e"/>
+      <stop offset="100%" stop-color="#d68f47"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 1. BASE BADGE BOX -->
+  <rect x="3" y="14" width="70" height="66" rx="10" fill="#181d28" stroke="#181d28" stroke-width="4.5" stroke-linejoin="round"/>
+  <rect x="4" y="15" width="68" height="64" rx="9" fill="url(#frenzyBg)"/>
+
+  <!-- Subtle inner background polka dots pattern -->
+  <circle cx="16" cy="32" r="3" fill="#8492ab" opacity="0.4"/>
+  <circle cx="16" cy="48" r="3" fill="#8492ab" opacity="0.4"/>
+  <circle cx="16" cy="64" r="3" fill="#8492ab" opacity="0.4"/>
+
+  <!-- 2. BOXING CAPYBARA CHARACTER -->
+  <g transform="translate(38, 48)">
+    <!-- Maroon Hero Cape behind -->
+    <path d="M -16,4 C -22,12 -20,24 -15,30 L 15,30 C 20,24 22,12 16,4 Z" fill="#691a32" stroke="#181310" stroke-width="3"/>
+
+    <!-- Round Ears -->
+    <ellipse cx="-13" cy="-18" rx="5" ry="4" fill="#181310"/>
+    <ellipse cx="-13" cy="-18" rx="3.5" ry="2.5" fill="#e8a35e"/>
+    <ellipse cx="13" cy="-18" rx="5" ry="4" fill="#181310"/>
+    <ellipse cx="13" cy="-18" rx="3.5" ry="2.5" fill="#e8a35e"/>
+
+    <!-- Capybara Head -->
+    <ellipse cx="0" cy="-6" rx="18" ry="16" fill="#181310" stroke="#181310" stroke-width="4" stroke-linejoin="round"/>
+    <ellipse cx="0" cy="-6" rx="18" ry="16" fill="url(#capyMiniFace)"/>
+
+    <!-- Darker Muzzle -->
+    <ellipse cx="0" cy="-2" rx="7.5" ry="6.5" fill="#ba753f" stroke="#181310" stroke-width="2"/>
+    <!-- Nose Y-mouth -->
+    <path d="M 0,-4 L 0,-1 M 0,-1 Q -3,2 -4,0 M 0,-1 Q 3,2 4,0" stroke="#181310" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+    <!-- Determined / Aggressive Slanted Eyes -->
+    <line x1="-10" y1="-9" x2="-4" y2="-7" stroke="#181310" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="10" y1="-9" x2="4" y2="-7" stroke="#181310" stroke-width="3.5" stroke-linecap="round"/>
+
+    <!-- Small Paws -->
+    <circle cx="-16" cy="6" r="3.5" fill="#e8a35e" stroke="#181310" stroke-width="2.5"/>
+    <circle cx="16" cy="6" r="3.5" fill="#e8a35e" stroke="#181310" stroke-width="2.5"/>
+
+    <!-- Red Boxing Gloves (Held together in front of chest) -->
+    <!-- Left Glove -->
+    <circle cx="-6" cy="14" r="8" fill="#181310" stroke="#181310" stroke-width="3"/>
+    <circle cx="-6" cy="14" r="8" fill="url(#gloveGrad)"/>
+    <ellipse cx="-8" cy="11" rx="2.5" ry="1.5" fill="#ffffff" opacity="0.6"/>
+
+    <!-- Right Glove -->
+    <circle cx="6" cy="14" r="8" fill="#181310" stroke="#181310" stroke-width="3"/>
+    <circle cx="6" cy="14" r="8" fill="url(#gloveGrad)"/>
+    <ellipse cx="4" cy="11" rx="2.5" ry="1.5" fill="#ffffff" opacity="0.6"/>
+  </g>
+
+  <!-- 3. BOLD "50%" BADGE LABEL -->
+  <text x="38" y="74"
+        font-family="'Lilita One', 'Fredoka', 'Arial Black', sans-serif"
+        font-size="18"
+        font-weight="900"
+        letter-spacing="-0.5"
+        fill="#ffffff"
+        stroke="#181310"
+        stroke-width="4"
+        paint-order="stroke fill"
+        text-anchor="middle">
+    50%
+  </text>
+
+  <!-- 4. TOP "COMMON" PILL TAB WITH WHITE DIAMOND -->
+  <polygon points="38,2 43,7 38,12 33,7" fill="#181d28" stroke="#181d28" stroke-width="2"/>
+  <polygon points="38,3 42,7 38,11 34,7" fill="#ffffff"/>
+
+  <rect x="7" y="8" width="62" height="15" rx="7.5" fill="#181d28" stroke="#181d28" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="8" y="9" width="60" height="13" rx="6.5" fill="#586180"/>
+  <text x="38" y="19"
+        font-family="'Lilita One', 'Fredoka', 'Arial Black', sans-serif"
+        font-size="10"
+        font-weight="900"
+        letter-spacing="0.3"
+        fill="#ffffff"
+        text-anchor="middle">
+    Common
+  </text>
+</svg>

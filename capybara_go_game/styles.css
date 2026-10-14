@@ -1,0 +1,4358 @@
+/* =========================================================
+   CAPYBARA GO! — Production Cartoon Mobile RPG Stylesheet
+   ========================================================= */
+
+:root {
+  --primary-gold: #ffbe0b;
+  --gold-glow: rgba(255, 190, 11, 0.5);
+  --hp-red: #ef4444;
+  --rage-orange: #f97316;
+  --text-dark: #2c2117;
+  --text-light: #fefae0;
+  --bg-deep: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  background: radial-gradient(circle at center, #1e293b 0%, #090d16 100%);
+  color: var(--text-light);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/* Centered Mobile Device Frame Container (Compact 9:16 Aspect Ratio) */
+#game-container {
+  width: 100%;
+  max-width: 420px;
+  height: 94vh;
+  max-height: 760px;
+  min-height: 620px;
+  background: #141d2b;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 6px #223249;
+  border-radius: 24px;
+}
+
+@media (max-width: 480px) {
+  #game-container {
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+/* ================= HEADER BAR ================= */
+#game-header {
+  background: linear-gradient(180deg, #1e2d42 0%, #152233 100%);
+  border-bottom: 2px solid #2e4363;
+  padding: 6px 12px 5px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+/* Hide legacy day bar on adventure tab when run is active to match pure reference image */
+#game-container.in-run #game-header {
+  display: none;
+}
+
+#game-container.in-run #bottom-nav {
+  display: none;
+}
+
+.header-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-day-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#header-chapter-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffd166;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+.badge-gold {
+  background: linear-gradient(180deg, #ffd166 0%, #e09f3e 100%);
+  color: #3d2605;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.header-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.ctrl-btn {
+  background: #27384f;
+  border: 1px solid #4a658a;
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+
+.ctrl-btn:hover {
+  background: #395273;
+}
+
+.ctrl-btn:active {
+  transform: scale(0.92);
+}
+
+.speed-active {
+  background: #e09f3e;
+  border-color: #ffd166;
+  color: #2b1800;
+}
+
+/* Day Progress Track with Milestone Icons */
+.day-progress-track {
+  width: 100%;
+  height: 8px;
+  background: #0f172a;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  position: relative;
+  overflow: visible;
+}
+
+.day-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #f59e0b);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.milestone-marker {
+  position: absolute;
+  top: -8px;
+  font-size: 11px;
+  transform: translateX(-50%);
+  background: #1e293b;
+  border: 1px solid #f59e0b;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.m-20 { left: 33.3%; }
+.m-40 { left: 66.6%; }
+.m-60 { left: 100%; }
+
+/* Currencies Row */
+.currencies-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.currency-pill {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  flex: 1;
+  justify-content: center;
+}
+
+.cur-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+/* ================= MAIN VIEWPORT ================= */
+#game-body {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tab-page {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tab-page.active {
+  display: flex;
+}
+
+/* ================= 50:50 SPLIT FOR ADVENTURE RUN ================= */
+#tab-adventure {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#tab-adventure.active {
+  display: flex;
+}
+
+/* Upper Half: Stage Viewport (50% Equal Split) */
+#stage-viewport {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  max-height: 50%;
+  position: relative;
+  background: #000;
+  overflow: hidden;
+  border-bottom: 3px solid #1c0f0a;
+}
+
+#stage-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Authentic Floating In-Stage Top Overlay (Matches Reference Screenshot) */
+.stage-floating-header {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* Settings Gear Button (Matches Image 1) */
+.stage-settings-btn {
+  pointer-events: auto;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(180deg, #6fe0fc 0%, #3bb9e8 50%, #1a9fd6 100%);
+  border: 2.2px solid #071b2d;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3.5px 0 #071b2d, 0 5px 8px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  box-sizing: border-box;
+  transition: transform 0.08s, filter 0.1s;
+}
+
+.stage-settings-btn::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 80%);
+  pointer-events: none;
+}
+
+.stage-settings-btn:hover {
+  filter: brightness(1.08);
+}
+
+.stage-settings-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1.5px 0 #071b2d;
+}
+
+.svg-gear-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+  overflow: visible;
+}
+
+/* ================= AUTHENTIC CAPYBARA GO DAY MILESTONE CAPSULE (MATCHES IMAGE 1) ================= */
+.stage-day-capsule {
+  pointer-events: auto;
+  background: rgba(14, 45, 52, 0.92);
+  border: 1.5px solid #071b20;
+  border-radius: 18px;
+  padding: 0 10px 0 9px;
+  height: 27px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 2.5px 6px rgba(0, 0, 0, 0.45);
+  position: relative;
+  user-select: none;
+}
+
+.stage-day-label {
+  font-family: 'Fredoka', 'Lilita One', 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+  text-shadow:
+    -1px -1px 0 #071b20,
+     1px -1px 0 #071b20,
+    -1px  1px 0 #071b20,
+     1px  1px 0 #071b20,
+     0px 1.5px 2px #000;
+  line-height: 1;
+}
+
+.stage-milestone-track {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  position: relative;
+  height: 100%;
+}
+
+/* Dark connecting railway track */
+.stage-rail-line {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 3px;
+  background: #092026;
+  border-radius: 1.5px;
+  z-index: 1;
+}
+
+/* Active progress fill line */
+.stage-milestone-fill {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 3px;
+  background: #ea580c;
+  border-radius: 1.5px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Circular Milestone Nodes */
+.stage-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  cursor: pointer;
+}
+
+.node-circle-body {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.node-svg-icon {
+  display: block;
+}
+
+/* 1. Current Active Day Node (x=73, D=28px) */
+.stage-node.node-current .node-circle-body {
+  width: 28px;
+  height: 28px;
+  background: radial-gradient(circle at 45% 40%, #ff832b 0%, #ea5e15 65%, #c84605 100%);
+  border: 1.8px solid #ffffff;
+  box-shadow: 0 0 0 1.2px #0a1f26, 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.stage-node.node-current .node-svg-icon {
+  width: 17px;
+  height: 17px;
+}
+
+/* Red downward indicator triangle at top rim */
+.node-pointer-arrow {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 3.5px solid transparent;
+  border-right: 3.5px solid transparent;
+  border-top: 5px solid #d5597a;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8));
+  z-index: 5;
+}
+
+/* 2. Mini-Boss / Boss Encounter (Purple Skull, D=20px) */
+.stage-node.node-boss .node-circle-body {
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle at 50% 40%, #8945c7 0%, #7535b0 70%, #5b2190 100%);
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 0 0 1px #0a1f26;
+}
+
+.stage-node.node-boss .node-svg-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* 3. Combat Encounter (Bronze Swords, D=20px) */
+.stage-node.node-combat .node-circle-body {
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle at 45% 40%, #ea6526 0%, #d85212 70%, #b83e05 100%);
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 0 0 1px #0a1f26;
+}
+
+.stage-node.node-combat .node-svg-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Day Number text overlapping the bottom of circle */
+.stage-node .node-num {
+  position: absolute;
+  bottom: -6px;
+  font-family: 'Fredoka', 'Lilita One', 'Nunito', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  line-height: 1;
+  text-shadow:
+    -1.2px -1.2px 0 #071b20,
+     1.2px -1.2px 0 #071b20,
+    -1.2px  1.2px 0 #071b20,
+     1.2px  1.2px 0 #071b20,
+     0px 1px 2px #000;
+  z-index: 4;
+}
+
+/* Ellipsis dots between nodes */
+.stage-dots {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0;
+  z-index: 2;
+}
+
+.stage-dots::before,
+.stage-dots::after {
+  content: '';
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: inline-block;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.stage-dots span,
+.stage-dots {
+  color: #ffffff;
+}
+
+/* Stage Controls & Mini Gem Counter (Top Right) */
+.stage-top-right-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.stage-sound-btn {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 100%);
+  border: 2px solid #0f172a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 0 #0f172a;
+  cursor: pointer;
+  font-size: 15px;
+  transition: transform 0.08s;
+}
+
+.stage-sound-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0f172a;
+}
+
+.stage-top-gold-pill {
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.85);
+  background: #f59e0b;
+  border: 1.5px solid #78350f;
+  border-radius: 12px;
+  padding: 2px 8px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 3px 0 #78350f, 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.stage-top-gem-pill {
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.85);
+  background: #22c55e;
+  border: 1.5px solid #14532d;
+  border-radius: 12px;
+  padding: 2px 8px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 3px 0 #14532d, 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.stage-top-gold-pill.active-loot-reveal,
+.stage-top-gem-pill.active-loot-reveal {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.gold-mini-icon {
+  font-size: 12px;
+}
+
+#stage-gold-num {
+  font-size: 12px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.gem-mini-icon {
+  font-size: 11px;
+}
+
+#stage-gems-num {
+  font-size: 12px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+#run-hud-overlay {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.hud-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hud-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hud-bar-label {
+  font-size: 10px;
+  font-weight: 800;
+  width: 32px;
+  color: #cbd5e1;
+  text-shadow: 0 1px 2px #000;
+}
+
+.hud-bar-track {
+  width: 110px;
+  height: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid #475569;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+}
+
+.hud-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+.fill-hp {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.fill-rage {
+  background: linear-gradient(90deg, #f97316, #fbbf24);
+}
+
+.rage-full-glow {
+  animation: pulse-rage 0.8s infinite alternate;
+}
+
+@keyframes pulse-rage {
+  0% { box-shadow: 0 0 5px #fbbf24; filter: brightness(1.1); }
+  100% { box-shadow: 0 0 12px #f97316; filter: brightness(1.4); }
+}
+
+.hud-bar-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px #000;
+}
+
+/* ================= TOP IN-RUN BLESSING SKILLS ROW (MATCHES REFERENCE IMAGE) ================= */
+.stage-skills-wrapper {
+  position: absolute;
+  top: 52px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  pointer-events: none;
+  z-index: 14;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.stage-skills-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.run-active-skills-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: auto;
+  flex-wrap: nowrap;
+}
+
+.run-skill-slot {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: #f1f5f9;
+  border: 2px solid #1e293b;
+  box-shadow: 0 2.5px 0 #0f172a, 0 3px 6px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s;
+}
+
+.run-skill-slot:hover {
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 4.5px 0 #0f172a, 0 6px 10px rgba(0, 0, 0, 0.5);
+}
+
+.run-skill-slot:active {
+  transform: translateY(1px) scale(0.96);
+  box-shadow: 0 1px 0 #0f172a;
+}
+
+/* Rarity border nuances */
+.run-skill-slot.rarity-common {
+  background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 100%);
+  border-color: #334155;
+}
+.run-skill-slot.rarity-uncommon {
+  background: linear-gradient(180deg, #dcfce7 0%, #86efac 100%);
+  border-color: #166534;
+}
+.run-skill-slot.rarity-rare {
+  background: linear-gradient(180deg, #e0f2fe 0%, #7dd3fc 100%);
+  border-color: #0369a1;
+}
+.run-skill-slot.rarity-epic {
+  background: linear-gradient(180deg, #f3e8ff 0%, #d8b4fe 100%);
+  border-color: #7e22ce;
+}
+.run-skill-slot.rarity-legendary {
+  background: linear-gradient(180deg, #fef3c7 0%, #fcd34d 100%);
+  border-color: #b45309;
+  box-shadow: 0 2.5px 0 #78350f, 0 0 8px rgba(245, 158, 11, 0.6);
+}
+
+.run-skill-slot img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Battle HUD Elements (Round Indicator & Speed Toggle) */
+.stage-battle-hud {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 13;
+}
+
+.stage-round-pill {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-size: 19px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-shadow:
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000,
+     0px  3px 0 #000,
+     0 3px 6px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  user-select: none;
+}
+
+.stage-speed-btn {
+  position: absolute;
+  bottom: -320px;
+  right: 12px;
+  pointer-events: auto;
+  width: 44px;
+  height: 38px;
+  background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+  border: 2.2px solid #0f172a;
+  border-radius: 9px;
+  box-shadow: 0 3px 0 #0f172a, 0 4px 8px rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.08s, filter 0.1s;
+  text-shadow: 0 1.5px 2px #0f172a;
+}
+
+.stage-speed-btn:hover {
+  filter: brightness(1.08);
+}
+
+.stage-speed-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0f172a;
+}
+
+.stage-speed-btn.speed-fast {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  border-color: #071b2d;
+  box-shadow: 0 3px 0 #071b2d, 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ================= AUTHENTIC FIGHT! & BOSS COMBAT INTRO SPLASH ================= */
+.stage-fight-splash {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 25;
+  overflow: hidden;
+}
+
+/* 1. Translucent Red Warning Banner with Chevrons and Hazard Stripes */
+.boss-warning-stripes-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  height: 96px;
+  background: rgba(142, 45, 30, 0.45);
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.35);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stage-fight-splash.is-boss .boss-warning-stripes-band {
+  display: flex;
+}
+
+/* Animated diagonal hazard top & bottom lines */
+.hazard-stripe-line {
+  width: 100%;
+  height: 9px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #ef4444,
+    #ef4444 8px,
+    #180808 8px,
+    #180808 16px
+  );
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Central subtle scrolling chevrons */
+.hazard-chevrons-stream {
+  flex: 1;
+  width: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 20px,
+    rgba(239, 68, 68, 0.12) 20px,
+    rgba(239, 68, 68, 0.12) 40px
+  );
+  animation: chevronSlide 1.2s linear infinite;
+}
+
+@keyframes chevronSlide {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 0; }
+}
+
+/* 2. Central Diamond Warning Skull Emblem (Matches Reference Image) */
+.boss-diamond-emblem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.stage-fight-splash.is-boss .boss-diamond-emblem {
+  display: flex;
+}
+
+.diamond-shape-outer {
+  width: 90px;
+  height: 90px;
+  background: #111420;
+  transform: rotate(45deg);
+  border: 4px solid #ef4444;
+  outline: 2.5px solid #07090e;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 15px rgba(239, 68, 68, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.diamond-shape-inner {
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.boss-emblem-skull {
+  width: 60px;
+  height: 60px;
+  display: block;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.7));
+}
+
+/* 3. Main Authentic Comic "FIGHT!" Graphic Banner (Direct Game Asset) */
+.fight-banner-img {
+  width: 230px;
+  max-width: 78%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.65));
+  transform-origin: center center;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  position: relative;
+  z-index: 4;
+}
+
+/* Position "FIGHT!" above the diamond when in Boss / Elite mode */
+.stage-fight-splash.is-boss .fight-banner-img {
+  margin-top: -85px;
+}
+
+/* 4. Subtitle "Elite incoming!!" / "Boss incoming!!" below emblem */
+.boss-incoming-subtitle {
+  position: absolute;
+  bottom: 58px;
+  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #fffbbf;
+  -webkit-text-stroke: 2.5px #07090e;
+  text-shadow: 0 4px 0 #000000, 0 5px 8px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  transform: translateY(10px);
+  user-select: none;
+  z-index: 4;
+  display: none;
+}
+
+.stage-fight-splash.is-boss .boss-incoming-subtitle {
+  display: block;
+}
+
+/* ================= ANIMATION SEQUENCES ================= */
+
+/* Standard Fight Animation using Authentic Game Asset */
+.stage-fight-splash.animate:not(.is-boss) .fight-banner-img {
+  animation: authenticFightSplash 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Boss / Elite Fight Sequence */
+.stage-fight-splash.animate.is-boss .boss-warning-stripes-band {
+  animation: warningBandExpand 1.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.stage-fight-splash.animate.is-boss .boss-diamond-emblem {
+  animation: diamondEmblemPunch 1.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.stage-fight-splash.animate.is-boss .fight-banner-img {
+  animation: authenticBossFightBanner 1.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.stage-fight-splash.animate.is-boss .boss-incoming-subtitle {
+  animation: subtitleFadeIn 1.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Keyframes */
+@keyframes warningBandExpand {
+  0% { transform: translateY(-50%) scaleY(0); opacity: 0; }
+  15% { transform: translateY(-50%) scaleY(1); opacity: 1; }
+  82% { transform: translateY(-50%) scaleY(1); opacity: 1; }
+  100% { transform: translateY(-50%) scaleY(0); opacity: 0; }
+}
+
+@keyframes diamondEmblemPunch {
+  0% { transform: translate(-50%, -50%) scale(0.2) rotate(-15deg); opacity: 0; }
+  22% { transform: translate(-50%, -50%) scale(1.15) rotate(0deg); opacity: 1; }
+  32% { transform: translate(-50%, -50%) scale(1.0) rotate(0deg); }
+  80% { transform: translate(-50%, -50%) scale(1.02) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.4) rotate(5deg); opacity: 0; }
+}
+
+@keyframes authenticBossFightBanner {
+  0% {
+    opacity: 0;
+    transform: scale(2.4);
+    filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.8));
+  }
+  24% {
+    opacity: 1;
+    transform: scale(0.92);
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+  }
+  35% {
+    transform: scale(1.06);
+  }
+  48% {
+    transform: scale(1.0);
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.65));
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35) translateY(-8px);
+    filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0));
+  }
+}
+
+@keyframes subtitleFadeIn {
+  0% { opacity: 0; transform: translateY(15px) scale(0.9); }
+  25% { opacity: 0; }
+  35% { opacity: 1; transform: translateY(0) scale(1.08); }
+  45% { opacity: 1; transform: translateY(0) scale(1.0); }
+  80% { opacity: 1; transform: translateY(0) scale(1.0); }
+  100% { opacity: 0; transform: translateY(-8px) scale(1.15); }
+}
+
+@keyframes authenticFightSplash {
+  0% {
+    opacity: 0;
+    transform: scale(2.4);
+    filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.8));
+  }
+  24% {
+    opacity: 1;
+    transform: scale(0.92);
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+  }
+  36% {
+    transform: scale(1.06);
+  }
+  48% {
+    transform: scale(1.0);
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.65));
+  }
+  78% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35) translateY(-8px);
+    filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0));
+  }
+}
+
+/* ================= AUTHENTIC CAPYBARA GO IN-RUN STATS BAR (MATCHES IMAGE 1) ================= */
+.run-stats-bar {
+  background: linear-gradient(180deg, #875c49 0%, #754b38 100%); /* Warm woody brown tone matching Image 1 */
+  border-top: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-bottom: 2.5px solid #48281b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 2px 10px 5px 10px;
+  gap: 7px;
+  height: 44px;
+  box-sizing: border-box;
+  z-index: 10;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Stat Unit Column (Floating label on top + Capsule below) */
+.stat-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.stat-floating-label {
+  font-family: 'Lilita One', 'Fredoka', 'Nunito', sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000, 1px 0 0 #000, -1px 0 0 #000, 0 -1px 0 #000;
+  line-height: 1;
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+
+/* Individual Unit Widths matching Image 1 layout */
+.unit-exp {
+  flex: 1.15;
+  min-width: 95px;
+}
+
+.unit-hp {
+  flex: 1.4;
+  min-width: 125px;
+}
+
+.unit-atk {
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.unit-def {
+  width: 72px;
+  flex-shrink: 0;
+}
+
+/* Dark Capsule Track */
+.stat-capsule-track {
+  position: relative;
+  width: 100%;
+  height: 19px;
+  background: #190f0c; /* Deep dark capsule interior matching Image 1 */
+  border: 1.5px solid #361f17;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7);
+  box-sizing: border-box;
+}
+
+.unit-atk .stat-capsule-track,
+.unit-def .stat-capsule-track {
+  justify-content: flex-end;
+  padding-right: 9px;
+}
+
+/* Protruding 3D Icons overlapping outside the capsule */
+.icon-protruding {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.75));
+}
+
+/* 1. EXP Hexagon Badge */
+.badge-exp-hex {
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 32px;
+}
+
+.svg-hex-badge {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* 2. HP Cute Heart & Percentage */
+.badge-hp-heart {
+  left: -11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.svg-heart-icon {
+  width: 26px;
+  height: 24px;
+  overflow: visible;
+}
+
+.hp-pct-tag {
+  font-family: 'Lilita One', 'Fredoka', sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000, 1px 0 0 #000, -1px 0 0 #000, 0 -1px 0 #000;
+  margin-top: -6px;
+  line-height: 1;
+  z-index: 2;
+  user-select: none;
+}
+
+/* 3. ATK Sword */
+.badge-atk-sword {
+  left: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 26px;
+}
+
+.svg-sword-icon {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+/* 4. DEF Crown Shield */
+.badge-def-shield {
+  left: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 26px;
+}
+
+.svg-shield-icon {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+/* Fills inside capsules */
+.stat-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.fill-exp {
+  background: linear-gradient(180deg, #4ade80 0%, #22c55e 50%, #16a34a 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.fill-hp-ghost {
+  background: #fef08a; /* Bright yellow/white damage catchup lag bar */
+  opacity: 0.85;
+  transition: width 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+}
+
+.fill-hp {
+  background: linear-gradient(180deg, #fb7185 0%, #f43f5e 50%, #e11d48 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 6px rgba(244, 63, 94, 0.5);
+  transition: width 0.22s ease-out;
+  z-index: 2;
+}
+
+/* Real-Time Heart Damage Shake */
+.heart-damaged-shake {
+  animation: heart-dmg-shake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes heart-dmg-shake {
+  0% { transform: scale(1); filter: brightness(1); }
+  20% { transform: scale(1.3) translateX(-3px); filter: brightness(1.6) drop-shadow(0 0 8px #ef4444); }
+  40% { transform: scale(1.2) translateX(3px); filter: brightness(1.4); }
+  60% { transform: scale(1.1) translateX(-2px); }
+  80% { transform: scale(1.05) translateX(1px); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Real-Time Heart Heal Pulse */
+.heart-heal-pulse {
+  animation: heart-heal-glow 0.45s ease-out both;
+}
+
+@keyframes heart-heal-glow {
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.28); filter: brightness(1.5) drop-shadow(0 0 10px #22c55e); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Real-Time Rolling Numbers Highlights */
+.hp-number-damaged {
+  color: #ff6b81 !important;
+  text-shadow: 0 0 6px rgba(255, 77, 109, 0.8), 0 1px 2px #000 !important;
+  transition: color 0.3s ease;
+}
+
+.hp-number-healed {
+  color: #4ade80 !important;
+  text-shadow: 0 0 6px rgba(74, 222, 128, 0.8), 0 1px 2px #000 !important;
+  transition: color 0.3s ease;
+}
+
+/* Typography inside tracks (Matching Image 1 bold white font with black stroke) */
+.stat-track-text {
+  position: relative;
+  z-index: 2;
+  font-family: 'Lilita One', 'Fredoka', 'Nunito', sans-serif;
+  font-size: 12.5px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000, 1px 0 0 #000, -1px 0 0 #000, 0 -1px 0 #000;
+  letter-spacing: 0.3px;
+  line-height: 1;
+  user-select: none;
+}
+
+.unit-exp .stat-track-text {
+  margin: 0 auto;
+  padding-left: 12px;
+}
+
+.unit-hp .stat-track-text {
+  margin: 0 auto;
+  padding-left: 14px;
+  font-size: 11.5px;
+}
+
+.stat-num-val {
+  font-size: 13.5px;
+}
+
+/* ================= ADVENTURE PANELS ================= */
+.panel-parchment {
+  flex: 1;
+  background: #e9dbc7;
+  color: #3b2c1f;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-image: url('assets/ui/capybara_cartoon_kit/panels/panel_parchment_dialog_9slice.png') 18 18 18 18 fill / 18px 18px 18px 18px repeat;
+  overflow: hidden;
+}
+
+.panel-window {
+  padding: 16px;
+  background: #1b263b;
+  border-image: url('assets/ui/capybara_cartoon_kit/panels/panel_navy_window_9slice.png') 18 18 18 18 fill / 18px 18px 18px 18px repeat;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffd166;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.panel-subtitle {
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+  margin-top: -6px;
+}
+
+/* ================= CAPYBARA GO AUTHENTIC EVENT STREAM DECK (MATCHES IMAGE 1) ================= */
+/* Lower Half: 50% Equal Split */
+.adventure-run-container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1d26;
+  background-image: url('assets/ui/capybara_watermark_tile.png');
+  background-repeat: repeat;
+  background-size: 112px 88px;
+  overflow: hidden;
+  position: relative;
+}
+
+.adventure-event-deck {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 14px 6px 14px;
+  display: flex;
+  flex-direction: column;
+  scroll-behavior: smooth;
+  background: transparent;
+}
+
+.adventure-event-deck::-webkit-scrollbar {
+  width: 5px;
+}
+.adventure-event-deck::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.event-cards-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Event Card Wrap */
+.event-card-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: card-appear 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes card-appear {
+  0% { transform: translateY(8px) scale(0.98); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Day Milestone Divider (Matches Screenshot: "Day 6 ———————————") */
+.day-milestone-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  margin-bottom: 6px;
+  padding-left: 2px;
+}
+
+.day-milestone-title {
+  font-family: 'Fredoka', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.day-milestone-line {
+  flex: 1;
+  height: 2px;
+  background: #2b303e; /* Dark divider line matching user screenshot */
+}
+
+/* Authentic Wooden Parchment Event Card Box (Exact Match to User Reference Screenshot) */
+.parchment-event-card {
+  position: relative;
+  background: #f8e9c8; /* Warm vanilla wooden parchment paper from user screenshot */
+  border: 2.5px solid #1a1720; /* Dark outer border */
+  border-radius: 6px;
+  box-shadow: 0 4px 0 #caa671, 0 6px 10px rgba(0, 0, 0, 0.45); /* 3D wooden bottom bevel */
+  padding: 12px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Vintage wooden plaque corner cut accents (Matches User Screenshot) */
+.parchment-event-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+}
+
+.parchment-event-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 5px;
+  height: 5px;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.25);
+  border-right: 1.5px solid rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+/* ================= AUTHENTIC STRIPED CARDS (MAJOR FORTUNE, MINOR FORTUNE, BAD LUCK) ================= */
+.card-striped {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease;
+}
+
+.card-striped-top-banner,
+.card-striped-bottom-banner {
+  height: 10px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Major Fortune: Pink / Rose diagonal candy stripes (Matches User Screenshot 1) */
+.card-major-fortune {
+  background: #fff6f7;
+  border: 2px solid #fb7185;
+}
+
+.card-major-fortune .card-striped-top-banner,
+.card-major-fortune .card-striped-bottom-banner {
+  background: repeating-linear-gradient(
+    -45deg,
+    #f43f5e,
+    #f43f5e 9px,
+    #fda4af 9px,
+    #fda4af 18px
+  );
+  border-bottom: 1.5px solid rgba(225, 29, 72, 0.5);
+}
+.card-major-fortune .card-striped-bottom-banner {
+  border-bottom: none;
+  border-top: 1.5px solid rgba(225, 29, 72, 0.5);
+}
+
+/* Minor Fortune: Sky Blue / Cyan diagonal candy stripes (Matches User Screenshot 2) */
+.card-minor-fortune {
+  background: #f4fbff;
+  border: 2px solid #38bdf8;
+}
+
+.card-minor-fortune .card-striped-top-banner,
+.card-minor-fortune .card-striped-bottom-banner {
+  background: repeating-linear-gradient(
+    -45deg,
+    #0284c7,
+    #0284c7 9px,
+    #7dd3fc 9px,
+    #7dd3fc 18px
+  );
+  border-bottom: 1.5px solid rgba(2, 132, 199, 0.5);
+}
+.card-minor-fortune .card-striped-bottom-banner {
+  border-bottom: none;
+  border-top: 1.5px solid rgba(2, 132, 199, 0.5);
+}
+
+/* Bad Luck: Slate Grey / Light Grey diagonal candy stripes (Matches User Screenshot 3) */
+.card-bad-luck {
+  background: #f5f6f9;
+  border: 2px solid #94a3b8;
+}
+
+.card-bad-luck .card-striped-top-banner,
+.card-bad-luck .card-striped-bottom-banner {
+  background: repeating-linear-gradient(
+    -45deg,
+    #64748b,
+    #64748b 9px,
+    #cbd5e1 9px,
+    #cbd5e1 18px
+  );
+  border-bottom: 1.5px solid rgba(71, 85, 105, 0.5);
+}
+.card-bad-luck .card-striped-bottom-banner {
+  border-bottom: none;
+  border-top: 1.5px solid rgba(71, 85, 105, 0.5);
+}
+
+/* Card Striped Inner Content */
+.card-striped-content {
+  padding: 12px 14px 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Bottom row: pills on left, category label on right */
+.card-striped-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.card-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.card-pill-capsule {
+  background: #141720;
+  border: 1px solid #2d3345;
+  border-radius: 14px;
+  padding: 3px 9px 3px 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.pill-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.pill-text {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.pill-text.val-green {
+  color: #4ade80; /* Lime green like in Major Fortune ATK+21% */
+}
+
+.pill-text.val-cyan {
+  color: #38bdf8; /* Cyan like in Gain Gold+100 */
+}
+
+.pill-text.val-yellow {
+  color: #facc15; /* Golden yellow like in Restore 30% HP */
+}
+
+.pill-text.val-red {
+  color: #ef4444; /* Bright red like in ATK-5% */
+}
+
+/* Category Label (Bottom Right) */
+.card-category-label {
+  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+}
+
+.card-category-label.label-major {
+  color: #facc15;
+  text-shadow: 0 1px 2px #000, 0 0 3px rgba(0, 0, 0, 0.95);
+}
+
+.card-category-label.label-minor {
+  color: #38bdf8;
+  text-shadow: 0 1px 2px #000, 0 0 3px rgba(0, 0, 0, 0.7);
+}
+
+.card-category-label.label-bad-luck {
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000, 0 0 3px rgba(0, 0, 0, 0.95);
+}
+
+/* Event Story Text (Clean high-contrast bold dark text) */
+.event-story-text {
+  font-family: 'Fredoka', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  font-size: 15.5px;
+  line-height: 1.45;
+  color: #1a1720; /* Deep black text from user screenshot */
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+/* Authentic Keyword Highlights (Matches User Screenshot: Rage Heal, Campsite, etc.) */
+.highlight-blue {
+  color: #2b72db !important; /* Rage Heal blue */
+  font-weight: 900;
+}
+
+.highlight-orange {
+  color: #d9661e !important; /* Campsite orange */
+  font-weight: 900;
+}
+
+.highlight-creature {
+  color: #d9661e !important;
+  font-weight: 900;
+}
+
+.highlight-gold {
+  color: #b45309 !important;
+  font-weight: 900;
+}
+
+.highlight-red, .highlight-danger {
+  color: #dc2626 !important;
+  font-weight: 900;
+}
+
+.highlight-purple {
+  color: #7e22ce !important;
+  font-weight: 900;
+}
+
+
+/* Reward Badge (Black pill with heart/sword + green text) */
+.event-reward-badge {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 20px;
+  padding: 3px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.event-reward-badge.badge-combat {
+  background: #451a03;
+  border-color: #78350f;
+}
+
+.event-reward-badge.badge-misfortune {
+  background: #3b0764;
+  border-color: #7e22ce;
+}
+
+.badge-icon-tag {
+  font-size: 11px;
+}
+
+.badge-val-tag {
+  font-size: 12px;
+  font-weight: 800;
+  color: #4ade80;
+  letter-spacing: 0.3px;
+}
+
+.badge-combat .badge-val-tag {
+  color: #fde047;
+}
+
+.badge-misfortune .badge-val-tag {
+  color: #f87171;
+}
+
+/* Category Label (e.g. Minor Fortune, Battle, Misfortune) */
+.event-category-label {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0284c7;
+  letter-spacing: 0.5px;
+}
+
+.event-category-label.label-combat {
+  color: #ea580c;
+}
+
+.event-category-label.label-misfortune {
+  color: #c084fc;
+}
+
+/* Choices inside cards */
+.event-choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.event-choice-capsule-btn {
+  background: #ffffff;
+  border: 2px solid #38bdf8;
+  border-radius: 10px;
+  padding: 8px 12px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: transform 0.1s, background 0.15s;
+}
+
+.event-choice-capsule-btn:hover {
+  background: #f0f9ff;
+  transform: translateX(3px);
+}
+
+.event-choice-capsule-btn strong {
+  font-size: 13px;
+  color: #0369a1;
+}
+
+.event-choice-capsule-btn small {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.event-choice-resolved {
+  font-size: 12px;
+  font-weight: 700;
+  color: #059669;
+  padding: 4px 6px;
+  background: #dcfce7;
+  border-radius: 6px;
+}
+
+/* ================= BOTTOM ACTION DECK (MATCHES SCREENSHOT) ================= */
+.adventure-bottom-deck {
+  background: transparent; /* Seamless continuation of the Capybara watermark background! */
+  border-top: none; /* No dividing border line */
+  padding: 8px 16px 16px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+/* Authentic Capsule Button (Matches User Screenshot Exactly) */
+.btn-capsule-travel {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: transform 0.08s ease, filter 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-capsule-travel:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.btn-capsule-travel:active:not(:disabled) {
+  transform: translateY(2px) scale(0.98);
+}
+
+/* Outer Rim: Thick dark border + Bevel ring */
+.btn-capsule-rim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 64px;
+  background: #393444; /* Bevel rim matching screenshot */
+  border: 4px solid #1a1722; /* Thick outer dark line */
+  border-radius: 9999px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 2px 2px rgba(255, 255, 255, 0.12);
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+/* Inner Core Pill */
+.btn-capsule-core {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  border: 2.5px solid #18151f; /* Inner dark border */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* State 1: Green "Next Day" (Matches Screenshot 2) */
+.btn-capsule-travel.state-ready .btn-capsule-core {
+  background: linear-gradient(180deg, #519a37 0%, #478930 55%, #3c7728 100%);
+  box-shadow: inset 0 -4px 0 #285419, inset 0 2px 3px rgba(255, 255, 255, 0.35);
+}
+
+/* State 2: Red "Moving" (Matches Screenshot 1) */
+.btn-capsule-travel.state-moving .btn-capsule-core,
+.btn-capsule-travel:disabled .btn-capsule-core {
+  background: linear-gradient(180deg, #c04343 0%, #af3a3a 55%, #9c3030 100%);
+  box-shadow: inset 0 -4px 0 #6e1f1f, inset 0 2px 3px rgba(255, 255, 255, 0.3);
+}
+
+/* Specular Highlight Oval (Top Left) */
+.btn-capsule-highlight {
+  position: absolute;
+  top: 6px;
+  left: 20px;
+  width: 22px;
+  height: 11px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: rotate(-15deg);
+  transition: background 0.2s ease;
+}
+
+.btn-capsule-travel.state-ready .btn-capsule-highlight {
+  background: rgba(185, 245, 145, 0.45);
+}
+
+.btn-capsule-travel.state-moving .btn-capsule-highlight,
+.btn-capsule-travel:disabled .btn-capsule-highlight {
+  background: rgba(255, 185, 185, 0.42);
+}
+
+/* Typography with Thick 3D Stroke & Shadow */
+.btn-capsule-text {
+  font-family: 'Fredoka', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  color: #22291e; /* Dark charcoal text matching user screenshot */
+  letter-spacing: 0.8px;
+  text-shadow: 0 1px 1.5px rgba(255, 255, 255, 0.45);
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-capsule-travel.state-moving .btn-capsule-text,
+.btn-capsule-travel:disabled .btn-capsule-text {
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Animated dot on Moving */
+.moving-dot {
+  display: inline-block;
+  animation: dot-pulse 0.8s infinite ease-in-out;
+  margin-left: 2px;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.2; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-2px); }
+}
+
+/* ================= DRAMATIC FORTUNE SPLASH ANIMATION (MATCHES VIDEO 0:40-0:50) ================= */
+.fortune-splash-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: none;
+  animation: splash-fade-in 0.2s ease-out forwards;
+}
+
+@keyframes splash-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.fortune-burst-light {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.45) 0%, rgba(245, 158, 11, 0.15) 50%, transparent 70%);
+  animation: burst-spin 4s linear infinite;
+}
+
+@keyframes burst-spin {
+  0% { transform: scale(0.8) rotate(0deg); opacity: 0.8; }
+  50% { transform: scale(1.15) rotate(180deg); opacity: 1; }
+  100% { transform: scale(0.8) rotate(360deg); opacity: 0.8; }
+}
+
+/* ================= AUTHENTIC VIDEO WIN ESCALATION BANNER (MATCHES VIDEO PROJECT 1) ================= */
+.fortune-win-banner {
+  position: absolute;
+  bottom: 54px; /* Perfectly overlaps the lower edge of the card and top of Next Day button */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 340px;
+  height: 130px;
+}
+
+/* Golden Shockwave Expansion Ring on Escalation */
+.win-shockwave-ring {
+  position: absolute;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  border: 4px solid #fde047;
+  box-shadow: 0 0 28px #facc15, inset 0 0 18px #f59e0b;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.win-shockwave-ring.trigger {
+  animation: ring-shockwave 0.55s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes ring-shockwave {
+  0% { transform: scale(0.2); opacity: 1; }
+  100% { transform: scale(5.2); opacity: 0; border-width: 1px; }
+}
+
+/* Rotating 12-Beam Sunburst Light Rays */
+.win-sunburst-wrap {
+  position: absolute;
+  width: 330px;
+  height: 330px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.win-sunburst-svg {
+  width: 100%;
+  height: 100%;
+  animation: sunburst-spin 12s linear infinite;
+}
+
+@keyframes sunburst-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.win-center-glow {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+/* Sunburst: Minor Win (Cyan / Aqua Aura) */
+.fortune-win-banner.state-minor-win .sunburst-blade {
+  fill: rgba(56, 189, 248, 0.28);
+}
+
+.fortune-win-banner.state-minor-win .win-center-glow {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(56, 189, 248, 0.65) 40%, rgba(14, 165, 233, 0.15) 70%, transparent 85%);
+  filter: drop-shadow(0 0 24px rgba(56, 189, 248, 0.85));
+}
+
+/* Sunburst: Big Win (Fiery Gold & Orange Explosion) */
+.fortune-win-banner.state-big-win .sunburst-blade {
+  fill: rgba(250, 204, 21, 0.42);
+}
+
+.fortune-win-banner.state-big-win .win-sunburst-svg {
+  animation-duration: 7s;
+}
+
+.fortune-win-banner.state-big-win .win-center-glow {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.98) 0%, rgba(250, 204, 21, 0.85) 35%, rgba(239, 68, 68, 0.45) 65%, transparent 85%);
+  filter: drop-shadow(0 0 32px rgba(250, 204, 21, 0.95));
+}
+
+/* Floating 4-Point Diamond Sparkles */
+.win-sparkles-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.win-diamond-star {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0;
+  animation: sparkle-twinkle-burst 1s ease-in-out infinite;
+  user-select: none;
+}
+
+.fortune-win-banner.state-minor-win .win-diamond-star {
+  color: #7dd3fc;
+  text-shadow: 0 0 10px #38bdf8, 0 0 18px #fff;
+}
+
+.fortune-win-banner.state-big-win .win-diamond-star {
+  color: #fef08a;
+  text-shadow: 0 0 12px #facc15, 0 0 20px #f59e0b;
+}
+
+.win-sparkles-wrap .sp-1 { top: 12px; left: 35px; animation-delay: 0.05s; font-size: 24px; }
+.win-sparkles-wrap .sp-2 { top: 8px; right: 40px; animation-delay: 0.25s; font-size: 26px; }
+.win-sparkles-wrap .sp-3 { bottom: 28px; left: 22px; animation-delay: 0.45s; font-size: 18px; }
+.win-sparkles-wrap .sp-4 { bottom: 32px; right: 28px; animation-delay: 0.15s; font-size: 22px; }
+.win-sparkles-wrap .sp-5 { top: 38px; right: 15px; animation-delay: 0.35s; font-size: 16px; }
+
+@keyframes sparkle-twinkle-burst {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.4) rotate(90deg); opacity: 1; }
+  100% { transform: scale(0) rotate(180deg); opacity: 0; }
+}
+
+/* Arched 3D Vector Text Container */
+.win-title-wrap {
+  position: relative;
+  width: 340px;
+  height: 115px;
+  z-index: 5;
+  user-select: none;
+}
+
+.win-text-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.svg-win-layer {
+  font-family: 'Lilita One', 'Fredoka', 'Titan One', cursive, sans-serif;
+  font-size: 48px;
+  letter-spacing: 1.5px;
+  font-weight: 900;
+  paint-order: stroke fill;
+}
+
+/* Minor Win Typography Pass */
+.fortune-win-banner.state-minor-win .win-title-wrap {
+  animation: minor-win-bounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.fortune-win-banner.state-minor-win .layer-shadow {
+  fill: #011b2b;
+  stroke: #011b2b;
+  stroke-width: 15px;
+  stroke-linejoin: round;
+}
+
+.fortune-win-banner.state-minor-win .layer-bevel {
+  fill: #034b6e;
+  stroke: #034b6e;
+  stroke-width: 10px;
+  stroke-linejoin: round;
+}
+
+.fortune-win-banner.state-minor-win .layer-stroke {
+  fill: #022338;
+  stroke: #022338;
+  stroke-width: 6.5px;
+  stroke-linejoin: round;
+}
+
+.fortune-win-banner.state-minor-win .layer-front {
+  fill: url(#svg-minor-fill);
+  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.95));
+}
+
+@keyframes minor-win-bounce {
+  0% { transform: scale(0.2) translateY(35px); opacity: 0; }
+  70% { transform: scale(1.18) translateY(-6px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* Big Win Typography Pass */
+.fortune-win-banner.state-big-win .win-title-wrap {
+  animation: big-win-punch 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.45) forwards;
+}
+
+.fortune-win-banner.state-big-win .layer-shadow {
+  fill: #260303;
+  stroke: #260303;
+  stroke-width: 16px;
+  stroke-linejoin: round;
+}
+
+.fortune-win-banner.state-big-win .layer-bevel {
+  fill: #881337;
+  stroke: #881337;
+  stroke-width: 11px;
+  stroke-linejoin: round;
+}
+
+.fortune-win-banner.state-big-win .layer-stroke {
+  fill: #450a0a;
+  stroke: #450a0a;
+  stroke-width: 7px;
+  stroke-linejoin: round;
+}
+
+.fortune-win-banner.state-big-win .layer-front {
+  fill: url(#svg-big-fill);
+  filter: drop-shadow(0 0 28px rgba(250, 204, 21, 0.95)) drop-shadow(0 0 8px rgba(239, 68, 68, 0.8));
+}
+
+@keyframes big-win-punch {
+  0% { transform: scale(0.65) rotate(-5deg); opacity: 0.8; }
+  40% { transform: scale(1.38) rotate(3deg); opacity: 1; }
+  75% { transform: scale(0.96) rotate(-1deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Screen Flash pulse on Big Win escalation */
+.win-flash-fx {
+  animation: screen-flash 0.35s ease-out forwards;
+}
+
+@keyframes screen-flash {
+  0% { filter: brightness(2.6); }
+  100% { filter: brightness(1); }
+}
+
+/* Screen Rumble on Big Win escalation */
+.win-rumble-fx {
+  animation: win-rumble 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+}
+
+@keyframes win-rumble {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-5px, 3px); }
+  40% { transform: translate(5px, -3px); }
+  60% { transform: translate(-4px, 2px); }
+  80% { transform: translate(3px, -1px); }
+}
+
+@keyframes win-rumble {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 2px); }
+  40% { transform: translate(4px, -2px); }
+  60% { transform: translate(-3px, 1px); }
+  80% { transform: translate(2px, -1px); }
+}
+
+/* ================= CARD SHINING WHITE SHEEN SWEEP (MATCHES CFRAME_030) ================= */
+.card-sheen-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 15;
+}
+
+.card-sheen-bar {
+  position: absolute;
+  top: -60%;
+  left: -80%;
+  width: 50%;
+  height: 220%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 30%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(255, 255, 255, 0.25) 70%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  animation: sheen-sweep-anim 0.75s ease-out forwards;
+}
+
+@keyframes sheen-sweep-anim {
+  0% { left: -80%; opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { left: 150%; opacity: 0; }
+}
+
+/* Card Corner Glints */
+.card-glint {
+  position: absolute;
+  font-size: 16px;
+  color: #fff;
+  text-shadow: 0 0 8px #fef08a, 0 0 16px #facc15;
+  pointer-events: none;
+  z-index: 16;
+  animation: glint-twinkle 0.8s ease-in-out forwards;
+}
+
+.card-glint.glint-tl { top: 4px; left: 8px; }
+.card-glint.glint-br { bottom: 4px; right: 12px; }
+
+@keyframes glint-twinkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.4) rotate(90deg); opacity: 1; }
+  100% { transform: scale(0) rotate(180deg); opacity: 0; }
+}
+
+/* Pill bounce pop-in */
+.card-pill-capsule {
+  animation: pill-pop-bounce 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+}
+
+@keyframes pill-pop-bounce {
+  0% { transform: scale(0.5); opacity: 0; }
+  80% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ================= FLYING COIN FOUNTAIN (MATCHES VIDEO PROJECT 1) ================= */
+.flying-coins-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999999;
+  overflow: visible;
+}
+
+.flying-coin-item {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  /* Shiny golden coin body with warm cartoon outline */
+  background: radial-gradient(circle at 35% 30%, #fffef0 0%, #fef08a 25%, #f59e0b 65%, #b45309 100%);
+  border: 2px solid #5a2807;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px #ffffff, 0 0 10px rgba(250, 204, 21, 0.75);
+  pointer-events: none;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+/* Inner coin ridge / ring matching authentic Capybara Go coin */
+.flying-coin-item::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid #d97706;
+  box-shadow: inset 0 1px 1px #fff;
+  opacity: 0.9;
+}
+
+/* Flying tiny sparkle particle following the coin */
+.flying-coin-sparkle {
+  position: absolute;
+  color: #ffffff;
+  font-size: 11px;
+  text-shadow: 0 0 4px #ffffff, 0 0 8px #fde047;
+  pointer-events: none;
+  z-index: 1002;
+  animation: coin-sparkle-fade 0.45s ease-out forwards;
+}
+
+@keyframes coin-sparkle-fade {
+  0% { transform: scale(1.3) rotate(0deg); opacity: 1; }
+  100% { transform: scale(0.3) rotate(45deg); opacity: 0; }
+}
+
+/* Stat Bump Pulse on Top HUD Bar / Stage Gold Pill when coins land */
+.coin-hud-bump {
+  animation: coin-bump-pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.4) forwards !important;
+}
+
+@keyframes coin-bump-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.32); filter: brightness(1.4) drop-shadow(0 0 10px #facc15); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Flying Gem Loot Item (Sparkling Emerald/Diamond) */
+.flying-gem-item {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle at 35% 30%, #ecfdf5 0%, #6ee7b7 25%, #10b981 60%, #047857 100%);
+  border: 2px solid #064e3b;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px #ffffff, 0 0 12px rgba(52, 211, 153, 0.85);
+  pointer-events: none;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+.flying-gem-item::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid #a7f3d0;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px #fff;
+  opacity: 0.95;
+}
+
+.flying-gem-sparkle {
+  position: absolute;
+  color: #a7f3d0;
+  font-size: 11px;
+  text-shadow: 0 0 4px #ffffff, 0 0 8px #34d399;
+  pointer-events: none;
+  z-index: 1002;
+  animation: gem-sparkle-fade 0.45s ease-out forwards;
+}
+
+@keyframes gem-sparkle-fade {
+  0% { transform: scale(1.3) rotate(0deg); opacity: 1; }
+  100% { transform: scale(0.3) rotate(45deg); opacity: 0; }
+}
+
+.gem-hud-bump {
+  animation: gem-bump-pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.4) forwards !important;
+}
+
+@keyframes gem-bump-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.32); filter: brightness(1.4) drop-shadow(0 0 10px #34d399); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+.stat-bump-pulse {
+  animation: stat-hud-pulse 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.3) forwards;
+}
+
+@keyframes stat-hud-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); filter: brightness(1.3) drop-shadow(0 0 8px #facc15); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+.fortune-splash-badge {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 28px;
+  border-radius: 20px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+  animation: badge-pop-zoom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes badge-pop-zoom {
+  0% { transform: scale(0.3) translateY(30px); opacity: 0; }
+  70% { transform: scale(1.1) translateY(-6px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* Major Fortune Theme: Radiant Golden Crimson */
+.fortune-splash-badge.theme-major {
+  background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 40%, #fecdd3 100%);
+  border: 4px solid #f43f5e;
+  box-shadow: 0 0 25px rgba(244, 63, 94, 0.6), 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.fortune-splash-badge.theme-major .fortune-splash-title {
+  color: #e11d48;
+  text-shadow: 0 2px 4px rgba(225, 29, 72, 0.3);
+}
+
+/* Minor Fortune Theme: Fresh Sky Blue / Cyan */
+.fortune-splash-badge.theme-minor {
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 40%, #bae6fd 100%);
+  border: 4px solid #38bdf8;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.6), 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.fortune-splash-badge.theme-minor .fortune-splash-title {
+  color: #0284c7;
+  text-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
+}
+
+/* Bad Luck Theme (Renamed from Misfortune): Cool Slate / Grey / Crimson Accents */
+.fortune-splash-badge.theme-badluck,
+.fortune-splash-badge.theme-misfortune {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 60%, #020617 100%);
+  border: 4px solid #94a3b8;
+  box-shadow: 0 0 25px rgba(148, 163, 184, 0.6), 0 10px 30px rgba(0, 0, 0, 0.85);
+}
+
+.fortune-splash-badge.theme-badluck .fortune-splash-title,
+.fortune-splash-badge.theme-misfortune .fortune-splash-title {
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.fortune-splash-badge.theme-badluck .fortune-splash-sub,
+.fortune-splash-badge.theme-misfortune .fortune-splash-sub {
+  color: #cbd5e1;
+}
+
+.fortune-splash-icon {
+  font-size: 42px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  animation: bounce-icon 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes bounce-icon {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+.fortune-splash-title {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+}
+
+.fortune-splash-sub {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-top: 4px;
+  max-width: 240px;
+}
+
+/* ================= CARTOON BUTTONS ================= */
+.btn-game {
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.08s ease, filter 0.15s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-game:hover {
+  filter: brightness(1.08);
+}
+
+.btn-game:active {
+  transform: scale(0.96) translateY(2px);
+  filter: brightness(0.92);
+}
+
+.btn-game:disabled {
+  filter: grayscale(0.8) opacity(0.65);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-gold {
+  background: url('assets/ui/capybara_cartoon_kit/buttons/gold_normal.png') center / 100% 100% no-repeat;
+  color: #3f2205;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  padding: 10px 18px;
+}
+
+.btn-gold:active {
+  background-image: url('assets/ui/capybara_cartoon_kit/buttons/gold_pressed.png');
+}
+
+.btn-blue {
+  background: url('assets/ui/capybara_cartoon_kit/buttons/blue_normal.png') center / 100% 100% no-repeat;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  padding: 10px 18px;
+}
+
+.btn-blue:active {
+  background-image: url('assets/ui/capybara_cartoon_kit/buttons/blue_pressed.png');
+}
+
+.btn-slate {
+  background: url('assets/ui/capybara_cartoon_kit/buttons/slate_normal.png') center / 100% 100% no-repeat;
+  color: #cbd5e1;
+  padding: 8px 14px;
+}
+
+.btn-parchment {
+  background: #fdf6e7;
+  border: 2px solid #bfa07e;
+  color: #451a03;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.btn-parchment:hover {
+  background: #fff;
+  border-color: #78350f;
+}
+
+/* ================= CHAPTER LIST ================= */
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chapter-card {
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.chapter-card.locked {
+  filter: grayscale(0.85) opacity(0.65);
+}
+
+.chapter-card-banner {
+  height: 64px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 6px 10px;
+}
+
+.chapter-card-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+}
+
+.chapter-num {
+  position: relative;
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffd166;
+  text-shadow: 0 1px 3px #000;
+}
+
+.chapter-card-info {
+  padding: 8px 12px;
+}
+
+.chapter-card-info h3 {
+  font-size: 15px;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.chapter-card-info p {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.3;
+}
+
+.chapter-rewards {
+  font-size: 11px;
+  color: #ffd166;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.chapter-card-action {
+  padding: 6px 12px 10px 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ================= EQUIPMENT TAB ================= */
+.hero-stats-panel {
+  padding: 12px 14px;
+  background: #172133;
+  border-bottom: 2px solid #2e4363;
+}
+
+.paperdoll-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 12px 0;
+}
+
+.paperdoll-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.paperdoll-slot {
+  width: 52px;
+  height: 52px;
+  background: #1e293b;
+  border: 2px dashed #475569;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.paperdoll-slot:hover {
+  transform: scale(1.08);
+}
+
+.paperdoll-slot.occupied {
+  border-style: solid;
+}
+
+.slot-ghost-icon {
+  width: 28px;
+  height: 28px;
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.slot-item-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.slot-item-lvl {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(0,0,0,0.7);
+  padding: 1px 3px;
+  border-radius: 4px;
+}
+
+.paperdoll-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-avatar-large {
+  width: 86px;
+  height: 86px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6));
+}
+
+.hero-title-badge {
+  background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 10px;
+  border: 1px solid #93c5fd;
+  margin-top: 4px;
+}
+
+.stats-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: #0f172a;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+}
+
+.stat-cell {
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.stat-cell strong {
+  color: #ffd166;
+}
+
+.backpack-panel {
+  padding: 12px 14px;
+  flex: 1;
+  background: #141d2b;
+  overflow-y: auto;
+}
+
+.backpack-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.inv-item-card {
+  aspect-ratio: 1;
+  background: #1e293b;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  border: 2px solid #475569;
+  transition: transform 0.1s;
+}
+
+.inv-item-card:hover {
+  transform: scale(1.08);
+}
+
+.inv-item-img {
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+}
+
+.inv-item-lvl {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 8px;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(0,0,0,0.7);
+  padding: 1px 3px;
+  border-radius: 4px;
+}
+
+.empty-inv-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 12px;
+  color: #64748b;
+  padding: 20px 0;
+}
+
+/* ================= TALENTS TAB ================= */
+.talents-panel {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.talents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.talent-card {
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.talent-icon-wrap {
+  width: 44px;
+  height: 44px;
+  background: #0f172a;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #475569;
+}
+
+.talent-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.talent-info {
+  flex: 1;
+}
+
+.talent-info h4 {
+  font-size: 14px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.talent-rank {
+  color: #ffd166;
+  font-size: 12px;
+}
+
+.talent-info p {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ================= CHESTS TAB ================= */
+.chests-panel {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.chests-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.chest-card {
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+}
+
+.royal-chest {
+  border-color: #f59e0b;
+  background: radial-gradient(circle at top, #2d2618 0%, #1e293b 100%);
+}
+
+.chest-card-img-wrap {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chest-card-img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.glow-pulse {
+  animation: glow-pulse 2s infinite ease-in-out;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { filter: drop-shadow(0 0 6px #f59e0b); }
+  50% { filter: drop-shadow(0 0 16px #fbbf24) scale(1.05); }
+}
+
+.chest-name {
+  font-size: 16px;
+  color: #fff;
+}
+
+.chest-desc {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ================= BESTIARY TAB ================= */
+.bestiary-panel {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bestiary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.bestiary-card {
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.bestiary-card.boss-card {
+  grid-column: 1 / -1;
+  border-color: #ffd166;
+  background: #252018;
+}
+
+.bestiary-card.undiscovered {
+  filter: grayscale(1) opacity(0.45);
+}
+
+.bestiary-img-wrap {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bestiary-img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+}
+
+.bestiary-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 4px;
+}
+
+.bestiary-kills {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ================= BOTTOM NAVIGATION ================= */
+#bottom-nav {
+  height: 64px;
+  background: #111a28;
+  border-top: 2px solid #2e4363;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 10;
+  padding: 0 4px;
+}
+
+.nav-tab-btn {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: all 0.15s;
+}
+
+.nav-tab-btn:hover {
+  color: #cbd5e1;
+}
+
+.nav-tab-btn.active {
+  color: #ffd166;
+  background: rgba(255, 209, 102, 0.12);
+  transform: translateY(-2px);
+}
+
+.nav-icon {
+  font-size: 20px;
+}
+
+.nav-label {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* ================= RARITY SYSTEM ================= */
+.rarity-common { border-color: #64748b !important; }
+.rarity-uncommon { border-color: #22c55e !important; }
+.rarity-rare { border-color: #3b82f6 !important; }
+.rarity-epic { border-color: #a855f7 !important; }
+.rarity-legendary { 
+  border-color: #f59e0b !important; 
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+}
+
+.rarity-text-common { color: #94a3b8; }
+.rarity-text-uncommon { color: #4ade80; }
+.rarity-text-rare { color: #60a5fa; }
+.rarity-text-epic { color: #c084fc; }
+.rarity-text-legendary { color: #fbbf24; text-shadow: 0 0 6px rgba(251,191,36,0.5); }
+
+/* ================= MODALS & POPUPS ================= */
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 16px 36px rgba(0,0,0,0.8);
+  animation: pop-modal 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pop-modal {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.panel-reward {
+  background: #2b2214;
+  border-image: url('assets/ui/capybara_cartoon_kit/panels/panel_reward_gold_9slice.png') 18 18 18 18 fill / 18px 18px 18px 18px repeat;
+  color: #fff;
+}
+
+.panel-navy {
+  background: #172133;
+  border-image: url('assets/ui/capybara_cartoon_kit/panels/panel_navy_card_9slice.png') 17 18 17 18 fill / 18px 18px 18px 18px repeat;
+  color: #fff;
+}
+
+.modal-header {
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffd166;
+}
+
+.modal-subtitle {
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+/* ================= AUTHENTIC CAPYBARA GO "CHOOSE SKILL" MODAL (MATCHES IMAGE 1) ================= */
+.modal-choose-skill-overlay {
+  background: rgba(8, 12, 16, 0.78);
+  backdrop-filter: blur(5px);
+  padding: 12px;
+}
+
+.choose-skill-modal-content {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  animation: pop-choose-skill 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pop-choose-skill {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Top Mascot & Banner Header Group */
+.choose-skill-header-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* Master Capybara Mascot + "Choose skill" Graphic (Direct Authentic Asset) */
+.choose-skill-header-img {
+  width: 320px;
+  max-width: 95%;
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Soft Warm Radial Glow Aura (Matches Screenshot) */
+.choose-skill-aura {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px;
+  height: 190px;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 240, 0.45) 0%, rgba(255, 255, 220, 0.22) 40%, rgba(255, 255, 200, 0.06) 65%, transparent 75%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(10px);
+}
+
+/* Twinkle Sparkles around Mascot (Exact Screenshot Placements) */
+.choose-skill-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.choose-skill-sparkles .sparkle {
+  position: absolute;
+  color: #ffffff;
+  text-shadow: 0 0 6px #ffffff, 0 0 12px #ffe066;
+  animation: sparkleTwinkle 1.8s ease-in-out infinite alternate;
+  user-select: none;
+}
+
+.choose-skill-sparkles .sp-1 { top: 22%; left: 20%; font-size: 16px; animation-delay: 0s; }
+.choose-skill-sparkles .sp-2 { top: 24%; right: 18%; font-size: 15px; animation-delay: 0.4s; }
+.choose-skill-sparkles .sp-3 { top: 48%; left: 12%; font-size: 13px; animation-delay: 0.8s; }
+.choose-skill-sparkles .sp-4 { top: 46%; right: 14%; font-size: 14px; animation-delay: 1.2s; }
+
+@keyframes sparkleTwinkle {
+  0% { transform: scale(0.7) rotate(0deg); opacity: 0.4; }
+  100% { transform: scale(1.25) rotate(15deg); opacity: 1; }
+}
+
+/* 3-Card Stack */
+.skill-cards-authentic-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 100%;
+  padding-left: 18px;
+  box-sizing: border-box;
+}
+
+/* Authentic Horizontal Card */
+.authentic-skill-card {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  background: #fffef7 !important;
+  border: 2.5px solid #1c1815 !important;
+  border-radius: 13px !important;
+  box-shadow: 0 4px 0 #1c1815, 0 6px 14px rgba(0, 0, 0, 0.4) !important;
+  cursor: pointer;
+  min-height: 72px;
+  transition: transform 0.14s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.14s;
+}
+
+.authentic-skill-card:hover {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 6px 0 #1c1815, 0 10px 20px rgba(0, 0, 0, 0.55) !important;
+}
+
+.authentic-skill-card:active {
+  transform: translateY(2px) scale(0.99);
+  box-shadow: 0 2px 0 #1c1815, 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Direct Authentic Badge Graphic (From Reference Screenshot) */
+.skill-card-badge-direct-wrap {
+  position: absolute;
+  left: -20px;
+  top: -7px;
+  width: 74px;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.skill-card-badge-direct {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+}
+
+/* Left Protruding Skill Icon Badge */
+.skill-card-badge {
+  position: absolute;
+  left: -20px;
+  top: -7px;
+  width: 72px;
+  height: 80px;
+  background: linear-gradient(180deg, #c5cee0 0%, #a6b2c7 60%, #93a0b7 100%) !important;
+  border: 2.5px solid #181d28 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 3.5px 0 #181d28, 0 5px 12px rgba(0, 0, 0, 0.45) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  box-sizing: border-box;
+}
+
+/* Rarity Pill at top of badge */
+.skill-card-rarity-pill {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #586180;
+  border: 2px solid #181d28;
+  border-radius: 8px;
+  box-shadow: 0 1.5px 0 #181d28;
+  padding: 1px 8px;
+  font-family: 'Fredoka', 'Lilita One', cursive, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  text-transform: capitalize;
+}
+
+.rarity-diamond-notch {
+  font-size: 8px;
+  color: #ffffff;
+  margin-right: 1px;
+}
+
+/* Rarity Color Themes for Pill */
+.skill-card-badge.rarity-common .skill-card-rarity-pill { background: #586180; }
+.skill-card-badge.rarity-uncommon .skill-card-rarity-pill { background: #16a34a; }
+.skill-card-badge.rarity-rare .skill-card-rarity-pill { background: #2563eb; }
+.skill-card-badge.rarity-epic .skill-card-rarity-pill { background: #9333ea; }
+.skill-card-badge.rarity-legendary .skill-card-rarity-pill { background: #ea580c; }
+
+/* Icon inside badge */
+.skill-card-icon-frame {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 4px;
+}
+
+.skill-card-icon-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 2.5px 4px rgba(0, 0, 0, 0.4));
+}
+
+.skill-badge-subval {
+  position: absolute;
+  bottom: -6px;
+  background: #ffffff;
+  border: 2px solid #181310;
+  border-radius: 6px;
+  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  color: #181310;
+  padding: 0 5px;
+  box-shadow: 0 1.5px 0 #181310;
+  white-space: nowrap;
+  line-height: 1.25;
+}
+
+/* Right Content Block */
+.skill-card-content-block {
+  flex: 1;
+  margin-left: 54px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Top Wood-Beige Header Strip */
+.skill-card-header-bar {
+  height: 27px;
+  background: #bfa58d;
+  border-bottom: 2px solid #a68c74;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-top-right-radius: 10px;
+}
+
+.skill-card-title-text {
+  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-size: 15.5px;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  -webkit-text-stroke: 2.5px #181410;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 0 #181410;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bottom Ivory Parchment Description */
+.skill-card-body-block {
+  flex: 1;
+  padding: 5px 10px 6px 10px;
+  display: flex;
+  align-items: center;
+  background: #fffef7;
+}
+
+.skill-card-description-text {
+  font-family: 'Fredoka', 'Quicksand', 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* Keyword Highlights (Matches Image 1) */
+.skill-card-description-text .kw-green {
+  color: #16a34a;
+  font-weight: 900;
+}
+
+.skill-card-description-text .kw-blue {
+  color: #2563eb;
+  font-weight: 900;
+}
+
+/* Item Detail Modal */
+.item-detail-top {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.item-detail-icon {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  background: #0f172a;
+  border-radius: 12px;
+  padding: 6px;
+  border: 2px solid #475569;
+}
+
+.item-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.item-modal-rarity {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.item-modal-lvl {
+  font-size: 11px;
+  color: #ffd166;
+}
+
+.item-detail-stats {
+  background: #0f172a;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Gacha Loot Grid */
+.gacha-loot-grid {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.gacha-item-card {
+  background: #1e293b;
+  border: 2px solid #475569;
+  border-radius: 12px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  animation: drop-loot 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+}
+
+@keyframes drop-loot {
+  0% { transform: translateY(-30px) scale(0.6); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.gacha-item-img-wrap {
+  width: 44px;
+  height: 44px;
+}
+
+.gacha-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gacha-item-name {
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.gacha-item-rarity {
+  font-size: 9px;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+.btn-claim-large {
+  width: 100%;
+  height: 46px;
+  font-size: 16px;
+}
+
+/* Toast Pill */
+.toast-pill {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: rgba(15, 23, 42, 0.95);
+  border: 1.5px solid #ffd166;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  text-align: center;
+  max-width: 85%;
+}
+
+.toast-pill.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* =========================================================
+   CAPYBARA GO! AUTHENTIC LOADING SCREEN (HABBY STYLE)
+   ========================================================= */
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  background: #0f172a;
+  user-select: none;
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center bottom;
+  z-index: 1;
+  transform: scale(1.03);
+  animation: bg-breathe 10s ease-in-out infinite alternate;
+}
+
+@keyframes bg-breathe {
+  0% { transform: scale(1.03) translateY(0); }
+  100% { transform: scale(1.06) translateY(-6px); }
+}
+
+.loading-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.65) 0%,
+    rgba(15, 23, 42, 0) 22%,
+    rgba(15, 23, 42, 0) 58%,
+    rgba(10, 15, 30, 0.88) 84%,
+    rgba(10, 15, 30, 0.98) 100%
+  );
+}
+
+/* Top Info Badges */
+.loading-top-info {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.loading-badge {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse-dot 1.8s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Floating Sparkles FX */
+.loading-sparkles {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px #facc15);
+  animation: float-sparkle 3s ease-in-out infinite alternate;
+}
+
+.sp-1 { top: 75px; left: 40px; animation-delay: 0s; font-size: 20px; }
+.sp-2 { top: 95px; right: 50px; animation-delay: 0.8s; font-size: 24px; }
+.sp-3 { top: 180px; left: 70px; animation-delay: 1.5s; font-size: 16px; }
+.sp-4 { top: 210px; right: 60px; animation-delay: 2.2s; font-size: 18px; }
+
+@keyframes float-sparkle {
+  0% { transform: translateY(0) scale(0.85); opacity: 0.4; }
+  100% { transform: translateY(-12px) scale(1.15); opacity: 1; }
+}
+
+/* Bottom Interactive Deck */
+.loading-bottom-deck {
+  position: relative;
+  z-index: 10;
+  padding: 18px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.loading-status-wrap {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 380px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f8fafc;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  padding: 0 4px;
+}
+
+.loading-status-text {
+  color: #fef08a;
+  letter-spacing: 0.3px;
+}
+
+.loading-percent-text {
+  color: #38bdf8;
+  font-weight: 800;
+}
+
+/* Progress Bar & Mascot Runner */
+.loading-bar-container {
+  width: 100%;
+  max-width: 380px;
+  position: relative;
+  margin-top: 14px;
+  margin-bottom: 4px;
+}
+
+.loading-bar-frame {
+  width: 100%;
+  height: 22px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 3px solid #facc15;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), inset 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 10px rgba(250, 204, 21, 0.35);
+  position: relative;
+  overflow: visible;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 50%, #facc15 100%);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+  transition: width 0.15s ease-out;
+}
+
+.loading-bar-gleam {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.25) 0px,
+    rgba(255, 255, 255, 0.25) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  background-size: 28px 28px;
+  animation: bar-stripes 1s linear infinite;
+}
+
+@keyframes bar-stripes {
+  0% { background-position: 0 0; }
+  100% { background-position: 28px 0; }
+}
+
+.loading-mascot {
+  position: absolute;
+  top: -15px;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+  z-index: 12;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+  transition: left 0.15s ease-out;
+}
+
+.mascot-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Tap to Start Prompt (Habby 3D Cartoon Button) */
+.loading-tap-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 380px;
+  animation: pop-start 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+}
+
+@keyframes pop-start {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.btn-tap-start {
+  width: 100%;
+  height: 52px;
+  background: linear-gradient(180deg, #fde047 0%, #f59e0b 50%, #d97706 100%);
+  border: 3.5px solid #78350f;
+  border-radius: 26px;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.55), inset 0 2px 4px rgba(255, 255, 255, 0.7), 0 5px 0 #78350f;
+  color: #fff;
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 4px rgba(120, 53, 15, 0.95), 0 -1px 1px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  animation: tap-bounce 1.4s ease-in-out infinite alternate;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-tap-start:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.5), 0 1px 0 #78350f;
+}
+
+@keyframes tap-bounce {
+  0% { transform: scale(0.97) translateY(0); box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45), 0 5px 0 #78350f; }
+  100% { transform: scale(1.03) translateY(-3px); box-shadow: 0 12px 28px rgba(245, 158, 11, 0.65), 0 6px 0 #78350f; }
+}
+
+.tap-icon {
+  font-size: 20px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+}
+
+.tap-subtext {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fef08a;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+  animation: pulse-subtext 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-subtext {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Publisher Footer */
+.loading-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 6px;
+  gap: 2px;
+}
+
+.habby-logo-text {
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #ef4444;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.habby-slogan {
+  font-size: 10px;
+  font-weight: 500;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+/* ================= SETTINGS MODAL ================= */
+.settings-modal-card {
+  max-width: 360px;
+  width: 90%;
+  padding: 16px 20px 20px 20px;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 2px solid #3b82f6;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 16px rgba(59, 130, 246, 0.3);
+}
+
+.settings-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+.settings-modal-header .modal-title {
+  font-family: 'Lilita One', 'Fredoka', sans-serif;
+  font-size: 20px;
+  color: #ffd166;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  margin: 0;
+}
+
+.settings-close-x {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #94a3b8;
+  font-size: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.settings-close-x:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.setting-item-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1.5px solid #334155;
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.setting-name {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.setting-sub {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.setting-switch-btn {
+  width: 60px;
+  height: 30px;
+  border-radius: 15px;
+  background: #334155;
+  border: 1.5px solid #475569;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.setting-switch-btn .switch-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #94a3b8;
+  transition: color 0.25s ease;
+}
+
+.setting-switch-btn .switch-knob {
+  position: absolute;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s ease;
+}
+
+.setting-switch-btn.active {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-color: #34d399;
+  justify-content: flex-start;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.setting-switch-btn.active .switch-label {
+  color: #ffffff;
+  margin-left: 24px;
+}
+
+.setting-switch-btn.active .switch-knob {
+  transform: translateX(30px);
+  background: #ffffff;
+}
+
+.btn-settings-confirm {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: 12px;
+}
+
+/* ================= AUTHENTIC TREASURE CHEST MODAL (MATCHES VIDEO PROJECT 2) ================= */
+.treasure-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at 50% 45%, rgba(15, 23, 42, 0.90) 0%, rgba(2, 6, 23, 0.98) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  animation: treasureOverlayFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes treasureOverlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.treasure-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: 100%;
+  max-height: 850px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 20px 16px;
+  box-sizing: border-box;
+}
+
+/* Rotating Golden Sunburst Rays */
+.treasure-sunburst-wrap {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px;
+  height: 520px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.treasure-sunburst-svg {
+  width: 100%;
+  height: 100%;
+  animation: treasureSunburstSpin 16s linear infinite;
+}
+
+.treasure-sunburst-blade {
+  fill: rgba(250, 204, 21, 0.22);
+}
+
+@keyframes treasureSunburstSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Floating 4-Point Diamond Sparkles */
+.treasure-sparkles-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.treasure-sparkle {
+  position: absolute;
+  color: #fef08a;
+  text-shadow: 0 0 10px #facc15, 0 0 16px #ffffff;
+  animation: treasureSparkleFloat 1.8s ease-in-out infinite alternate;
+  user-select: none;
+}
+
+.treasure-sparkles-wrap .sp-1 { top: 22%; left: 16%; font-size: 24px; animation-delay: 0.1s; }
+.treasure-sparkles-wrap .sp-2 { top: 18%; right: 18%; font-size: 28px; animation-delay: 0.3s; }
+.treasure-sparkles-wrap .sp-3 { top: 48%; left: 12%; font-size: 20px; animation-delay: 0.5s; }
+.treasure-sparkles-wrap .sp-4 { top: 52%; right: 14%; font-size: 22px; animation-delay: 0.2s; }
+.treasure-sparkles-wrap .sp-5 { top: 32%; right: 26%; font-size: 18px; animation-delay: 0.6s; }
+
+@keyframes treasureSparkleFloat {
+  0% { transform: scale(0.8) rotate(0deg); opacity: 0.5; }
+  100% { transform: scale(1.25) rotate(25deg); opacity: 1; }
+}
+
+/* Phase Contents */
+.treasure-content-phase {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.treasure-main-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: #ffffff;
+  text-align: center;
+  margin: 0 0 28px 0;
+  text-shadow: 0 2px 0 #000, 0 0 14px rgba(250, 204, 21, 0.7);
+  letter-spacing: 0.5px;
+  animation: treasureTitleDrop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.treasure-gaining-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #fef08a;
+  text-align: center;
+  margin: 0 0 14px 0;
+  text-shadow: 0 2px 0 #000, 0 0 14px rgba(250, 204, 21, 0.85);
+  letter-spacing: 0.5px;
+  animation: treasureTitleDrop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes treasureTitleDrop {
+  from { transform: translateY(-20px) scale(0.9); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Chest Display Area (Hero Zoom) */
+.treasure-chest-display-wrap {
+  position: relative;
+  width: 220px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 35px;
+}
+
+.treasure-chest-hero-img {
+  width: 195px;
+  height: 175px;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.75));
+  animation: chestHeroBounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.4) forwards, chestHeroHover 2.6s ease-in-out 0.5s infinite;
+}
+
+@keyframes chestHeroBounceIn {
+  0% { transform: scale(0.3) translateY(50px); opacity: 0; }
+  70% { transform: scale(1.15) translateY(-8px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes chestHeroHover {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-1.5deg); }
+}
+
+/* Buttons */
+.btn-treasure-open-action {
+  min-width: 160px;
+  padding: 12px 32px;
+  font-size: 18px;
+  font-weight: 900;
+  border-radius: 24px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 0 #92400e, 0 8px 18px rgba(0, 0, 0, 0.5);
+  animation: btnPulseGlow 1.8s ease-in-out infinite;
+}
+
+.btn-treasure-claim-action {
+  min-width: 180px;
+  margin-top: 18px;
+  padding: 12px 36px;
+  font-size: 17px;
+  font-weight: 900;
+  border-radius: 24px;
+  box-shadow: 0 5px 0 #92400e, 0 8px 18px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes btnPulseGlow {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.06); filter: brightness(1.2) drop-shadow(0 0 10px #facc15); }
+}
+
+/* Open Chest Container & Upward God Rays Light Beam */
+.treasure-chest-opened-wrap {
+  position: relative;
+  width: 220px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.treasure-chest-open-hero-img {
+  width: 175px;
+  height: 210px;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 26px rgba(250, 204, 21, 0.55));
+  animation: chestOpenFlashIn 0.4s ease-out forwards;
+}
+
+@keyframes chestOpenFlashIn {
+  0% { transform: scale(0.85); filter: brightness(2.5); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Skill Cards Stack (Matches Video Project 2 Frame 08 & 09) */
+.treasure-cards-stack {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 5px;
+  z-index: 15;
+}
+
+.treasure-skill-card {
+  position: relative;
+  background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+  border: 2.5px solid #3d1702;
+  border-radius: 14px;
+  padding: 10px 14px 10px 62px;
+  box-shadow: 0 4px 0 #3d1702, 0 8px 16px rgba(0, 0, 0, 0.35);
+  transform: translateY(35px) scale(0.9);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.35s ease;
+}
+
+.treasure-skill-card.revealed {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.treasure-card-tag {
+  position: absolute;
+  top: -9px;
+  left: 12px;
+  font-size: 10.5px;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 5px;
+  border: 1.5px solid #220e03;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.tag-mythic {
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  color: #ffffff;
+}
+
+.tag-legendary {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+}
+
+.tag-epic {
+  background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+  color: #ffffff;
+}
+
+.treasure-card-icon {
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 2px solid #3d1702;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef08a 100%);
+  box-shadow: inset 0 2px 2px #fff, 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.treasure-card-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: #1e1b4b;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.treasure-card-desc {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  margin: 2px 0 0 0;
+  line-height: 1.35;
+}
+
+/* Event Parchment Chest Card in Feed */
+.card-striped-event-card.chest-event-card {
+  border-color: #d97706;
+}
+
+.btn-pickup-capsule {
+  padding: 6px 18px;
+  font-size: 13px;
+  font-weight: 900;
+  border-radius: 16px;
+  animation: btnPulseGlow 1.8s ease-in-out infinite;
+}
+
+/* Stage Screen Rumble Shake on Impact */
+.chest-impact-rumble {
+  animation: chestImpactShake 0.35s ease-out forwards;
+}
+
+@keyframes chestImpactShake {
+  0% { transform: translateY(0); }
+  20% { transform: translateY(4px); }
+  40% { transform: translateY(-3px); }
+  60% { transform: translateY(2px); }
+  80% { transform: translateY(-1px); }
+  100% { transform: translateY(0); }
+}
+

@@ -1,0 +1,276 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 354 209" width="354" height="209">
+  <defs>
+    <!-- Background Soft Radial Sunlight Aura -->
+    <radialGradient id="sunAura" cx="52%" cy="46%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="40%" stop-color="#fffbeb" stop-opacity="0.30"/>
+      <stop offset="75%" stop-color="#fef08a" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#fef08a" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Wooden Sword Facet Gradients -->
+    <linearGradient id="swordBladeTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#966559"/>
+      <stop offset="50%" stop-color="#845448"/>
+      <stop offset="100%" stop-color="#714237"/>
+    </linearGradient>
+    <linearGradient id="swordBladeBtm" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#70443c"/>
+      <stop offset="50%" stop-color="#5b322a"/>
+      <stop offset="100%" stop-color="#47211a"/>
+    </linearGradient>
+
+    <!-- Sword Grip Pink-Magenta Wrap -->
+    <linearGradient id="gripGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d44b6a"/>
+      <stop offset="50%" stop-color="#ba3856"/>
+      <stop offset="100%" stop-color="#8e203b"/>
+    </linearGradient>
+
+    <!-- Capybara Fur Gradient (Golden Tan) -->
+    <linearGradient id="furGrad" x1="25%" y1="0%" x2="75%" y2="100%">
+      <stop offset="0%" stop-color="#f8bf7d"/>
+      <stop offset="45%" stop-color="#e4a15b"/>
+      <stop offset="100%" stop-color="#c8823d"/>
+    </linearGradient>
+
+    <!-- Snout Dark Caramel Patch Gradient -->
+    <linearGradient id="snoutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b26f3e"/>
+      <stop offset="100%" stop-color="#8d4f24"/>
+    </linearGradient>
+
+    <!-- Green Sash Gradient -->
+    <linearGradient id="sashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#558842"/>
+      <stop offset="100%" stop-color="#3b6b2b"/>
+    </linearGradient>
+
+    <!-- Golden Plaque Gradient -->
+    <linearGradient id="plaqueGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffe365"/>
+      <stop offset="25%" stop-color="#ffca32"/>
+      <stop offset="80%" stop-color="#fca310"/>
+      <stop offset="100%" stop-color="#dc7700"/>
+    </linearGradient>
+
+    <!-- Ribbon Wing Gradients -->
+    <linearGradient id="wingGradL" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e2690e"/>
+      <stop offset="60%" stop-color="#f17a17"/>
+      <stop offset="100%" stop-color="#c74e05"/>
+    </linearGradient>
+    <linearGradient id="wingGradR" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e2690e"/>
+      <stop offset="60%" stop-color="#f17a17"/>
+      <stop offset="100%" stop-color="#c74e05"/>
+    </linearGradient>
+
+    <!-- Sparkle Glow Filter -->
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.6" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- ================= 1. SUNBURST AURA ================= -->
+  <ellipse cx="185" cy="98" rx="115" ry="80" fill="url(#sunAura)"/>
+
+  <!-- ================= 2. FOUR-POINT SPARKLE STARS ================= -->
+  <!-- Top Left (119, 70) near sword tip -->
+  <path d="M 119,70 Q 120.5,65 120.5,60 Q 120.5,65 122,70 Q 127,70 132,70 Q 127,71 122,72 Q 120.5,77 120.5,82 Q 120.5,77 119,72 Q 114,71 109,70 Q 114,70 119,70 Z" fill="#ffffff" filter="url(#glow)"/>
+  <!-- Far Left (84, 116) -->
+  <path d="M 84,116 Q 85,112.5 85,108 Q 85,112.5 86,116 Q 90,116 94,116 Q 90,117 86,118 Q 85,122 85,126 Q 85,122 84,118 Q 80,117 76,116 Q 80,116 84,116 Z" fill="#ffffff" filter="url(#glow)"/>
+  <!-- Top Right (271, 92) -->
+  <path d="M 271,92 Q 272.5,87 272.5,82 Q 272.5,87 274,92 Q 279,92 284,92 Q 279,93 274,94 Q 272.5,99 272.5,104 Q 272.5,99 271,94 Q 266,93 261,92 Q 266,92 271,92 Z" fill="#ffffff" filter="url(#glow)"/>
+  <!-- Far Right (285, 112) -->
+  <path d="M 285,112 Q 286,108.5 286,105 Q 286,108.5 287,112 Q 291,112 295,112 Q 291,113 287,114 Q 286,118 286,121 Q 286,118 285,114 Q 281,113 277,112 Q 281,112 285,112 Z" fill="#ffffff" filter="url(#glow)"/>
+
+  <!-- ================= 3. AUTHENTIC WOODEN BUSTER SWORD (RESTS ON SHOULDER) ================= -->
+  <g id="wooden-sword">
+    <!-- Blade Drop Shadow -->
+    <polygon points="106,42 136,27 202,68 184,106 148,86 122,70" fill="rgba(0,0,0,0.22)"/>
+
+    <!-- Entire Blade Outer Heavy Cartoon Border -->
+    <polygon points="108,40 138,25 204,66 182,104 153,88 150,83 146,87 124,68 108,40"
+             fill="#151210" stroke="#151210" stroke-width="5" stroke-linejoin="round"/>
+
+    <!-- Top Facet (Light Warm Wood) -->
+    <polygon points="109,40 138,27 202,67 192,85" fill="url(#swordBladeTop)"/>
+
+    <!-- Bottom Facet (Dark Warm Wood) -->
+    <polygon points="109,40 192,85 180,103 153,87 150,83 146,86 124,68" fill="url(#swordBladeBtm)"/>
+
+    <!-- Central Ridge Line -->
+    <line x1="109" y1="40" x2="192" y2="85" stroke="#151210" stroke-width="2.6"/>
+
+    <!-- Wood Grain Carved Lines -->
+    <line x1="130" y1="46" x2="148" y2="42" stroke="#4a221b" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="140" y1="72" x2="154" y2="68" stroke="#4a221b" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="162" y1="60" x2="171" y2="65" stroke="#371510" stroke-width="2.2" stroke-linecap="round"/>
+
+    <!-- Crossguard (Charcoal Block) -->
+    <polygon points="196,62 214,73 203,89 185,78" fill="#291a16" stroke="#151210" stroke-width="3.5" stroke-linejoin="round"/>
+
+    <!-- Grip / Handle (Magenta-Pink Wrapped) -->
+    <polygon points="207,81 221,90 236,115 224,124" fill="url(#gripGrad)" stroke="#151210" stroke-width="3.5" stroke-linejoin="round"/>
+    <!-- Wrap Band Lines -->
+    <line x1="211" y1="91" x2="223" y2="99" stroke="#681026" stroke-width="2.4"/>
+    <line x1="219" y1="103" x2="231" y2="111" stroke="#681026" stroke-width="2.4"/>
+
+    <!-- Pommel (Dark Wooden Angled Cap) -->
+    <polygon points="234,113 243,119 238,127 228,122" fill="#381c16" stroke="#151210" stroke-width="3.5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- ================= 4. CAPYBARA WARRIOR (MATCHES IMAGE 1:1) ================= -->
+  <g id="capybara">
+
+    <!-- A. EAR (At nape of neck behind crown) -->
+    <path d="M 160,78 C 156,71 160,63 167,61 C 173,60 178,64 178,72 Z"
+          fill="#151210" stroke="#151210" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M 160,78 C 156,71 160,63 167,61 C 173,60 178,64 178,72 Z"
+          fill="#df9a56"/>
+    <!-- Pinkish Salmon Inner Ear -->
+    <ellipse cx="168" cy="68" rx="4.5" ry="3.5" transform="rotate(-15, 168, 68)" fill="#dc8773"/>
+
+    <!-- B. SOLID CHUBBY BODY & HEAD SILHOUETTE -->
+    <path d="M 120,158
+             L 226,158
+             C 229,144 228,132 222,122
+             C 228,114 229,102 228,92
+             C 226,80 216,72 206,68
+             C 192,64 172,68 158,74
+             C 144,88 132,108 122,132
+             C 118,144 119,152 120,158 Z"
+          fill="#151210" stroke="#151210" stroke-width="7" stroke-linejoin="round"/>
+
+    <!-- Warm Golden Fur Body Fill -->
+    <path d="M 120,158
+             L 226,158
+             C 229,144 228,132 222,122
+             C 228,114 229,102 228,92
+             C 226,80 216,72 206,68
+             C 192,64 172,68 158,74
+             C 144,88 132,108 122,132
+             C 118,144 119,152 120,158 Z"
+          fill="url(#furGrad)"/>
+
+    <!-- Forehead Highlight Glint -->
+    <ellipse cx="196" cy="72" rx="6.5" ry="3" transform="rotate(-15, 196, 72)" fill="#ffffff" opacity="0.6"/>
+
+    <!-- C. SNOUT DARK CARAMEL PATCH (Front-right face patch) -->
+    <path d="M 210,80
+             C 220,83 227,90 228,100
+             C 228,112 225,121 218,122
+             C 212,123 207,118 206,108
+             C 205,96 206,84 210,80 Z"
+          fill="url(#snoutGrad)" stroke="#151210" stroke-width="3" stroke-linejoin="round"/>
+
+    <!-- D. NOSE & MOUTH CREASE (Iconic Capybara Y-Crease) -->
+    <path d="M 221,95 L 221,105 M 221,105 Q 215,110 212,107 M 221,105 Q 225,110 227,106"
+          stroke="#151210" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+    <!-- E. THE ICONIC SLEEPY EYE (Solid horizontal black pill dash '-') -->
+    <rect x="180" y="86" width="18" height="6.5" rx="3.25"
+          transform="rotate(-22, 189, 89)"
+          fill="#151210"/>
+
+    <!-- F. LEFT FRONT LEG & PAW -->
+    <path d="M 154,116
+             C 148,122 140,130 135,140
+             C 133,145 137,150 143,149
+             C 149,148 156,142 160,134
+             C 164,128 161,120 154,116 Z"
+          fill="#151210" stroke="#151210" stroke-width="4.5" stroke-linejoin="round"/>
+    <path d="M 154,116
+             C 148,122 140,130 135,140
+             C 133,145 137,150 143,149
+             C 149,148 156,142 160,134
+             C 164,128 161,120 154,116 Z"
+          fill="#e4a15b"/>
+    <!-- Paw Pad (Warm Pinkish-Brown Tip) -->
+    <path d="M 134,140 Q 139,150 145,148 Q 152,145 151,138 C 147,132 137,132 134,140 Z"
+          fill="#ca8467"/>
+
+    <!-- G. GREEN SASH / WRAP (Wraps across belly and back) -->
+    <path d="M 134,136
+             C 142,126 166,128 194,116
+             C 214,108 222,112 226,118
+             C 229,124 218,138 198,146
+             C 168,155 140,150 134,136 Z"
+          fill="#151210" stroke="#151210" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M 134,136
+             C 142,126 166,128 194,116
+             C 214,108 222,112 226,118
+             C 229,124 218,138 198,146
+             C 168,155 140,150 134,136 Z"
+          fill="url(#sashGrad)"/>
+    <!-- Pale mint swirls -->
+    <path d="M 160,143 C 163,138 170,138 172,141 C 174,144 171,148 167,147 C 163,146 162,143 164,141"
+          stroke="#c8edbf" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.9"/>
+    <path d="M 192,133 C 195,128 202,128 204,131 C 206,134 203,138 199,137 C 195,136 194,133 196,131"
+          stroke="#c8edbf" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.9"/>
+
+    <!-- H. RIGHT PAW (Gripping Sword Handle at X: 228, Y: 112) -->
+    <ellipse cx="230" cy="112" rx="7.5" ry="6" transform="rotate(-20, 230, 112)"
+             fill="#151210" stroke="#151210" stroke-width="2"/>
+    <ellipse cx="230" cy="112" rx="6" ry="4.5" transform="rotate(-20, 230, 112)"
+             fill="#e4a15b"/>
+    <line x1="227" y1="109" x2="233" y2="108" stroke="#151210" stroke-width="1.8"/>
+    <line x1="227" y1="113" x2="233" y2="112" stroke="#151210" stroke-width="1.8"/>
+  </g>
+
+  <!-- ================= 5. GOLDEN "CHOOSE SKILL" BANNER ================= -->
+  <!-- Overlaps the bottom of the body at Y=152 -->
+  <g id="banner">
+
+    <!-- LEFT FOLDED RIBBON WING -->
+    <polygon points="35,166 54,156 54,180 35,188" fill="rgba(0,0,0,0.3)"/>
+    <polygon points="35,164 54,154 54,178 35,186" fill="#151210" stroke="#151210" stroke-width="3.5" stroke-linejoin="round"/>
+    <polygon points="36,165 53,155 53,177 36,184" fill="url(#wingGradL)"/>
+    <line x1="40" y1="170" x2="49" y2="163" stroke="#872900" stroke-width="2"/>
+    <line x1="42" y1="179" x2="49" y2="173" stroke="#872900" stroke-width="2"/>
+
+    <!-- RIGHT FOLDED RIBBON WING -->
+    <polygon points="318,156 337,166 337,188 318,180" fill="rgba(0,0,0,0.3)"/>
+    <polygon points="318,154 337,164 337,186 318,178" fill="#151210" stroke="#151210" stroke-width="3.5" stroke-linejoin="round"/>
+    <polygon points="319,155 336,165 336,184 319,177" fill="url(#wingGradR)"/>
+    <line x1="332" y1="170" x2="323" y2="163" stroke="#872900" stroke-width="2"/>
+    <line x1="330" y1="179" x2="323" y2="173" stroke="#872900" stroke-width="2"/>
+
+    <!-- Under-shadow wedges behind plaque -->
+    <polygon points="50,166 54,154 54,178" fill="#3a1200"/>
+    <polygon points="318,154 322,166 318,178" fill="#3a1200"/>
+
+    <!-- MAIN GOLDEN PLAQUE -->
+    <!-- Heavy Outline Shadow Base -->
+    <rect x="52" y="152" width="266" height="34" rx="4.5" fill="#151210" stroke="#151210" stroke-width="4.5" stroke-linejoin="round"/>
+    <!-- Lower Bevel (Dark Amber #cf7409) -->
+    <rect x="54" y="172" width="262" height="13" rx="3" fill="#cf7409"/>
+    <!-- Main Face Gradient -->
+    <rect x="54" y="153" width="262" height="28" rx="3.5" fill="url(#plaqueGrad)"/>
+    <!-- Top Chamfer Highlight Stripe -->
+    <rect x="56" y="154" width="258" height="3.5" rx="1.5" fill="#fff59d" opacity="0.85"/>
+
+    <!-- Wood Notches on Plaque Edges -->
+    <polygon points="300,151 302,155 306,151" fill="#151210"/>
+    <polygon points="68,187 71,183 74,187" fill="#151210"/>
+
+    <!-- "Choose skill" TEXT IN EXACT 'FREDOKA' ROUNDED CARTOON FONT -->
+    <text x="185" y="176"
+          font-family="'Fredoka', 'Fredoka One', 'Quicksand', sans-serif"
+          font-size="26"
+          font-weight="700"
+          letter-spacing="0.2"
+          fill="#ffffff"
+          stroke="#151210"
+          stroke-width="4.8"
+          paint-order="stroke fill"
+          text-anchor="middle">
+      Choose skill
+    </text>
+  </g>
+</svg>

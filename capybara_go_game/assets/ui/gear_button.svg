@@ -1,0 +1,21 @@
+﻿<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='128' height='128'>
+  <rect width='32' height='32' rx='8' fill='#46c8f5' stroke='#0d2847' stroke-width='2.5'/>
+  <!-- Specular glint -->
+  <circle cx='5' cy='5' r='3' fill='#ffffff' opacity='0.6'/>
+  <!-- Dark outline layer -->
+  <g fill='#0d2847' stroke='#0d2847' stroke-width='3.6' stroke-linejoin='round'>
+    <rect x='5' y='12' width='22' height='8' rx='4' ry='4'/>
+    <rect x='5' y='12' width='22' height='8' rx='4' ry='4' transform='rotate(60 16 16)'/>
+    <rect x='5' y='12' width='22' height='8' rx='4' ry='4' transform='rotate(120 16 16)'/>
+    <circle cx='16' cy='16' r='7.5'/>
+  </g>
+  <!-- Pure white interior -->
+  <g fill='#ffffff'>
+    <rect x='5' y='12' width='22' height='8' rx='4' ry='4'/>
+    <rect x='5' y='12' width='22' height='8' rx='4' ry='4' transform='rotate(60 16 16)'/>
+    <rect x='5' y='12' width='22' height='8' rx='4' ry='4' transform='rotate(120 16 16)'/>
+    <circle cx='16' cy='16' r='7.5'/>
+  </g>
+  <!-- Center hole with outline -->
+  <circle cx='16' cy='16' r='3' fill='#34b4e8' stroke='#0d2847' stroke-width='2'/>
+</svg>

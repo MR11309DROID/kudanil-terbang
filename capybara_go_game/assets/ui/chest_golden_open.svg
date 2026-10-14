@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <!-- Gold Trim Gradients -->
+    <linearGradient id="goldTopGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fffde7"/>
+      <stop offset="25%" stop-color="#fef08a"/>
+      <stop offset="60%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="goldBrightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#fef08a"/>
+      <stop offset="70%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="goldShadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+
+    <!-- Crimson Velvet Gradients -->
+    <linearGradient id="velvetGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="30%" stop-color="#dc2626"/>
+      <stop offset="75%" stop-color="#b91c1c"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </linearGradient>
+
+    <!-- Radiant Inner Lid Light Gradient -->
+    <radialGradient id="innerLidGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="45%" stop-color="#fef08a"/>
+      <stop offset="80%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </radialGradient>
+
+    <!-- Conical God Rays Light Beam (Upward) -->
+    <linearGradient id="chestLightBeam" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="rgba(254, 240, 138, 0.95)"/>
+      <stop offset="25%" stop-color="rgba(253, 224, 71, 0.75)"/>
+      <stop offset="70%" stop-color="rgba(250, 204, 21, 0.35)"/>
+      <stop offset="100%" stop-color="rgba(250, 204, 21, 0.0)"/>
+    </linearGradient>
+
+    <linearGradient id="beamCore" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="rgba(255, 255, 255, 0.95)"/>
+      <stop offset="35%" stop-color="rgba(254, 249, 195, 0.70)"/>
+      <stop offset="100%" stop-color="rgba(254, 240, 138, 0.0)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 1. Towering Radiant Conical Light Beam Shooting into the Sky -->
+  <polygon points="45,152 155,152 195,0 5,0" fill="url(#chestLightBeam)"/>
+  <polygon points="65,152 135,152 165,0 35,0" fill="url(#beamCore)"/>
+
+  <!-- 2. Ground Drop Shadow -->
+  <ellipse cx="100" cy="226" rx="72" ry="11" fill="rgba(15, 23, 42, 0.48)"/>
+
+  <!-- 3. Open Lid Standing Vertically (Matches Video Frame 6da46f48) -->
+  <!-- Top Gold Handle / Latch on Lid -->
+  <rect x="88" y="44" width="24" height="12" rx="3" fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="3"/>
+  <line x1="90" y1="46" x2="110" y2="46" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+
+  <!-- Right Hinge Bracket -->
+  <path d="M 160,70 C 168,70 174,78 174,88 C 174,102 168,118 160,122 Z" fill="url(#goldShadeGrad)" stroke="#220e03" stroke-width="3.5"/>
+  <circle cx="166" cy="94" r="3.5" fill="#f59e0b"/>
+
+  <!-- Lid Main Golden Beveled Backboard -->
+  <rect x="42" y="52" width="116" height="92" rx="14" fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Inner Recessed Luminous Golden Well -->
+  <rect x="52" y="62" width="96" height="72" rx="8" fill="url(#innerLidGlow)" stroke="#b45309" stroke-width="2.5"/>
+
+  <!-- Sparkles inside the golden lid -->
+  <g transform="translate(68, 78) scale(0.75)">
+    <path d="M 0,-10 Q 0,0 10,0 Q 0,0 0,10 Q 0,0 -10,0 Q 0,0 0,-10 Z" fill="#ffffff"/>
+  </g>
+  <g transform="translate(130, 116) scale(0.65)">
+    <path d="M 0,-10 Q 0,0 10,0 Q 0,0 0,10 Q 0,0 -10,0 Q 0,0 0,-10 Z" fill="#ffffff"/>
+  </g>
+
+  <!-- 4. Lower Box Outer Crimson Base -->
+  <rect x="34" y="154" width="132" height="66" rx="8" fill="url(#velvetGrad)" stroke="#220e03" stroke-width="4.5" stroke-linejoin="round"/>
+
+  <!-- 5. Open Golden Top Rim of Base -->
+  <rect x="28" y="146" width="144" height="24" rx="5" fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Top Lip Highlight -->
+  <line x1="32" y1="149" x2="168" y2="149" stroke="#ffffff" stroke-width="2.5" opacity="0.9"/>
+
+  <!-- Radiant Golden Interior of Open Base -->
+  <rect x="46" y="152" width="108" height="12" rx="4" fill="#ffffff" opacity="0.95"/>
+
+  <!-- 6. Lower Box Vertical Footing Brackets (Left & Right) -->
+  <!-- Left Bottom Bracket -->
+  <rect x="30" y="182" width="34" height="42" rx="6" fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="4" stroke-linejoin="round"/>
+  <line x1="33" y1="185" x2="61" y2="185" stroke="#ffffff" stroke-width="1.8" opacity="0.7"/>
+  <circle cx="47" cy="204" r="6.5" fill="url(#goldBrightGrad)" stroke="#220e03" stroke-width="3"/>
+  <circle cx="45" cy="202" r="1.8" fill="#ffffff" opacity="0.95"/>
+
+  <!-- Right Bottom Bracket -->
+  <rect x="136" y="182" width="34" height="42" rx="6" fill="url(#goldTopGrad)" stroke="#220e03" stroke-width="4" stroke-linejoin="round"/>
+  <line x1="139" y1="185" x2="167" y2="185" stroke="#ffffff" stroke-width="1.8" opacity="0.7"/>
+  <circle cx="153" cy="204" r="6.5" fill="url(#goldBrightGrad)" stroke="#220e03" stroke-width="3"/>
+  <circle cx="151" cy="202" r="1.8" fill="#ffffff" opacity="0.95"/>
+
+  <!-- Bottom Connecting Bar -->
+  <rect x="64" y="196" width="72" height="18" fill="url(#goldShadeGrad)" stroke="#220e03" stroke-width="3.5" stroke-linejoin="round"/>
+</svg>

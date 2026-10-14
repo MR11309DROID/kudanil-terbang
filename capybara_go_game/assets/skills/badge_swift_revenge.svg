@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76 84" width="76" height="84">
+  <defs>
+    <!-- Slate-Lavender Badge Gradient -->
+    <linearGradient id="revengeBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c5cee0"/>
+      <stop offset="60%" stop-color="#a6b2c7"/>
+      <stop offset="100%" stop-color="#93a0b7"/>
+    </linearGradient>
+
+    <!-- Silver Steel Sword Gradients -->
+    <linearGradient id="bladeLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="bladeDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+
+    <!-- Red Counter Arrow Gradient -->
+    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff4d4d"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 1. BASE BADGE BOX -->
+  <rect x="3" y="14" width="70" height="66" rx="10" fill="#181d28" stroke="#181d28" stroke-width="4.5" stroke-linejoin="round"/>
+  <rect x="4" y="15" width="68" height="64" rx="9" fill="url(#revengeBg)"/>
+
+  <!-- Subtle inner background polka dots pattern -->
+  <circle cx="16" cy="32" r="3" fill="#8492ab" opacity="0.4"/>
+  <circle cx="16" cy="48" r="3" fill="#8492ab" opacity="0.4"/>
+  <circle cx="16" cy="64" r="3" fill="#8492ab" opacity="0.4"/>
+
+  <!-- 2. RED CURVED COUNTER ARROWS BEHIND SWORD -->
+  <g transform="translate(24, 38)">
+    <!-- Main Arrow Head -->
+    <path d="M -8,-6 L 6,-18 L 8,-14 L 3,-4 L 14,-2 L 12,2 L 1,0 L -4,8 Z"
+          fill="#181310" stroke="#181310" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M -8,-6 L 6,-18 L 8,-14 L 3,-4 L 14,-2 L 12,2 L 1,0 L -4,8 Z"
+          fill="url(#arrowGrad)"/>
+    
+    <!-- Curved Echo Slash lines -->
+    <path d="M -12,2 Q -8,12 2,16" stroke="#ef4444" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M -16,8 Q -12,18 -4,22" stroke="#ef4444" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+  </g>
+
+  <!-- 3. STEEL BROADSWORD -->
+  <g transform="translate(42, 50) rotate(-42)">
+    <!-- Sword Outer Outline -->
+    <polygon points="-8,-28 0,-38 8,-28 7,16 -7,16" fill="#181310" stroke="#181310" stroke-width="4" stroke-linejoin="round"/>
+    <!-- Left Blade Face (Light) -->
+    <polygon points="-7,-27 0,-36 0,15 -6,15" fill="url(#bladeLight)"/>
+    <!-- Right Blade Face (Shadow) -->
+    <polygon points="0,-36 7,-27 6,15 0,15" fill="url(#bladeDark)"/>
+    <!-- Central Ridge Line -->
+    <line x1="0" y1="-36" x2="0" y2="15" stroke="#94a3b8" stroke-width="1.5"/>
+
+    <!-- Crossguard -->
+    <rect x="-11" y="15" width="22" height="6" rx="2.5" fill="#f8fafc" stroke="#181310" stroke-width="2.5"/>
+
+    <!-- Grip Handle -->
+    <rect x="-3" y="21" width="6" height="11" rx="1.5" fill="#334155" stroke="#181310" stroke-width="2"/>
+    <!-- Pommel -->
+    <circle cx="0" cy="33" r="3.5" fill="#94a3b8" stroke="#181310" stroke-width="2"/>
+
+    <!-- Golden Glint Sparkle on Sword Tip -->
+    <polygon points="6,-24 10,-24 12,-20 10,-16 6,-16 4,-20" fill="#fde047" opacity="0.9"/>
+    <polygon points="7,-23 9,-23 11,-20 9,-17 7,-17 5,-20" fill="#ffffff"/>
+  </g>
+
+  <!-- 4. BOLD "100%" BADGE LABEL -->
+  <text x="44" y="74"
+        font-family="'Lilita One', 'Fredoka', 'Arial Black', sans-serif"
+        font-size="17"
+        font-weight="900"
+        letter-spacing="-0.5"
+        fill="#ffffff"
+        stroke="#181310"
+        stroke-width="4"
+        paint-order="stroke fill"
+        text-anchor="middle">
+    100%
+  </text>
+
+  <!-- 5. TOP "COMMON" PILL TAB WITH WHITE DIAMOND -->
+  <polygon points="38,2 43,7 38,12 33,7" fill="#181d28" stroke="#181d28" stroke-width="2"/>
+  <polygon points="38,3 42,7 38,11 34,7" fill="#ffffff"/>
+
+  <rect x="7" y="8" width="62" height="15" rx="7.5" fill="#181d28" stroke="#181d28" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="8" y="9" width="60" height="13" rx="6.5" fill="#586180"/>
+  <text x="38" y="19"
+        font-family="'Lilita One', 'Fredoka', 'Arial Black', sans-serif"
+        font-size="10"
+        font-weight="900"
+        letter-spacing="0.3"
+        fill="#ffffff"
+        text-anchor="middle">
+    Common
+  </text>
+</svg>
