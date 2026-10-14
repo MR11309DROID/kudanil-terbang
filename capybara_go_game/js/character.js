@@ -141,27 +141,40 @@ class CharacterManager {
 
     // Apply In-Run Skills & Buffs
     if (this.activeRun) {
-      if (this.activeRun.bonusAtkPct) s.atk *= (1 + this.activeRun.bonusAtkPct);
-      if (this.activeRun.bonusHpPct) s.hp *= (1 + this.activeRun.bonusHpPct);
+      let totalAtkPct = this.activeRun.bonusAtkPct || 0;
+      let totalHpPct = this.activeRun.bonusHpPct || 0;
       if (this.activeRun.bonusDef) s.def += this.activeRun.bonusDef;
       if (this.activeRun.bonusCrit) s.critRate += this.activeRun.bonusCrit;
       if (this.activeRun.bonusDodge) s.dodgeRate += this.activeRun.bonusDodge;
       if (this.activeRun.bonusLifesteal) s.lifesteal += this.activeRun.bonusLifesteal;
 
       for (const sk of this.activeRun.skills) {
-        if (sk.atkBonus) s.atk *= (1 + sk.atkBonus);
-        if (sk.hpBonus) s.hp *= (1 + sk.hpBonus);
+        if (sk.atkBonus) totalAtkPct += sk.atkBonus;
+        if (sk.hpBonus) totalHpPct += sk.hpBonus;
+        if (sk.allStatsBonus) {
+          totalAtkPct += sk.allStatsBonus;
+          totalHpPct += sk.allStatsBonus;
+          s.def += Math.round(s.def * sk.allStatsBonus);
+        }
         if (sk.defBonus) s.def += sk.defBonus;
         if (sk.critBonus) s.critRate += sk.critBonus;
         if (sk.dodgeBonus) s.dodgeRate += sk.dodgeBonus;
         if (sk.lifesteal) s.lifesteal += sk.lifesteal;
         if (sk.critDmgBonus) s.critDmg += sk.critDmgBonus;
       }
+
+      s.atk = Math.round(s.atk * (1 + totalAtkPct));
+      s.hp = Math.round(s.hp * (1 + totalHpPct));
     }
 
+    // Clamp stats to balanced bounds so combat feels challenging and fun
     s.hp = Math.round(s.hp);
     s.atk = Math.round(s.atk);
     s.def = Math.round(s.def);
+    s.critRate = Math.min(0.60, Math.max(0.05, s.critRate || 0.05));
+    s.dodgeRate = Math.min(0.40, Math.max(0, s.dodgeRate || 0));
+    s.lifesteal = Math.min(0.30, Math.max(0, s.lifesteal || 0));
+    s.critDmg = Math.min(2.50, Math.max(1.50, s.critDmg || 1.50));
     return s;
   }
 

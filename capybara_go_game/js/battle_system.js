@@ -205,20 +205,26 @@ class BattleSystem {
     if (this.turnCount === 1 && r.enemyState) {
       const dragonOpener = c.skills.find(s => (s.key === "mythic_02_dragon_roar" || (s.name && s.name.includes("Dragon"))) && s.startCombatDmg);
       if (dragonOpener && r.launchDragonBreath) {
-        const roarDmg = Math.round(c.atk * dragonOpener.startCombatDmg);
+        const mult = Math.min(0.40, dragonOpener.startCombatDmg || 0.40);
+        const roarDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.30)));
         r.launchDragonBreath(r.playerState.x, r.groundY - 50, r.enemyState.x, r.groundY - 50, () => {
           e.hp -= roarDmg;
-          r.enemyState.currentHp = Math.max(0, e.hp);
-          r.addFloatingText(roarDmg, r.enemyState.x, r.groundY - 60, "crit");
+          if (r.enemyState) {
+            r.enemyState.currentHp = Math.max(0, e.hp);
+            r.addFloatingText(roarDmg, r.enemyState.x, r.groundY - 60, "crit");
+          }
         }, null, this.speedMultiplier);
       }
       const bombOpener = c.skills.find(s => (s.key === "common_10_bomb" || (s.name && s.name.includes("Bomb"))) && s.startCombatDmg);
       if (bombOpener && r.launchBombToss) {
-        const bombDmg = Math.round(c.atk * bombOpener.startCombatDmg);
+        const mult = Math.min(0.35, bombOpener.startCombatDmg || 0.35);
+        const bombDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.30)));
         r.launchBombToss(r.playerState.x, r.groundY - 50, r.enemyState.x, r.groundY - 20, () => {
           e.hp -= bombDmg;
-          r.enemyState.currentHp = Math.max(0, e.hp);
-          r.addFloatingText(bombDmg, r.enemyState.x, r.groundY - 55, "crit");
+          if (r.enemyState) {
+            r.enemyState.currentHp = Math.max(0, e.hp);
+            r.addFloatingText(bombDmg, r.enemyState.x, r.groundY - 55, "crit");
+          }
         }, null, this.speedMultiplier);
       }
     }
@@ -226,8 +232,8 @@ class BattleSystem {
     // Periodic Skill Procs (Black Hole singularity every 4 turns)
     const blackHoleSkill = c.skills.find(s => (s.key === "mythic_03_black_hole" || (s.name && s.name.includes("Black Hole"))) && this.turnCount % (s.procEvery || 4) === 0);
     if (blackHoleSkill && r.enemyState && r.launchBlackHole) {
-      const mult = blackHoleSkill.dmgMult ? Math.min(blackHoleSkill.dmgMult, 0.30) : 0.30;
-      const bhDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.25)));
+      const mult = blackHoleSkill.dmgMult ? Math.min(blackHoleSkill.dmgMult, 0.25) : 0.25;
+      const bhDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.30)));
       r.launchBlackHole(
         r.enemyState.x,
         r.groundY - 25,
@@ -250,12 +256,15 @@ class BattleSystem {
     // Periodic Skill Procs (Thunder Hammer & Lightning bolts every 3 turns)
     const thunderSkill = c.skills.find(s => (s.key === "legendary_02_thunder_hammer" || s.effect === "thunder" || (s.name && s.name.includes("Thunder"))) && this.turnCount % (s.procEvery || 3) === 0);
     if (thunderSkill && r.enemyState) {
-      const boltDmg = Math.round(c.atk * (thunderSkill.dmgMult || 2.2));
+      const mult = Math.min(0.55, thunderSkill.dmgMult || 0.55);
+      const boltDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.30)));
       if (r.launchThunderHammerStrike) {
         r.launchThunderHammerStrike(r.enemyState.x, r.groundY - 45, () => {
           e.hp -= boltDmg;
-          r.enemyState.currentHp = Math.max(0, e.hp);
-          r.addFloatingText(boltDmg, r.enemyState.x, r.groundY - 60, "crit");
+          if (r.enemyState) {
+            r.enemyState.currentHp = Math.max(0, e.hp);
+            r.addFloatingText(boltDmg, r.enemyState.x, r.groundY - 60, "crit");
+          }
         }, null, this.speedMultiplier);
       } else {
         e.hp -= boltDmg;
@@ -267,14 +276,17 @@ class BattleSystem {
       }
     }
 
-    // Periodic Skill Procs (Fireball splash every 2 turns)
-    const fireballSkill = c.skills.find(s => (s.key === "legendary_08_fireball" || (s.name && s.name.includes("Fireball"))) && this.turnCount % (s.procEvery || 2) === 0);
+    // Periodic Skill Procs (Fireball splash every 3 turns)
+    const fireballSkill = c.skills.find(s => (s.key === "legendary_08_fireball" || (s.name && s.name.includes("Fireball"))) && this.turnCount % (s.procEvery || 3) === 0);
     if (fireballSkill && r.enemyState && r.launchFireball) {
-      const fbDmg = Math.round(c.atk * (fireballSkill.dmgMult || 2.2));
+      const mult = Math.min(0.50, fireballSkill.dmgMult || 0.50);
+      const fbDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.30)));
       r.launchFireball(r.playerState.x + 30, r.groundY - 45, r.enemyState.x, r.groundY - 45, () => {
         e.hp -= fbDmg;
-        r.enemyState.currentHp = Math.max(0, e.hp);
-        r.addFloatingText(fbDmg, r.enemyState.x, r.groundY - 55, "crit");
+        if (r.enemyState) {
+          r.enemyState.currentHp = Math.max(0, e.hp);
+          r.addFloatingText(fbDmg, r.enemyState.x, r.groundY - 55, "crit");
+        }
       }, null, this.speedMultiplier);
     }
 
@@ -286,8 +298,8 @@ class BattleSystem {
       const meteorSkill = c.skills.find(s => s.key === "mythic_05_meteor_strike" || (s.name && s.name.includes("Meteor")));
       if (meteorSkill && r.launchMeteorStrike) {
         r.setPlayerAnim("skill", false);
-        const ultMult = meteorSkill.ultMult || 5.0;
-        const dmg = Math.round(c.atk * ultMult);
+        const ultMult = Math.min(1.60, meteorSkill.ultMult || 1.60);
+        const dmg = Math.max(1, Math.round((c.atk * ultMult) - (e.def * 0.35)));
         r.launchMeteorStrike(r.enemyState.x, r.groundY - 20, () => {
           e.hp -= dmg;
           if (r.enemyState) {
