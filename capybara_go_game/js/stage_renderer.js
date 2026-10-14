@@ -2095,6 +2095,70 @@ class StageRenderer {
       ctx.stroke();
       ctx.restore();
     }
+
+    // 9. Black Hole / Cosmic Crystal Quiver (Tabung Panah di Punggung)
+    const hasBlackHole = hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.skillExpression && p.skillExpression !== "normal");
+    if (hasBlackHole) {
+      ctx.save();
+      ctx.translate(-drawW * 0.22, -drawH * 0.52);
+      ctx.rotate(-0.35);
+
+      // Slim leather quiver cylinder
+      ctx.fillStyle = "#78350f";
+      ctx.strokeStyle = "#291003";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.roundRect(-4, -2, 8, 22, 2.5);
+      ctx.fill();
+      ctx.stroke();
+
+      // Golden collar band
+      ctx.fillStyle = "#b45309";
+      ctx.beginPath();
+      ctx.roundRect(-4.5, -3, 9, 3.5, 1.2);
+      ctx.fill();
+      ctx.stroke();
+
+      // 3 Sky-blue arrows with cyan feathers
+      const arrows = [
+        { dx: -2, dy: -8, rot: -0.20 },
+        { dx: 0, dy: -11, rot: 0.02 },
+        { dx: 2, dy: -7, rot: 0.22 }
+      ];
+      for (const arr of arrows) {
+        ctx.save();
+        ctx.translate(arr.dx, arr.dy);
+        ctx.rotate(arr.rot);
+
+        ctx.strokeStyle = "#451a03";
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, 8);
+        ctx.stroke();
+
+        ctx.fillStyle = "#38bdf8";
+        ctx.strokeStyle = "#0284c7";
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(0, -1);
+        ctx.lineTo(-3, 3);
+        ctx.lineTo(0, 2.2);
+        ctx.lineTo(3, 3);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.strokeStyle = "#e0f2fe";
+        ctx.lineWidth = 0.6;
+        ctx.beginPath();
+        ctx.moveTo(0, -0.8);
+        ctx.lineTo(0, 2.5);
+        ctx.stroke();
+        ctx.restore();
+      }
+      ctx.restore();
+    }
   }
 
   renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now) {
@@ -2481,6 +2545,103 @@ class StageRenderer {
       ctx.restore();
     }
 
+    // 12. Mythic: Black Hole / Cosmic Crystal Sword (Pedang Kristal Kosmik)
+    const hasBlackHole = hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.skillExpression && p.skillExpression !== "normal");
+    if (hasBlackHole) {
+      ctx.save();
+      let swordX = drawW * 0.22;
+      let swordY = -drawH * 0.22;
+      let swordRot = 0.52; // Default 45 deg ready slant
+
+      if (p.swordAction === "slash") {
+        swordX = drawW * 0.30;
+        swordY = -drawH * 0.10;
+        swordRot = 1.35; // Slashing forward
+      } else if (p.swordAction === "cast") {
+        swordX = drawW * 0.16;
+        swordY = -drawH * 0.28;
+        swordRot = 0.15; // Pointing forward/up
+      } else if (p.swordAction === "absorb") {
+        swordX = drawW * 0.12;
+        swordY = -drawH * 0.15;
+        swordRot = 0.75; // Low diagonal absorb
+      }
+
+      ctx.translate(swordX, swordY);
+      ctx.rotate(swordRot);
+
+      // Void Aura on Sword
+      ctx.shadowColor = "#d946ef";
+      ctx.shadowBlur = 10;
+
+      // Dark Pommel & Grip
+      ctx.fillStyle = "#1e1b4b";
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.arc(0, 11, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.roundRect(-1.2, 5, 2.4, 6, 0.8);
+      ctx.fill();
+      ctx.stroke();
+
+      // Winged Crystal Crossguard
+      ctx.fillStyle = "#6b21a8";
+      ctx.strokeStyle = "#c084fc";
+      ctx.lineWidth = 1.1;
+      ctx.beginPath();
+      ctx.moveTo(-6.5, 5);
+      ctx.lineTo(-3, 3.5);
+      ctx.lineTo(0, 4.2);
+      ctx.lineTo(3, 3.5);
+      ctx.lineTo(6.5, 5);
+      ctx.lineTo(3, 6);
+      ctx.lineTo(-3, 6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Glowing Faceted Crystal Blade
+      const bladeGrad = ctx.createLinearGradient(0, -18, 0, 4);
+      bladeGrad.addColorStop(0, "#ffffff");
+      bladeGrad.addColorStop(0.25, "#f0abfc");
+      bladeGrad.addColorStop(0.7, "#c084fc");
+      bladeGrad.addColorStop(1, "#9333ea");
+      ctx.fillStyle = bladeGrad;
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1.1;
+
+      ctx.beginPath();
+      ctx.moveTo(0, -18); // Tip
+      ctx.lineTo(3.2, -13);
+      ctx.lineTo(2.8, 3.5);
+      ctx.lineTo(0, 4.2);
+      ctx.lineTo(-2.8, 3.5);
+      ctx.lineTo(-3.2, -13);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Center Crystal Ridge Line
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.lineWidth = 0.9;
+      ctx.beginPath();
+      ctx.moveTo(0, -17);
+      ctx.lineTo(0, 3.8);
+      ctx.stroke();
+
+      // Sparkling Star Glint near tip
+      const glint = 0.5 + 0.5 * Math.sin(now * 0.008);
+      ctx.fillStyle = `rgba(255, 255, 255, ${glint})`;
+      ctx.beginPath();
+      ctx.arc(0, -14, 1.5 * glint, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
   }
 
   // --- Dynamic Skill Combat Animations (Meteor Strike, Dragon Roar, Singularity, etc.) ---
@@ -2667,20 +2828,25 @@ class StageRenderer {
     this.skillCombatEffects.push({
       startTime: performance.now(),
       duration: duration,
-      update: (progress) => {
-        // Dynamic Capybara facial expression matching 12-frame reference art
+        // Dynamic Capybara facial expression & crystal sword action matching 12-frame reference art
         if (progress >= 0.08 && progress < 0.25) {
           this.playerState.skillExpression = "void_eye"; // Frames 2 & 3: Void Awaken & Gravity Charge
+          this.playerState.swordAction = "cast";
         } else if (progress >= 0.25 && progress < 0.35) {
-          this.playerState.skillExpression = "slash_squint"; // Frame 4: Rift Cast
+          this.playerState.skillExpression = "slash_squint"; // Frame 4: Rift Cast (Slashing)
+          this.playerState.swordAction = "slash";
         } else if (progress >= 0.35 && progress < 0.70) {
           this.playerState.skillExpression = "void_eye"; // Frames 5, 6, 7: Singularity, Gravity Pull, Event Horizon
+          this.playerState.swordAction = "cast";
         } else if (progress >= 0.70 && progress < 0.85) {
           this.playerState.skillExpression = "flash_squint"; // Frames 8 & 9: Cosmic Crush & Supernova
+          this.playerState.swordAction = "ready";
         } else if (progress >= 0.85 && progress < 0.96) {
           this.playerState.skillExpression = "peaceful_relief"; // Frames 10 & 11: Void Absorb & Recovery
+          this.playerState.swordAction = "absorb";
         } else {
           this.playerState.skillExpression = null;
+          this.playerState.swordAction = "ready";
         }
 
         // Supernova Implosion / Detonation at progress 0.70
@@ -3028,6 +3194,7 @@ class StageRenderer {
       },
       onComplete: () => {
         this.playerState.skillExpression = null;
+        this.playerState.swordAction = null;
         this.setPlayerAnim("idle", true);
         if (onComplete) onComplete();
       }
