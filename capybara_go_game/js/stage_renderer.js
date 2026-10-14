@@ -1675,14 +1675,20 @@ class StageRenderer {
         const sprY = -114 * s;
         ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
       } else if (p.currentAnim === "black_hole") {
+        // Capybara stays still in place; holds Frame 04 sword-slash casting pose during
+        // frames 4 to 8 while the HD Black Hole flies forward and manifests on the enemy!
+        let effectiveFrameImg = frameImg;
+        if (p.frameIndex >= 4 && p.frameIndex <= 8) {
+          effectiveFrameImg = animFrames[3] || frameImg;
+        }
         // 192x144 frame: Capybara body is anchored at (106, 133)
         // Scale by 0.50 so the body height matches the 64x64 idle sprite exactly
         const s = p.scale * 0.50;
-        const sprW = frameImg.naturalWidth * s;
-        const sprH = frameImg.naturalHeight * s;
+        const sprW = effectiveFrameImg.naturalWidth * s;
+        const sprH = effectiveFrameImg.naturalHeight * s;
         const sprX = -106 * s;
         const sprY = -133 * s;
-        ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
+        ctx.drawImage(effectiveFrameImg, sprX, sprY, sprW, sprH);
       } else {
         // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
         // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
@@ -2520,14 +2526,20 @@ class StageRenderer {
   }
 
   launchBlackHole(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
-    const duration = 880 / speedMult;
+    const duration = 920 / speedMult;
     let hitTriggered = false;
 
-    // Trigger authentic 12-frame Black Hole animation on Capybara
+    // Trigger authentic casting animation on Capybara (stays in place at homePlayerX)
     this.setPlayerAnim("black_hole", false);
 
     // Frame 07 Event Horizon vortex sprite from the preloaded sheet
     const vortexImg = this.playerAnimations["black_hole"] ? this.playerAnimations["black_hole"][6] : null;
+
+    // Origin position: from Capybara's cosmic sword tip
+    const startX = this.playerState.x + 35;
+    const startY = this.groundY - 45;
+    const finalHoleX = targetX - 25;
+    const finalHoleY = targetY - 25;
 
     // 8 Meteorite Asteroid Boulders with randomized shapes and orbits
     const meteors = [];
@@ -2555,8 +2567,8 @@ class StageRenderer {
       startTime: performance.now(),
       duration: duration,
       update: (progress) => {
-        // Supernova Implosion / Detonation at progress 0.68
-        if (progress >= 0.68 && !hitTriggered) {
+        // Supernova Implosion / Detonation at progress 0.70
+        if (progress >= 0.70 && !hitTriggered) {
           hitTriggered = true;
           Sound.playSfx("magicBurst");
           Sound.playSfx("bossRoar");
@@ -2568,9 +2580,9 @@ class StageRenderer {
             this.enemyState.knockback = 18;
             setTimeout(() => { if (this.enemyState) this.enemyState.knockback = 0; }, 200 / speedMult);
           }
-          this.addVisualEffect("critBurst", targetX, targetY - 25, 3.0);
-          this.addMagicImpactSparks(targetX, targetY - 25, ["#c084fc", "#9333ea", "#38bdf8", "#fde047", "#ffffff", "#030712"]);
-          this.addGroundSlashFissure(targetX, this.groundY, "#a855f7");
+          this.addVisualEffect("critBurst", finalHoleX, finalHoleY, 3.0);
+          this.addMagicImpactSparks(finalHoleX, finalHoleY, ["#c084fc", "#9333ea", "#38bdf8", "#fde047", "#ffffff", "#030712"]);
+          this.addGroundSlashFissure(finalHoleX, this.groundY, "#a855f7");
           if (onHit) onHit();
         }
       },
@@ -2579,10 +2591,21 @@ class StageRenderer {
         const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
         const p = Math.min(1, elapsed / duration);
 
+        // Compute current Black Hole position:
+        // Flies from Capy (progress 0.0 -> 0.22) to in front of enemy (progress 0.22 -> 1.0)
+        let currHoleX = finalHoleX;
+        let currHoleY = finalHoleY;
+        if (p < 0.22) {
+          const flyP = p / 0.22;
+          const flyEase = 1 - Math.pow(1 - flyP, 3);
+          currHoleX = startX + (finalHoleX - startX) * flyEase;
+          currHoleY = startY + (finalHoleY - startY) * flyEase - Math.sin(flyP * Math.PI) * 16;
+        }
+
         // 1. Cosmic Void Nebula Screen Vignette
         ctx.save();
         const dimAlpha = Math.sin(p * Math.PI) * 0.72;
-        const screenGrad = ctx.createRadialGradient(targetX, targetY - 25, 20, targetX, targetY - 25, this.width * 0.85);
+        const screenGrad = ctx.createRadialGradient(currHoleX, currHoleY, 20, currHoleX, currHoleY, this.width * 0.85);
         screenGrad.addColorStop(0, `rgba(12, 4, 28, ${dimAlpha * 0.95})`);
         screenGrad.addColorStop(0.5, `rgba(8, 2, 20, ${dimAlpha * 0.7})`);
         screenGrad.addColorStop(1, `rgba(2, 0, 8, ${dimAlpha * 0.4})`);
@@ -2590,123 +2613,150 @@ class StageRenderer {
         ctx.fillRect(-20, -20, this.width + 40, this.height + 40);
         ctx.restore();
 
-        ctx.save();
-        ctx.translate(targetX, targetY - 25);
-
-        if (p < 0.68) {
-          // PHASE 1 & 2: Gravitational Pull & Accretion Vortex
-          const growth = Math.min(1, p / 0.35);
-          const vortexScale = growth * (1 - Math.pow(Math.max(0, (p - 0.55) / 0.13), 2) * 0.6);
-
-          // Glowing Outer Accretion Rings
+        // 2. Flying Cosmic Singularity Comet Trail (while in flight)
+        if (p < 0.22) {
           ctx.save();
-          ctx.rotate(now * 0.008);
-          ctx.shadowColor = "#a855f7";
-          ctx.shadowBlur = 28;
-
-          // Accretion halo gradient
-          const accGrad = ctx.createRadialGradient(0, 0, 10 * vortexScale, 0, 0, 50 * vortexScale);
-          accGrad.addColorStop(0, "rgba(255, 255, 255, 0.9)");
-          accGrad.addColorStop(0.2, "rgba(192, 132, 252, 0.85)");
-          accGrad.addColorStop(0.6, "rgba(99, 102, 241, 0.5)");
-          accGrad.addColorStop(1, "rgba(168, 85, 247, 0)");
-          ctx.fillStyle = accGrad;
-          ctx.beginPath();
-          ctx.arc(0, 0, 50 * vortexScale, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Swirling Accretion Stream Curves
-          ctx.strokeStyle = "rgba(192, 132, 252, 0.85)";
-          ctx.lineWidth = 2.5 * vortexScale;
-          for (let a = 0; a < 4; a++) {
-            ctx.beginPath();
-            ctx.arc(0, 0, Math.max(3, 40 * vortexScale * (0.4 + a * 0.2)), a * 1.5, a * 1.5 + Math.PI);
-            ctx.stroke();
-          }
-          ctx.restore();
-
-          // Crackling Void Lightning Arcs
-          ctx.save();
-          ctx.strokeStyle = "#e9d5ff";
+          const tGrad = ctx.createLinearGradient(startX, startY, currHoleX, currHoleY);
+          tGrad.addColorStop(0, "rgba(168, 85, 247, 0)");
+          tGrad.addColorStop(0.5, "rgba(192, 132, 252, 0.6)");
+          tGrad.addColorStop(1, "rgba(255, 255, 255, 0.95)");
+          ctx.strokeStyle = tGrad;
+          ctx.lineWidth = 4.5;
           ctx.shadowColor = "#c084fc";
-          ctx.shadowBlur = 12;
-          ctx.lineWidth = 1.8;
-          for (const arc of lightningArcs) {
-            const arcP = (now * 0.01 + arc.angle) % (Math.PI * 2);
-            const arcLen = arc.length * vortexScale;
-            ctx.beginPath();
-            ctx.moveTo(Math.cos(arcP) * 12 * vortexScale, Math.sin(arcP) * 12 * vortexScale);
-            let lx = Math.cos(arcP) * 12 * vortexScale;
-            let ly = Math.sin(arcP) * 12 * vortexScale;
-            for (let b = 0; b < 3; b++) {
-              const segLen = arcLen * 0.33;
-              lx += Math.cos(arcP + arc.branches[b]) * segLen;
-              ly += Math.sin(arcP + arc.branches[b]) * segLen;
-              ctx.lineTo(lx, ly);
-            }
-            ctx.stroke();
-          }
-          ctx.restore();
+          ctx.shadowBlur = 14;
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(currHoleX, currHoleY);
+          ctx.stroke();
 
-          // Authentic Event Horizon Sprite (or Procedural Singularity)
-          if (vortexImg && vortexImg.complete) {
+          // Small flying orb
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.arc(currHoleX, currHoleY, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        ctx.save();
+        ctx.translate(currHoleX, currHoleY);
+
+        if (p < 0.70) {
+          // PHASE 2 & 3: Gravitational Pull & Accretion Vortex in front of enemy
+          const arrivalP = Math.max(0, (p - 0.22) / 0.48);
+          const growth = Math.min(1, arrivalP / 0.3);
+          const vortexScale = growth * (1 - Math.pow(Math.max(0, (arrivalP - 0.7) / 0.3), 2) * 0.5);
+
+          if (vortexScale > 0.05) {
+            // Glowing Outer Accretion Rings
             ctx.save();
-            ctx.rotate(now * 0.005);
-            const vW = vortexImg.naturalWidth * 0.75 * vortexScale;
-            const vH = vortexImg.naturalHeight * 0.75 * vortexScale;
-            ctx.drawImage(vortexImg, -vW / 2, -vH / 2, vW, vH);
-            ctx.restore();
-          } else {
-            // Pure Black Hole Core with Neon Rim
-            ctx.fillStyle = "#020205";
+            ctx.rotate(now * 0.008);
+            ctx.shadowColor = "#a855f7";
+            ctx.shadowBlur = 28;
+
+            // Accretion halo gradient
+            const accGrad = ctx.createRadialGradient(0, 0, 10 * vortexScale, 0, 0, 52 * vortexScale);
+            accGrad.addColorStop(0, "rgba(255, 255, 255, 0.9)");
+            accGrad.addColorStop(0.2, "rgba(192, 132, 252, 0.85)");
+            accGrad.addColorStop(0.6, "rgba(99, 102, 241, 0.5)");
+            accGrad.addColorStop(1, "rgba(168, 85, 247, 0)");
+            ctx.fillStyle = accGrad;
             ctx.beginPath();
-            ctx.arc(0, 0, Math.max(2, 22 * vortexScale), 0, Math.PI * 2);
+            ctx.arc(0, 0, 52 * vortexScale, 0, Math.PI * 2);
             ctx.fill();
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2.0;
-            ctx.stroke();
-          }
 
-          // 8 Spiraling Meteor Asteroid Boulders pulled into Singularity
-          const pullP = Math.min(1, Math.max(0, (p - 0.1) / 0.58));
-          ctx.save();
-          for (let m = 0; m < meteors.length; m++) {
-            const b = meteors[m];
-            const currDist = b.baseRadius * (1 - pullP * 0.88);
-            const currAng = b.startAngle + pullP * 12;
-            const mx = Math.cos(currAng) * currDist;
-            const my = Math.sin(currAng) * (currDist * 0.65); // 3D perspective ellipse
-
-            // Violet Plasma Tail behind meteor
-            ctx.strokeStyle = "rgba(192, 132, 252, 0.65)";
-            ctx.lineWidth = 2.0;
-            ctx.beginPath();
-            ctx.moveTo(mx, my);
-            ctx.lineTo(mx - Math.cos(currAng) * 14, my - Math.sin(currAng) * 8);
-            ctx.stroke();
-
-            // Meteor Boulder Polygon
-            ctx.fillStyle = "#475569";
-            ctx.strokeStyle = "#94a3b8";
-            ctx.lineWidth = 1.0;
-            ctx.beginPath();
-            for (let j = 0; j < 4; j++) {
-              const jAng = (j / 4) * Math.PI * 2 + now * b.rotSpeed;
-              const jDist = b.size * b.jagged[j];
-              const px = mx + Math.cos(jAng) * jDist;
-              const py = my + Math.sin(jAng) * jDist;
-              if (j === 0) ctx.moveTo(px, py);
-              else ctx.lineTo(px, py);
+            // Swirling Accretion Stream Curves
+            ctx.strokeStyle = "rgba(192, 132, 252, 0.85)";
+            ctx.lineWidth = 2.5 * vortexScale;
+            for (let a = 0; a < 4; a++) {
+              ctx.beginPath();
+              ctx.arc(0, 0, Math.max(3, 42 * vortexScale * (0.4 + a * 0.2)), a * 1.5, a * 1.5 + Math.PI);
+              ctx.stroke();
             }
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
+            ctx.restore();
+
+            // Crackling Void Lightning Arcs
+            ctx.save();
+            ctx.strokeStyle = "#e9d5ff";
+            ctx.shadowColor = "#c084fc";
+            ctx.shadowBlur = 12;
+            ctx.lineWidth = 1.8;
+            for (const arc of lightningArcs) {
+              const arcP = (now * 0.01 + arc.angle) % (Math.PI * 2);
+              const arcLen = arc.length * vortexScale;
+              ctx.beginPath();
+              ctx.moveTo(Math.cos(arcP) * 12 * vortexScale, Math.sin(arcP) * 12 * vortexScale);
+              let lx = Math.cos(arcP) * 12 * vortexScale;
+              let ly = Math.sin(arcP) * 12 * vortexScale;
+              for (let b = 0; b < 3; b++) {
+                const segLen = arcLen * 0.33;
+                lx += Math.cos(arcP + arc.branches[b]) * segLen;
+                ly += Math.sin(arcP + arc.branches[b]) * segLen;
+                ctx.lineTo(lx, ly);
+              }
+              ctx.stroke();
+            }
+            ctx.restore();
+
+            // Authentic Event Horizon Sprite (or Procedural Singularity)
+            if (vortexImg && vortexImg.complete) {
+              ctx.save();
+              ctx.rotate(now * 0.005);
+              const vW = vortexImg.naturalWidth * 0.75 * vortexScale;
+              const vH = vortexImg.naturalHeight * 0.75 * vortexScale;
+              ctx.drawImage(vortexImg, -vW / 2, -vH / 2, vW, vH);
+              ctx.restore();
+            } else {
+              // Pure Black Hole Core with Neon Rim
+              ctx.fillStyle = "#020205";
+              ctx.beginPath();
+              ctx.arc(0, 0, Math.max(2, 22 * vortexScale), 0, Math.PI * 2);
+              ctx.fill();
+              ctx.strokeStyle = "#ffffff";
+              ctx.lineWidth = 2.0;
+              ctx.stroke();
+            }
+
+            // 8 Spiraling Meteor Asteroid Boulders pulled into Singularity
+            const pullP = Math.min(1, Math.max(0, arrivalP));
+            ctx.save();
+            for (let m = 0; m < meteors.length; m++) {
+              const b = meteors[m];
+              const currDist = b.baseRadius * (1 - pullP * 0.88);
+              const currAng = b.startAngle + pullP * 12;
+              const mx = Math.cos(currAng) * currDist;
+              const my = Math.sin(currAng) * (currDist * 0.65); // 3D perspective ellipse
+
+              // Violet Plasma Tail behind meteor
+              ctx.strokeStyle = "rgba(192, 132, 252, 0.65)";
+              ctx.lineWidth = 2.0;
+              ctx.beginPath();
+              ctx.moveTo(mx, my);
+              ctx.lineTo(mx - Math.cos(currAng) * 14, my - Math.sin(currAng) * 8);
+              ctx.stroke();
+
+              // Meteor Boulder Polygon
+              ctx.fillStyle = "#475569";
+              ctx.strokeStyle = "#94a3b8";
+              ctx.lineWidth = 1.0;
+              ctx.beginPath();
+              for (let j = 0; j < 4; j++) {
+                const jAng = (j / 4) * Math.PI * 2 + now * b.rotSpeed;
+                const jDist = b.size * b.jagged[j];
+                const px = mx + Math.cos(jAng) * jDist;
+                const py = my + Math.sin(jAng) * jDist;
+                if (j === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+              }
+              ctx.closePath();
+              ctx.fill();
+              ctx.stroke();
+            }
+            ctx.restore();
           }
-          ctx.restore();
 
         } else {
-          // PHASE 3 & 4: SUPERNOVA EXPLOSION & COSMIC SHOCKWAVE
-          const expP = (p - 0.68) / 0.32;
+          // PHASE 4: SUPERNOVA EXPLOSION & COSMIC SHOCKWAVE ON ENEMY
+          const expP = (p - 0.70) / 0.30;
           const fadeAlpha = Math.max(0, 1 - expP);
 
           // Blinding White/Gold Core Flash
@@ -2730,14 +2780,14 @@ class StageRenderer {
           ctx.shadowColor = "#38bdf8";
           ctx.shadowBlur = 22;
           ctx.beginPath();
-          ctx.arc(0, 0, expP * 125, 0, Math.PI * 2);
+          ctx.arc(0, 0, expP * 130, 0, Math.PI * 2);
           ctx.stroke();
 
           // Inner shockwave
           ctx.strokeStyle = "#ffffff";
           ctx.lineWidth = 2.5 * fadeAlpha;
           ctx.beginPath();
-          ctx.arc(0, 0, expP * 90, 0, Math.PI * 2);
+          ctx.arc(0, 0, expP * 95, 0, Math.PI * 2);
           ctx.stroke();
           ctx.restore();
         }
