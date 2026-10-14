@@ -219,16 +219,17 @@ class UIManager {
       });
     }
 
-    // 2. Chapter Previous / Next Arrows
+    // 2. Chapter Previous / Next Arrows & Map Selector
     const btnPrev = document.getElementById("btn-menu-chapter-prev");
     const btnNext = document.getElementById("btn-menu-chapter-next");
+    const elChTitle = document.getElementById("menu-chapter-name");
 
     if (btnPrev) {
       btnPrev.addEventListener("click", (e) => {
         e.stopPropagation();
-        Sound.playSfx("click");
         const cur = Character.selectedChapter || 1;
         if (cur > 1) {
+          Sound.playSfx("click");
           Character.selectedChapter = cur - 1;
           Character.save();
           this.renderMenuHub();
@@ -239,14 +240,73 @@ class UIManager {
     if (btnNext) {
       btnNext.addEventListener("click", (e) => {
         e.stopPropagation();
-        Sound.playSfx("click");
         const cur = Character.selectedChapter || 1;
         if (cur < GameData.chapters.length) {
+          Sound.playSfx("click");
           Character.selectedChapter = cur + 1;
           Character.save();
           this.renderMenuHub();
         }
       });
+    }
+
+    if (elChTitle) {
+      elChTitle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        Sound.playSfx("click");
+        this.openChapterSelectModal();
+      });
+    }
+
+    // Chapter Select Modal close handlers
+    const btnCloseCh = document.getElementById("btn-chapter-select-close");
+    const btnCloseChX = document.getElementById("btn-chapter-select-close-x");
+    const modalCh = document.getElementById("modal-chapter-select");
+
+    if (btnCloseCh && modalCh) {
+      btnCloseCh.addEventListener("click", () => {
+        modalCh.style.display = "none";
+      });
+    }
+    if (btnCloseChX && modalCh) {
+      btnCloseChX.addEventListener("click", () => {
+        modalCh.style.display = "none";
+      });
+    }
+    if (modalCh) {
+      modalCh.addEventListener("click", (e) => {
+        if (e.target === modalCh) modalCh.style.display = "none";
+      });
+    }
+
+    // Swipe gestures on stage-viewport for chapter switching in menu mode
+    const stageVp = document.getElementById("stage-viewport");
+    if (stageVp) {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      stageVp.addEventListener("touchstart", (e) => {
+        if (e.touches && e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+      stageVp.addEventListener("touchend", (e) => {
+        if (!Character.activeRun && touchStartX > 0) {
+          const touchEndX = e.changedTouches[0].clientX;
+          const touchEndY = e.changedTouches[0].clientY;
+          const dx = touchEndX - touchStartX;
+          const dy = touchEndY - touchStartY;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+            if (dx > 0) {
+              if (btnPrev && !btnPrev.disabled) btnPrev.click();
+            } else {
+              if (btnNext && !btnNext.disabled) btnNext.click();
+            }
+          }
+          touchStartX = 0;
+          touchStartY = 0;
+        }
+      }, { passive: true });
     }
 
     // 3. Hamburger Drawer Button (Opens Settings Modal)
@@ -873,6 +933,17 @@ class UIManager {
     const elChName = document.getElementById("menu-chapter-name");
     const elLongest = document.getElementById("menu-longest-days");
     const btnStart = document.getElementById("btn-start-run");
+    const btnPrev = document.getElementById("btn-menu-chapter-prev");
+    const btnNext = document.getElementById("btn-menu-chapter-next");
+
+    if (btnPrev) {
+      btnPrev.disabled = chapterId <= 1;
+      btnPrev.classList.toggle("disabled", chapterId <= 1);
+    }
+    if (btnNext) {
+      btnNext.disabled = chapterId >= GameData.chapters.length;
+      btnNext.classList.toggle("disabled", chapterId >= GameData.chapters.length);
+    }
 
     if (elChName) {
       elChName.textContent = `${ch.id}.${ch.name}${!isUnlocked ? " 🔒" : ""}`;
@@ -903,6 +974,50 @@ class UIManager {
         this.engine.renderer.setBackground(ch.bg);
       }
     }
+  }
+
+  openChapterSelectModal() {
+    const modal = document.getElementById("modal-chapter-select");
+    const list = document.getElementById("chapter-select-list");
+    if (!modal || !list) return;
+
+    const currentId = Character.selectedChapter || 1;
+    list.innerHTML = GameData.chapters.map(ch => {
+      const isUnlocked = ch.id <= Character.unlockedChapters;
+      const isCurrent = ch.id === currentId;
+      const days = (Character.longestSurvived && Character.longestSurvived[ch.id]) || (ch.id === 1 ? 39 : 0);
+      const badgeClass = isCurrent ? "badge-active" : (isUnlocked ? "badge-unlocked" : "badge-locked");
+      const badgeText = isCurrent ? "Dipilih" : (isUnlocked ? "Pilih Map" : "Terkunci 🔒");
+
+      return `
+        <div class="chapter-select-item ${isCurrent ? 'active' : ''} ${!isUnlocked ? 'locked' : ''}" data-chid="${ch.id}">
+          <img src="${ch.bg}" alt="${ch.name}" class="chapter-item-thumb">
+          <div class="chapter-item-info">
+            <div class="chapter-item-title-row">
+              <span class="chapter-item-name">${ch.id}. ${ch.name}</span>
+              <span class="chapter-item-badge ${badgeClass}">${badgeText}</span>
+            </div>
+            <div class="chapter-item-desc">${ch.description || ''}</div>
+            <div class="chapter-item-stats">🏆 Max Bertahan: ${days} hari • Hadiah: ${ch.rewardGold || 1000} 🪙, ${ch.rewardGems || 100} 💎</div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    list.querySelectorAll(".chapter-select-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const chId = parseInt(item.getAttribute("data-chid"), 10);
+        if (chId) {
+          Sound.playSfx("click");
+          Character.selectedChapter = chId;
+          Character.save();
+          this.renderMenuHub();
+          modal.style.display = "none";
+        }
+      });
+    });
+
+    modal.style.display = "flex";
   }
 
   renderActiveTab() {

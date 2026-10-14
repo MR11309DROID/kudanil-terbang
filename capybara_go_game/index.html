@@ -134,7 +134,7 @@
             <div class="menu-chapter-select-wrap">
               <div class="menu-chapter-title-row">
                 <button id="btn-menu-chapter-prev" class="menu-ch-arrow-btn" title="Previous Chapter">‹</button>
-                <h1 id="menu-chapter-name" class="menu-chapter-main-title">1.Gale Town</h1>
+                <h1 id="menu-chapter-name" class="menu-chapter-main-title" title="Klik untuk pilih Map / Chapter">1.Gale Town</h1>
                 <button id="btn-menu-chapter-next" class="menu-ch-arrow-btn" title="Next Chapter">›</button>
               </div>
               <div class="menu-longest-survived-text">
@@ -938,6 +938,24 @@
       <div class="settings-modal-actions">
         <button id="btn-settings-to-menu" class="btn-game btn-blue btn-settings-menu">🏠 Ke Menu Utama</button>
         <button id="btn-settings-close" class="btn-game btn-gold btn-settings-confirm">Simpan & Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chapter / Map Selection Modal -->
+  <div id="modal-chapter-select" class="modal-overlay" style="display: none;">
+    <div class="modal-card panel-navy chapter-select-modal-card">
+      <div class="settings-modal-header">
+        <h2 class="modal-title">🗺️ Pilih Map / Chapter</h2>
+        <button id="btn-chapter-select-close-x" class="settings-close-x" title="Close">✕</button>
+      </div>
+
+      <div class="chapter-select-list" id="chapter-select-list">
+        <!-- Rendered dynamically via GameUI -->
+      </div>
+
+      <div class="settings-modal-actions">
+        <button id="btn-chapter-select-close" class="btn-game btn-gold">Tutup</button>
       </div>
     </div>
   </div>
