@@ -1674,25 +1674,6 @@ class StageRenderer {
         const sprX = -86 * s;
         const sprY = -114 * s;
         ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
-      } else if (p.currentAnim === "black_hole") {
-        // Use clean, crisp, 100% transparent Capybara skill sprite with cosmic purple aura
-        // so there is zero cropped PNG background, zero twitching, and zero rough edges!
-        const skillFrames = this.playerAnimations["skill"] || this.playerAnimations["idle"];
-        const sIndex = Math.min(skillFrames.length - 1, Math.floor(p.frameIndex * 0.75));
-        const effectiveImg = skillFrames[sIndex] || frameImg;
-
-        ctx.drawImage(effectiveImg, -drawW / 2, -drawH, drawW, drawH);
-
-        // Glowing Cosmic Purple Eyes on Capybara during cast
-        ctx.save();
-        ctx.fillStyle = "#c084fc";
-        ctx.shadowColor = "#a855f7";
-        ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.arc(drawW * 0.08, -drawH * 0.58, 2.8, 0, Math.PI * 2);
-        ctx.arc(drawW * 0.22, -drawH * 0.58, 2.8, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
       } else {
         // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
         // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
@@ -1919,26 +1900,8 @@ class StageRenderer {
       ctx.restore();
     }
 
-    // 4. Mythic: Black Hole (Cosmic Gravitational Singularity & Teal Quiver Strapped to Back)
+    // 4. Mythic: Black Hole (Cosmic Gravitational Singularity Floating Behind/Above)
     if (hasSkill("black_hole") || hasSkill("black hole")) {
-      // Teal Quiver with arrows strapped to back (matching reference image)
-      ctx.save();
-      ctx.translate(-drawW * 0.18, -drawH * 0.50);
-      ctx.rotate(-0.4);
-      ctx.fillStyle = "#1e293b";
-      ctx.strokeStyle = "#0f172a";
-      ctx.lineWidth = 1.2;
-      ctx.fillRect(-3, -12, 6, 20);
-      ctx.fillStyle = "#06b6d4";
-      ctx.strokeStyle = "#38bdf8";
-      ctx.lineWidth = 0.8;
-      ctx.beginPath();
-      ctx.moveTo(-2, -12); ctx.lineTo(-4, -18); ctx.lineTo(-1, -15); ctx.closePath();
-      ctx.moveTo(1, -12); ctx.lineTo(3, -20); ctx.lineTo(1, -16); ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      ctx.restore();
-
       ctx.save();
       const bhBob = Math.sin(now * 0.002) * 3;
       ctx.translate(-drawW * 0.28, -drawH - 6 + bhBob);
@@ -2400,51 +2363,6 @@ class StageRenderer {
       ctx.restore();
     }
 
-    // 12. Mythic: Black Hole (Cosmic Crystal Sword held in front paw)
-    if (hasSkill("black_hole") || hasSkill("black hole")) {
-      ctx.save();
-      const swBob = Math.sin(now * 0.003) * 2;
-      ctx.translate(drawW * 0.30, -drawH * 0.38 + swBob);
-      ctx.rotate(0.35);
-
-      ctx.shadowColor = "#a855f7";
-      ctx.shadowBlur = 12;
-
-      // Hilt
-      ctx.fillStyle = "#334155";
-      ctx.fillRect(-1.5, 6, 3, 7);
-      ctx.fillRect(-5, 4, 10, 2.5);
-
-      // Broad Crystal Blade
-      const bGrad = ctx.createLinearGradient(0, -22, 0, 4);
-      bGrad.addColorStop(0, "#ffffff");
-      bGrad.addColorStop(0.2, "#e9d5ff");
-      bGrad.addColorStop(0.6, "#a855f7");
-      bGrad.addColorStop(1, "#581c87");
-      ctx.fillStyle = bGrad;
-      ctx.strokeStyle = "#c084fc";
-      ctx.lineWidth = 1.4;
-
-      ctx.beginPath();
-      ctx.moveTo(0, -24);
-      ctx.lineTo(4, -18);
-      ctx.lineTo(4, 4);
-      ctx.lineTo(-4, 4);
-      ctx.lineTo(-4, -18);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Sharp white center spine line
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 0.8;
-      ctx.beginPath();
-      ctx.moveTo(0, -21);
-      ctx.lineTo(0, 3);
-      ctx.stroke();
-
-      ctx.restore();
-    }
   }
 
   // --- Dynamic Skill Combat Animations (Meteor Strike, Dragon Roar, Singularity, etc.) ---
@@ -2597,13 +2515,10 @@ class StageRenderer {
     const duration = 920 / speedMult;
     let hitTriggered = false;
 
-    // Trigger authentic casting animation on Capybara (stays in place at homePlayerX)
-    this.setPlayerAnim("black_hole", false);
+    // Trigger standard casting animation on Capybara (stays in place at homePlayerX)
+    this.setPlayerAnim("skill", false);
 
-    // Frame 07 Event Horizon vortex sprite from the preloaded sheet
-    const vortexImg = this.playerAnimations["black_hole"] ? this.playerAnimations["black_hole"][6] : null;
-
-    // Origin position: from Capybara's cosmic sword tip
+    // Origin position: from Capybara's casting hand/front
     const startX = this.playerState.x + 35;
     const startY = this.groundY - 45;
     const finalHoleX = targetX - 25;
