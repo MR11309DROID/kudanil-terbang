@@ -312,7 +312,17 @@ class CharacterManager {
       if (s.talents) this.talents = s.talents;
       if (s.unlockedChapters !== undefined) this.unlockedChapters = s.unlockedChapters;
       if (s.bestiary) this.bestiary = s.bestiary;
-      if (s.activeRun) this.activeRun = s.activeRun;
+      if (s.activeRun) {
+        this.activeRun = s.activeRun;
+        // Fix any saved skills that might have emoji string icons instead of file paths
+        if (this.activeRun.skills && Array.isArray(this.activeRun.skills)) {
+          this.activeRun.skills.forEach(sk => {
+            if (sk.id === 101 && (!sk.icon || !sk.icon.includes('.'))) sk.icon = "assets/skills/skill_016.png";
+            if (sk.id === 102 && (!sk.icon || !sk.icon.includes('.'))) sk.icon = "assets/skills/skill_022.png";
+            if (sk.id === 103 && (!sk.icon || !sk.icon.includes('.'))) sk.icon = "assets/skills/skill_011.png";
+          });
+        }
+      }
     } catch (e) {}
   }
 }

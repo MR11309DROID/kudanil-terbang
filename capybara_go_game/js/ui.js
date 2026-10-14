@@ -433,7 +433,8 @@ class UIManager {
         rarity: "mythic",
         tagText: "👑 Mythic",
         tagClass: "tag-mythic",
-        icon: "🪦",
+        icon: "assets/skills/skill_016.png",
+        displayIcon: "🪦",
         desc: "Revive after your first death with 50% HP. Effective once per run.",
         reviveOnce: true
       },
@@ -443,7 +444,8 @@ class UIManager {
         rarity: "legendary",
         tagText: "🔥 Legendary",
         tagClass: "tag-legendary",
-        icon: "🔥",
+        icon: "assets/skills/skill_022.png",
+        displayIcon: "🔥",
         desc: "Rage Skill can be cast 2 times. DMG +35%.",
         rageBoost: 0.5,
         atkBonus: 0.35
@@ -454,7 +456,8 @@ class UIManager {
         rarity: "epic",
         tagText: "⚔️ Epic",
         tagClass: "tag-epic",
-        icon: "⚔️",
+        icon: "assets/skills/skill_011.png",
+        displayIcon: "⚔️",
         desc: "Combo Rate +15%, can combo up to 2 times. ATK +20%.",
         critBonus: 0.15,
         atkBonus: 0.20
@@ -468,7 +471,9 @@ class UIManager {
       card.className = "treasure-skill-card";
       card.innerHTML = `
         <span class="treasure-card-tag ${sk.tagClass}">${sk.tagText}</span>
-        <div class="treasure-card-icon">${sk.icon}</div>
+        <div class="treasure-card-icon">
+          <img src="${sk.icon}" alt="${sk.name}" style="width: 28px; height: 28px; object-fit: contain;">
+        </div>
         <h4 class="treasure-card-title">${sk.name}</h4>
         <p class="treasure-card-desc">${sk.desc}</p>
       `;
@@ -676,15 +681,32 @@ class UIManager {
       if (run.skills && run.skills.length > 0) {
         skillsList.style.display = "flex";
         run.skills.forEach(sk => {
+          // Auto-fix icon path if not a valid image path
+          if (sk.id === 101 && (!sk.icon || !sk.icon.includes('.'))) sk.icon = "assets/skills/skill_016.png";
+          if (sk.id === 102 && (!sk.icon || !sk.icon.includes('.'))) sk.icon = "assets/skills/skill_022.png";
+          if (sk.id === 103 && (!sk.icon || !sk.icon.includes('.'))) sk.icon = "assets/skills/skill_011.png";
+
           const slot = document.createElement("div");
           slot.className = `run-skill-slot rarity-${sk.rarity || 'common'}`;
           slot.title = `${sk.name}: ${sk.desc}`;
+
+          const isImagePath = sk.icon && (sk.icon.includes('/') || sk.icon.includes('.'));
+          if (isImagePath) {
+            const icon = document.createElement("img");
+            icon.src = sk.icon;
+            icon.alt = sk.name;
+            icon.onerror = () => {
+              const fallbackEmoji = sk.displayIcon || (sk.name ? sk.name.charAt(0) : "★");
+              slot.innerHTML = `<span class="run-skill-emoji">${fallbackEmoji}</span>`;
+            };
+            slot.appendChild(icon);
+          } else {
+            const span = document.createElement("span");
+            span.className = "run-skill-emoji";
+            span.textContent = sk.displayIcon || sk.icon || "★";
+            slot.appendChild(span);
+          }
           
-          const icon = document.createElement("img");
-          icon.src = sk.icon;
-          icon.alt = sk.name;
-          
-          slot.appendChild(icon);
           slot.addEventListener("click", () => {
             this.showToast(`[${sk.name}]: ${sk.desc}`);
           });

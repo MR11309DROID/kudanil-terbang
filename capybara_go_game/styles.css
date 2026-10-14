@@ -745,12 +745,26 @@ body {
   border-color: #b45309;
   box-shadow: 0 2.5px 0 #78350f, 0 0 8px rgba(245, 158, 11, 0.6);
 }
+.run-skill-slot.rarity-mythic {
+  background: linear-gradient(180deg, #fce7f3 0%, #f472b6 100%);
+  border-color: #be185d;
+  box-shadow: 0 2.5px 0 #831843, 0 0 10px rgba(244, 114, 182, 0.7);
+}
 
 .run-skill-slot img {
   width: 24px;
   height: 24px;
   object-fit: contain;
   display: block;
+}
+
+.run-skill-slot .run-skill-emoji {
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
 }
 
 /* Battle HUD Elements (Round Indicator & Speed Toggle) */
