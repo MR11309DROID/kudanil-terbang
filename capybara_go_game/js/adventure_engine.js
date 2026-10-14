@@ -32,6 +32,12 @@ class AdventureEngine {
 
   travelNextDay() {
     if (this.traveling || this.battleSystem.inBattle) return;
+    if (this.hasPendingChest || (this.renderer && this.renderer.chestState)) {
+      if (window.Game && window.Game.ui) {
+        window.Game.ui.openTreasureChestModal();
+      }
+      return;
+    }
     if (!Character.activeRun) return;
 
     const run = Character.activeRun;
@@ -208,9 +214,11 @@ class AdventureEngine {
       const shouldOfferSkill = (run.day % 3 === 0) || result.isBoss;
       if (shouldOfferSkill) {
         if (window.Game && window.Game.ui && window.Game.ui.triggerFallingChest) {
+          this.hasPendingChest = true;
           window.Game.ui.triggerFallingChest({
             storyText: `The ${result.isBoss ? 'mighty Boss' : 'swordsman'} falls, and you obtain a <span class="highlight-blue">Golden Chest</span>, but it's clear the humans won't stop here.`,
             onClaimed: () => {
+              this.hasPendingChest = false;
               if (this.onTravelStateChange) this.onTravelStateChange("ready");
               this.checkAutoAdvance();
             }
@@ -392,8 +400,10 @@ class AdventureEngine {
   }
 
   checkAutoAdvance() {
+    if (this.hasPendingChest || (this.renderer && this.renderer.chestState)) return;
     if (this.autoTravel && !this.battleSystem.inBattle && Character.activeRun) {
       setTimeout(() => {
+        if (this.hasPendingChest || (this.renderer && this.renderer.chestState)) return;
         this.travelNextDay();
       }, 700 / this.battleSystem.speedMultiplier);
     }

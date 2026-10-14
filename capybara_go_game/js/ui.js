@@ -305,6 +305,22 @@ class UIManager {
     if (stageCanvas) {
       stageCanvas.addEventListener("click", (e) => {
         const r = this.engine && this.engine.renderer;
+        if (r && r.chestState && (r.chestState.state === "resting" || r.chestState.state === "falling" || r.chestState.state === "bouncing")) {
+          const rect = stageCanvas.getBoundingClientRect();
+          const scaleX = stageCanvas.width / rect.width;
+          const scaleY = stageCanvas.height / rect.height;
+          const clickX = (e.clientX - rect.left) * scaleX;
+          const clickY = (e.clientY - rect.top) * scaleY;
+          const dx = clickX - r.chestState.x;
+          const dy = clickY - (r.chestState.y - 20);
+          if (Math.hypot(dx, dy) <= 75) {
+            this.openTreasureChestModal();
+          }
+        }
+      });
+
+      stageCanvas.addEventListener("mousemove", (e) => {
+        const r = this.engine && this.engine.renderer;
         if (r && r.chestState && r.chestState.state === "resting") {
           const rect = stageCanvas.getBoundingClientRect();
           const scaleX = stageCanvas.width / rect.width;
@@ -313,9 +329,13 @@ class UIManager {
           const clickY = (e.clientY - rect.top) * scaleY;
           const dx = clickX - r.chestState.x;
           const dy = clickY - (r.chestState.y - 20);
-          if (Math.hypot(dx, dy) <= 60) {
-            this.openTreasureChestModal();
+          if (Math.hypot(dx, dy) <= 65) {
+            stageCanvas.style.cursor = "pointer";
+            return;
           }
+        }
+        if (stageCanvas.style.cursor === "pointer") {
+          stageCanvas.style.cursor = "default";
         }
       });
     }
@@ -342,12 +362,25 @@ class UIManager {
     if (btnClaim) {
       btnClaim.addEventListener("click", () => {
         Sound.playSfx("confirm");
-        if (modal) modal.style.display = "none";
+        if (modal) {
+          modal.style.display = "none";
+          modal.classList.remove("open");
+        }
+
+        // Clear chest flags
+        this.hasPendingChest = false;
+        if (this.engine) this.engine.hasPendingChest = false;
 
         // Remove chest from stage
         if (this.engine && this.engine.renderer) {
           this.engine.renderer.removeTreasureChest();
         }
+
+        // Update any chest event card in the feed
+        const feedCardRows = document.querySelectorAll(".chest-event-card .card-striped-bottom-row");
+        feedCardRows.forEach(row => {
+          row.innerHTML = `<div class="event-choice-resolved">✨ <span class="highlight-blue">Treasure Claimed!</span></div>`;
+        });
 
         // Apply skill rewards to run
         const run = Character.activeRun;
@@ -378,6 +411,7 @@ class UIManager {
         if (this._onChestClaimedCallback) {
           const cb = this._onChestClaimedCallback;
           this._onChestClaimedCallback = null;
+          this._pendingChestOptions = null;
           cb();
         } else {
           this.setTravelButtonState("ready", "Next Day");
@@ -448,7 +482,17 @@ class UIManager {
     });
   }
 
-  openTreasureChestModal(options = {}) {
+  openTreasureChestModal(options = null) {
+    if (options) {
+      this._pendingChestOptions = Object.assign({}, this._pendingChestOptions || {}, options);
+    } else {
+      options = this._pendingChestOptions || {};
+    }
+
+    if (options.onClaimed) {
+      this._onChestClaimedCallback = options.onClaimed;
+    }
+
     const modal = document.getElementById("modal-treasure-chest");
     const findPhase = document.getElementById("treasure-phase-find");
     const openPhase = document.getElementById("treasure-phase-open");
@@ -459,10 +503,9 @@ class UIManager {
     const closedImg = document.getElementById("treasure-img-closed");
     if (closedImg) closedImg.style.animation = "";
 
-    this._onChestClaimedCallback = options.onClaimed || null;
-
     if (modal) {
       modal.style.display = "flex";
+      modal.classList.add("open");
       Sound.playSfx("confirm");
     }
   }
@@ -471,7 +514,12 @@ class UIManager {
     const renderer = this.engine && this.engine.renderer;
     if (!renderer) return;
 
-    this.setTravelButtonState("combat", "Pick up Chest");
+    // Set pending chest flags immediately so neither auto-advance nor Next Day skips it
+    this.hasPendingChest = true;
+    if (this.engine) this.engine.hasPendingChest = true;
+    this._pendingChestOptions = options;
+
+    this.setTravelButtonState("chest", "🎁 Pick up Chest");
 
     // 1. Drop the chest from the sky onto stage canvas
     renderer.dropTreasureChest(() => {
@@ -510,8 +558,8 @@ class UIManager {
 
       const pickupBtn = cardWrap.querySelector(".btn-pickup-capsule");
       if (pickupBtn) {
-        pickupBtn.addEventListener("click", () => {
-          pickupBtn.parentElement.innerHTML = `<div class="event-choice-resolved">✨ <span class="highlight-blue">Treasure Claimed!</span></div>`;
+        pickupBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
           this.openTreasureChestModal(options);
         });
       }
@@ -1592,24 +1640,26 @@ class UIManager {
     const btnText = document.getElementById("next-day-btn-text");
     if (!travelBtn || !btnText) return;
 
-    if (state === "moving") {
-      travelBtn.classList.remove("state-ready");
+    travelBtn.classList.remove("state-ready", "state-moving", "state-chest");
+
+    if (state === "chest") {
+      travelBtn.classList.add("state-chest");
+      travelBtn.disabled = false;
+      btnText.innerHTML = customText || "🎁 Pick up Chest";
+    } else if (state === "moving") {
       travelBtn.classList.add("state-moving");
       travelBtn.disabled = true;
       btnText.innerHTML = `Moving<span class="moving-dot">.</span>`;
     } else if (state === "combat") {
-      travelBtn.classList.remove("state-moving");
       travelBtn.classList.add("state-ready");
       travelBtn.disabled = false;
       btnText.innerHTML = customText || "⚔️ Fight!";
     } else if (state === "in-battle") {
-      travelBtn.classList.remove("state-ready");
       travelBtn.classList.add("state-moving");
       travelBtn.disabled = true;
       btnText.innerHTML = "In Battle...";
     } else {
       // "ready" state -> Authentic Green "Next Day" (Matches Screenshot 2)
-      travelBtn.classList.remove("state-moving");
       travelBtn.classList.add("state-ready");
       travelBtn.disabled = false;
       btnText.innerHTML = customText || "Next Day";
@@ -1621,6 +1671,12 @@ class UIManager {
     Sound.unlockAndWarmup();
 
     if (this.battle.inBattle || this.engine.traveling) return;
+
+    // 1. CHEST PICK UP PRIORITY: If chest is on stage or pending, clicking this button MUST open the chest!
+    if (this.hasPendingChest || (this.engine && this.engine.renderer && this.engine.renderer.chestState)) {
+      this.openTreasureChestModal();
+      return;
+    }
 
     if (this.engine.currentEvent) {
       const ev = this.engine.currentEvent;

@@ -1894,6 +1894,24 @@ body {
   box-shadow: inset 0 -4px 0 #6e1f1f, inset 0 2px 3px rgba(255, 255, 255, 0.3);
 }
 
+/* State 3: Golden "Pick up Chest" (Matches Video Project 2 Event State) */
+.btn-capsule-travel.state-chest .btn-capsule-core {
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 55%, #b45309 100%);
+  box-shadow: inset 0 -4px 0 #78350f, inset 0 2px 3px rgba(255, 255, 255, 0.5), 0 0 18px rgba(245, 158, 11, 0.6);
+  animation: chestBtnGlowPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes chestBtnGlowPulse {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow: inset 0 -4px 0 #78350f, inset 0 2px 3px rgba(255, 255, 255, 0.5), 0 0 12px rgba(245, 158, 11, 0.45);
+  }
+  50% {
+    filter: brightness(1.08);
+    box-shadow: inset 0 -4px 0 #78350f, inset 0 2px 4px rgba(255, 255, 255, 0.7), 0 0 24px rgba(245, 158, 11, 0.85);
+  }
+}
+
 /* Specular Highlight Oval (Top Left) */
 .btn-capsule-highlight {
   position: absolute;
@@ -1909,6 +1927,10 @@ body {
 
 .btn-capsule-travel.state-ready .btn-capsule-highlight {
   background: rgba(185, 245, 145, 0.45);
+}
+
+.btn-capsule-travel.state-chest .btn-capsule-highlight {
+  background: rgba(254, 240, 138, 0.7);
 }
 
 .btn-capsule-travel.state-moving .btn-capsule-highlight,
@@ -4045,6 +4067,10 @@ body {
   justify-content: center;
   backdrop-filter: blur(4px);
   animation: treasureOverlayFadeIn 0.3s ease-out forwards;
+}
+
+.treasure-modal-overlay.open {
+  display: flex !important;
 }
 
 @keyframes treasureOverlayFadeIn {

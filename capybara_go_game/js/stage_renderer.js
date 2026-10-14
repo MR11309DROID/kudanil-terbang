@@ -868,7 +868,9 @@ class StageRenderer {
           cs.rotation = 0;
           cs.state = "resting";
           if (cs.onLanded) {
-            cs.onLanded();
+            const cb = cs.onLanded;
+            cs.onLanded = null;
+            cb();
           }
         }
       }
