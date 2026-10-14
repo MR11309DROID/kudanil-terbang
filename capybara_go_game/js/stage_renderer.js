@@ -108,6 +108,7 @@ class StageRenderer {
       attack: 12,
       sword_slash: 12,
       heal: 12,
+      black_hole: 12,
       skill: 9,
       hurt: 9,
       die: 7
@@ -121,6 +122,8 @@ class StageRenderer {
           ? `assets/skills/animations/sword_slash/frame_${frameNum}.png`
           : anim === "heal"
           ? `assets/skills/animations/heal/frame_${frameNum}.png`
+          : anim === "black_hole"
+          ? `assets/skills/animations/black_hole/frame_${frameNum}.png`
           : `assets/characters/player/${anim}/frame_${frameNum}.png`;
         const img = new Image();
         img.src = path;
@@ -241,7 +244,7 @@ class StageRenderer {
     this.playerState.loop = loop;
 
     if (animName === "attack" || animName === "sword_slash") this.playerState.fps = 18;
-    else if (animName === "heal") this.playerState.fps = 14;
+    else if (animName === "heal" || animName === "black_hole") this.playerState.fps = 14;
     else if (animName === "skill") this.playerState.fps = 15;
     else if (animName === "walk") this.playerState.fps = 12;
     else if (animName === "run") this.playerState.fps = 14;
@@ -794,7 +797,7 @@ class StageRenderer {
             p.frameIndex = 0;
           } else {
             p.frameIndex = animFrames.length - 1;
-            if (p.currentAnim === "hurt" || p.currentAnim === "heal") {
+            if (p.currentAnim === "hurt" || p.currentAnim === "heal" || p.currentAnim === "black_hole") {
               this.setPlayerAnim("idle", true);
             }
           }
@@ -1351,6 +1354,15 @@ class StageRenderer {
         const sprH = frameImg.naturalHeight * s;
         const sprX = -86 * s;
         const sprY = -114 * s;
+        ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
+      } else if (p.currentAnim === "black_hole") {
+        // 192x144 frame: Capybara body is anchored at (106, 133)
+        // Scale by 0.50 so the body height matches the 64x64 idle sprite exactly
+        const s = p.scale * 0.50;
+        const sprW = frameImg.naturalWidth * s;
+        const sprH = frameImg.naturalHeight * s;
+        const sprX = -106 * s;
+        const sprY = -133 * s;
         ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
       } else {
         // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
@@ -2189,22 +2201,28 @@ class StageRenderer {
   }
 
   launchBlackHole(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
-    const duration = 400 / speedMult;
+    const duration = 550 / speedMult;
     let hitTriggered = false;
+
+    // Trigger authentic 12-frame Black Hole animation on Capybara
+    this.setPlayerAnim("black_hole", false);
+
+    // Frame 07 Event Horizon vortex sprite from the preloaded sheet
+    const vortexImg = this.playerAnimations["black_hole"] ? this.playerAnimations["black_hole"][6] : null;
 
     this.skillCombatEffects.push({
       startTime: performance.now(),
-      duration: duration + 150,
+      duration: duration + 200,
       update: (progress) => {
-        if (progress >= 0.7 && !hitTriggered) {
+        if (progress >= 0.65 && !hitTriggered) {
           hitTriggered = true;
           Sound.playSfx("magicBurst");
           if (this.enemyState) {
             this.enemyState.flashWhite = 1.0;
-            this.enemyState.shake = 2.0;
+            this.enemyState.shake = 2.4;
           }
-          this.addVisualEffect("critBurst", targetX, targetY - 25, 2.0);
-          this.addMagicImpactSparks(targetX, targetY - 25, ["#c084fc", "#9333ea", "#38bdf8", "#000000"]);
+          this.addVisualEffect("critBurst", targetX, targetY - 25, 2.5);
+          this.addMagicImpactSparks(targetX, targetY - 25, ["#c084fc", "#9333ea", "#38bdf8", "#000000", "#ffffff"]);
           if (onHit) onHit();
         }
       },
@@ -2215,28 +2233,36 @@ class StageRenderer {
 
         ctx.save();
         ctx.translate(targetX, targetY - 25);
-        const radius = Math.sin(p * Math.PI) * 28;
+        
+        // Draw the authentic Event Horizon vortex sprite at the enemy
+        if (vortexImg && vortexImg.complete) {
+          const vScale = Math.sin(p * Math.PI) * 0.72;
+          const vW = vortexImg.naturalWidth * vScale;
+          const vH = vortexImg.naturalHeight * vScale;
+          ctx.drawImage(vortexImg, -vW / 2, -vH / 2, vW, vH);
+        } else {
+          const radius = Math.sin(p * Math.PI) * 36;
+          ctx.save();
+          ctx.rotate(now * 0.01);
+          ctx.strokeStyle = "rgba(192, 132, 252, 0.85)";
+          ctx.lineWidth = 2.5;
+          ctx.shadowColor = "#a855f7";
+          ctx.shadowBlur = 24;
+          for (let a = 0; a < 3; a++) {
+            ctx.beginPath();
+            ctx.arc(0, 0, Math.max(2, radius * (0.4 + a * 0.3)), a * 1.5, a * 1.5 + Math.PI);
+            ctx.stroke();
+          }
+          ctx.restore();
 
-        ctx.save();
-        ctx.rotate(now * 0.01);
-        ctx.strokeStyle = "rgba(192, 132, 252, 0.75)";
-        ctx.lineWidth = 2.0;
-        ctx.shadowColor = "#a855f7";
-        ctx.shadowBlur = 18;
-        for (let a = 0; a < 3; a++) {
+          ctx.fillStyle = "#030712";
           ctx.beginPath();
-          ctx.arc(0, 0, Math.max(2, radius * (0.4 + a * 0.3)), a * 1.5, a * 1.5 + Math.PI);
+          ctx.arc(0, 0, Math.max(2, radius * 0.55), 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#c084fc";
+          ctx.lineWidth = 2.0;
           ctx.stroke();
         }
-        ctx.restore();
-
-        ctx.fillStyle = "#030712";
-        ctx.beginPath();
-        ctx.arc(0, 0, Math.max(2, radius * 0.5), 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = "#c084fc";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
         ctx.restore();
       },
       onComplete: () => {
