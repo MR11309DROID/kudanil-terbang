@@ -196,6 +196,11 @@ class BattleSystem {
       r.addFloatingText(e.poisonDoT, r.enemyState.x, r.groundY - 40, "poison");
     }
 
+    if (e.hp <= 0) {
+      callback();
+      return;
+    }
+
     // Turn 1 Opener Skills (Dragon Roar & Bomb)
     if (this.turnCount === 1 && r.enemyState) {
       const dragonOpener = c.skills.find(s => (s.key === "mythic_02_dragon_roar" || (s.name && s.name.includes("Dragon"))) && s.startCombatDmg);
@@ -223,11 +228,23 @@ class BattleSystem {
     if (blackHoleSkill && r.enemyState && r.launchBlackHole) {
       const mult = blackHoleSkill.dmgMult ? Math.min(blackHoleSkill.dmgMult, 0.85) : 0.85;
       const bhDmg = Math.max(1, Math.round(c.atk * mult));
-      r.launchBlackHole(r.enemyState.x, r.groundY - 25, () => {
-        e.hp -= bhDmg;
-        r.enemyState.currentHp = Math.max(0, e.hp);
-        r.addFloatingText(bhDmg, r.enemyState.x, r.groundY - 60, "void");
-      }, null, this.speedMultiplier);
+      r.launchBlackHole(
+        r.enemyState.x,
+        r.groundY - 25,
+        () => {
+          e.hp -= bhDmg;
+          if (r.enemyState) {
+            r.enemyState.currentHp = Math.max(0, e.hp);
+            r.addFloatingText(bhDmg, r.enemyState.x, r.groundY - 60, "void");
+          }
+          this.syncPlayerRunStats();
+        },
+        () => {
+          callback();
+        },
+        this.speedMultiplier
+      );
+      return;
     }
 
     // Periodic Skill Procs (Thunder Hammer & Lightning bolts every 3 turns)

@@ -394,6 +394,11 @@ class StageRenderer {
 
   clearEnemy() {
     this.enemyState = null;
+    this.skillCombatEffects = [];
+    if (this.playerState) {
+      this.playerState.swordAction = null;
+      this.playerState.skillExpression = null;
+    }
   }
 
   // --- Cartoon Dust FX (Sprinting & Skid Impact Trails matching reference image) ---
@@ -1185,9 +1190,17 @@ class StageRenderer {
       const fx = this.skillCombatEffects[i];
       const elapsed = now - fx.startTime;
       const progress = Math.min(1, elapsed / fx.duration);
-      if (fx.update) fx.update(progress, elapsed);
+      try {
+        if (fx.update) fx.update(progress, elapsed);
+      } catch (err) {
+        console.error("SkillCombatEffects update error:", err);
+      }
       if (progress >= 1) {
-        if (fx.onComplete) fx.onComplete();
+        try {
+          if (fx.onComplete) fx.onComplete();
+        } catch (err) {
+          console.error("SkillCombatEffects onComplete error:", err);
+        }
         this.skillCombatEffects.splice(i, 1);
       }
     }
@@ -2774,7 +2787,11 @@ class StageRenderer {
     const ctx = this.ctx;
     ctx.save();
     for (const fx of this.skillCombatEffects) {
-      if (fx.render) fx.render(ctx);
+      try {
+        if (fx.render) fx.render(ctx);
+      } catch (err) {
+        console.error("renderSkillCombatEffects error:", err);
+      }
     }
     ctx.restore();
   }
@@ -2915,7 +2932,7 @@ class StageRenderer {
   }
 
   launchBlackHole(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
-    const duration = 1900 / speedMult;
+    const duration = 1500 / speedMult;
     let hitTriggered = false;
 
     // Trigger casting animation on Capybara
@@ -3028,7 +3045,11 @@ class StageRenderer {
           this.addVisualEffect("critBurst", finalHoleX, finalHoleY, 3.2);
           this.addMagicImpactSparks(finalHoleX, finalHoleY, ["#c084fc", "#9333ea", "#38bdf8", "#fde047", "#ffffff", "#030712"]);
           this.addGroundSlashFissure(finalHoleX, this.groundY, "#a855f7");
-          if (onHit) onHit();
+          try {
+            if (onHit) onHit();
+          } catch (err) {
+            console.error("Black Hole onHit error:", err);
+          }
         }
       },
       render: (ctx) => {
@@ -3453,7 +3474,11 @@ class StageRenderer {
           this.enemyState.shake = 0;
         }
         this.setPlayerAnim("idle", true);
-        if (onComplete) onComplete();
+        try {
+          if (onComplete) onComplete();
+        } catch (err) {
+          console.error("Black Hole onComplete error:", err);
+        }
       }
     });
   }
