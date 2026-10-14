@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110" width="100" height="110">
+  <defs>
+    <!-- Glass Dome Glow -->
+    <linearGradient id="domeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45"/>
+      <stop offset="40%" stop-color="#38bdf8" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.05"/>
+    </linearGradient>
+    <!-- Gold Ribbon -->
+    <linearGradient id="ribbonGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <!-- Royal Violet Bag -->
+    <linearGradient id="bagViolet" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="60%" stop-color="#9333ea"/>
+      <stop offset="100%" stop-color="#6b21a8"/>
+    </linearGradient>
+    <!-- Crimson Gift Box -->
+    <linearGradient id="boxCrimson" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="60%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Glass Dome -->
+  <path d="M 12,74 C 12,24 28,8 50,8 C 72,8 88,24 88,74 Z" fill="url(#domeGlow)" stroke="#7dd3fc" stroke-width="2.5" stroke-opacity="0.6"/>
+  <!-- Dome Highlight Reflection -->
+  <path d="M 22,65 C 20,38 30,20 46,14" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Left: Crimson Gift Box -->
+  <rect x="18" y="44" width="32" height="30" rx="5" fill="url(#boxCrimson)" stroke="#1e1b18" stroke-width="2.5"/>
+  <!-- Gold Ribbon on Box -->
+  <rect x="31" y="44" width="6" height="30" fill="url(#ribbonGold)" stroke="#1e1b18" stroke-width="1.5"/>
+  <rect x="18" y="56" width="32" height="6" fill="url(#ribbonGold)" stroke="#1e1b18" stroke-width="1.5"/>
+
+  <!-- Right: Royal Violet Treasure Pouch -->
+  <ellipse cx="64" cy="62" rx="18" ry="14" fill="url(#bagViolet)" stroke="#1e1b18" stroke-width="2.5"/>
+  <path d="M 52,52 C 54,46 58,42 64,42 C 70,42 74,46 76,52 Z" fill="url(#ribbonGold)" stroke="#1e1b18" stroke-width="2"/>
+  <!-- Tied Cord -->
+  <ellipse cx="64" cy="52" rx="7" ry="3" fill="#ca8a04" stroke="#1e1b18" stroke-width="1.5"/>
+
+  <!-- Gold Coins at Base -->
+  <ellipse cx="44" cy="74" rx="10" ry="4" fill="url(#ribbonGold)" stroke="#1e1b18" stroke-width="1.8"/>
+  <ellipse cx="62" cy="74" rx="11" ry="4.5" fill="url(#ribbonGold)" stroke="#1e1b18" stroke-width="1.8"/>
+
+  <!-- Sparkle Stars -->
+  <polygon points="26,16 28,21 33,23 28,25 26,30 24,25 19,23 24,21" fill="#ffffff"/>
+  <polygon points="76,28 77,31 80,32 77,33 76,36 75,33 72,32 75,31" fill="#ffffff"/>
+
+  <!-- Dome Wooden Base Ring -->
+  <ellipse cx="50" cy="76" rx="42" ry="7" fill="#78350f" stroke="#1e1b18" stroke-width="2.5"/>
+  <ellipse cx="50" cy="74" rx="39" ry="5.5" fill="#a16207"/>
+
+  <!-- "Newbie Gifts" Label Banner directly inside graphic with clean vector outline -->
+  <rect x="8" y="80" width="84" height="20" rx="6" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+  <text x="50" y="94" font-family="'Fredoka', 'Lilita One', sans-serif" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="0.2">Newbie Gifts</text>
+</svg>

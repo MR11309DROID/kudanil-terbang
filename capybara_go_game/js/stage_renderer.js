@@ -684,11 +684,32 @@ class StageRenderer {
     }
   }
 
+  checkResize() {
+    if (!this.canvas) return;
+    const clientW = this.canvas.clientWidth;
+    const clientH = this.canvas.clientHeight;
+    if (clientW > 0 && clientH > 0) {
+      if (this.canvas.width !== clientW || this.canvas.height !== clientH) {
+        this.canvas.width = clientW;
+        this.canvas.height = clientH;
+        this.width = clientW;
+        this.height = clientH;
+        this.groundY = Math.round(this.height * 0.70);
+        this.horizonY = Math.round(this.height * 0.40);
+        if (this.isMenuMode) {
+          this.playerState.x = Math.round(this.width * 0.52);
+          this.playerState.y = this.groundY;
+        }
+      }
+    }
+  }
+
   startRenderLoop() {
     const loop = (timestamp) => {
       const dt = (timestamp - this.lastTime) / 1000;
       this.lastTime = timestamp;
 
+      this.checkResize();
       this.update(dt);
       this.render();
 
@@ -1284,11 +1305,67 @@ class StageRenderer {
     // Layer 1: Render Behind-Capy Skill Attachments (Wings, Demon Avatar, Healing Mandala, Singularity)
     this.renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now);
 
+    // Menu Hub: Authentic Slung Greatsword across Capybara's Back (Matches Reference Screenshot)
+    if (this.isMenuMode) {
+      ctx.save();
+      ctx.translate(-drawW * 0.04, -drawH * 0.50);
+      ctx.rotate(-0.52);
+      // Sword blade
+      ctx.fillStyle = "#78350f";
+      ctx.strokeStyle = "#1c1917";
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      ctx.roundRect(-8, -32, 16, 42, [3, 3, 1, 1]);
+      ctx.fill();
+      ctx.stroke();
+      // Silver blade edge
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(-5, -30, 3, 38);
+      // Crossguard
+      ctx.fillStyle = "#831843";
+      ctx.strokeStyle = "#1c1917";
+      ctx.lineWidth = 2.4;
+      ctx.strokeRect(-12, 10, 24, 6);
+      ctx.fillRect(-12, 10, 24, 6);
+      // Hilt Handle
+      ctx.fillStyle = "#451a03";
+      ctx.strokeRect(-3.5, 16, 7, 12);
+      ctx.fillRect(-3.5, 16, 7, 12);
+      // Gold Pommel
+      ctx.fillStyle = "#facc15";
+      ctx.beginPath();
+      ctx.arc(0, 29, 4.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
     // Layer 2: Render Capybara Character Sprite (Clean, Crisp & Cute - Zero AI morphing/glitches)
     ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
 
     // Layer 3: Render In-Front Skill Attachments (Halo, Dragon Head, Shields, Grimoire, Weapons, Cyclones)
     this.renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now);
+
+    // Menu Hub: Authentic Green Adventurer Sash & Pouch across Chest (Matches Reference Screenshot)
+    if (this.isMenuMode) {
+      ctx.save();
+      // Shoulder Strap
+      ctx.strokeStyle = "#451a03";
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(-drawW * 0.18, -drawH * 0.65);
+      ctx.lineTo(drawW * 0.12, -drawH * 0.25);
+      ctx.stroke();
+      // Green Tunic Cloth
+      ctx.fillStyle = "#15803d";
+      ctx.strokeStyle = "#14532d";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(-drawW * 0.05, -drawH * 0.30, drawW * 0.22, drawH * 0.15, 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
 
     ctx.restore();
 

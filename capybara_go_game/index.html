@@ -74,10 +74,11 @@
     
     <!-- Top Header Bar (Menu Mode Profile & Currencies) -->
     <header id="game-header" class="menu-hub-header">
-      <!-- Player Profile Card (Matches Authentic Capybara Go) -->
-      <div class="player-profile-pill" id="player-profile-card">
+      <!-- Player Profile Section (Directly placed, matches reference screenshot) -->
+      <div class="player-profile-group" id="player-profile-card">
         <div class="player-avatar-wrap">
           <img src="assets/ui/menu/menu_avatar.png" alt="Avatar" class="player-avatar-img">
+          <span class="player-avatar-notif">!</span>
         </div>
         <div class="player-info-col">
           <div class="player-name-row">
@@ -85,7 +86,7 @@
           </div>
           <div class="player-title-row">
             <span id="player-profile-title" class="player-title-badge">Apprentice - 1</span>
-            <span class="player-notif-dot"></span>
+            <span class="player-title-dot">◆</span>
           </div>
           <div class="player-power-badge">
             <span class="power-sword-icon">⚔️</span>
@@ -98,21 +99,20 @@
       <div class="menu-currencies-row">
         <!-- Energy Pill -->
         <div class="menu-cur-pill cur-energy" title="Energy">
-          <div class="cur-notif-badge">!</div>
           <span class="cur-bolt-icon">⚡</span>
-          <span id="header-energy" class="cur-num">37/30</span>
+          <span id="header-energy" class="cur-num">30/30</span>
           <button class="cur-add-btn" id="btn-add-energy" title="Refill Energy">+</button>
         </div>
         <!-- Gems Pill -->
         <div class="menu-cur-pill cur-gems" title="Gems">
           <span class="cur-gem-icon">💎</span>
-          <span id="header-gems" class="cur-num">130</span>
+          <span id="header-gems" class="cur-num">625</span>
           <button class="cur-add-btn" id="btn-add-gems" title="Get Gems">+</button>
         </div>
         <!-- Gold Pill -->
         <div class="menu-cur-pill cur-gold" title="Gold">
           <span class="cur-gold-icon">🪙</span>
-          <span id="header-gold" class="cur-num">1,143</span>
+          <span id="header-gold" class="cur-num">25,358</span>
           <button class="cur-add-btn" id="btn-add-gold" title="Get Gold">+</button>
         </div>
       </div>
@@ -150,7 +150,7 @@
                 <span class="widget-notif-dot">!</span>
               </button>
               <div class="newbie-gifts-widget" id="btn-newbie-gifts" title="Newbie Gifts">
-                <img src="assets/ui/menu/btn_newbie_gifts.png" alt="Newbie Gifts" class="newbie-gifts-img">
+                <img src="assets/ui/menu/widget_newbie_gifts.svg" alt="Newbie Gifts" class="newbie-gifts-img">
                 <div class="newbie-timer-badge">6d 23h</div>
               </div>
             </div>
@@ -804,10 +804,12 @@
       </button>
 
       <button class="nav-tab-btn active tab-adventure-btn" data-tab="adventure" title="Adventure">
+        <span class="nav-adv-chevron-left">◀</span>
         <div class="nav-adventure-capsule">
           <img src="assets/ui/menu/nav_adventure.svg" alt="Adventure" class="nav-adventure-img">
           <span class="nav-tab-label">Adventure</span>
         </div>
+        <span class="nav-adv-chevron-right">▶</span>
       </button>
 
       <button class="nav-tab-btn" data-tab="talents" title="Talents">

@@ -59,17 +59,18 @@ body {
 
 /* ================= AUTHENTIC MENU HUB HEADER ================= */
 #game-header {
-  background: linear-gradient(180deg, #1a2738 0%, #101a26 100%);
-  border-bottom: 2px solid #23354d;
-  padding: 6px 10px;
+  background: #0d141f;
+  border-bottom: 2px solid #1a2738;
+  padding: 4px 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px;
   z-index: 20;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+  height: 48px;
+  box-sizing: border-box;
 }
 
 /* Hide legacy day bar on adventure tab when run is active to match pure reference image */
@@ -81,133 +82,41 @@ body {
   display: none;
 }
 
-/* Player Profile Pill (Avatar + Name + Rank + Power) */
-.player-profile-pill {
+/* Player Profile Group (Avatar + Name + Rank + Power) */
+.player-profile-group {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(11, 19, 30, 0.88);
-  border: 1.5px solid #2e4363;
-  border-radius: 22px;
-  padding: 3px 10px 3px 4px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  gap: 7px;
+  min-width: 0;
 }
 
 .player-avatar-wrap {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  border: 2px solid #facc15;
-  overflow: hidden;
+  border: 2.2px solid #facc15;
   background: #233347;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   flex-shrink: 0;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .player-avatar-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-
-.player-info-col {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.player-name-row {
-  line-height: 1.1;
-}
-
-.player-name-text {
-  font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 11.5px;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: 0.3px;
-  text-shadow: 0 1px 2px #000000;
-}
-
-.player-title-row {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  line-height: 1;
-}
-
-.player-title-badge {
-  font-family: 'Fredoka', sans-serif;
-  font-size: 10px;
-  font-weight: 800;
-  color: #c084fc;
-}
-
-.player-notif-dot {
-  width: 5px;
-  height: 5px;
-  background: #ef4444;
   border-radius: 50%;
-  box-shadow: 0 0 3px #ef4444;
+  object-fit: cover;
+  display: block;
 }
 
-.player-power-badge {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  line-height: 1;
-  margin-top: 2px;
-}
-
-.power-sword-icon {
-  font-size: 9px;
-  background: #ea580c;
-  border: 1px solid #f97316;
-  border-radius: 3px;
-  padding: 1px 2px;
-  line-height: 1;
-}
-
-.power-val-text {
-  font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 11px;
-  font-weight: 900;
-  color: #facc15;
-  text-shadow: 0 1px 2px #000000;
-  letter-spacing: 0.4px;
-}
-
-/* Menu Currencies Row (Energy, Gems, Gold with + buttons) */
-.menu-currencies-row {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.menu-cur-pill {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  background: #09121d;
-  border: 1.5px solid #23354d;
-  border-radius: 16px;
-  padding: 2px 2px 2px 6px;
-  position: relative;
-  height: 27px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
-}
-
-.menu-cur-pill .cur-notif-badge {
+.player-avatar-notif {
   position: absolute;
-  top: -5px;
-  left: -3px;
+  top: -2px;
+  right: -2px;
   width: 13px;
   height: 13px;
   background: #ef4444;
-  border: 1.2px solid #ffffff;
+  border: 1.5px solid #ffffff;
   border-radius: 50%;
   color: #ffffff;
   font-size: 8.5px;
@@ -215,7 +124,144 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.player-info-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  line-height: 1;
+}
+
+.player-name-row {
+  line-height: 1;
+}
+
+.player-name-text {
+  font-family: 'Fredoka', 'Lilita One', sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 2px #000000;
+}
+
+.player-title-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.player-title-badge {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #c084fc;
+}
+
+.player-title-dot {
+  font-size: 7px;
+  color: #f97316;
+}
+
+.player-power-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #7c2d12;
+  border: 1.2px solid #ea580c;
+  border-radius: 10px;
+  padding: 1px 5px 1px 4px;
+  line-height: 1;
+  margin-top: 2px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.power-sword-icon {
+  font-size: 8.5px;
+  line-height: 1;
+}
+
+.power-val-text {
+  font-family: 'Fredoka', 'Lilita One', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  color: #facc15;
+  text-shadow: 0 1px 2px #000000;
+  letter-spacing: 0.3px;
+}
+
+/* Menu Currencies Row (Energy, Gems, Gold with + buttons) */
+.menu-currencies-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.menu-cur-pill {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: #09121d;
+  border: 1.5px solid #1e293b;
+  border-radius: 16px;
+  padding: 2px 2px 2px 6px;
+  height: 24px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+}
+
+.menu-cur-pill .cur-bolt-icon {
+  font-size: 11px;
+  color: #38bdf8;
+  line-height: 1;
+}
+
+.menu-cur-pill .cur-gem-icon {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.menu-cur-pill .cur-gold-icon {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.menu-cur-pill .cur-num {
+  font-family: 'Fredoka', 'Lilita One', sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000;
+  letter-spacing: 0.2px;
+}
+
+.cur-add-btn {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
+  border: 1.2px solid #14532d;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  padding: 0;
+  line-height: 1;
+  transition: transform 0.08s ease;
+}
+
+.cur-add-btn:active {
+  transform: scale(0.9);
 }
 
 .menu-cur-pill .cur-bolt-icon {
@@ -395,16 +441,20 @@ body {
   display: flex;
 }
 
-/* Upper Half: Stage Viewport (50% Equal Split) */
+/* Upper Half: Stage Viewport (Authentic ~60% Height in Menu, 50% in Run) */
 #stage-viewport {
   width: 100%;
-  flex: 1;
+  flex: 1.45;
   min-height: 0;
-  max-height: 50%;
   position: relative;
   background: #000;
   overflow: hidden;
   border-bottom: 3px solid #1c0f0a;
+}
+
+#game-container.in-run #stage-viewport {
+  flex: 1;
+  max-height: 50%;
 }
 
 #stage-canvas {
@@ -594,24 +644,24 @@ body {
 }
 
 .newbie-gifts-img {
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 54px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
 }
 
 .newbie-timer-badge {
-  font-family: 'Lilita One', 'Fredoka', cursive;
+  font-family: 'Fredoka', 'Lilita One', sans-serif;
   font-size: 9.5px;
   font-weight: 900;
-  color: #ffffff;
+  color: #fffbeb;
   background: #78350f;
   border: 1.5px solid #ca8a04;
   border-radius: 8px;
-  padding: 1px 6px;
-  margin-top: -6px;
+  padding: 1px 7px;
+  margin-top: -3px;
   text-shadow: 0 1px 2px #000000;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 /* Authentic Floating In-Stage Top Overlay (Matches Reference Screenshot) */
@@ -1757,7 +1807,7 @@ body {
 
 /* ================= MENU LAWN ACTION PANEL ================= */
 .menu-lawn-action-panel {
-  flex: 1;
+  flex: 0.95;
   min-height: 0;
   background: #88c070;
   display: flex;
@@ -1765,7 +1815,7 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 16px 20px 20px 20px;
+  padding: 10px 20px 14px 20px;
   overflow: hidden;
   box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.15);
 }
@@ -4161,7 +4211,20 @@ body {
 
 /* Center Raised Adventure Tab */
 .bottom-nav-authentic .tab-adventure-btn {
-  flex: 1.2;
+  flex: 1.35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.bottom-nav-authentic .nav-adv-chevron-left,
+.bottom-nav-authentic .nav-adv-chevron-right {
+  font-size: 10px;
+  color: #facc15;
+  text-shadow: 0 1px 2px #000;
+  margin-top: -8px;
+  user-select: none;
 }
 
 .bottom-nav-authentic .nav-adventure-capsule {
