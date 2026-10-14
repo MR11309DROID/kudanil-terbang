@@ -1924,9 +1924,9 @@ class StageRenderer {
   // --- Skill Idle Visual Attachments (Authentic 60FPS Procedural & Vector Auras) ---
 
   renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now) {
-    if (!runSkills || runSkills.length === 0) return;
+    if ((!runSkills || runSkills.length === 0) && !p.swordAction && !p.skillExpression) return;
 
-    const hasSkill = (term) => runSkills.some(s => {
+    const hasSkill = (term) => (runSkills || []).some(s => {
       if (typeof term === "number") return s.id === term;
       const t = term.toLowerCase();
       return (s.key && s.key.toLowerCase().includes(t)) || (s.name && s.name.toLowerCase().includes(t));
@@ -2125,7 +2125,7 @@ class StageRenderer {
     }
 
     // 9. Black Hole / Cosmic Crystal Quiver (Tabung Panah di Punggung)
-    const hasBlackHole = hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.skillExpression && p.skillExpression !== "normal");
+    const hasBlackHole = hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.swordAction) || (p.skillExpression && p.skillExpression !== "normal");
     if (hasBlackHole) {
       ctx.save();
       ctx.translate(-drawW * 0.22, -drawH * 0.52);
@@ -2235,9 +2235,9 @@ class StageRenderer {
   }
 
   renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now) {
-    if (!runSkills || runSkills.length === 0) return;
+    if ((!runSkills || runSkills.length === 0) && !p.swordAction && !p.skillExpression) return;
 
-    const hasSkill = (term) => runSkills.some(s => {
+    const hasSkill = (term) => (runSkills || []).some(s => {
       if (typeof term === "number") return s.id === term;
       const t = term.toLowerCase();
       return (s.key && s.key.toLowerCase().includes(t)) || (s.name && s.name.toLowerCase().includes(t));
@@ -2619,7 +2619,7 @@ class StageRenderer {
     }
 
     // 12. Mythic: Black Hole / Cosmic Crystal Sword (Pedang Kristal Kosmik Besar Sesuai Video)
-    const hasBlackHole = hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.skillExpression && p.skillExpression !== "normal");
+    const hasBlackHole = hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.swordAction) || (p.skillExpression && p.skillExpression !== "normal");
     if (hasBlackHole) {
       ctx.save();
       let swordX = drawW * 0.22;
@@ -2915,65 +2915,101 @@ class StageRenderer {
   }
 
   launchBlackHole(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
-    const duration = 1600 / speedMult;
+    const duration = 1900 / speedMult;
     let hitTriggered = false;
 
-    // Trigger standard casting animation on Capybara (stays in place at homePlayerX)
+    // Trigger casting animation on Capybara
     this.setPlayerAnim("skill", false);
 
-    // Origin position: from Capybara's casting hand/front
+    // Positions in arena
     const startX = this.playerState.x + 35;
     const startY = this.groundY - 45;
     const finalHoleX = targetX - 25;
     const finalHoleY = targetY - 25;
 
-    // 8 Meteorite Asteroid Boulders with randomized shapes and orbits
-    const meteors = [];
+    // 7 Storyboard Scenes from Video Reference & Interactive Preview
+    const scenes = [
+      { start: 0.00, end: 0.15, title: "Phase 1: Void Awaken", dialogue: "Saksikan kekuatan VOID!" },
+      { start: 0.15, end: 0.28, title: "Phase 2: Dimensional Rift Slash", dialogue: "Tebasan Dimensi!" },
+      { start: 0.28, end: 0.48, title: "Phase 3: Singularity Comet Launch", dialogue: "Rasakan lubang hitam!" },
+      { start: 0.48, end: 0.72, title: "Phase 4: Event Horizon Gravitational Vortex", dialogue: "Hancurlah!" },
+      { start: 0.72, end: 0.78, title: "Phase 5: Cosmic Implosion", dialogue: "Titik Singularitas..." },
+      { start: 0.78, end: 0.88, title: "Phase 6: SUPERNOVA EXPLOSION!", dialogue: "LEDAKAN SUPERNOVA!" },
+      { start: 0.88, end: 1.00, title: "Phase 7: Void Settle and Stardust Drift", dialogue: "Kedamaian kosmik kembali..." }
+    ];
+
+    // 8 Orbiting Asteroid Boulders with 3D elliptical orbit (Clean procedural vector)
+    const asteroids = [];
     for (let i = 0; i < 8; i++) {
-      meteors.push({
-        startAngle: (i / 8) * Math.PI * 2 + (Math.random() * 0.4 - 0.2),
-        baseRadius: 65 + Math.random() * 35,
-        size: Math.random() * 5 + 4,
-        rotSpeed: Math.random() * 0.1 + 0.05,
-        jagged: [Math.random() * 0.4 + 0.8, Math.random() * 0.4 + 0.8, Math.random() * 0.4 + 0.8, Math.random() * 0.4 + 0.8]
+      asteroids.push({
+        angle: (i / 8) * Math.PI * 2,
+        radius: 55 + (i % 3) * 18,
+        speed: 0.05 + (i % 3) * 0.02,
+        size: 5 + (i % 4) * 2.2,
+        color: ["#64748b", "#475569", "#78716c", "#57534e"][i % 4]
       });
     }
 
-    // Dynamic Lightning Arcs
-    const lightningArcs = [];
-    for (let i = 0; i < 5; i++) {
-      lightningArcs.push({
-        angle: Math.random() * Math.PI * 2,
-        length: Math.random() * 40 + 35,
-        branches: [Math.random() * 0.5 - 0.25, Math.random() * 0.5 - 0.25, Math.random() * 0.5 - 0.25]
+    // Branching Lightning Arcs across accretion rim
+    const lightnings = [];
+    for (let i = 0; i < 6; i++) {
+      lightnings.push({
+        angle: (i / 6) * Math.PI * 2,
+        length: 42 + (i % 2) * 16
       });
     }
+
+    // Drifting Stardust Petals for Phase 7
+    const stardustPetals = [];
+    for (let i = 0; i < 35; i++) {
+      stardustPetals.push({
+        x: (Math.random() - 0.5) * 360,
+        y: (Math.random() - 0.5) * 180,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: Math.random() * 0.8 + 0.3,
+        size: Math.random() * 3 + 1.5,
+        color: ["#c084fc", "#e879f9", "#38bdf8", "#f5d0fe"][i % 4],
+        alpha: Math.random() * 0.6 + 0.4
+      });
+    }
+
+    const startTime = performance.now();
 
     this.skillCombatEffects.push({
-      startTime: performance.now(),
+      startTime: startTime,
       duration: duration,
       update: (progress) => {
-        // Smooth player animation choreography matching video reference
+        // Player choreography matching video & preview
         if (progress < 0.15) {
-          // Phase 1: Void Awaken (Ready stance, rising void flames)
+          // Phase 1: Void Awaken
           if (this.playerState.currentAnim !== "skill") this.setPlayerAnim("skill", true);
           this.playerState.swordAction = "ready";
           this.playerState.skillExpression = "void_eye";
-        } else if (progress < 0.30) {
-          // Phase 2: Dimensional Rift Slash (Slashing arc forward)
+        } else if (progress < 0.28) {
+          // Phase 2: Dimensional Rift Slash
           if (this.playerState.currentAnim !== "attack") this.setPlayerAnim("attack", false);
           this.playerState.swordAction = "slash";
           this.playerState.skillExpression = "slash_squint";
         } else if (progress < 0.75) {
-          // Phase 3 & 4: Singularity Launch & Event Horizon (Channeling firmly in place)
+          // Phase 3 & 4: Singularity Launch & Event Horizon
           if (this.playerState.currentAnim !== "skill") this.setPlayerAnim("skill", false);
           this.playerState.swordAction = "cast";
           this.playerState.skillExpression = "void_eye";
+
+          // Gravitational suction pull on enemy monster
+          if (progress >= 0.48 && progress < 0.72 && this.enemyState) {
+            this.enemyState.knockback = -12 * ((progress - 0.48) / 0.24);
+            this.enemyState.shake = 3.5;
+          }
         } else {
           // Phase 7: Settle & recovery
           if (this.playerState.currentAnim !== "idle") this.setPlayerAnim("idle", true);
           this.playerState.swordAction = "ready";
           this.playerState.skillExpression = "peaceful_relief";
+          if (this.enemyState && progress >= 0.88) {
+            this.enemyState.knockback = 0;
+            this.enemyState.shake = 0;
+          }
         }
 
         // Supernova Implosion / Detonation at progress 0.78
@@ -2982,14 +3018,14 @@ class StageRenderer {
           Sound.playSfx("magicBurst");
           Sound.playSfx("bossRoar");
           Sound.playSfx("attackHeavy");
-          this.triggerScreenShake(2.2);
+          this.triggerScreenShake(2.5);
           if (this.enemyState) {
             this.enemyState.flashWhite = 1.0;
-            this.enemyState.shake = 3.8;
-            this.enemyState.knockback = 18;
-            setTimeout(() => { if (this.enemyState) this.enemyState.knockback = 0; }, 200 / speedMult);
+            this.enemyState.shake = 8.0;
+            this.enemyState.knockback = 28;
+            setTimeout(() => { if (this.enemyState) this.enemyState.knockback = 0; }, 260 / speedMult);
           }
-          this.addVisualEffect("critBurst", finalHoleX, finalHoleY, 3.0);
+          this.addVisualEffect("critBurst", finalHoleX, finalHoleY, 3.2);
           this.addMagicImpactSparks(finalHoleX, finalHoleY, ["#c084fc", "#9333ea", "#38bdf8", "#fde047", "#ffffff", "#030712"]);
           this.addGroundSlashFissure(finalHoleX, this.groundY, "#a855f7");
           if (onHit) onHit();
@@ -2997,31 +3033,14 @@ class StageRenderer {
       },
       render: (ctx) => {
         const now = performance.now();
-        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const elapsed = now - startTime;
         const p = Math.min(1, elapsed / duration);
-
-        // Compute current Black Hole position:
-        // Flies from Capy (progress 0.0 -> 0.22) to in front of enemy (progress 0.22 -> 1.0)
-        let currHoleX = finalHoleX;
-        let currHoleY = finalHoleY;
-        let flyAngle = 0;
-        if (p < 0.22) {
-          const flyP = p / 0.22;
-          const flyEase = 1 - Math.pow(1 - flyP, 3);
-          currHoleX = startX + (finalHoleX - startX) * flyEase;
-          currHoleY = startY + (finalHoleY - startY) * flyEase - Math.sin(flyP * Math.PI) * 20;
-
-          const nextP = Math.min(1, flyP + 0.02);
-          const nextEase = 1 - Math.pow(1 - nextP, 3);
-          const nextX = startX + (finalHoleX - startX) * nextEase;
-          const nextY = startY + (finalHoleY - startY) * nextEase - Math.sin(nextP * Math.PI) * 20;
-          flyAngle = Math.atan2(nextY - currHoleY, nextX - currHoleX);
-        }
+        const currScene = scenes.find(s => p >= s.start && p < s.end) || scenes[scenes.length - 1];
 
         // 1. Cosmic Void Nebula Screen Vignette
         ctx.save();
         const dimAlpha = Math.sin(p * Math.PI) * 0.72;
-        const screenGrad = ctx.createRadialGradient(currHoleX, currHoleY, 20, currHoleX, currHoleY, this.width * 0.85);
+        const screenGrad = ctx.createRadialGradient(finalHoleX, finalHoleY, 20, finalHoleX, finalHoleY, this.width * 0.85);
         screenGrad.addColorStop(0, `rgba(12, 4, 28, ${dimAlpha * 0.95})`);
         screenGrad.addColorStop(0.5, `rgba(8, 2, 20, ${dimAlpha * 0.7})`);
         screenGrad.addColorStop(1, `rgba(2, 0, 8, ${dimAlpha * 0.4})`);
@@ -3029,300 +3048,410 @@ class StageRenderer {
         ctx.fillRect(-20, -20, this.width + 40, this.height + 40);
         ctx.restore();
 
-        // Frame 4: Authentic HD Dimensional Rift Crack at launch origin
-        if (p < 0.22) {
-          const riftAlpha = Math.sin((p / 0.22) * Math.PI);
+        // 2. Void Ground Energy Flames under Capy (Phase 1, 0.00 - 0.20)
+        if (p < 0.20) {
+          const flameIntensity = p < 0.08 ? (p / 0.08) : (1 - (p - 0.08) / 0.12);
           ctx.save();
-          ctx.translate(startX, startY);
-          ctx.globalAlpha = riftAlpha;
-          ctx.shadowColor = "#d946ef";
-          ctx.shadowBlur = 22;
-          if (this.blackHoleHdImages && this.blackHoleHdImages.rift.complete) {
-            const rw = 52 * riftAlpha;
-            const rh = 90 * riftAlpha;
-            ctx.drawImage(this.blackHoleHdImages.rift, -rw / 2, -rh / 2, rw, rh);
-          } else {
-            ctx.fillStyle = "rgba(10, 2, 24, 0.9)";
-            ctx.strokeStyle = "#d946ef";
-            ctx.lineWidth = 3.0;
+          ctx.translate(this.playerState.x, this.groundY - 6);
+
+          ctx.save();
+          ctx.scale(1, 0.32);
+          const auraGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 52 * flameIntensity);
+          auraGrad.addColorStop(0, "rgba(168, 85, 247, 0.85)");
+          auraGrad.addColorStop(0.5, "rgba(88, 28, 135, 0.65)");
+          auraGrad.addColorStop(1, "rgba(3, 7, 18, 0)");
+          ctx.fillStyle = auraGrad;
+          ctx.beginPath();
+          ctx.arc(0, 0, 52 * flameIntensity, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+
+          ctx.shadowColor = "#c084fc";
+          ctx.shadowBlur = 12 * flameIntensity;
+          const tendrilCount = 7;
+          for (let i = 0; i < tendrilCount; i++) {
+            const tAngle = (i / tendrilCount) * Math.PI * 2;
+            const wave = Math.sin(now * 0.008 + i * 1.3);
+            const fx = Math.cos(tAngle) * (26 * flameIntensity);
+            const fy = Math.sin(tAngle) * (8 * flameIntensity);
+            const fHeight = (18 + wave * 8) * flameIntensity;
+
+            ctx.save();
+            ctx.translate(fx, fy);
+            const fGrad = ctx.createLinearGradient(0, 0, 0, -fHeight);
+            fGrad.addColorStop(0, "rgba(88, 28, 135, 0.85)");
+            fGrad.addColorStop(0.6, "rgba(168, 85, 247, 0.75)");
+            fGrad.addColorStop(1, "rgba(245, 208, 254, 0)");
+            ctx.fillStyle = fGrad;
+
             ctx.beginPath();
-            ctx.moveTo(0, -42 * riftAlpha);
-            ctx.lineTo(10 * riftAlpha, -22 * riftAlpha);
-            ctx.lineTo(5 * riftAlpha, -6 * riftAlpha);
-            ctx.lineTo(12 * riftAlpha, 10 * riftAlpha);
-            ctx.lineTo(0, 42 * riftAlpha);
-            ctx.lineTo(-10 * riftAlpha, 14 * riftAlpha);
-            ctx.lineTo(-5 * riftAlpha, -8 * riftAlpha);
-            ctx.lineTo(-11 * riftAlpha, -20 * riftAlpha);
+            ctx.moveTo(-4, 0);
+            ctx.quadraticCurveTo(-2 + wave * 2, -fHeight * 0.6, wave * 3, -fHeight);
+            ctx.quadraticCurveTo(2 + wave * 2, -fHeight * 0.6, 4, 0);
             ctx.closePath();
             ctx.fill();
-            ctx.stroke();
+            ctx.restore();
           }
           ctx.restore();
         }
 
-        // 2. Flying Authentic HD Cosmic Comet Black Hole (Frames 9 & 10)
-        if (p < 0.22) {
+        // 3. Crescent Slash Arc (Phase 2, 0.15 - 0.28)
+        if (p >= 0.15 && p < 0.28) {
+          const sp = (p - 0.15) / 0.13;
+          const sAlpha = Math.sin(sp * Math.PI);
           ctx.save();
-          ctx.translate(currHoleX, currHoleY);
-          ctx.rotate(flyAngle);
+          ctx.translate(this.playerState.x + 28, this.groundY - 40);
+          ctx.rotate(-0.25 + sp * 0.5);
+          ctx.globalAlpha = sAlpha;
+          ctx.shadowColor = "#f0abfc";
+          ctx.shadowBlur = 24;
+          ctx.strokeStyle = "rgba(232, 121, 249, 0.95)";
+          ctx.lineWidth = 14 * sAlpha;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.arc(0, 0, 52, -Math.PI * 0.6, Math.PI * 0.35);
+          ctx.stroke();
 
-          if (this.blackHoleHdImages && this.blackHoleHdImages.cometFlight && this.blackHoleHdImages.cometFlight.complete) {
-            // Authentic HD flying comet sprite with streaming purple plasma tail
-            const cWidth = 96;
-            const cHeight = 44;
-            const headOffsetX = -cWidth * (162 / 205);
-            const headOffsetY = -cHeight * (48 / 95);
-            ctx.shadowColor = "#d946ef";
-            ctx.shadowBlur = 18;
-            ctx.drawImage(this.blackHoleHdImages.cometFlight, headOffsetX, headOffsetY, cWidth, cHeight);
-          } else if (this.blackHoleHdImages && this.blackHoleHdImages.singularity.complete) {
-            ctx.rotate(now * 0.008);
-            const sw = 42;
-            const sh = 42;
-            ctx.drawImage(this.blackHoleHdImages.singularity, -sw / 2, -sh / 2, sw, sh);
-          } else {
-            ctx.fillStyle = "#ffffff";
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 4.5 * sAlpha;
+          ctx.beginPath();
+          ctx.arc(0, 0, 52, -Math.PI * 0.55, Math.PI * 0.3);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // 4. Diamond Dimensional Rift Portal (Phase 2 & 3, 0.20 - 0.38)
+        if (p >= 0.20 && p < 0.38) {
+          let riftScale = 1.0;
+          if (p < 0.25) riftScale = (p - 0.20) / 0.05;
+          else if (p > 0.32) riftScale = 1 - (p - 0.32) / 0.06;
+
+          ctx.save();
+          ctx.translate(this.playerState.x + 54, this.groundY - 45);
+          ctx.scale(riftScale, riftScale);
+          ctx.shadowColor = "#d946ef";
+          ctx.shadowBlur = 28;
+
+          ctx.strokeStyle = "#c084fc";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(0, -68); ctx.lineTo(16, 0); ctx.lineTo(0, 68); ctx.lineTo(-16, 0);
+          ctx.closePath();
+          ctx.stroke();
+
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 2.0;
+          ctx.beginPath();
+          ctx.moveTo(0, -65); ctx.lineTo(14, 0); ctx.lineTo(0, 65); ctx.lineTo(-14, 0);
+          ctx.closePath();
+          ctx.stroke();
+
+          ctx.fillStyle = "#030712";
+          ctx.fill();
+
+          ctx.strokeStyle = "#f5d0fe";
+          ctx.lineWidth = 1.2;
+          for (let i = 0; i < 4; i++) {
+            const sAngle = (i / 4) * Math.PI * 2 + now * 0.01;
+            const sx = Math.cos(sAngle) * 14;
+            const sy = Math.sin(sAngle) * 45;
             ctx.beginPath();
-            ctx.arc(0, 0, 8, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(sx + Math.sin(now * 0.02 + i) * 8, sy + Math.cos(now * 0.02 + i) * 6);
+            ctx.stroke();
           }
           ctx.restore();
         }
 
-        ctx.save();
-        ctx.translate(currHoleX, currHoleY);
+        // 5. BLACK HOLE LAUNCH & VORTEX (Phase 3, 4, 5, 6)
+        if (p >= 0.28 && p < 0.88) {
+          let currHoleX = finalHoleX;
+          let currHoleY = finalHoleY;
 
-        if (p < 0.70) {
-          // PHASE 2 & 3: Gravitational Pull & Authentic HD Event Horizon in front of enemy
-          const arrivalP = Math.max(0, (p - 0.22) / 0.48);
-          const growth = Math.min(1, arrivalP / 0.28);
-          let vortexScale = growth;
+          // Phase 3 (0.28 - 0.48): Comet Flight from Rift to Enemy
+          if (p < 0.48) {
+            const flyP = (p - 0.28) / 0.20;
+            const flyEase = 1 - Math.pow(1 - flyP, 3);
+            const startHoleX = this.playerState.x + 54;
+            const startHoleY = this.groundY - 45;
+            currHoleX = startHoleX + (finalHoleX - startHoleX) * flyEase;
+            currHoleY = startHoleY + (finalHoleY - startHoleY) * flyEase - Math.sin(flyP * Math.PI) * 22;
 
-          // Frame 8: Cosmic Crush implosion right before supernova
-          if (arrivalP > 0.85) {
-            const crushP = (arrivalP - 0.85) / 0.15;
-            vortexScale = growth * (1 - crushP * 0.55);
-          }
-
-          if (vortexScale > 0.05) {
-            // A. Glowing Outer Accretion Halo
+            // Streaming Plasma Comet Tail & Zigzag Lightning
             ctx.save();
-            ctx.shadowColor = "#a855f7";
-            ctx.shadowBlur = 32;
-
-            const accGrad = ctx.createRadialGradient(0, 0, 10 * vortexScale, 0, 0, 60 * vortexScale);
-            accGrad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
-            accGrad.addColorStop(0.2, "rgba(217, 70, 239, 0.85)");
-            accGrad.addColorStop(0.6, "rgba(147, 51, 234, 0.5)");
-            accGrad.addColorStop(1, "rgba(168, 85, 247, 0)");
-            ctx.fillStyle = accGrad;
-            ctx.beginPath();
-            ctx.arc(0, 0, 60 * vortexScale, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-
-            // B. RENDER AUTHENTIC HD EVENT HORIZON / CRUSH ASSET WITH 60 FPS CONTINUOUS ROTATION!
-            if (arrivalP > 0.85 && this.blackHoleHdImages && this.blackHoleHdImages.crush.complete) {
-              ctx.save();
-              ctx.rotate(now * 0.005);
-              const cw = 150 * vortexScale;
-              const ch = 150 * vortexScale;
-              ctx.drawImage(this.blackHoleHdImages.crush, -cw / 2, -ch / 2, cw, ch);
-              ctx.restore();
-            } else {
-              // Frame 12: Smooth rotating accretion spiral galaxy underneath
-              if (this.blackHoleHdImages && this.blackHoleHdImages.vortexSpiral && this.blackHoleHdImages.vortexSpiral.complete) {
-                ctx.save();
-                ctx.rotate(-now * 0.004);
-                const vsW = 155 * vortexScale;
-                const vsH = 155 * vortexScale;
-                ctx.drawImage(this.blackHoleHdImages.vortexSpiral, -vsW / 2, -vsH / 2, vsW, vsH);
-                ctx.restore();
-              }
-              // Card 16: Event Horizon Vortex with orbiting meteors & lightning
-              if (this.blackHoleHdImages && this.blackHoleHdImages.eventHorizon.complete) {
-                ctx.save();
-                ctx.rotate(now * 0.0035);
-                const hdW = 155 * vortexScale;
-                const hdH = 155 * vortexScale;
-                ctx.drawImage(this.blackHoleHdImages.eventHorizon, -hdW / 2, -hdH / 2, hdW, hdH);
-                ctx.restore();
-              }
-            }
-
-            // C. Crackling Void Lightning Arcs
-            ctx.save();
-            ctx.strokeStyle = "#ffffff";
             ctx.shadowColor = "#c084fc";
-            ctx.shadowBlur = 14;
-            ctx.lineWidth = 2.0;
-            for (const arc of lightningArcs) {
-              const arcP = (now * 0.01 + arc.angle) % (Math.PI * 2);
-              const arcLen = arc.length * vortexScale;
-              ctx.beginPath();
-              ctx.moveTo(Math.cos(arcP) * 14 * vortexScale, Math.sin(arcP) * 14 * vortexScale);
-              let lx = Math.cos(arcP) * 14 * vortexScale;
-              let ly = Math.sin(arcP) * 14 * vortexScale;
-              for (let b = 0; b < 3; b++) {
-                const segLen = arcLen * 0.33;
-                lx += Math.cos(arcP + arc.branches[b]) * segLen;
-                ly += Math.sin(arcP + arc.branches[b]) * segLen;
-                ctx.lineTo(lx, ly);
-              }
-              ctx.stroke();
-            }
-            ctx.restore();
+            ctx.shadowBlur = 20;
 
-            // D. Pure Abyssal Black Hole Singularity Core & Glowing Photon Sphere
-            ctx.save();
-            ctx.fillStyle = "#010006";
-            ctx.shadowColor = "#a855f7";
-            ctx.shadowBlur = 24;
+            const tailLen = 65 * flyP;
+            const pGrad = ctx.createLinearGradient(currHoleX, currHoleY, currHoleX - tailLen, currHoleY + 6);
+            pGrad.addColorStop(0, "rgba(232, 121, 249, 0.95)");
+            pGrad.addColorStop(0.5, "rgba(168, 85, 247, 0.65)");
+            pGrad.addColorStop(1, "rgba(59, 7, 100, 0)");
+            ctx.fillStyle = pGrad;
             ctx.beginPath();
-            ctx.arc(0, 0, Math.max(3, 22 * vortexScale), 0, Math.PI * 2);
+            ctx.moveTo(currHoleX, currHoleY - 14);
+            ctx.lineTo(currHoleX - tailLen, currHoleY);
+            ctx.lineTo(currHoleX, currHoleY + 14);
+            ctx.closePath();
             ctx.fill();
 
-            // Blinding White Photon Ring Rim
             ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2.5;
-            ctx.shadowColor = "#f0abfc";
-            ctx.shadowBlur = 18;
+            ctx.lineWidth = 2.2;
+            ctx.beginPath();
+            ctx.moveTo(currHoleX, currHoleY);
+            for (let z = 1; z <= 5; z++) {
+              const zx = currHoleX - z * (tailLen / 5);
+              const zy = currHoleY + Math.sin(now * 0.03 + z * 1.5) * 10;
+              ctx.lineTo(zx, zy);
+            }
             ctx.stroke();
             ctx.restore();
+          }
 
-            // E. 8 Spiraling Meteor Asteroid Boulders pulled into Singularity
-            const pullP = Math.min(1, Math.max(0, arrivalP));
+          // Phase 4 (0.48 - 0.78): Event Horizon Gravitational Vortex (Video & Screenshot!)
+          if (p >= 0.48 && p < 0.78) {
+            const vP = p < 0.72 ? 1.0 : (1 - (p - 0.72) / 0.06); // Collapse in Phase 5
+            const vortexRadius = 68 * vP;
+
             ctx.save();
-            for (let m = 0; m < meteors.length; m++) {
-              const b = meteors[m];
-              const currDist = b.baseRadius * (1 - pullP * 0.88);
-              const currAng = b.startAngle + pullP * 12;
-              const mx = Math.cos(currAng) * currDist;
-              const my = Math.sin(currAng) * (currDist * 0.65);
+            ctx.translate(currHoleX, currHoleY);
 
-              // Violet Plasma Tail behind meteor
-              ctx.strokeStyle = "rgba(192, 132, 252, 0.75)";
-              ctx.lineWidth = 2.0;
-              ctx.beginPath();
-              ctx.moveTo(mx, my);
-              ctx.lineTo(mx - Math.cos(currAng) * 14, my - Math.sin(currAng) * 8);
-              ctx.stroke();
+            // Rotating Cosmic Accretion Disk (60 FPS smooth continuous spin)
+            ctx.rotate(now * 0.0035);
+            ctx.shadowColor = "#a855f7";
+            ctx.shadowBlur = 28 * vP;
 
-              // Meteor Boulder Polygon
-              ctx.fillStyle = "#334155";
-              ctx.strokeStyle = "#64748b";
-              ctx.lineWidth = 1.0;
+            // Outer glowing spiral nebula bands
+            for (let b = 0; b < 3; b++) {
+              const bAngle = (b / 3) * Math.PI * 2;
+              const bGrad = ctx.createRadialGradient(0, 0, 16, 0, 0, vortexRadius);
+              bGrad.addColorStop(0, "rgba(245, 208, 254, 0.9)");
+              bGrad.addColorStop(0.4, "rgba(192, 132, 252, 0.7)");
+              bGrad.addColorStop(0.8, "rgba(126, 34, 206, 0.4)");
+              bGrad.addColorStop(1, "rgba(3, 7, 18, 0)");
+              ctx.fillStyle = bGrad;
               ctx.beginPath();
-              for (let j = 0; j < 4; j++) {
-                const jAng = (j / 4) * Math.PI * 2 + now * b.rotSpeed;
-                const jDist = b.size * b.jagged[j];
-                const px = mx + Math.cos(jAng) * jDist;
-                const py = my + Math.sin(jAng) * jDist;
-                if (j === 0) ctx.moveTo(px, py);
-                else ctx.lineTo(px, py);
-              }
+              ctx.arc(0, 0, vortexRadius, bAngle, bAngle + Math.PI * 0.7);
+              ctx.lineTo(0, 0);
               ctx.closePath();
               ctx.fill();
+            }
+
+            // Branching Purple Lightning Bolts across rim
+            ctx.strokeStyle = "#f5d0fe";
+            ctx.lineWidth = 1.8;
+            for (let l of lightnings) {
+              const lAng = l.angle + now * 0.004;
+              const lx1 = Math.cos(lAng) * (vortexRadius * 0.4);
+              const ly1 = Math.sin(lAng) * (vortexRadius * 0.4);
+              const lx2 = Math.cos(lAng) * vortexRadius;
+              const ly2 = Math.sin(lAng) * vortexRadius;
+              ctx.beginPath();
+              ctx.moveTo(lx1, ly1);
+              ctx.lineTo((lx1 + lx2) / 2 + Math.sin(now * 0.03) * 8, (ly1 + ly2) / 2);
+              ctx.lineTo(lx2, ly2);
               ctx.stroke();
             }
+
+            // 8 Orbiting Asteroid Boulders sucked in a 3D spiral (Video & Screenshot!)
+            for (let ast of asteroids) {
+              const aAng = ast.angle + now * ast.speed * 0.05;
+              const spiralDist = Math.max(18, ast.radius * vP - Math.sin(now * 0.003) * 6);
+              const ax = Math.cos(aAng) * spiralDist;
+              const ay = Math.sin(aAng) * (spiralDist * 0.45); // 3D ellipse tilt
+
+              ctx.save();
+              ctx.translate(ax, ay);
+              ctx.fillStyle = ast.color;
+              ctx.strokeStyle = "#1e293b";
+              ctx.lineWidth = 1.0;
+              ctx.beginPath();
+              ctx.arc(0, 0, ast.size, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.stroke();
+
+              // Asteroid glow
+              ctx.fillStyle = "rgba(240, 171, 252, 0.6)";
+              ctx.beginPath();
+              ctx.arc(-1, -1, ast.size * 0.4, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+            }
+
             ctx.restore();
           }
 
-        } else {
-          // PHASE 4: SUPERNOVA EXPLOSION & COSMIC SHOCKWAVE ON ENEMY
-          const expP = (p - 0.70) / 0.30;
-          const fadeAlpha = Math.max(0, 1 - expP);
+          // Pitch-black Spherical Core with Radiant Photon Rings (All active phases)
+          const coreScale = (p >= 0.72 && p < 0.78) ? (1 - (p - 0.72) / 0.06) : 1.0;
+          const coreR = Math.max(4, 20 * coreScale);
 
-          // RENDER AUTHENTIC HD SUPERNOVA ASSET
-          if (this.blackHoleHdImages && this.blackHoleHdImages.supernova.complete) {
-            ctx.save();
-            ctx.globalAlpha = fadeAlpha;
-            const snW = 150 * (1 + expP * 0.4);
-            const snH = 150 * (1 + expP * 0.4);
-            ctx.drawImage(this.blackHoleHdImages.supernova, -snW / 2, -snH / 2, snW, snH);
-            ctx.restore();
-          }
-
-          // Blinding White/Gold Core Flash
-          if (expP < 0.45) {
-            const flashAlpha = 1 - (expP / 0.45);
-            ctx.save();
-            ctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha})`;
-            ctx.shadowColor = "#fde047";
-            ctx.shadowBlur = 35;
-            ctx.beginPath();
-            ctx.arc(0, 0, 52 * flashAlpha, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-          }
-
-          // Cosmic Expanding Shockwave Rings
           ctx.save();
-          ctx.globalAlpha = fadeAlpha;
-          ctx.strokeStyle = "#c084fc";
-          ctx.lineWidth = 5 * fadeAlpha;
-          ctx.shadowColor = "#38bdf8";
-          ctx.shadowBlur = 24;
-          ctx.beginPath();
-          ctx.arc(0, 0, expP * 140, 0, Math.PI * 2);
-          ctx.stroke();
+          ctx.translate(currHoleX, currHoleY);
 
-          // Inner shockwave
-          ctx.strokeStyle = "#ffffff";
-          ctx.lineWidth = 2.8 * fadeAlpha;
-          ctx.beginPath();
-          ctx.arc(0, 0, expP * 100, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        ctx.restore(); // currHoleX, currHoleY
-
-        // Frame 10 & 11 / Card 20: Cosmic Stardust Ribbon Stream returning from enemy & swirling around Capybara
-        if (p >= 0.82 && p < 0.99) {
-          const streamT = (p - 0.82) / 0.17;
-          const fadeAlpha = Math.sin(streamT * Math.PI);
-          ctx.save();
-          ctx.strokeStyle = `rgba(217, 70, 239, ${fadeAlpha * 0.85})`;
-          ctx.lineWidth = 3.2;
+          // Radiant Photon Ring
           ctx.shadowColor = "#c084fc";
-          ctx.shadowBlur = 18;
-          for (let i = 0; i < 4; i++) {
-            const sy = finalHoleY + (i - 1.5) * 12;
+          ctx.shadowBlur = 24;
+          ctx.strokeStyle = "#e879f9";
+          ctx.lineWidth = 3.5;
+          ctx.beginPath();
+          ctx.arc(0, 0, coreR + 3, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.strokeStyle = "#38bdf8";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(0, 0, coreR + 1.5, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Pure pitch-black void singularity
+          ctx.fillStyle = "#000000";
+          ctx.beginPath();
+          ctx.arc(0, 0, coreR, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+
+          // Phase 5 (0.72 - 0.78): Blinding White-Hot Singularity Star
+          if (p >= 0.72 && p < 0.78) {
+            const starP = (p - 0.72) / 0.06;
+            ctx.save();
+            ctx.translate(currHoleX, currHoleY);
+            ctx.shadowColor = "#ffffff";
+            ctx.shadowBlur = 35;
+
+            ctx.fillStyle = "#ffffff";
             ctx.beginPath();
-            ctx.moveTo(finalHoleX - 10, sy);
-            ctx.quadraticCurveTo((startX + finalHoleX) / 2, this.groundY - 60 + i * 5, startX + 15, startY);
+            ctx.arc(0, 0, 12 + starP * 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 4-Point Radiant Lens Flare Beams
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.95)";
+            ctx.lineWidth = 3.0;
+            const beamLen = 90 * starP;
+            ctx.beginPath();
+            ctx.moveTo(-beamLen, 0); ctx.lineTo(beamLen, 0);
+            ctx.moveTo(0, -beamLen); ctx.lineTo(0, beamLen);
             ctx.stroke();
+            ctx.restore();
           }
 
-          // Card 20 (Void Absorb): Swirling purple stardust galaxy ribbon around Capybara
+          // Phase 6 (0.78 - 0.88): SUPERNOVA EXPLOSION!
+          if (p >= 0.78 && p < 0.88) {
+            const expP = (p - 0.78) / 0.10;
+            ctx.save();
+            ctx.translate(currHoleX, currHoleY);
+
+            // 1. Blinding Shockwave Blast Wave Rings
+            const blastR = expP * 240;
+            ctx.shadowColor = "#fb923c";
+            ctx.shadowBlur = 32;
+
+            // Fiery Orange / Yellow Inner Shockwave
+            ctx.strokeStyle = `rgba(251, 146, 60, ${1 - expP})`;
+            ctx.lineWidth = 14 * (1 - expP);
+            ctx.beginPath();
+            ctx.arc(0, 0, blastR * 0.75, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Deep Neon Purple Outer Shockwave
+            ctx.strokeStyle = `rgba(192, 132, 252, ${1 - expP})`;
+            ctx.lineWidth = 8 * (1 - expP);
+            ctx.beginPath();
+            ctx.arc(0, 0, blastR, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // 2. Blinding Core Light Flash
+            const coreGrad = ctx.createRadialGradient(0, 0, 5, 0, 0, 75 * (1 - expP));
+            coreGrad.addColorStop(0, `rgba(255, 255, 255, ${1 - expP * 0.8})`);
+            coreGrad.addColorStop(0.4, `rgba(254, 215, 170, ${0.8 * (1 - expP)})`);
+            coreGrad.addColorStop(1, "rgba(168, 85, 247, 0)");
+            ctx.fillStyle = coreGrad;
+            ctx.beginPath();
+            ctx.arc(0, 0, 75 * (1 - expP), 0, Math.PI * 2);
+            ctx.fill();
+
+            // 3. Shattering Crystal Shards & Rocks Blasting in 360 degrees
+            ctx.lineWidth = 1.5;
+            for (let s = 0; s < 18; s++) {
+              const sAng = (s / 18) * Math.PI * 2;
+              const dist = expP * (110 + (s % 3) * 55);
+              const sx = Math.cos(sAng) * dist;
+              const sy = Math.sin(sAng) * dist;
+              ctx.save();
+              ctx.translate(sx, sy);
+              ctx.rotate(sAng + expP * 4);
+              ctx.fillStyle = s % 2 === 0 ? "#f5d0fe" : "#a855f7";
+              ctx.shadowColor = "#d946ef";
+              ctx.shadowBlur = 10;
+              ctx.beginPath();
+              ctx.moveTo(0, -6);
+              ctx.lineTo(3.5, 0);
+              ctx.lineTo(0, 6);
+              ctx.lineTo(-3.5, 0);
+              ctx.closePath();
+              ctx.fill();
+              ctx.restore();
+            }
+
+            ctx.restore();
+          }
+        }
+
+        // Phase 7 (0.85 - 1.00): Void Settle & Drifting Crystal Stardust
+        if (p >= 0.85) {
+          const settleP = (p - 0.85) / 0.15;
           ctx.save();
-          ctx.translate(startX, startY);
-          ctx.rotate(now * 0.006);
-          ctx.scale(1, 0.42);
-          ctx.strokeStyle = `rgba(192, 132, 252, ${fadeAlpha * 0.9})`;
-          ctx.lineWidth = 4 * fadeAlpha;
-          ctx.shadowColor = "#e879f9";
-          ctx.shadowBlur = 14;
-          ctx.beginPath();
-          ctx.arc(0, 0, 48 * (1 - streamT * 0.25), 0, Math.PI * 2);
-          ctx.stroke();
-
-          ctx.strokeStyle = `rgba(255, 255, 255, ${fadeAlpha * 0.85})`;
-          ctx.lineWidth = 2.2 * fadeAlpha;
-          ctx.beginPath();
-          ctx.arc(0, 0, 36 * (1 - streamT * 0.25), 0.5, Math.PI * 1.8);
-          ctx.stroke();
-          ctx.restore();
-
+          for (let sp of stardustPetals) {
+            const sx = finalHoleX + sp.x + sp.vx * settleP * 30;
+            const sy = finalHoleY + sp.y + sp.vy * settleP * 45;
+            ctx.globalAlpha = sp.alpha * (1 - settleP);
+            ctx.fillStyle = sp.color;
+            ctx.shadowColor = sp.color;
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.arc(sx, sy, sp.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
           ctx.restore();
         }
+
+        // 6. Authentic Dialogue Subtitle Box (Matching User's Screenshot!)
+        ctx.save();
+        const boxX = this.width / 2;
+        const boxY = Math.min(this.height - 40, this.groundY + 45);
+        ctx.translate(boxX, boxY);
+        ctx.font = "bold 13px 'Fredoka', 'Nunito', sans-serif";
+        const dialogueText = `"${currScene.dialogue}"`;
+        const textWidth = ctx.measureText(dialogueText).width;
+        const padX = 16;
+        const boxW = Math.max(120, textWidth + padX * 2);
+        const boxH = 28;
+
+        ctx.fillStyle = "rgba(8, 3, 18, 0.88)";
+        ctx.strokeStyle = "rgba(192, 132, 252, 0.6)";
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = "#a855f7";
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.roundRect(-boxW / 2, -boxH / 2, boxW, boxH, boxH / 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#f5d0fe";
+        ctx.shadowColor = "#e879f9";
+        ctx.shadowBlur = 6;
+        ctx.fillText(dialogueText, 0, 1);
+        ctx.restore();
       },
       onComplete: () => {
         this.playerState.skillExpression = null;
         this.playerState.swordAction = null;
         this.playerState.blackHoleSprite = null;
+        if (this.enemyState) {
+          this.enemyState.knockback = 0;
+          this.enemyState.shake = 0;
+        }
         this.setPlayerAnim("idle", true);
         if (onComplete) onComplete();
       }
