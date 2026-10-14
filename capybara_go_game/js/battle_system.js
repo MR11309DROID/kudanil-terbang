@@ -226,8 +226,8 @@ class BattleSystem {
     // Periodic Skill Procs (Black Hole singularity every 4 turns)
     const blackHoleSkill = c.skills.find(s => (s.key === "mythic_03_black_hole" || (s.name && s.name.includes("Black Hole"))) && this.turnCount % (s.procEvery || 4) === 0);
     if (blackHoleSkill && r.enemyState && r.launchBlackHole) {
-      const mult = blackHoleSkill.dmgMult ? Math.min(blackHoleSkill.dmgMult, 0.85) : 0.85;
-      const bhDmg = Math.max(1, Math.round(c.atk * mult));
+      const mult = blackHoleSkill.dmgMult ? Math.min(blackHoleSkill.dmgMult, 0.30) : 0.30;
+      const bhDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.25)));
       r.launchBlackHole(
         r.enemyState.x,
         r.groundY - 25,
