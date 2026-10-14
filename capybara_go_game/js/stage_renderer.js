@@ -973,6 +973,10 @@ class StageRenderer {
       color = "#48f07e";
       fontSize = 17;
       text = "+" + text;
+    } else if (type === "void") {
+      color = "#c084fc";
+      fontSize = 18;
+      text = text + " VOID";
     } else if (type === "dodge") {
       color = "#6ee7b7";
       fontSize = 16;

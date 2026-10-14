@@ -218,14 +218,15 @@ class BattleSystem {
       }
     }
 
-    // Periodic Skill Procs (Black Hole singularity every 3 turns)
-    const blackHoleSkill = c.skills.find(s => (s.key === "mythic_03_black_hole" || (s.name && s.name.includes("Black Hole"))) && this.turnCount % (s.procEvery || 3) === 0);
+    // Periodic Skill Procs (Black Hole singularity every 4 turns)
+    const blackHoleSkill = c.skills.find(s => (s.key === "mythic_03_black_hole" || (s.name && s.name.includes("Black Hole"))) && this.turnCount % (s.procEvery || 4) === 0);
     if (blackHoleSkill && r.enemyState && r.launchBlackHole) {
-      const bhDmg = Math.round(c.atk * (blackHoleSkill.dmgMult || 3.0));
+      const mult = blackHoleSkill.dmgMult ? Math.min(blackHoleSkill.dmgMult, 0.85) : 0.85;
+      const bhDmg = Math.max(1, Math.round(c.atk * mult));
       r.launchBlackHole(r.enemyState.x, r.groundY - 25, () => {
         e.hp -= bhDmg;
         r.enemyState.currentHp = Math.max(0, e.hp);
-        r.addFloatingText(bhDmg, r.enemyState.x, r.groundY - 60, "crit");
+        r.addFloatingText(bhDmg, r.enemyState.x, r.groundY - 60, "void");
       }, null, this.speedMultiplier);
     }
 
@@ -479,7 +480,10 @@ class BattleSystem {
         let dmg = Math.max(1, Math.round(rawDmg - (c.def * 0.4)));
 
         const redSkill = c.skills.find(s => s.dmgReduction);
-        if (redSkill) dmg = Math.round(dmg * (1 - redSkill.dmgReduction));
+        if (redSkill) {
+          const redVal = Math.min(0.12, redSkill.dmgReduction || 0.10);
+          dmg = Math.round(dmg * (1 - redVal));
+        }
 
         // Absorb with Shield
         if (c.shield > 0) {
