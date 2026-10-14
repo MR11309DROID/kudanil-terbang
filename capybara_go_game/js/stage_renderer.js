@@ -84,6 +84,9 @@ class StageRenderer {
     // Active Combat Skill Special Animations (Meteor, Dragon Breath, Lightning, Black Hole, etc.)
     this.skillCombatEffects = [];
 
+    // Current Background Track
+    this.currentBgPath = "assets/backgrounds/panoramas/village_road_bg.png";
+
     // 3D Depth Elements
     this.init3DDepthEngine();
 
@@ -122,11 +125,29 @@ class StageRenderer {
 
   setBackground(bgPath) {
     if (!bgPath) return;
+    this.currentBgPath = bgPath;
     const img = new Image();
     img.onload = () => {
       this.bgImage = this.createSeamlessTexture(img);
     };
     img.src = bgPath;
+  }
+
+  isFirstMap() {
+    if (this.currentBgPath) {
+      if (this.currentBgPath.includes("village_road_bg") || this.currentBgPath.includes("chapter_1")) {
+        return true;
+      }
+    }
+    if (typeof Character !== "undefined") {
+      if (Character.activeRun && Character.activeRun.chapterId) {
+        return Character.activeRun.chapterId === 1;
+      }
+      if (this.isMenuMode && Character.selectedChapter) {
+        return Character.selectedChapter === 1;
+      }
+    }
+    return !this.currentBgPath || this.currentBgPath.includes("village_road_bg");
   }
 
   createSeamlessTexture(img) {
@@ -686,18 +707,20 @@ class StageRenderer {
 
 
 
-    // Update Near-Camera Foreground 3D Foliage & Petals
-    for (const fg of this.foregroundParticles) {
-      fg.x += fg.speedX * (this.scrollSpeed > 0 ? (1 + this.scrollSpeed * 0.4) : 1);
-      fg.y += fg.speedY;
-      fg.rotation += fg.rotSpeed;
-      if (fg.x < -40) {
-        fg.x = this.width + 40;
-        fg.y = Math.random() * this.height;
-      }
-      if (fg.y > this.height + 20) {
-        fg.y = -20;
-        fg.x = Math.random() * this.width;
+    // Update Near-Camera Foreground 3D Foliage & Petals (Skipped on First Map / Gale Town)
+    if (!this.isFirstMap()) {
+      for (const fg of this.foregroundParticles) {
+        fg.x += fg.speedX * (this.scrollSpeed > 0 ? (1 + this.scrollSpeed * 0.4) : 1);
+        fg.y += fg.speedY;
+        fg.rotation += fg.rotSpeed;
+        if (fg.x < -40) {
+          fg.x = this.width + 40;
+          fg.y = Math.random() * this.height;
+        }
+        if (fg.y > this.height + 20) {
+          fg.y = -20;
+          fg.x = Math.random() * this.width;
+        }
       }
     }
 
@@ -942,7 +965,9 @@ class StageRenderer {
 
     // ================= 6. AMBIENT SKY PARTICLES =================
     ctx.save();
+    const isMap1 = this.isFirstMap();
     for (const pt of this.ambientParticles) {
+      if (isMap1 && (pt.color === "#ff9bb2" || pt.color === "#fbcfe8")) continue;
       ctx.globalAlpha = pt.alpha;
       ctx.fillStyle = pt.color;
       ctx.beginPath();
@@ -1185,6 +1210,9 @@ class StageRenderer {
   // --- Foreground 3D Depth Particles (Near Camera Bokeh & Leaves) ---
 
   renderForeground3D(ctx) {
+    // Hilangkan efek bunga sakura / daun jatuh di map pertama (Gale Town)
+    if (this.isFirstMap()) return;
+
     ctx.save();
     for (const fg of this.foregroundParticles) {
       ctx.save();
