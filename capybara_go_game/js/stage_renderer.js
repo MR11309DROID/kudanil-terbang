@@ -154,6 +154,30 @@ class StageRenderer {
     this.blackHoleHdImages.rift.src = "assets/skills/animations/black_hole/rift_hd.png";
     this.blackHoleHdImages.supernova.src = "assets/skills/animations/black_hole/supernova_hd.png";
     this.blackHoleHdImages.crush.src = "assets/skills/animations/black_hole/cosmic_crush_v2_hd.png";
+
+    // Preload Authentic HD Capybara Sprites from User's Artwork (Slim, Crystal Sword & Arrow Quiver)
+    this.blackHoleCapySprites = {
+      f01_idle: new Image(),
+      f02_awaken: new Image(),
+      f03_charge: new Image(),
+      f04_slash: new Image(),
+      f06_cast: new Image(),
+      f07_push: new Image(),
+      f08_recover: new Image(),
+      f10_absorb: new Image(),
+      f11_relief: new Image(),
+      f12_idle2: new Image()
+    };
+    this.blackHoleCapySprites.f01_idle.src = "assets/skills/animations/black_hole/capy_sprites/f01_idle.png";
+    this.blackHoleCapySprites.f02_awaken.src = "assets/skills/animations/black_hole/capy_sprites/f02_awaken.png";
+    this.blackHoleCapySprites.f03_charge.src = "assets/skills/animations/black_hole/capy_sprites/f03_charge.png";
+    this.blackHoleCapySprites.f04_slash.src = "assets/skills/animations/black_hole/capy_sprites/f04_slash.png";
+    this.blackHoleCapySprites.f06_cast.src = "assets/skills/animations/black_hole/capy_sprites/f06_cast.png";
+    this.blackHoleCapySprites.f07_push.src = "assets/skills/animations/black_hole/capy_sprites/f07_push.png";
+    this.blackHoleCapySprites.f08_recover.src = "assets/skills/animations/black_hole/capy_sprites/f08_recover.png";
+    this.blackHoleCapySprites.f10_absorb.src = "assets/skills/animations/black_hole/capy_sprites/f10_absorb.png";
+    this.blackHoleCapySprites.f11_relief.src = "assets/skills/animations/black_hole/capy_sprites/f11_relief.png";
+    this.blackHoleCapySprites.f12_idle2.src = "assets/skills/animations/black_hole/capy_sprites/f12_idle2.png";
   }
 
   setBackground(bgPath) {
@@ -1678,36 +1702,46 @@ class StageRenderer {
     const runSkills = (run && run.skills) ? run.skills : [];
 
     // Layer 1: Render Behind-Capy Skill Attachments (Wings, Demon Avatar, Healing Mandala, Singularity)
-    this.renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now);
-
-    // Layer 2: Render Capybara Character Sprite (Clean, Crisp & Cute - Zero AI morphing/glitches)
-    const isWiderFrame = frameImg.naturalWidth && frameImg.naturalWidth > 64;
-    if (isWiderFrame) {
-      if (p.currentAnim === "heal") {
-        // 176x128 frame: Capybara body is anchored at (86, 114)
-        // Scale by 0.54 so the body height matches the 64x64 idle sprite exactly
-        const s = p.scale * 0.54;
-        const sprW = frameImg.naturalWidth * s;
-        const sprH = frameImg.naturalHeight * s;
-        const sprX = -86 * s;
-        const sprY = -114 * s;
-        ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
-      } else {
-        // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
-        // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
-        const s = p.scale * 0.75;
-        const sprW = frameImg.naturalWidth * s;
-        const sprH = frameImg.naturalHeight * s;
-        const sprX = -44 * s;
-        const sprY = -88 * s;
-        ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
-      }
-    } else {
-      ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
+    if (!p.blackHoleSprite) {
+      this.renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now);
     }
 
-    // Dynamic Skill Facial Expressions on Capybara (Matching authentic reference frames)
-    if (p.skillExpression) {
+    // Layer 2: Render Capybara Character Sprite (Clean, Crisp & Cute - Zero AI morphing/glitches)
+    if (p.blackHoleSprite && p.blackHoleSprite.complete) {
+      const spr = p.blackHoleSprite;
+      const ox = (p.blackHoleOx !== undefined ? p.blackHoleOx : -spr.naturalWidth / 2);
+      const oy = (p.blackHoleOy !== undefined ? p.blackHoleOy : -spr.naturalHeight);
+      ctx.drawImage(spr, ox, oy);
+    } else {
+      const isWiderFrame = frameImg.naturalWidth && frameImg.naturalWidth > 64;
+      if (isWiderFrame) {
+        if (p.currentAnim === "heal") {
+          // 176x128 frame: Capybara body is anchored at (86, 114)
+          // Scale by 0.54 so the body height matches the 64x64 idle sprite exactly
+          const s = p.scale * 0.54;
+          const sprW = frameImg.naturalWidth * s;
+          const sprH = frameImg.naturalHeight * s;
+          const sprX = -86 * s;
+          const sprY = -114 * s;
+          ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
+        } else {
+          // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
+          // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
+          const s = p.scale * 0.75;
+          const sprW = frameImg.naturalWidth * s;
+          const sprH = frameImg.naturalHeight * s;
+          const sprX = -44 * s;
+          const sprY = -88 * s;
+          ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
+        }
+      } else {
+        ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
+      }
+    }
+
+    if (!p.blackHoleSprite) {
+      // Dynamic Skill Facial Expressions on Capybara (Matching authentic reference frames)
+      if (p.skillExpression) {
       const eyeX = drawW * 0.12;
       const eyeY = -drawH * 0.62;
 
@@ -1808,6 +1842,7 @@ class StageRenderer {
 
     // Layer 3: Render In-Front Skill Attachments (Halo, Dragon Head, Shields, Grimoire, Weapons, Cyclones)
     this.renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now);
+    }
 
     ctx.restore();
 
@@ -2828,6 +2863,52 @@ class StageRenderer {
     this.skillCombatEffects.push({
       startTime: performance.now(),
       duration: duration,
+      update: (progress) => {
+        // Dynamic authentic Capybara sprite poses from master artwork
+        if (this.blackHoleCapySprites) {
+          if (progress < 0.08) {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f01_idle;
+            this.playerState.blackHoleOx = -48;
+            this.playerState.blackHoleOy = -82;
+          } else if (progress < 0.16) {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f02_awaken;
+            this.playerState.blackHoleOx = -62;
+            this.playerState.blackHoleOy = -100;
+          } else if (progress < 0.25) {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f03_charge;
+            this.playerState.blackHoleOx = -64;
+            this.playerState.blackHoleOy = -100;
+          } else if (progress < 0.35) {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f04_slash;
+            this.playerState.blackHoleOx = -55;
+            this.playerState.blackHoleOy = -88;
+          } else if (progress < 0.48) {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f06_cast;
+            this.playerState.blackHoleOx = -46;
+            this.playerState.blackHoleOy = -78;
+          } else if (progress < 0.70) {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f07_push;
+            this.playerState.blackHoleOx = -46;
+            this.playerState.blackHoleOy = -80;
+          } else if (progress < 0.86) {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f08_recover;
+            this.playerState.blackHoleOx = -44;
+            this.playerState.blackHoleOy = -80;
+          } else if (progress < 0.94) {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f10_absorb;
+            this.playerState.blackHoleOx = -85;
+            this.playerState.blackHoleOy = -104;
+          } else if (progress < 0.98) {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f11_relief;
+            this.playerState.blackHoleOx = -60;
+            this.playerState.blackHoleOy = -95;
+          } else {
+            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f12_idle2;
+            this.playerState.blackHoleOx = -55;
+            this.playerState.blackHoleOy = -95;
+          }
+        }
+
         // Dynamic Capybara facial expression & crystal sword action matching 12-frame reference art
         if (progress >= 0.08 && progress < 0.25) {
           this.playerState.skillExpression = "void_eye"; // Frames 2 & 3: Void Awaken & Gravity Charge
@@ -3195,6 +3276,7 @@ class StageRenderer {
       onComplete: () => {
         this.playerState.skillExpression = null;
         this.playerState.swordAction = null;
+        this.playerState.blackHoleSprite = null;
         this.setPlayerAnim("idle", true);
         if (onComplete) onComplete();
       }
