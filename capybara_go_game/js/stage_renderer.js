@@ -1919,8 +1919,26 @@ class StageRenderer {
       ctx.restore();
     }
 
-    // 4. Mythic: Black Hole (Cosmic Gravitational Singularity Floating Behind/Above)
+    // 4. Mythic: Black Hole (Cosmic Gravitational Singularity & Teal Quiver Strapped to Back)
     if (hasSkill("black_hole") || hasSkill("black hole")) {
+      // Teal Quiver with arrows strapped to back (matching reference image)
+      ctx.save();
+      ctx.translate(-drawW * 0.18, -drawH * 0.50);
+      ctx.rotate(-0.4);
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 1.2;
+      ctx.fillRect(-3, -12, 6, 20);
+      ctx.fillStyle = "#06b6d4";
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(-2, -12); ctx.lineTo(-4, -18); ctx.lineTo(-1, -15); ctx.closePath();
+      ctx.moveTo(1, -12); ctx.lineTo(3, -20); ctx.lineTo(1, -16); ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
       ctx.save();
       const bhBob = Math.sin(now * 0.002) * 3;
       ctx.translate(-drawW * 0.28, -drawH - 6 + bhBob);
@@ -2381,6 +2399,52 @@ class StageRenderer {
       });
       ctx.restore();
     }
+
+    // 12. Mythic: Black Hole (Cosmic Crystal Sword held in front paw)
+    if (hasSkill("black_hole") || hasSkill("black hole")) {
+      ctx.save();
+      const swBob = Math.sin(now * 0.003) * 2;
+      ctx.translate(drawW * 0.30, -drawH * 0.38 + swBob);
+      ctx.rotate(0.35);
+
+      ctx.shadowColor = "#a855f7";
+      ctx.shadowBlur = 12;
+
+      // Hilt
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(-1.5, 6, 3, 7);
+      ctx.fillRect(-5, 4, 10, 2.5);
+
+      // Broad Crystal Blade
+      const bGrad = ctx.createLinearGradient(0, -22, 0, 4);
+      bGrad.addColorStop(0, "#ffffff");
+      bGrad.addColorStop(0.2, "#e9d5ff");
+      bGrad.addColorStop(0.6, "#a855f7");
+      bGrad.addColorStop(1, "#581c87");
+      ctx.fillStyle = bGrad;
+      ctx.strokeStyle = "#c084fc";
+      ctx.lineWidth = 1.4;
+
+      ctx.beginPath();
+      ctx.moveTo(0, -24);
+      ctx.lineTo(4, -18);
+      ctx.lineTo(4, 4);
+      ctx.lineTo(-4, 4);
+      ctx.lineTo(-4, -18);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Sharp white center spine line
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(0, -21);
+      ctx.lineTo(0, 3);
+      ctx.stroke();
+
+      ctx.restore();
+    }
   }
 
   // --- Dynamic Skill Combat Animations (Meteor Strike, Dragon Roar, Singularity, etc.) ---
@@ -2617,6 +2681,41 @@ class StageRenderer {
         ctx.fillRect(-20, -20, this.width + 40, this.height + 40);
         ctx.restore();
 
+        // Frame 4: Vertical Jagged Neon-Purple Dimensional Rift Crack at launch origin
+        if (p < 0.22) {
+          const riftAlpha = Math.sin((p / 0.22) * Math.PI);
+          ctx.save();
+          ctx.translate(startX, startY);
+          ctx.shadowColor = "#d946ef";
+          ctx.shadowBlur = 20;
+          ctx.fillStyle = "rgba(10, 2, 24, 0.9)";
+          ctx.strokeStyle = "#d946ef";
+          ctx.lineWidth = 3.0;
+          ctx.beginPath();
+          ctx.moveTo(0, -42 * riftAlpha);
+          ctx.lineTo(10 * riftAlpha, -22 * riftAlpha);
+          ctx.lineTo(5 * riftAlpha, -6 * riftAlpha);
+          ctx.lineTo(12 * riftAlpha, 10 * riftAlpha);
+          ctx.lineTo(0, 42 * riftAlpha);
+          ctx.lineTo(-10 * riftAlpha, 14 * riftAlpha);
+          ctx.lineTo(-5 * riftAlpha, -8 * riftAlpha);
+          ctx.lineTo(-11 * riftAlpha, -20 * riftAlpha);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          // Blinding White Core
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(0, -36 * riftAlpha);
+          ctx.lineTo(3 * riftAlpha, -14 * riftAlpha);
+          ctx.lineTo(-2 * riftAlpha, 6 * riftAlpha);
+          ctx.lineTo(0, 36 * riftAlpha);
+          ctx.stroke();
+          ctx.restore();
+        }
+
         // 2. Flying Cosmic Singularity Comet Trail (while in flight)
         if (p < 0.22) {
           ctx.save();
@@ -2676,6 +2775,19 @@ class StageRenderer {
               ctx.arc(0, 0, Math.max(3, 42 * vortexScale * (0.4 + a * 0.2)), a * 1.5, a * 1.5 + Math.PI);
               ctx.stroke();
             }
+            ctx.restore();
+
+            // Frame 7: 3D Inclined Outer Gravitational Lensing Ring
+            ctx.save();
+            ctx.scale(1, 0.42);
+            ctx.rotate(-now * 0.005);
+            ctx.strokeStyle = "rgba(192, 132, 252, 0.85)";
+            ctx.lineWidth = 2.4 * vortexScale;
+            ctx.shadowColor = "#38bdf8";
+            ctx.shadowBlur = 18;
+            ctx.beginPath();
+            ctx.arc(0, 0, 68 * vortexScale, 0, Math.PI * 2);
+            ctx.stroke();
             ctx.restore();
 
             // Crackling Void Lightning Arcs
@@ -2801,7 +2913,26 @@ class StageRenderer {
           ctx.restore();
         }
 
-        ctx.restore();
+        ctx.restore(); // currHoleX, currHoleY
+
+        // Frame 10: Cosmic Stardust Ribbon Stream returning from enemy to Capybara's sword
+        if (p >= 0.82 && p < 0.99) {
+          const streamT = (p - 0.82) / 0.17;
+          const fadeAlpha = Math.sin(streamT * Math.PI);
+          ctx.save();
+          ctx.strokeStyle = `rgba(217, 70, 239, ${fadeAlpha * 0.85})`;
+          ctx.lineWidth = 3.2;
+          ctx.shadowColor = "#c084fc";
+          ctx.shadowBlur = 18;
+          for (let i = 0; i < 4; i++) {
+            const sy = finalHoleY + (i - 1.5) * 12;
+            ctx.beginPath();
+            ctx.moveTo(finalHoleX - 10, sy);
+            ctx.quadraticCurveTo((startX + finalHoleX) / 2, this.groundY - 60 + i * 5, startX + 15, startY);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
       },
       onComplete: () => {
         this.setPlayerAnim("idle", true);
