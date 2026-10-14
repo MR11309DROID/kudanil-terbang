@@ -361,6 +361,11 @@ class UIManager {
 
     if (btnClaim) {
       btnClaim.addEventListener("click", () => {
+        if (!this._selectedChestSkill) {
+          this.showToast("Please tap to select 1 skill first!");
+          return;
+        }
+
         Sound.playSfx("confirm");
         if (modal) {
           modal.style.display = "none";
@@ -376,22 +381,22 @@ class UIManager {
           this.engine.renderer.removeTreasureChest();
         }
 
+        // Apply ONLY THE SINGLE CHOSEN SKILL to the run!
+        const run = Character.activeRun;
+        const chosen = this._selectedChestSkill;
+        if (run && chosen) {
+          if (!run.skills.some(owned => owned.id === chosen.id)) {
+            run.skills.push(chosen);
+          }
+          this.showToast(`[${chosen.name}] Added!`);
+          this._selectedChestSkill = null;
+        }
+
         // Update any chest event card in the feed
         const feedCardRows = document.querySelectorAll(".chest-event-card .card-striped-bottom-row");
         feedCardRows.forEach(row => {
-          row.innerHTML = `<div class="event-choice-resolved">✨ <span class="highlight-blue">Treasure Claimed!</span></div>`;
+          row.innerHTML = `<div class="event-choice-resolved">✨ <span class="highlight-blue">${chosen ? chosen.name : 'Treasure'} Claimed!</span></div>`;
         });
-
-        // Apply skill rewards to run
-        const run = Character.activeRun;
-        if (run && this._pendingChestSkills) {
-          this._pendingChestSkills.forEach(sk => {
-            if (!run.skills.some(owned => owned.id === sk.id)) {
-              run.skills.push(sk);
-            }
-          });
-          this._pendingChestSkills = null;
-        }
 
         // Heal 25% HP with real-time smooth animation (Matches Video 0:02 "Restore 20-25% HP")
         if (run && run.currentHp < run.maxHp) {
@@ -406,6 +411,7 @@ class UIManager {
         }
 
         this.renderStageFloatingHeader();
+        this.renderAdventureScreen();
         Character.save();
 
         if (this._onChestClaimedCallback) {
@@ -422,61 +428,85 @@ class UIManager {
 
   populateChestCards() {
     const container = document.getElementById("treasure-cards-container");
+    const btnClaim = document.getElementById("btn-treasure-claim");
     if (!container) return;
     container.innerHTML = "";
 
-    // 3 Authentic skills matching Video Project 2 Frame 08 & 09
-    const defaultSkills = [
-      {
-        id: 101,
-        name: "Revive",
-        rarity: "mythic",
-        tagText: "👑 Mythic",
-        tagClass: "tag-mythic",
-        icon: "assets/skills/skill_016.png",
-        displayIcon: "🪦",
-        desc: "Revive after your first death with 50% HP. Effective once per run.",
-        reviveOnce: true
-      },
-      {
-        id: 102,
-        name: "Rage Combo",
-        rarity: "legendary",
-        tagText: "🔥 Legendary",
-        tagClass: "tag-legendary",
-        icon: "assets/skills/skill_022.png",
-        displayIcon: "🔥",
-        desc: "Rage Skill can be cast 2 times. DMG +35%.",
-        rageBoost: 0.5,
-        atkBonus: 0.35
-      },
-      {
-        id: 103,
-        name: "Combo Spirit",
-        rarity: "epic",
-        tagText: "⚔️ Epic",
-        tagClass: "tag-epic",
-        icon: "assets/skills/skill_011.png",
-        displayIcon: "⚔️",
-        desc: "Combo Rate +15%, can combo up to 2 times. ATK +20%.",
-        critBonus: 0.15,
-        atkBonus: 0.20
+    this._selectedChestSkill = null;
+    if (btnClaim) {
+      btnClaim.disabled = true;
+      btnClaim.textContent = "Select a Skill";
+    }
+
+    const run = Character.activeRun;
+    const ownedIds = (run && run.skills) ? run.skills.map(s => s.id) : [];
+
+    // 1. Mythic Skills Pool (Guaranteed 1 Exclusive Mythic variant in every Golden Chest!)
+    const allMythics = GameData.skills.filter(s => s.rarity === "mythic");
+    const unownedMythics = allMythics.filter(s => !ownedIds.includes(s.id));
+    const mythicPool = unownedMythics.length > 0 ? unownedMythics : allMythics;
+    const pickedMythic = mythicPool[Math.floor(Math.random() * mythicPool.length)];
+
+    // 2. High-tier Adventure Skills Pool (Legendary, Epic, Rare variants)
+    const allHighTier = GameData.skills.filter(s => s.rarity !== "mythic" && (s.rarity === "legendary" || s.rarity === "epic" || s.rarity === "rare"));
+    const unownedHighTier = allHighTier.filter(s => !ownedIds.includes(s.id));
+    const highTierPool = unownedHighTier.length >= 2 ? unownedHighTier : allHighTier;
+
+    // Pick 2 unique high-tier skills
+    const shuffledOthers = [...highTierPool].sort(() => 0.5 - Math.random());
+    const pickedOthers = [];
+    for (const sk of shuffledOthers) {
+      if (pickedOthers.length >= 2) break;
+      if (sk.id !== pickedMythic.id && !pickedOthers.some(o => o.id === sk.id)) {
+        pickedOthers.push(sk);
       }
-    ];
+    }
 
-    this._pendingChestSkills = defaultSkills;
+    // Combine 3 distinct cards (1 Mythic + 2 High-Tier)
+    const candidates = [pickedMythic, ...pickedOthers];
+    candidates.sort((a, b) => {
+      const order = { mythic: 0, legendary: 1, epic: 2, rare: 3, uncommon: 4, common: 5 };
+      return (order[a.rarity] || 9) - (order[b.rarity] || 9);
+    });
 
-    defaultSkills.forEach((sk, idx) => {
+    this._currentChestOfferedCards = candidates;
+
+    candidates.forEach((sk, idx) => {
       const card = document.createElement("div");
       card.className = "treasure-skill-card";
+
+      const tagClass = `tag-${sk.rarity || 'epic'}`;
+      const tagText = sk.rarity === 'mythic' 
+        ? '👑 Mythic' 
+        : sk.rarity === 'legendary' 
+          ? '🔥 Legendary' 
+          : sk.rarity === 'epic' 
+            ? '⚔️ Epic' 
+            : `★ ${sk.rarity.toUpperCase()}`;
+
       card.innerHTML = `
-        <span class="treasure-card-tag ${sk.tagClass}">${sk.tagText}</span>
+        <span class="treasure-card-tag ${tagClass}">${tagText}</span>
+        <span class="treasure-card-check">✔</span>
         <div class="treasure-card-icon">
           <img src="${sk.icon}" alt="${sk.name}" style="width: 28px; height: 28px; object-fit: contain;">
         </div>
         <h4 class="treasure-card-title">${sk.name}</h4>
         <p class="treasure-card-desc">${sk.desc}</p>
       `;
+
+      // Allow selecting ONLY ONE skill
+      card.addEventListener("click", () => {
+        Sound.playSfx("click");
+        container.querySelectorAll(".treasure-skill-card").forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+        this._selectedChestSkill = sk;
+
+        if (btnClaim) {
+          btnClaim.disabled = false;
+          btnClaim.textContent = `Claim ${sk.name} ✨`;
+        }
+      });
+
       container.appendChild(card);
 
       // Staggered slide up emergence from chest
@@ -501,6 +531,13 @@ class UIManager {
     const modal = document.getElementById("modal-treasure-chest");
     const findPhase = document.getElementById("treasure-phase-find");
     const openPhase = document.getElementById("treasure-phase-open");
+    const btnClaim = document.getElementById("btn-treasure-claim");
+
+    this._selectedChestSkill = null;
+    if (btnClaim) {
+      btnClaim.disabled = true;
+      btnClaim.textContent = "Select a Skill";
+    }
 
     if (findPhase) findPhase.style.display = "flex";
     if (openPhase) openPhase.style.display = "none";

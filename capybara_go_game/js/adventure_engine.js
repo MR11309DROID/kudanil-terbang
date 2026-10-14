@@ -363,7 +363,11 @@ class AdventureEngine {
 
   offerSkillCards(onSelectedCallback) {
     const run = Character.activeRun;
-    const available = GameData.skills.filter(s => !run.skills.some(owned => owned.id === s.id));
+    const available = GameData.skills.filter(s => 
+      !run.skills.some(owned => owned.id === s.id) && 
+      s.rarity !== "mythic" && 
+      !s.isChestExclusive
+    );
     
     // If hero hasn't chosen any skill yet this run, offer the 3 iconic authentic skills matching Image 1
     let candidates = null;

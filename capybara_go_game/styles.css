@@ -4249,6 +4249,32 @@ body {
   font-weight: 900;
   border-radius: 24px;
   box-shadow: 0 5px 0 #92400e, 0 8px 18px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+}
+
+.btn-treasure-claim-action:disabled {
+  opacity: 0.55;
+  filter: grayscale(0.5);
+  cursor: not-allowed;
+  box-shadow: 0 4px 0 #4b5563;
+  background: linear-gradient(180deg, #9ca3af 0%, #6b7280 100%);
+  animation: none;
+}
+
+.treasure-choose-subtitle {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fef08a;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  margin: -10px 0 14px 0;
+  letter-spacing: 0.5px;
+  animation: subtitlePulse 2s ease-in-out infinite;
+}
+
+@keyframes subtitlePulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
 }
 
 @keyframes btnPulseGlow {
@@ -4300,7 +4326,44 @@ body {
   box-shadow: 0 4px 0 #3d1702, 0 8px 16px rgba(0, 0, 0, 0.35);
   transform: translateY(35px) scale(0.9);
   opacity: 0;
-  transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.35s ease;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.35s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.treasure-skill-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: #f59e0b;
+}
+
+.treasure-skill-card.selected {
+  border-color: #f59e0b;
+  border-width: 3px;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.85), 0 5px 0 #b45309;
+  transform: translateY(-4px) scale(1.035);
+}
+
+.treasure-card-check {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background: #16a34a;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+.treasure-skill-card.selected .treasure-card-check {
+  display: flex;
 }
 
 .treasure-skill-card.revealed {

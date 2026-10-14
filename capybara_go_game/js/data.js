@@ -179,7 +179,36 @@ const GameData = {
     { id: 40, name: "King's Mandate", icon: "assets/skills/skill_040.png", rarity: "legendary", badgeVal: "+100%", desc: "Double all gold and gem drops. +35% ATK and +35% DEF.", type: "legendary", goldBonus: 1.0, gemBonus: 1.0, atkBonus: 0.35, defBonus: 0.35 },
     { id: 41, name: "Critical Recovery", icon: "assets/skills/skill_003.png", badge: "assets/skills/badge_crit_recovery.svg", rarity: "common", badgeVal: "30%", desc: "At <30% HP for the 1st time, restore 10% HP each round for 3 rounds.", type: "defense" },
     { id: 42, name: "Critical Frenzy", icon: "assets/skills/skill_005.png", badge: "assets/skills/badge_crit_frenzy.svg", rarity: "common", badgeVal: "50%", desc: "At <50% HP, ATK, DEF ↑ ↑ .", type: "stat" },
-    { id: 43, name: "Swift Revenge", icon: "assets/skills/skill_007.png", badge: "assets/skills/badge_swift_revenge.svg", rarity: "common", badgeVal: "100%", desc: "Round 1 Counter Rate +100%.", type: "passive" }
+    { id: 43, name: "Swift Revenge", icon: "assets/skills/skill_007.png", badge: "assets/skills/badge_swift_revenge.svg", rarity: "common", badgeVal: "100%", desc: "Round 1 Counter Rate +100%.", type: "passive" },
+
+    // Additional Adventure Skill Variants (44 - 60)
+    { id: 44, name: "Thunder Surge", icon: "assets/skills/skill_044.png", rarity: "rare", badgeVal: "+30%", desc: "Every 4 turns, shock all enemies for 180% ATK damage.", type: "element", procEvery: 4, dmgMult: 1.8, effect: "thunder" },
+    { id: 45, name: "Dragon Roar", icon: "assets/skills/skill_045.png", rarity: "epic", badgeVal: "+40%", desc: "ATK +40%, but take 10% more damage from attacks.", type: "stat", atkBonus: 0.40 },
+    { id: 46, name: "Radiant Blessing", icon: "assets/skills/skill_046.png", rarity: "rare", badgeVal: "10%", desc: "Heal 10% Max HP whenever enemy casts a skill.", type: "passive", turnRegen: 0.08 },
+    { id: 47, name: "Shadow Cloak", icon: "assets/skills/skill_047.png", rarity: "epic", badgeVal: "+25%", desc: "Dodge chance +25%. Dodged attacks heal 10% Max HP.", type: "defense", dodgeBonus: 0.25 },
+    { id: 48, name: "Venom Burst", icon: "assets/skills/skill_048.png", rarity: "uncommon", badgeVal: "20%", desc: "Apply 20% ATK poison on every attack.", type: "element", dotPoison: 0.20 },
+    { id: 49, name: "Bladestorm", icon: "assets/skills/skill_049.png", rarity: "legendary", badgeVal: "4x", desc: "Attacks hit 4 times for 40% damage each. Crit Rate +15%.", type: "attack", multiHits: 4, hitDmgRatio: 0.40, critBonus: 0.15 },
+    { id: 50, name: "Fortress Will", icon: "assets/skills/skill_050.png", rarity: "rare", badgeVal: "+35", desc: "DEF +35. When below 40% HP, gain 30% damage reduction.", type: "defense", defBonus: 35, dmgReduction: 0.30 },
+    { id: 51, name: "Lightning Dash", icon: "assets/skills/skill_051.png", rarity: "uncommon", badgeVal: "+20%", desc: "Speed +20%. Deal 50% extra damage on your first attack.", type: "stat", speedBonus: 0.20, startCombatDmg: 0.50 },
+    { id: 52, name: "Flame Tempest", icon: "assets/skills/skill_052.png", rarity: "epic", badgeVal: "250%", desc: "Ultimate sets the battlefield ablaze for 250% fire damage.", type: "ultimate", ultMult: 2.5, dotBurn: 0.35 },
+    { id: 53, name: "Titan Grip", icon: "assets/skills/skill_053.png", rarity: "rare", badgeVal: "+30%", desc: "Crits deal +50% more damage. Max HP +20%.", type: "stat", critDmgBonus: 0.50, hpBonus: 0.20 },
+    { id: 54, name: "Divine Protection", icon: "assets/skills/skill_054.png", rarity: "legendary", badgeVal: "40%", desc: "Block the first fatal attack and gain a shield equal to 40% HP.", type: "defense", shieldRatio: 0.40 },
+    { id: 55, name: "Glacial Spike", icon: "assets/skills/skill_055.png", rarity: "rare", badgeVal: "30%", desc: "30% chance to freeze enemy for 1 turn upon hit.", type: "element", freezeChance: 0.30 },
+    { id: 56, name: "Greed Ring", icon: "assets/skills/skill_056.png", rarity: "common", badgeVal: "+50%", desc: "Gain +50% Gold from monsters and stages.", type: "utility", goldBonus: 0.50 },
+    { id: 57, name: "Survival Instinct", icon: "assets/skills/skill_057.png", rarity: "uncommon", badgeVal: "+20%", desc: "When below 50% HP, Dodge +20% and DEF +20.", type: "passive", dodgeBonus: 0.20, defBonus: 20 },
+    { id: 58, name: "Spirit Siphon", icon: "assets/skills/skill_058.png", rarity: "epic", badgeVal: "18%", desc: "Recover 18% of damage dealt as HP. Rage +15 per turn.", type: "passive", lifesteal: 0.18, rageBoost: 0.20 },
+    { id: 59, name: "Overpower", icon: "assets/skills/skill_059.png", rarity: "common", badgeVal: "+25%", desc: "ATK +25%.", type: "stat", atkBonus: 0.25 },
+    { id: 60, name: "Ancient Vigor", icon: "assets/skills/skill_060.png", rarity: "rare", badgeVal: "+35%", desc: "Max HP +35%. Restore 15% HP when battle starts.", type: "stat", hpBonus: 0.35, instantHeal: 50 },
+
+    // Exclusive Mythic Skills (Available ONLY inside Golden Chests)
+    { id: 101, name: "Phoenix Rebirth", icon: "assets/skills/skill_016.png", displayIcon: "🪦", rarity: "mythic", isChestExclusive: true, badgeVal: "75%", desc: "Revive once per run with 75% HP upon defeat. Gain immunity for 1 turn.", type: "mythic", reviveOnce: true, reviveHpRatio: 0.75 },
+    { id: 102, name: "Rage Overdrive", icon: "assets/skills/skill_022.png", displayIcon: "🔥", rarity: "mythic", isChestExclusive: true, badgeVal: "450%", desc: "Rage gain +60%. Ultimate damage +100% and hits twice!", type: "mythic", rageBoost: 0.60, ultMult: 4.5 },
+    { id: 103, name: "Omni Combo Blade", icon: "assets/skills/skill_011.png", displayIcon: "⚔️", rarity: "mythic", isChestExclusive: true, badgeVal: "60%", desc: "60% chance for a 3-hit combo attack! Crit Rate +25%, ATK +30%.", type: "mythic", doubleHitChance: 0.60, critBonus: 0.25, atkBonus: 0.30 },
+    { id: 104, name: "Celestial Judgement", icon: "assets/skills/skill_020.png", displayIcon: "☀️", rarity: "mythic", isChestExclusive: true, badgeVal: "350%", desc: "Every 2 turns, strike holy beams for 350% ATK damage and blind enemy.", type: "mythic", procEvery: 2, dmgMult: 3.5, effect: "thunder" },
+    { id: 105, name: "Immortal Aegis", icon: "assets/skills/skill_008.png", displayIcon: "🛡️", rarity: "mythic", isChestExclusive: true, badgeVal: "50%", desc: "Grant a divine shield equal to 50% Max HP every 3 turns. Reflects 40% damage.", type: "mythic", shieldInterval: 3, shieldRatio: 0.50, reflectRatio: 0.40 },
+    { id: 106, name: "Blood Lord Domain", icon: "assets/skills/skill_003.png", displayIcon: "🩸", rarity: "mythic", isChestExclusive: true, badgeVal: "35%", desc: "Lifesteal 35% of all damage dealt. Defeating an enemy restores 30% Max HP.", type: "mythic", lifesteal: 0.35, onKillHeal: 0.30, atkBonus: 0.25 },
+    { id: 107, name: "Capybara Monarch", icon: "assets/skills/skill_040.png", displayIcon: "👑", rarity: "mythic", isChestExclusive: true, badgeVal: "+150%", desc: "All stats +35%. Double Gold & Gems! Start combat with 150% blast.", type: "mythic", allStatsBonus: 0.35, atkBonus: 0.35, hpBonus: 0.35, defBonus: 35, goldBonus: 1.0, gemBonus: 1.0, startCombatDmg: 1.50 },
+    { id: 108, name: "Glacial Dragon Wrath", icon: "assets/skills/skill_006.png", displayIcon: "❄️", rarity: "mythic", isChestExclusive: true, badgeVal: "40%", desc: "40% chance to freeze enemy on attack. Attacks deal +60% bonus DMG to frozen foes.", type: "mythic", freezeChance: 0.40, atkBonus: 0.25 }
   ],
 
   // Equipment Database
