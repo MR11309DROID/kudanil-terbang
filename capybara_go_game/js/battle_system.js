@@ -158,12 +158,18 @@ class BattleSystem {
         const healAmt = Math.round(c.maxHp * sk.turnRegen);
         c.hp = Math.min(c.maxHp, c.hp + healAmt);
         if (sk.id === 204 || sk.key === "common_04_heal" || (sk.name && sk.name.toLowerCase().includes("heal"))) {
-          r.setPlayerAnim("heal", false);
-          Sound.playSfx("heal");
-          r.addVisualEffect("healRing", r.playerState.x, r.groundY - 30);
-          r.addMagicImpactSparks(r.playerState.x, r.groundY - 35, ["#4ade80", "#86efac", "#ffffff"]);
+          if (r.performPlayerHeal) {
+            r.performPlayerHeal(healAmt, null, this.speedMultiplier);
+          } else {
+            r.setPlayerAnim("heal", false);
+            Sound.playSfx("heal");
+            r.addVisualEffect("healRing", r.playerState.x, r.groundY - 30);
+            r.addMagicImpactSparks(r.playerState.x, r.groundY - 35, ["#4ade80", "#86efac", "#ffffff"]);
+            r.addFloatingText(healAmt, r.playerState.x, r.groundY - 50, "heal");
+          }
+        } else {
+          r.addFloatingText(healAmt, r.playerState.x, r.groundY - 50, "heal");
         }
-        r.addFloatingText(healAmt, r.playerState.x, r.groundY - 50, "heal");
         statChanged = true;
       }
       if (sk.shieldInterval && this.turnCount % sk.shieldInterval === 0) {

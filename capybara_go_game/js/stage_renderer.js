@@ -84,6 +84,12 @@ class StageRenderer {
     // Active Combat Skill Special Animations (Meteor, Dragon Breath, Lightning, Black Hole, etc.)
     this.skillCombatEffects = [];
 
+    // Global Cinematic Combat Impact (Screen Rumble, Anime Slash Speed Lines, Ground Fissures)
+    this.screenShake = 0;
+    this.screenShakeOffset = { x: 0, y: 0 };
+    this.slashSpeedLines = [];
+    this.groundSlashFissures = [];
+
     // Current Background Track
     this.currentBgPath = "assets/backgrounds/panoramas/village_road_bg.png";
 
@@ -412,6 +418,102 @@ class StageRenderer {
     this.projectiles.push(p);
   }
 
+  // --- Global Cinematic Combat FX (Screen Rumble, Anime Slash Speed Lines, Ground Fissure Scars) ---
+
+  triggerScreenShake(intensity = 1.0) {
+    this.screenShake = Math.max(this.screenShake, intensity);
+  }
+
+  triggerSlashSpeedLines(targetX, targetY, color = "#38bdf8") {
+    this.slashSpeedLines = [];
+    const count = 12;
+    for (let i = 0; i < count; i++) {
+      const angle = -0.38 + (Math.random() * 0.76 - 0.38);
+      const length = 140 + Math.random() * 160;
+      const dist = 30 + Math.random() * 80;
+      const side = (i % 2 === 0) ? 1 : -1;
+      const cx = targetX + Math.cos(angle) * dist * side + (Math.random() * 40 - 20);
+      const cy = targetY + Math.sin(angle) * dist * side + (Math.random() * 40 - 20);
+      this.slashSpeedLines.push({
+        x1: cx - Math.cos(angle) * (length / 2),
+        y1: cy - Math.sin(angle) * (length / 2),
+        x2: cx + Math.cos(angle) * (length / 2),
+        y2: cy + Math.sin(angle) * (length / 2),
+        lineWidth: Math.random() * 3.5 + 1.5,
+        alpha: 1.0,
+        color: color
+      });
+    }
+  }
+
+  addGroundSlashFissure(x, y, color = "#38bdf8") {
+    this.groundSlashFissures.push({
+      x, y,
+      maxLife: 0.65,
+      life: 0.65,
+      alpha: 1.0,
+      width: 95,
+      color: color
+    });
+  }
+
+  renderSlashSpeedLines(ctx) {
+    if (!this.slashSpeedLines || this.slashSpeedLines.length === 0) return;
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    for (const sl of this.slashSpeedLines) {
+      ctx.globalAlpha = Math.max(0, sl.alpha);
+      ctx.strokeStyle = sl.color;
+      ctx.shadowColor = sl.color;
+      ctx.shadowBlur = 14;
+      ctx.lineWidth = sl.lineWidth;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(sl.x1, sl.y1);
+      ctx.lineTo(sl.x2, sl.y2);
+      ctx.stroke();
+
+      // Blazing white hot core
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = Math.max(1, sl.lineWidth * 0.4);
+      ctx.beginPath();
+      ctx.moveTo(sl.x1, sl.y1);
+      ctx.lineTo(sl.x2, sl.y2);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  renderGroundSlashFissures(ctx) {
+    if (!this.groundSlashFissures || this.groundSlashFissures.length === 0) return;
+    ctx.save();
+    for (const gf of this.groundSlashFissures) {
+      ctx.save();
+      ctx.translate(gf.x, gf.y);
+      ctx.scale(1, 0.34); // 3D ground projection
+      ctx.globalAlpha = gf.alpha;
+      ctx.shadowColor = gf.color;
+      ctx.shadowBlur = 18;
+
+      // Outer crack glowing scar
+      ctx.strokeStyle = gf.color;
+      ctx.lineWidth = 5.5 * gf.alpha;
+      ctx.beginPath();
+      ctx.moveTo(-gf.width / 2, 0);
+      ctx.lineTo(-gf.width * 0.22, -6);
+      ctx.lineTo(gf.width * 0.12, 5);
+      ctx.lineTo(gf.width / 2, 0);
+      ctx.stroke();
+
+      // Sharp white core
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2.0 * gf.alpha;
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
   // --- Player Authentic 12-Frame Sword Slash Attack Action (3-Phase Sequence) ---
 
   performPlayerAttack(onHit, onComplete, speedMult = 1.0) {
@@ -463,9 +565,28 @@ class StageRenderer {
         setTimeout(() => {
           // Phase 2 (Frames 4-8): Peak Crescent Wave Slash Strike!
           Sound.playSfx("slash");
+          Sound.playSfx("attackHeavy");
 
-          // Subtle cartoon dust puff at feet on strike
-          this.addRunDustPuff(p.x - 8, this.groundY - 2, -0.8);
+          // Screen rumble & cinematic impact
+          this.triggerScreenShake(0.85);
+          this.triggerSlashSpeedLines(e.x, this.groundY - 30, "#38bdf8");
+          this.addGroundSlashFissure(e.x, this.groundY, "#38bdf8");
+
+          // Forward flying crescent energy shockwave bursting through enemy
+          this.launchSlashWave(p.x + 15, this.groundY - 35, e.x + 40, this.groundY - 35, false, null, speedMult * 1.35);
+
+          // Impact sparks & burst ring
+          this.addVisualEffect("critBurst", e.x, this.groundY - 35, 1.6);
+          this.addMagicImpactSparks(e.x, this.groundY - 35, ["#38bdf8", "#0ea5e9", "#7dd3fc", "#ffffff"]);
+          this.addRunDustPuff(p.x - 8, this.groundY - 2, -1.2);
+
+          // Enemy reaction: stagger, flash white, knockback
+          if (this.enemyState) {
+            this.enemyState.flashWhite = 0.9;
+            this.enemyState.shake = 2.4;
+            this.enemyState.knockback = 12;
+            setTimeout(() => { if (this.enemyState) this.enemyState.knockback = 0; }, 140 / speedMult);
+          }
 
           // Deliver impact hit to enemy (damage calculation, flash, sparks)
           if (onHit) onHit();
@@ -510,22 +631,179 @@ class StageRenderer {
     const p = this.playerState;
     this.setPlayerAnim("heal", false);
 
-    const castDuration = 380 / speedMult; // Frames 1-6 (Wind up, leaf focus, to peak burst dome)
-    const totalDuration = 820 / speedMult; // Full 12-frame loop
+    const castDuration = 360 / speedMult; // Frames 1-6
+    const totalDuration = 880 / speedMult; // Full 12-frame loop
+    let healed = false;
 
-    setTimeout(() => {
-      Sound.playSfx("heal");
-      this.addVisualEffect("healRing", p.x, this.groundY - 30);
-      this.addMagicImpactSparks(p.x, this.groundY - 35, ["#4ade80", "#86efac", "#bbf7d0", "#ffffff"]);
-      if (amount) {
-        this.addFloatingText(amount, p.x, this.groundY - 55, "heal");
+    // Trigger Epic Nature Combat Effect (Mandala, Emerald Sunbeam, Spiraling Leaves, Dome, + Symbols)
+    this.skillCombatEffects.push({
+      startTime: performance.now(),
+      duration: totalDuration,
+      update: (progress) => {
+        if (progress >= (castDuration / totalDuration) && !healed) {
+          healed = true;
+          Sound.playSfx("heal");
+          Sound.playSfx("magicBurst");
+          this.triggerScreenShake(0.35);
+          this.addVisualEffect("healRing", p.x, this.groundY - 28, 1.8);
+          this.addMagicImpactSparks(p.x, this.groundY - 35, ["#4ade80", "#86efac", "#bbf7d0", "#ffffff", "#fef08a"]);
+          if (amount) {
+            this.addFloatingText(amount, p.x, this.groundY - 60, "heal");
+          }
+        }
+      },
+      render: (ctx) => {
+        const now = performance.now();
+        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+        const prog = Math.min(1, elapsed / totalDuration);
+        const capyX = p.x;
+        const feetY = this.groundY;
+
+        // 1. Volumetric Ascending Emerald Sunbeam / Divine Pillar of Light
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        const beamPulse = Math.sin(prog * Math.PI);
+        const beamW = 60 * beamPulse;
+        const bGrad = ctx.createLinearGradient(0, 0, 0, feetY);
+        bGrad.addColorStop(0, "rgba(134, 239, 172, 0.45)");
+        bGrad.addColorStop(0.6, "rgba(74, 222, 128, 0.65)");
+        bGrad.addColorStop(1, "rgba(34, 197, 94, 0.0)");
+        ctx.fillStyle = bGrad;
+        ctx.fillRect(capyX - beamW / 2, 0, beamW, feetY);
+        ctx.restore();
+
+        // 2. 3D Concentric Nature Magic Mandala on the ground at feet
+        ctx.save();
+        ctx.translate(capyX, feetY + 1);
+        ctx.scale(1, 0.36); // 3D ground projection
+        const mandalaScale = Math.sin(prog * Math.PI);
+        ctx.shadowColor = "#4ade80";
+        ctx.shadowBlur = 18;
+
+        // Outer Runic Circle
+        ctx.save();
+        ctx.rotate(now * 0.0018);
+        ctx.strokeStyle = `rgba(74, 222, 128, ${0.85 * mandalaScale})`;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(0, 0, 52 * mandalaScale, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // 8 Golden Rune Nodes
+        ctx.fillStyle = "#fef08a";
+        for (let a = 0; a < 8; a++) {
+          const ang = (Math.PI / 4) * a;
+          ctx.beginPath();
+          ctx.arc(Math.cos(ang) * 52 * mandalaScale, Math.sin(ang) * 52 * mandalaScale, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // Inner 6-Petal Sacred Lotus
+        ctx.save();
+        ctx.rotate(-now * 0.0012);
+        ctx.fillStyle = `rgba(34, 197, 94, ${0.28 * mandalaScale})`;
+        ctx.strokeStyle = `rgba(134, 239, 172, ${0.9 * mandalaScale})`;
+        ctx.lineWidth = 1.8;
+        for (let pIdx = 0; pIdx < 6; pIdx++) {
+          const pAng = (Math.PI / 3) * pIdx;
+          ctx.beginPath();
+          ctx.ellipse(Math.cos(pAng) * 22 * mandalaScale, Math.sin(pAng) * 22 * mandalaScale, 18 * mandalaScale, 8 * mandalaScale, pAng, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+        ctx.restore();
+        ctx.restore();
+
+        // 3. Orbiting 3D Emerald Leaves spiraling upwards in a helix
+        ctx.save();
+        for (let l = 0; l < 8; l++) {
+          const lAngle = (l / 8) * Math.PI * 2 + (elapsed * 0.0045);
+          const lHeight = (elapsed * 0.075 + l * 12) % 75;
+          const lDist = 26 + Math.sin(lAngle * 2) * 6;
+          const lx = capyX + Math.cos(lAngle) * lDist;
+          const ly = feetY - lHeight;
+          const lAlpha = Math.sin((lHeight / 75) * Math.PI) * 0.9;
+
+          ctx.save();
+          ctx.translate(lx, ly);
+          ctx.rotate(lAngle + Math.PI / 4);
+          ctx.globalAlpha = Math.max(0, lAlpha);
+          ctx.fillStyle = "#22c55e";
+          ctx.strokeStyle = "#86efac";
+          ctx.lineWidth = 1.0;
+          ctx.shadowColor = "#4ade80";
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 6, 3, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
+        ctx.restore();
+
+        // 4. Ascending Floating Glowing Green-Gold "+" Cross Glyphs
+        ctx.save();
+        for (let c = 0; c < 5; c++) {
+          const cHeight = (elapsed * 0.065 + c * 18) % 80;
+          const cx = capyX + Math.sin(c * 1.8 + elapsed * 0.003) * 26;
+          const cy = feetY - 10 - cHeight;
+          const cAlpha = Math.sin((cHeight / 80) * Math.PI) * 0.95;
+
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.globalAlpha = Math.max(0, cAlpha);
+          ctx.shadowColor = "#4ade80";
+          ctx.shadowBlur = 10;
+          ctx.fillStyle = "#ffffff";
+          ctx.strokeStyle = "#22c55e";
+          ctx.lineWidth = 2.0;
+          const cw = 4.5;
+          const ch = 12;
+          ctx.fillRect(-cw / 2, -ch / 2, cw, ch);
+          ctx.strokeRect(-cw / 2, -ch / 2, cw, ch);
+          ctx.fillRect(-ch / 2, -cw / 2, ch, cw);
+          ctx.strokeRect(-ch / 2, -cw / 2, ch, cw);
+          ctx.restore();
+        }
+        ctx.restore();
+
+        // 5. Protective Healing Aura Dome: expands at frames 4-7, shrinks & absorbs at frame 8
+        ctx.save();
+        ctx.translate(capyX, feetY - 24);
+        let domeR = 0;
+        let domeA = 0;
+        if (prog <= 0.55) {
+          domeR = (prog / 0.55) * 44;
+          domeA = 0.45 * (prog / 0.55);
+        } else if (prog <= 0.75) {
+          const shrinkP = (prog - 0.55) / 0.20;
+          domeR = 44 * (1 - shrinkP);
+          domeA = 0.45 + shrinkP * 0.35;
+        }
+        if (domeR > 1) {
+          ctx.globalAlpha = domeA;
+          ctx.shadowColor = "#86efac";
+          ctx.shadowBlur = 18;
+          const domeGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, domeR);
+          domeGrad.addColorStop(0, "rgba(254, 240, 138, 0.7)");
+          domeGrad.addColorStop(0.5, "rgba(74, 222, 128, 0.45)");
+          domeGrad.addColorStop(1, "rgba(34, 197, 94, 0.15)");
+          ctx.fillStyle = domeGrad;
+          ctx.strokeStyle = "rgba(134, 239, 172, 0.9)";
+          ctx.lineWidth = 2.0;
+          ctx.beginPath();
+          ctx.arc(0, 0, domeR, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+        ctx.restore();
+      },
+      onComplete: () => {
+        this.setPlayerAnim("idle", true);
+        if (onComplete) onComplete();
       }
-    }, castDuration);
-
-    setTimeout(() => {
-      this.setPlayerAnim("idle", true);
-      if (onComplete) onComplete();
-    }, totalDuration);
+    });
   }
 
   // --- Player Ultimate Ranged Mega Slash Wave (Restored to Authentic Original Ranged Form) ---
@@ -999,11 +1277,46 @@ class StageRenderer {
         this.chestDustPuffs.splice(i, 1);
       }
     }
+
+    // Screen Rumble Decay
+    if (this.screenShake > 0) {
+      this.screenShake = Math.max(0, this.screenShake - dt * 3.8);
+      const mag = this.screenShake * 10;
+      this.screenShakeOffset.x = (Math.random() * 2 - 1) * mag;
+      this.screenShakeOffset.y = (Math.random() * 2 - 1) * mag;
+    } else {
+      this.screenShakeOffset.x = 0;
+      this.screenShakeOffset.y = 0;
+    }
+
+    // Update Slash Speed Lines
+    for (let i = this.slashSpeedLines.length - 1; i >= 0; i--) {
+      const sl = this.slashSpeedLines[i];
+      sl.alpha -= dt * 3.6;
+      if (sl.alpha <= 0) {
+        this.slashSpeedLines.splice(i, 1);
+      }
+    }
+
+    // Update Ground Slash Fissures
+    for (let i = this.groundSlashFissures.length - 1; i >= 0; i--) {
+      const gf = this.groundSlashFissures[i];
+      gf.life -= dt;
+      gf.alpha = Math.max(0, gf.life / gf.maxLife);
+      if (gf.life <= 0) {
+        this.groundSlashFissures.splice(i, 1);
+      }
+    }
   }
 
   render() {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.width, this.height);
+
+    ctx.save();
+    if (this.screenShakeOffset.x !== 0 || this.screenShakeOffset.y !== 0) {
+      ctx.translate(this.screenShakeOffset.x, this.screenShakeOffset.y);
+    }
 
     // ================= 1. DEEP SKY BASE GRADIENT =================
     const skyGrad = ctx.createLinearGradient(0, 0, 0, this.height);
@@ -1037,6 +1350,7 @@ class StageRenderer {
 
     // ================= 6.5 DRAW SPRINT DUST TRAILS & CARTOON IMPACT SKID (Under Actors) =================
     this.renderDustEffects(ctx);
+    this.renderGroundSlashFissures(ctx);
 
     // ================= 7. DRAW ACTORS (WITH 3D SHADOWS) =================
     this.renderPlayer();
@@ -1093,6 +1407,11 @@ class StageRenderer {
 
     // ================= 10. FOREGROUND 3D DEPTH FOLIAGE & BOKEH =================
     this.renderForeground3D(ctx);
+
+    // ================= 11. ANIME SPEED SLASH LINES (OVERLAY LAYER) =================
+    this.renderSlashSpeedLines(ctx);
+
+    ctx.restore();
   }
 
   // --- 100% Seamless Continuous Background Engine (Village & Authentic Sandy Road) ---
@@ -2201,7 +2520,7 @@ class StageRenderer {
   }
 
   launchBlackHole(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
-    const duration = 550 / speedMult;
+    const duration = 880 / speedMult;
     let hitTriggered = false;
 
     // Trigger authentic 12-frame Black Hole animation on Capybara
@@ -2210,19 +2529,48 @@ class StageRenderer {
     // Frame 07 Event Horizon vortex sprite from the preloaded sheet
     const vortexImg = this.playerAnimations["black_hole"] ? this.playerAnimations["black_hole"][6] : null;
 
+    // 8 Meteorite Asteroid Boulders with randomized shapes and orbits
+    const meteors = [];
+    for (let i = 0; i < 8; i++) {
+      meteors.push({
+        startAngle: (i / 8) * Math.PI * 2 + (Math.random() * 0.4 - 0.2),
+        baseRadius: 65 + Math.random() * 35,
+        size: Math.random() * 5 + 4,
+        rotSpeed: Math.random() * 0.1 + 0.05,
+        jagged: [Math.random() * 0.4 + 0.8, Math.random() * 0.4 + 0.8, Math.random() * 0.4 + 0.8, Math.random() * 0.4 + 0.8]
+      });
+    }
+
+    // Dynamic Lightning Arcs
+    const lightningArcs = [];
+    for (let i = 0; i < 5; i++) {
+      lightningArcs.push({
+        angle: Math.random() * Math.PI * 2,
+        length: Math.random() * 40 + 35,
+        branches: [Math.random() * 0.5 - 0.25, Math.random() * 0.5 - 0.25, Math.random() * 0.5 - 0.25]
+      });
+    }
+
     this.skillCombatEffects.push({
       startTime: performance.now(),
-      duration: duration + 200,
+      duration: duration,
       update: (progress) => {
-        if (progress >= 0.65 && !hitTriggered) {
+        // Supernova Implosion / Detonation at progress 0.68
+        if (progress >= 0.68 && !hitTriggered) {
           hitTriggered = true;
           Sound.playSfx("magicBurst");
+          Sound.playSfx("bossRoar");
+          Sound.playSfx("attackHeavy");
+          this.triggerScreenShake(2.2);
           if (this.enemyState) {
             this.enemyState.flashWhite = 1.0;
-            this.enemyState.shake = 2.4;
+            this.enemyState.shake = 3.8;
+            this.enemyState.knockback = 18;
+            setTimeout(() => { if (this.enemyState) this.enemyState.knockback = 0; }, 200 / speedMult);
           }
-          this.addVisualEffect("critBurst", targetX, targetY - 25, 2.5);
-          this.addMagicImpactSparks(targetX, targetY - 25, ["#c084fc", "#9333ea", "#38bdf8", "#000000", "#ffffff"]);
+          this.addVisualEffect("critBurst", targetX, targetY - 25, 3.0);
+          this.addMagicImpactSparks(targetX, targetY - 25, ["#c084fc", "#9333ea", "#38bdf8", "#fde047", "#ffffff", "#030712"]);
+          this.addGroundSlashFissure(targetX, this.groundY, "#a855f7");
           if (onHit) onHit();
         }
       },
@@ -2231,41 +2579,173 @@ class StageRenderer {
         const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
         const p = Math.min(1, elapsed / duration);
 
+        // 1. Cosmic Void Nebula Screen Vignette
+        ctx.save();
+        const dimAlpha = Math.sin(p * Math.PI) * 0.72;
+        const screenGrad = ctx.createRadialGradient(targetX, targetY - 25, 20, targetX, targetY - 25, this.width * 0.85);
+        screenGrad.addColorStop(0, `rgba(12, 4, 28, ${dimAlpha * 0.95})`);
+        screenGrad.addColorStop(0.5, `rgba(8, 2, 20, ${dimAlpha * 0.7})`);
+        screenGrad.addColorStop(1, `rgba(2, 0, 8, ${dimAlpha * 0.4})`);
+        ctx.fillStyle = screenGrad;
+        ctx.fillRect(-20, -20, this.width + 40, this.height + 40);
+        ctx.restore();
+
         ctx.save();
         ctx.translate(targetX, targetY - 25);
-        
-        // Draw the authentic Event Horizon vortex sprite at the enemy
-        if (vortexImg && vortexImg.complete) {
-          const vScale = Math.sin(p * Math.PI) * 0.72;
-          const vW = vortexImg.naturalWidth * vScale;
-          const vH = vortexImg.naturalHeight * vScale;
-          ctx.drawImage(vortexImg, -vW / 2, -vH / 2, vW, vH);
-        } else {
-          const radius = Math.sin(p * Math.PI) * 36;
+
+        if (p < 0.68) {
+          // PHASE 1 & 2: Gravitational Pull & Accretion Vortex
+          const growth = Math.min(1, p / 0.35);
+          const vortexScale = growth * (1 - Math.pow(Math.max(0, (p - 0.55) / 0.13), 2) * 0.6);
+
+          // Glowing Outer Accretion Rings
           ctx.save();
-          ctx.rotate(now * 0.01);
-          ctx.strokeStyle = "rgba(192, 132, 252, 0.85)";
-          ctx.lineWidth = 2.5;
+          ctx.rotate(now * 0.008);
           ctx.shadowColor = "#a855f7";
-          ctx.shadowBlur = 24;
-          for (let a = 0; a < 3; a++) {
+          ctx.shadowBlur = 28;
+
+          // Accretion halo gradient
+          const accGrad = ctx.createRadialGradient(0, 0, 10 * vortexScale, 0, 0, 50 * vortexScale);
+          accGrad.addColorStop(0, "rgba(255, 255, 255, 0.9)");
+          accGrad.addColorStop(0.2, "rgba(192, 132, 252, 0.85)");
+          accGrad.addColorStop(0.6, "rgba(99, 102, 241, 0.5)");
+          accGrad.addColorStop(1, "rgba(168, 85, 247, 0)");
+          ctx.fillStyle = accGrad;
+          ctx.beginPath();
+          ctx.arc(0, 0, 50 * vortexScale, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Swirling Accretion Stream Curves
+          ctx.strokeStyle = "rgba(192, 132, 252, 0.85)";
+          ctx.lineWidth = 2.5 * vortexScale;
+          for (let a = 0; a < 4; a++) {
             ctx.beginPath();
-            ctx.arc(0, 0, Math.max(2, radius * (0.4 + a * 0.3)), a * 1.5, a * 1.5 + Math.PI);
+            ctx.arc(0, 0, Math.max(3, 40 * vortexScale * (0.4 + a * 0.2)), a * 1.5, a * 1.5 + Math.PI);
             ctx.stroke();
           }
           ctx.restore();
 
-          ctx.fillStyle = "#030712";
-          ctx.beginPath();
-          ctx.arc(0, 0, Math.max(2, radius * 0.55), 0, Math.PI * 2);
-          ctx.fill();
+          // Crackling Void Lightning Arcs
+          ctx.save();
+          ctx.strokeStyle = "#e9d5ff";
+          ctx.shadowColor = "#c084fc";
+          ctx.shadowBlur = 12;
+          ctx.lineWidth = 1.8;
+          for (const arc of lightningArcs) {
+            const arcP = (now * 0.01 + arc.angle) % (Math.PI * 2);
+            const arcLen = arc.length * vortexScale;
+            ctx.beginPath();
+            ctx.moveTo(Math.cos(arcP) * 12 * vortexScale, Math.sin(arcP) * 12 * vortexScale);
+            let lx = Math.cos(arcP) * 12 * vortexScale;
+            let ly = Math.sin(arcP) * 12 * vortexScale;
+            for (let b = 0; b < 3; b++) {
+              const segLen = arcLen * 0.33;
+              lx += Math.cos(arcP + arc.branches[b]) * segLen;
+              ly += Math.sin(arcP + arc.branches[b]) * segLen;
+              ctx.lineTo(lx, ly);
+            }
+            ctx.stroke();
+          }
+          ctx.restore();
+
+          // Authentic Event Horizon Sprite (or Procedural Singularity)
+          if (vortexImg && vortexImg.complete) {
+            ctx.save();
+            ctx.rotate(now * 0.005);
+            const vW = vortexImg.naturalWidth * 0.75 * vortexScale;
+            const vH = vortexImg.naturalHeight * 0.75 * vortexScale;
+            ctx.drawImage(vortexImg, -vW / 2, -vH / 2, vW, vH);
+            ctx.restore();
+          } else {
+            // Pure Black Hole Core with Neon Rim
+            ctx.fillStyle = "#020205";
+            ctx.beginPath();
+            ctx.arc(0, 0, Math.max(2, 22 * vortexScale), 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2.0;
+            ctx.stroke();
+          }
+
+          // 8 Spiraling Meteor Asteroid Boulders pulled into Singularity
+          const pullP = Math.min(1, Math.max(0, (p - 0.1) / 0.58));
+          ctx.save();
+          for (let m = 0; m < meteors.length; m++) {
+            const b = meteors[m];
+            const currDist = b.baseRadius * (1 - pullP * 0.88);
+            const currAng = b.startAngle + pullP * 12;
+            const mx = Math.cos(currAng) * currDist;
+            const my = Math.sin(currAng) * (currDist * 0.65); // 3D perspective ellipse
+
+            // Violet Plasma Tail behind meteor
+            ctx.strokeStyle = "rgba(192, 132, 252, 0.65)";
+            ctx.lineWidth = 2.0;
+            ctx.beginPath();
+            ctx.moveTo(mx, my);
+            ctx.lineTo(mx - Math.cos(currAng) * 14, my - Math.sin(currAng) * 8);
+            ctx.stroke();
+
+            // Meteor Boulder Polygon
+            ctx.fillStyle = "#475569";
+            ctx.strokeStyle = "#94a3b8";
+            ctx.lineWidth = 1.0;
+            ctx.beginPath();
+            for (let j = 0; j < 4; j++) {
+              const jAng = (j / 4) * Math.PI * 2 + now * b.rotSpeed;
+              const jDist = b.size * b.jagged[j];
+              const px = mx + Math.cos(jAng) * jDist;
+              const py = my + Math.sin(jAng) * jDist;
+              if (j === 0) ctx.moveTo(px, py);
+              else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+          }
+          ctx.restore();
+
+        } else {
+          // PHASE 3 & 4: SUPERNOVA EXPLOSION & COSMIC SHOCKWAVE
+          const expP = (p - 0.68) / 0.32;
+          const fadeAlpha = Math.max(0, 1 - expP);
+
+          // Blinding White/Gold Core Flash
+          if (expP < 0.4) {
+            const flashAlpha = 1 - (expP / 0.4);
+            ctx.save();
+            ctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha})`;
+            ctx.shadowColor = "#fde047";
+            ctx.shadowBlur = 30;
+            ctx.beginPath();
+            ctx.arc(0, 0, 48 * flashAlpha, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+
+          // Cosmic Expanding Shockwave Rings
+          ctx.save();
+          ctx.globalAlpha = fadeAlpha;
           ctx.strokeStyle = "#c084fc";
-          ctx.lineWidth = 2.0;
+          ctx.lineWidth = 5 * fadeAlpha;
+          ctx.shadowColor = "#38bdf8";
+          ctx.shadowBlur = 22;
+          ctx.beginPath();
+          ctx.arc(0, 0, expP * 125, 0, Math.PI * 2);
           ctx.stroke();
+
+          // Inner shockwave
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 2.5 * fadeAlpha;
+          ctx.beginPath();
+          ctx.arc(0, 0, expP * 90, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
         }
+
         ctx.restore();
       },
       onComplete: () => {
+        this.setPlayerAnim("idle", true);
         if (onComplete) onComplete();
       }
     });
