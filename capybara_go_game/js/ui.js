@@ -2259,36 +2259,177 @@ class UIManager {
     });
   }
 
-  // Chests Gacha Screen
+  // Authentic Chests Gacha & Shop Screen
   renderChestsScreen() {
-    const btnWood = document.getElementById("btn-open-wood-chest");
-    const btnRoyal = document.getElementById("btn-open-royal-chest");
+    if (!Character.gachaPity) {
+      Character.gachaPity = {
+        legendaryEpic: 10,
+        legendarySEpic: 60,
+        adventurer: 9,
+        hero: 10,
+        adventurerAds: 3,
+        heroAds: 1
+      };
+    }
 
-    if (btnWood) {
-      btnWood.onclick = () => {
+    // 1. Update Pity Counters
+    const elLegEpic = document.getElementById("pity-leg-epic");
+    if (elLegEpic) elLegEpic.textContent = Character.gachaPity.legendaryEpic;
+
+    const elLegSEpic = document.getElementById("pity-leg-sepic");
+    if (elLegSEpic) elLegSEpic.textContent = Character.gachaPity.legendarySEpic;
+
+    const elCrateAdv = document.getElementById("pity-crate-adv");
+    if (elCrateAdv) elCrateAdv.textContent = Character.gachaPity.adventurer;
+
+    const elCrateHero = document.getElementById("pity-crate-hero");
+    if (elCrateHero) elCrateHero.textContent = Character.gachaPity.hero;
+
+    // 2. Update Badges
+    const badgeAdvAd = document.getElementById("badge-adv-ad");
+    if (badgeAdvAd) badgeAdvAd.textContent = Character.gachaPity.adventurerAds ?? 3;
+
+    const badgeHeroAd = document.getElementById("badge-hero-ad");
+    if (badgeHeroAd) badgeHeroAd.textContent = Character.gachaPity.heroAds ?? 1;
+
+    // 3. Update Hero Key Label
+    const heroKeyLabel = document.getElementById("hero-key-label");
+    if (heroKeyLabel) {
+      heroKeyLabel.textContent = `${Character.keys || 0}/1`;
+    }
+
+    // 4. Legendary Chest Action Buttons
+    const btnLeg1 = document.getElementById("btn-gacha-leg-1");
+    if (btnLeg1) {
+      btnLeg1.onclick = () => {
         Sound.playSfx("click");
-        const res = Gacha.openChest("wood");
+        const res = Gacha.openLegendary(1);
         if (res && res.success) {
-          this.showGachaResultsModal(res.items, "Wooden Chest");
+          this.showGachaResultsModal(res.items, "Legendary Treasure Chest");
           this.renderHeader();
+          this.renderChestsScreen();
         } else if (res && !res.success) {
           this.showToast(res.msg);
         }
       };
     }
 
-    if (btnRoyal) {
-      btnRoyal.onclick = () => {
+    const btnLeg10 = document.getElementById("btn-gacha-leg-10");
+    if (btnLeg10) {
+      btnLeg10.onclick = () => {
         Sound.playSfx("click");
-        const res = Gacha.openChest("royal");
+        const res = Gacha.openLegendary(10);
         if (res && res.success) {
-          this.showGachaResultsModal(res.items, "Royal Chest");
+          this.showGachaResultsModal(res.items, "Legendary Treasure Chest (10x)");
           this.renderHeader();
+          this.renderChestsScreen();
         } else if (res && !res.success) {
           this.showToast(res.msg);
         }
       };
     }
+
+    // 5. Adventurer Crate Buttons
+    const btnAdvAd = document.getElementById("btn-gacha-adv-ad");
+    if (btnAdvAd) {
+      btnAdvAd.onclick = () => {
+        Sound.playSfx("click");
+        const res = Gacha.openAdventurer(true);
+        if (res && res.success) {
+          this.showGachaResultsModal(res.items, "Adventurer's Supply Crate (AD)");
+          this.renderHeader();
+          this.renderChestsScreen();
+        } else if (res && !res.success) {
+          this.showToast(res.msg);
+        }
+      };
+    }
+
+    const btnAdvGem = document.getElementById("btn-gacha-adv-gem");
+    if (btnAdvGem) {
+      btnAdvGem.onclick = () => {
+        Sound.playSfx("click");
+        const res = Gacha.openAdventurer(false);
+        if (res && res.success) {
+          this.showGachaResultsModal(res.items, "Adventurer's Supply Crate");
+          this.renderHeader();
+          this.renderChestsScreen();
+        } else if (res && !res.success) {
+          this.showToast(res.msg);
+        }
+      };
+    }
+
+    // 6. Hero Crate Buttons
+    const btnHeroAd = document.getElementById("btn-gacha-hero-ad");
+    if (btnHeroAd) {
+      btnHeroAd.onclick = () => {
+        Sound.playSfx("click");
+        const res = Gacha.openHero(true);
+        if (res && res.success) {
+          this.showGachaResultsModal(res.items, "Hero's Supply Crate (AD)");
+          this.renderHeader();
+          this.renderChestsScreen();
+        } else if (res && !res.success) {
+          this.showToast(res.msg);
+        }
+      };
+    }
+
+    const btnHeroKey = document.getElementById("btn-gacha-hero-key");
+    if (btnHeroKey) {
+      btnHeroKey.onclick = () => {
+        Sound.playSfx("click");
+        const res = Gacha.openHero(false);
+        if (res && res.success) {
+          this.showGachaResultsModal(res.items, "Hero's Supply Crate");
+          this.renderHeader();
+          this.renderChestsScreen();
+        } else if (res && !res.success) {
+          this.showToast(res.msg);
+        }
+      };
+    }
+
+    // 7. Info / Probability Buttons
+    document.querySelectorAll(".gacha-help-circle-btn").forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        Sound.playSfx("click");
+        const type = btn.dataset.info;
+        if (type === "legendary") {
+          this.showToast("Legendary Rates: S-Epic 5%, Epic 25%, Rare 45%, Great 25%. Guaranteed S-Epic in 60 pulls!");
+        } else if (type === "hero") {
+          this.showToast("Hero Rates: Epic 20%, Rare 40%, Great 40%. Guaranteed Epic in 10 pulls!");
+        } else {
+          this.showToast("Adventurer Rates: Great 45%, Common 55%. Guaranteed Great in 9 pulls!");
+        }
+      };
+    });
+
+    // 8. Sub-nav Shelf Buttons
+    document.querySelectorAll(".shop-subtab-btn").forEach(btn => {
+      btn.onclick = () => {
+        Sound.playSfx("click");
+        document.querySelectorAll(".shop-subtab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const tab = btn.dataset.subtab;
+        if (tab === "value_pack") {
+          this.showToast("🎁 Daily Value Pack: 100 Gems & 500 Gold claimed!");
+          Character.gems += 100;
+          Character.gold += 500;
+          Character.save();
+          this.renderHeader();
+        } else if (tab === "pack_shop") {
+          this.showToast("🎒 Pack Shop: Adventure Bundle available soon!");
+        } else if (tab === "top_up") {
+          this.showToast("💎 Top Up: Daily Free +50 Gems claimed!");
+          Character.gems += 50;
+          Character.save();
+          this.renderHeader();
+        }
+      };
+    });
   }
 
   showGachaResultsModal(items, chestName) {

@@ -599,37 +599,181 @@
         </div>
       </div>
 
-      <!-- ================= TAB 4: CHESTS / GACHA ================= -->
+      <!-- ================= TAB 4: CHESTS / GACHA (SHOP) ================= -->
       <div id="tab-chests" class="tab-page">
-        <div class="chests-panel">
-          <h2 class="panel-title">Treasure Vault</h2>
-          <p class="panel-subtitle">Open mystery chests to obtain powerful gear and precious relics!</p>
-          
-          <div class="chests-container">
-            <!-- Wooden Chest -->
-            <div class="chest-card wood-chest">
-              <div class="chest-card-img-wrap">
-                <img src="assets/items/loot/loot_003.png" alt="Wooden Chest" class="chest-card-img">
-              </div>
-              <h3 class="chest-name">Wooden Mystery Chest</h3>
-              <p class="chest-desc">Drops 2 items (Common, Uncommon, Rare)</p>
-              <button id="btn-open-wood-chest" class="btn-game btn-blue">
-                Open (1 🗝️ or 150 🪙)
-              </button>
+        <div class="shop-gacha-screen">
+
+          <!-- 1. EVENT CHEST SECTION -->
+          <section class="gacha-section">
+            <div class="gacha-wood-header">
+              <span class="wood-rivet wood-rivet-left"></span>
+              <span class="wood-header-title">Event Chest</span>
+              <span class="wood-rivet wood-rivet-right"></span>
             </div>
 
-            <!-- Royal Golden Chest -->
-            <div class="chest-card royal-chest">
-              <div class="chest-card-img-wrap">
-                <img src="assets/items/loot/loot_007.png" alt="Royal Chest" class="chest-card-img glow-pulse">
+            <!-- Legendary Treasure Chest Card -->
+            <div class="gacha-card-legendary">
+              <div class="legendary-header-row">
+                <span class="legendary-title">Legendary Treasure Chest</span>
+                <button class="gacha-help-circle-btn" data-info="legendary" title="Rates & Info">?</button>
               </div>
-              <h3 class="chest-name">Royal Golden Chest</h3>
-              <p class="chest-desc">Drops 3 items (High chance for Epic & Legendary!)</p>
-              <button id="btn-open-royal-chest" class="btn-game btn-gold">
-                Open (60 💎)
-              </button>
+
+              <!-- Content Row: Left Chest + Right Speech Bubble & Buttons -->
+              <div class="legendary-content-grid">
+                <!-- Left: Big Chest with Pity lines -->
+                <div class="legendary-chest-wrap">
+                  <div class="legendary-sunburst-glow"></div>
+                  <img src="assets/ui/gacha/chest_legendary.svg" alt="Legendary Treasure Chest" class="legendary-chest-art">
+                  <div class="legendary-pity-block">
+                    <div class="pity-line">Get <span class="rarity-highlight-epic">Epic</span> equipment in <span id="pity-leg-epic" class="pity-count">10</span> open(s)</div>
+                    <div class="pity-line">Get <span class="rarity-highlight-sepic">S-Epic</span> in <span id="pity-leg-sepic" class="pity-count">60</span> open(s)</div>
+                  </div>
+                </div>
+
+                <!-- Right: Speech Bubble & Action Buttons -->
+                <div class="legendary-right-col">
+                  <div class="gacha-speech-bubble bubble-legendary">
+                    <span class="bubble-arrow-left"></span>
+                    May give <span class="rarity-highlight-sepic">S-Grade Epic</span> equipment
+                  </div>
+
+                  <div class="legendary-buttons-row">
+                    <!-- Get 1 Button -->
+                    <button id="btn-gacha-leg-1" class="btn-gacha-action btn-gold-amber">
+                      <span class="btn-gacha-label">Get 1</span>
+                      <span class="btn-gacha-cost">
+                        <span class="cost-gem-icon">💎</span> 320
+                      </span>
+                    </button>
+
+                    <!-- Get 10 Button -->
+                    <button id="btn-gacha-leg-10" class="btn-gacha-action btn-lime-green">
+                      <span class="btn-gacha-label">Get 10</span>
+                      <span class="btn-gacha-cost">
+                        <span class="cost-gem-icon">💎</span> 2980
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
+          </section>
+
+          <!-- 2. EQUIPMENT CHEST SECTION -->
+          <section class="gacha-section">
+            <div class="gacha-wood-header">
+              <span class="wood-rivet wood-rivet-left"></span>
+              <span class="wood-header-title">Equipment Chest</span>
+              <span class="wood-rivet wood-rivet-right"></span>
+            </div>
+
+            <!-- Two Column Crates Grid -->
+            <div class="gacha-crates-grid">
+              
+              <!-- LEFT CRATE: Adventurer's Supply Crate -->
+              <div class="gacha-crate-card crate-adventurer">
+                <div class="crate-header-row">
+                  <span class="crate-title">Adventurer's Supply Crate</span>
+                  <button class="gacha-help-circle-btn" data-info="adventurer" title="Rates & Info">?</button>
+                </div>
+
+                <!-- Speech Bubble -->
+                <div class="gacha-speech-bubble bubble-adventurer">
+                  <span class="bubble-arrow-down"></span>
+                  Includes <span class="rarity-text-common">Common</span> or <span class="rarity-text-great">Great</span> equipment
+                </div>
+
+                <!-- Crate Graphic -->
+                <div class="crate-img-wrap">
+                  <img src="assets/ui/gacha/crate_adventurer.svg" alt="Adventurer's Supply Crate" class="crate-chest-art">
+                </div>
+
+                <!-- Pity Text -->
+                <div class="crate-pity-text">
+                  Get <span class="rarity-highlight-great">Great</span> equipment in <span id="pity-crate-adv" class="pity-count">9</span> open(s)
+                </div>
+
+                <!-- Free Timer Badge -->
+                <div class="crate-timer-badge">
+                  <span class="timer-stopwatch-icon">⏱</span>
+                  <span id="adv-crate-timer">Free in 05:46:37</span>
+                </div>
+
+                <!-- Action Buttons Row -->
+                <div class="crate-action-buttons-row">
+                  <!-- AD Button with badge 3 -->
+                  <button id="btn-gacha-adv-ad" class="btn-crate-ad" title="Watch AD for Free Chest">
+                    <span class="btn-ad-icon">▶ AD</span>
+                    <span id="badge-adv-ad" class="badge-ad-count">3</span>
+                  </button>
+
+                  <!-- Gem 80 Button -->
+                  <button id="btn-gacha-adv-gem" class="btn-crate-main btn-lime-green">
+                    <span class="cost-gem-icon">💎</span> 80
+                  </button>
+                </div>
+              </div>
+
+              <!-- RIGHT CRATE: Hero's Supply Crate -->
+              <div class="gacha-crate-card crate-hero">
+                <div class="crate-header-row">
+                  <span class="crate-title">Hero's Supply Crate</span>
+                  <button class="gacha-help-circle-btn" data-info="hero" title="Rates & Info">?</button>
+                </div>
+
+                <!-- Speech Bubble -->
+                <div class="gacha-speech-bubble bubble-hero">
+                  <span class="bubble-arrow-down"></span>
+                  Includes <span class="rarity-text-great">Great</span>, <span class="rarity-text-rare">Rare</span>, or <span class="rarity-text-epic">Epic</span> equipment
+                </div>
+
+                <!-- Crate Graphic -->
+                <div class="crate-img-wrap">
+                  <img src="assets/ui/gacha/crate_hero.svg" alt="Hero's Supply Crate" class="crate-chest-art">
+                </div>
+
+                <!-- Pity Text -->
+                <div class="crate-pity-text">
+                  Get <span class="rarity-highlight-epic">Epic</span> equipment in <span id="pity-crate-hero" class="pity-count">10</span> open(s)
+                </div>
+
+                <!-- Action Buttons Row -->
+                <div class="crate-action-buttons-row hero-buttons-offset">
+                  <!-- AD Button with badge 1 -->
+                  <button id="btn-gacha-hero-ad" class="btn-crate-ad" title="Watch AD for Free Chest">
+                    <span class="btn-ad-icon">▶ AD</span>
+                    <span id="badge-hero-ad" class="badge-ad-count">1</span>
+                  </button>
+
+                  <!-- Key Button (0/1 or key count) -->
+                  <button id="btn-gacha-hero-key" class="btn-crate-main btn-lime-green">
+                    <img src="assets/ui/gacha/icon_key_gold.svg" class="btn-key-icon" alt="Key">
+                    <span id="hero-key-label">0/1</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- 3. SUB-NAV TABS BAR (Above Bottom Dock) -->
+          <div class="shop-subnav-shelf">
+            <button class="shop-subtab-btn active" data-subtab="equipment">
+              <span class="subtab-label">Equipment Shop</span>
+              <span class="subtab-notif">!</span>
+            </button>
+            <button class="shop-subtab-btn" data-subtab="value_pack">
+              <span class="subtab-label">Value Pack</span>
+              <span class="subtab-notif">!</span>
+            </button>
+            <button class="shop-subtab-btn" data-subtab="pack_shop">
+              <span class="subtab-label">Pack Shop</span>
+            </button>
+            <button class="shop-subtab-btn" data-subtab="top_up">
+              <span class="subtab-label">Top Up</span>
+            </button>
           </div>
+
         </div>
       </div>
 

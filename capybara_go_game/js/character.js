@@ -48,6 +48,16 @@ class CharacterManager {
     this.unlockedChapters = 1;
     this.bestiary = {};
 
+    // Gacha Pity & Daily Free / AD tracking
+    this.gachaPity = {
+      legendaryEpic: 10,
+      legendarySEpic: 60,
+      adventurer: 9,
+      hero: 10,
+      adventurerAds: 3,
+      heroAds: 1
+    };
+
     // Current Run State (Day 1 - 60)
     this.activeRun = null;
 
@@ -303,6 +313,7 @@ class CharacterManager {
       talents: this.talents,
       unlockedChapters: this.unlockedChapters,
       bestiary: this.bestiary,
+      gachaPity: this.gachaPity,
       activeRun: this.activeRun
     };
     try {
@@ -330,6 +341,16 @@ class CharacterManager {
       if (s.talents) this.talents = s.talents;
       if (s.unlockedChapters !== undefined) this.unlockedChapters = s.unlockedChapters;
       if (s.bestiary) this.bestiary = s.bestiary;
+      if (s.gachaPity) {
+        this.gachaPity = Object.assign({
+          legendaryEpic: 10,
+          legendarySEpic: 60,
+          adventurer: 9,
+          hero: 10,
+          adventurerAds: 3,
+          heroAds: 1
+        }, s.gachaPity);
+      }
       if (s.activeRun) {
         this.activeRun = s.activeRun;
         // Fix any saved skills that might have emoji string icons instead of file paths

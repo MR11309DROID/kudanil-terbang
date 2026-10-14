@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 180" width="220" height="180">
+  <defs>
+    <!-- Gold Gradient -->
+    <linearGradient id="legGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="20%" stop-color="#fde047"/>
+      <stop offset="60%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#a16207"/>
+    </linearGradient>
+    <linearGradient id="legGoldBright" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <!-- Royal Purple Velvet -->
+    <linearGradient id="legPurpleVelvet" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="35%" stop-color="#9333ea"/>
+      <stop offset="80%" stop-color="#6b21a8"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
+    </linearGradient>
+    <!-- Magenta Jewel -->
+    <linearGradient id="legJewelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fbcfe8"/>
+      <stop offset="30%" stop-color="#f472b6"/>
+      <stop offset="70%" stop-color="#d946ef"/>
+      <stop offset="100%" stop-color="#a21caf"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ground Drop Shadow -->
+  <ellipse cx="110" cy="166" rx="85" ry="12" fill="rgba(15, 23, 42, 0.42)"/>
+
+  <!-- Left/Right Side Gold Handles -->
+  <rect x="22" y="104" width="16" height="26" rx="5" fill="url(#legGoldGrad)" stroke="#18181b" stroke-width="4"/>
+  <rect x="25" y="109" width="9" height="16" rx="2.5" fill="#a16207"/>
+  <rect x="182" y="104" width="16" height="26" rx="5" fill="url(#legGoldGrad)" stroke="#18181b" stroke-width="4"/>
+  <rect x="186" y="109" width="9" height="16" rx="2.5" fill="#a16207"/>
+
+  <!-- Main Box Purple Velvet Body -->
+  <rect x="36" y="94" width="148" height="66" rx="9" fill="url(#legPurpleVelvet)" stroke="#18181b" stroke-width="5" stroke-linejoin="round"/>
+
+  <!-- Upper Arched Lid Background (Purple Center) -->
+  <path d="M 36,94 L 36,58 C 36,34 58,24 110,24 C 162,24 184,34 184,58 L 184,94 Z" 
+        fill="url(#legPurpleVelvet)" stroke="#18181b" stroke-width="5" stroke-linejoin="round"/>
+
+  <!-- Lid Left Curved Gold Arch Trim -->
+  <path d="M 34,94 L 34,58 C 34,34 50,25 76,25 C 85,25 83,42 74,58 L 74,94 Z" 
+        fill="url(#legGoldGrad)" stroke="#18181b" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M 48,90 L 48,58 C 48,42 58,34 68,33" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.75"/>
+
+  <!-- Lid Right Curved Gold Arch Trim -->
+  <path d="M 186,94 L 186,58 C 186,34 170,25 144,25 C 135,25 137,42 146,58 L 146,94 Z" 
+        fill="url(#legGoldGrad)" stroke="#18181b" stroke-width="4.5" stroke-linejoin="round"/>
+
+  <!-- Upper Lid Golden Studs -->
+  <circle cx="55" cy="54" r="7" fill="url(#legGoldBright)" stroke="#18181b" stroke-width="3"/>
+  <circle cx="53" cy="52" r="2.2" fill="#ffffff"/>
+  <circle cx="165" cy="54" r="7" fill="url(#legGoldBright)" stroke="#18181b" stroke-width="3"/>
+  <circle cx="163" cy="52" r="2.2" fill="#ffffff"/>
+
+  <!-- Middle Horizontal Dividing Gold Belt -->
+  <rect x="30" y="86" width="160" height="22" rx="6" fill="url(#legGoldGrad)" stroke="#18181b" stroke-width="4.5" stroke-linejoin="round"/>
+  <line x1="34" y1="90" x2="186" y2="90" stroke="#ffffff" stroke-width="2.2" opacity="0.8"/>
+  <line x1="34" y1="104" x2="186" y2="104" stroke="#713f12" stroke-width="1.8" opacity="0.6"/>
+
+  <!-- Lower Box Vertical Footing Gold Brackets -->
+  <rect x="32" y="122" width="38" height="42" rx="7" fill="url(#legGoldGrad)" stroke="#18181b" stroke-width="4.5" stroke-linejoin="round"/>
+  <circle cx="51" cy="144" r="7.5" fill="url(#legGoldBright)" stroke="#18181b" stroke-width="3.2"/>
+  <circle cx="49" cy="142" r="2.2" fill="#ffffff"/>
+
+  <rect x="150" y="122" width="38" height="42" rx="7" fill="url(#legGoldGrad)" stroke="#18181b" stroke-width="4.5" stroke-linejoin="round"/>
+  <circle cx="169" cy="144" r="7.5" fill="url(#legGoldBright)" stroke="#18181b" stroke-width="3.2"/>
+  <circle cx="167" cy="142" r="2.2" fill="#ffffff"/>
+
+  <!-- Center Clasp: Royal Shield Crest with Magenta Diamond Gem -->
+  <!-- Outer Gold Shield -->
+  <path d="M 88,78 L 132,78 L 136,108 C 136,128 110,138 110,138 C 110,138 84,128 84,108 Z" 
+        fill="url(#legGoldGrad)" stroke="#18181b" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Inner Magenta Jewel Shield -->
+  <path d="M 94,84 L 126,84 L 129,106 C 129,122 110,130 110,130 C 110,130 91,122 91,106 Z" 
+        fill="url(#legJewelGrad)" stroke="#18181b" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Diamond Jewel Glint -->
+  <polygon points="110,88 122,102 110,118 98,102" fill="#ffffff" opacity="0.45"/>
+  <circle cx="106" cy="96" r="3" fill="#ffffff" opacity="0.9"/>
+</svg>

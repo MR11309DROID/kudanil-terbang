@@ -3483,71 +3483,562 @@ body {
   color: #94a3b8;
 }
 
-/* ================= CHESTS TAB ================= */
-.chests-panel {
-  padding: 16px;
+/* ================= CHESTS / GACHA SHOP TAB (AUTHENTIC CAPYBARA GO STYLE) ================= */
+.shop-gacha-screen {
+  padding: 12px 14px 60px 14px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  align-items: center;
+  gap: 14px;
+  background: #18151f;
+  box-sizing: border-box;
+  min-height: 100%;
 }
 
-.chests-container {
+.gacha-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   width: 100%;
 }
 
-.chest-card {
-  background: #1e293b;
-  border: 2px solid #334155;
+/* Authentic Wooden Header Plank with Metallic Rivets */
+.gacha-wood-header {
+  position: relative;
+  width: 100%;
+  height: 36px;
+  background: linear-gradient(180deg, #6c401f 0%, #522d14 50%, #3a1d0b 100%);
+  border: 3px solid #1a0d06;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.22), 0 3px 6px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.wood-header-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: #fffbeb;
+  text-shadow: 0 2px 0 #180d05, 0 3px 4px rgba(0, 0, 0, 0.85);
+  letter-spacing: 0.5px;
+}
+
+.wood-rivet {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #94a3b8 0%, #475569 60%, #1e293b 100%);
+  border: 1.5px solid #0f172a;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45);
+}
+
+.wood-rivet-left { left: 12px; }
+.wood-rivet-right { right: 12px; }
+
+/* 1. Legendary Treasure Chest Card (Event Chest) */
+.gacha-card-legendary {
+  position: relative;
+  width: 100%;
+  background: radial-gradient(circle at 32% 50%, #fb923c 0%, #f97316 45%, #ea580c 80%, #c2410c 100%);
+  border: 3.5px solid #18181b;
   border-radius: 16px;
-  padding: 16px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25), 0 6px 0 #7c2d12, 0 10px 20px rgba(0, 0, 0, 0.55);
+  padding: 12px 14px 14px 14px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.legendary-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.legendary-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: -1.5px -1.5px 0 #111827, 1.5px -1.5px 0 #111827, -1.5px 1.5px 0 #111827, 1.5px 1.5px 0 #111827, 0 3px 4px rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.3px;
+}
+
+.gacha-help-circle-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #3f3f46;
+  border: 2px solid #18181b;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #18181b;
+  padding: 0;
+  transition: transform 0.08s ease;
+}
+
+.gacha-help-circle-btn:active {
+  transform: translateY(2px);
+}
+
+.legendary-content-grid {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.legendary-chest-wrap {
+  flex: 0 0 135px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.legendary-sunburst-glow {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 110px;
+  background: radial-gradient(circle, rgba(254, 240, 138, 0.42) 0%, rgba(251, 146, 60, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.legendary-chest-art {
+  width: 122px;
+  height: 98px;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.45));
+}
+
+.legendary-pity-block {
+  position: relative;
+  z-index: 1;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+}
+
+.pity-line {
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000000;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.pity-count {
+  font-weight: 900;
+  color: #fef08a;
+}
+
+.rarity-highlight-epic {
+  color: #d8b4fe;
+  font-weight: 900;
+}
+
+.rarity-highlight-sepic {
+  color: #fb7185;
+  font-weight: 900;
+}
+
+.rarity-highlight-great {
+  color: #4ade80;
+  font-weight: 900;
+}
+
+.legendary-right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: space-between;
+  height: 100%;
+  min-width: 0;
+}
+
+.gacha-speech-bubble {
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #ffffff;
+  position: relative;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+  line-height: 1.35;
+}
+
+.bubble-legendary {
+  background: #1c100a;
+  border: 2px solid #381e10;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.bubble-arrow-left {
+  position: absolute;
+  left: -8px;
+  top: 16px;
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-right: 8px solid #1c100a;
+}
+
+.legendary-buttons-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.btn-gacha-action {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 4px;
+  border: 3px solid #18181b;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.08s ease, filter 0.12s ease;
+}
+
+.btn-gacha-action:active {
+  transform: translateY(3px);
+  box-shadow: none !important;
+}
+
+.btn-gold-amber {
+  background: linear-gradient(180deg, #fef08a 0%, #facc15 35%, #eab308 70%, #ca8a04 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 5px 0 #78350f, 0 7px 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn-lime-green {
+  background: linear-gradient(180deg, #bef264 0%, #a3e635 35%, #84cc16 70%, #65a30d 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 5px 0 #365314, 0 7px 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn-gacha-label {
+  font-size: 14px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: -1px -1px 0 #18181b, 1px -1px 0 #18181b, -1px 1px 0 #18181b, 1px 1px 0 #18181b;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.btn-gacha-cost {
+  font-size: 13px;
+  font-weight: 900;
+  color: #1c1917;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1;
+}
+
+.cost-gem-icon {
+  font-size: 13px;
+}
+
+/* 2. Equipment Chests (Two Column Grid) */
+.gacha-crates-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.gacha-crate-card {
+  position: relative;
+  border: 3.5px solid #18181b;
+  border-radius: 16px;
+  padding: 10px 8px 12px 8px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 8px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+  overflow: hidden;
 }
 
-.royal-chest {
-  border-color: #f59e0b;
-  background: radial-gradient(circle at top, #2d2618 0%, #1e293b 100%);
+.crate-adventurer {
+  background: radial-gradient(circle at 50% 50%, #38bdf8 0%, #06b6d4 50%, #0891b2 85%, #0e7490 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 6px 0 #155e75, 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
-.chest-card-img-wrap {
+.crate-hero {
+  background: radial-gradient(circle at 50% 50%, #c084fc 0%, #9333ea 50%, #7e22ce 85%, #581c87 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 6px 0 #4c1d95, 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.crate-header-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.crate-title {
+  font-size: 12.5px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: -1px -1px 0 #111827, 1px -1px 0 #111827, -1px 1px 0 #111827, 1px 1px 0 #111827;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.bubble-adventurer {
+  background: #082f49;
+  border: 2px solid #0369a1;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.25;
+}
+
+.bubble-hero {
+  background: #2e1065;
+  border: 2px solid #6b21a8;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.25;
+}
+
+.bubble-arrow-down {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid currentColor;
+}
+.bubble-adventurer .bubble-arrow-down { color: #082f49; }
+.bubble-hero .bubble-arrow-down { color: #2e1065; }
+
+.crate-img-wrap {
+  width: 100%;
   height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 4px 0 6px 0;
 }
 
-.chest-card-img {
-  width: 72px;
-  height: 72px;
+.crate-chest-art {
+  max-width: 95px;
+  max-height: 75px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+}
+
+.crate-pity-text {
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.crate-timer-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 900;
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1.5px solid #0f172a;
+  border-radius: 12px;
+  padding: 3px 8px;
+  margin-bottom: 8px;
+  width: 92%;
+  box-sizing: border-box;
+}
+
+.timer-stopwatch-icon {
+  font-size: 12px;
+}
+
+.crate-action-buttons-row {
+  width: 100%;
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  margin-top: auto;
+}
+
+.hero-buttons-offset {
+  margin-top: 14px; /* Matches timer height offset so buttons align */
+}
+
+.btn-crate-ad {
+  position: relative;
+  flex: 0 0 46px;
+  height: 38px;
+  background: linear-gradient(180deg, #a855f7 0%, #8b5cf6 45%, #6d28d9 100%);
+  border: 2.5px solid #18181b;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 0 #4c1d95, 0 6px 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 11px;
+  padding: 0;
+  transition: transform 0.08s ease;
+}
+
+.btn-crate-ad:active {
+  transform: translateY(3px);
+  box-shadow: none !important;
+}
+
+.btn-ad-icon {
+  text-shadow: 0 1px 2px #000;
+}
+
+.badge-ad-count {
+  position: absolute;
+  top: -6px;
+  right: -5px;
+  min-width: 17px;
+  height: 17px;
+  background: #ef4444;
+  border: 2px solid #ffffff;
+  border-radius: 9px;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.btn-crate-main {
+  flex: 1;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 2.5px solid #18181b;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 900;
+  color: #1c1917;
+  box-sizing: border-box;
+  transition: transform 0.08s ease;
+}
+
+.btn-crate-main:active {
+  transform: translateY(3px);
+  box-shadow: none !important;
+}
+
+.btn-key-icon {
+  width: 20px;
+  height: 20px;
   object-fit: contain;
 }
 
-.glow-pulse {
-  animation: glow-pulse 2s infinite ease-in-out;
+/* 3. Shop Sub-Navigation Shelf (Above Dock) */
+.shop-subnav-shelf {
+  margin-top: 10px;
+  width: 100%;
+  background: #1c1917;
+  border: 3px solid #0c0a09;
+  border-radius: 12px;
+  padding: 6px;
+  display: flex;
+  gap: 6px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes glow-pulse {
-  0%, 100% { filter: drop-shadow(0 0 6px #f59e0b); }
-  50% { filter: drop-shadow(0 0 16px #fbbf24) scale(1.05); }
-}
-
-.chest-name {
-  font-size: 16px;
-  color: #fff;
-}
-
-.chest-desc {
+.shop-subtab-btn {
+  position: relative;
+  flex: 1;
+  padding: 8px 4px;
+  background: #27272a;
+  border: 2px solid #3f3f46;
+  border-radius: 8px;
+  color: #a1a1aa;
+  font-family: inherit;
   font-size: 11px;
-  color: #94a3b8;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s ease;
+}
+
+.shop-subtab-btn.active {
+  background: linear-gradient(180deg, #fef08a 0%, #facc15 50%, #eab308 100%);
+  border-color: #78350f;
+  color: #451a03;
+  box-shadow: inset 0 1px 0 #ffffff, 0 3px 0 #78350f;
+  transform: translateY(-2px);
+}
+
+.subtab-notif {
+  position: absolute;
+  top: -5px;
+  right: -3px;
+  width: 14px;
+  height: 14px;
+  background: #ef4444;
+  border: 1.5px solid #ffffff;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ================= BESTIARY TAB ================= */
@@ -4146,10 +4637,13 @@ body {
 
 /* Gacha Loot Grid */
 .gacha-loot-grid {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
   gap: 8px;
   margin: 12px 0;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 4px;
 }
 
 .gacha-item-card {

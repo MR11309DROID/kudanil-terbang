@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 150" width="180" height="150">
+  <defs>
+    <!-- Gold Gradients -->
+    <linearGradient id="heroGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fffde7"/>
+      <stop offset="25%" stop-color="#fef08a"/>
+      <stop offset="65%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <!-- Rich Purple Gradients -->
+    <linearGradient id="heroPurpleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="35%" stop-color="#9333ea"/>
+      <stop offset="75%" stop-color="#7e22ce"/>
+      <stop offset="100%" stop-color="#581c87"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ground Drop Shadow -->
+  <ellipse cx="90" cy="138" rx="70" ry="9" fill="rgba(15, 23, 42, 0.45)"/>
+
+  <!-- Left/Right Handles -->
+  <rect x="18" y="86" width="12" height="20" rx="3.5" fill="url(#heroGoldGrad)" stroke="#1e1b18" stroke-width="3.5"/>
+  <rect x="150" y="86" width="12" height="20" rx="3.5" fill="url(#heroGoldGrad)" stroke="#1e1b18" stroke-width="3.5"/>
+
+  <!-- Main Chest Purple Body -->
+  <rect x="28" y="78" width="124" height="52" rx="7" fill="url(#heroPurpleGrad)" stroke="#1e1b18" stroke-width="4" stroke-linejoin="round"/>
+
+  <!-- Upper Arched Lid (Purple Inset) -->
+  <path d="M 28,78 L 28,50 C 28,30 46,22 90,22 C 134,22 152,30 152,50 L 152,78 Z" 
+        fill="url(#heroPurpleGrad)" stroke="#1e1b18" stroke-width="4" stroke-linejoin="round"/>
+
+  <!-- Left / Right Gold Arch Corner Brackets -->
+  <path d="M 27,78 L 27,50 C 27,30 40,24 60,24 C 67,24 65,38 58,50 L 58,78 Z" 
+        fill="url(#heroGoldGrad)" stroke="#1e1b18" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M 153,78 L 153,50 C 153,30 140,24 120,24 C 113,24 115,38 122,50 L 122,78 Z" 
+        fill="url(#heroGoldGrad)" stroke="#1e1b18" stroke-width="3.5" stroke-linejoin="round"/>
+
+  <!-- Middle Gold Belt -->
+  <rect x="24" y="72" width="132" height="16" rx="4.5" fill="url(#heroGoldGrad)" stroke="#1e1b18" stroke-width="4" stroke-linejoin="round"/>
+  <line x1="27" y1="75" x2="153" y2="75" stroke="#ffffff" stroke-width="1.8" opacity="0.8"/>
+
+  <!-- Lower Corner Gold Rivets -->
+  <circle cx="40" cy="116" r="5" fill="#fef08a" stroke="#1e1b18" stroke-width="2.5"/>
+  <circle cx="140" cy="116" r="5" fill="#fef08a" stroke="#1e1b18" stroke-width="2.5"/>
+
+  <!-- Center Clasp: Gold Shield Padlock with Keyhole -->
+  <path d="M 72,66 L 108,66 L 112,90 C 112,108 90,116 90,116 C 90,116 68,108 68,90 Z" 
+        fill="url(#heroGoldGrad)" stroke="#1e1b18" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Keyhole -->
+  <circle cx="90" cy="85" r="4.5" fill="#18181b"/>
+  <polygon points="87.5,85 92.5,85 94,96 86,96" fill="#18181b"/>
+</svg>
