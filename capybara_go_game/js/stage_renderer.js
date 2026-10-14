@@ -1701,47 +1701,37 @@ class StageRenderer {
     const run = window.Character && window.Character.activeRun;
     const runSkills = (run && run.skills) ? run.skills : [];
 
-    // Layer 1: Render Behind-Capy Skill Attachments (Wings, Demon Avatar, Healing Mandala, Singularity)
-    if (!p.blackHoleSprite) {
-      this.renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now);
-    }
+    // Layer 1: Render Behind-Capy Skill Attachments (Wings, Demon Avatar, Healing Mandala, Singularity, Quiver)
+    this.renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now);
 
     // Layer 2: Render Capybara Character Sprite (Clean, Crisp & Cute - Zero AI morphing/glitches)
-    if (p.blackHoleSprite && p.blackHoleSprite.complete) {
-      const spr = p.blackHoleSprite;
-      const ox = (p.blackHoleOx !== undefined ? p.blackHoleOx : -spr.naturalWidth / 2);
-      const oy = (p.blackHoleOy !== undefined ? p.blackHoleOy : -spr.naturalHeight);
-      ctx.drawImage(spr, ox, oy);
-    } else {
-      const isWiderFrame = frameImg.naturalWidth && frameImg.naturalWidth > 64;
-      if (isWiderFrame) {
-        if (p.currentAnim === "heal") {
-          // 176x128 frame: Capybara body is anchored at (86, 114)
-          // Scale by 0.54 so the body height matches the 64x64 idle sprite exactly
-          const s = p.scale * 0.54;
-          const sprW = frameImg.naturalWidth * s;
-          const sprH = frameImg.naturalHeight * s;
-          const sprX = -86 * s;
-          const sprY = -114 * s;
-          ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
-        } else {
-          // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
-          // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
-          const s = p.scale * 0.75;
-          const sprW = frameImg.naturalWidth * s;
-          const sprH = frameImg.naturalHeight * s;
-          const sprX = -44 * s;
-          const sprY = -88 * s;
-          ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
-        }
+    const isWiderFrame = frameImg.naturalWidth && frameImg.naturalWidth > 64;
+    if (isWiderFrame) {
+      if (p.currentAnim === "heal") {
+        // 176x128 frame: Capybara body is anchored at (86, 114)
+        // Scale by 0.54 so the body height matches the 64x64 idle sprite exactly
+        const s = p.scale * 0.54;
+        const sprW = frameImg.naturalWidth * s;
+        const sprH = frameImg.naturalHeight * s;
+        const sprX = -86 * s;
+        const sprY = -114 * s;
+        ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
       } else {
-        ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
+        // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
+        // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
+        const s = p.scale * 0.75;
+        const sprW = frameImg.naturalWidth * s;
+        const sprH = frameImg.naturalHeight * s;
+        const sprX = -44 * s;
+        const sprY = -88 * s;
+        ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
       }
+    } else {
+      ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
     }
 
-    if (!p.blackHoleSprite) {
-      // Dynamic Skill Facial Expressions on Capybara (Matching authentic reference frames)
-      if (p.skillExpression) {
+    // Dynamic Skill Facial Expressions on Capybara (Matching authentic reference frames)
+    if (p.skillExpression) {
       const eyeX = drawW * 0.12;
       const eyeY = -drawH * 0.62;
 
@@ -1842,7 +1832,6 @@ class StageRenderer {
 
     // Layer 3: Render In-Front Skill Attachments (Halo, Dragon Head, Shields, Grimoire, Weapons, Cyclones)
     this.renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now);
-    }
 
     ctx.restore();
 
@@ -2193,6 +2182,51 @@ class StageRenderer {
         ctx.restore();
       }
       ctx.restore();
+
+      // 10. Black Hole: Ground Void Energy Flames (Matching Video 00:00)
+      if (p.currentAnim === "skill" || p.skillExpression === "void_eye") {
+        ctx.save();
+        ctx.translate(0, 2);
+        ctx.scale(1, 0.32);
+        const auraGrad = ctx.createRadialGradient(0, 0, 8, 0, 0, 48);
+        auraGrad.addColorStop(0, "rgba(168, 85, 247, 0.85)");
+        auraGrad.addColorStop(0.5, "rgba(88, 28, 135, 0.65)");
+        auraGrad.addColorStop(1, "rgba(3, 7, 18, 0)");
+        ctx.fillStyle = auraGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, 48, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.shadowColor = "#c084fc";
+        ctx.shadowBlur = 12;
+        const tendrilCount = 7;
+        for (let i = 0; i < tendrilCount; i++) {
+          const tAngle = (i / tendrilCount) * Math.PI * 2;
+          const wave = Math.sin(now * 0.008 + i * 1.3);
+          const fx = Math.cos(tAngle) * 24;
+          const fy = Math.sin(tAngle) * 7;
+          const fHeight = 16 + wave * 7;
+
+          ctx.save();
+          ctx.translate(fx, fy);
+          const fGrad = ctx.createLinearGradient(0, 0, 0, -fHeight);
+          fGrad.addColorStop(0, "rgba(88, 28, 135, 0.85)");
+          fGrad.addColorStop(0.6, "rgba(168, 85, 247, 0.75)");
+          fGrad.addColorStop(1, "rgba(245, 208, 254, 0)");
+          ctx.fillStyle = fGrad;
+
+          ctx.beginPath();
+          ctx.moveTo(-3.5, 0);
+          ctx.quadraticCurveTo(-1.8 + wave * 1.8, -fHeight * 0.6, wave * 2.5, -fHeight);
+          ctx.quadraticCurveTo(1.8 + wave * 1.8, -fHeight * 0.6, 3.5, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+        ctx.restore();
+      }
     }
   }
 
@@ -2580,17 +2614,17 @@ class StageRenderer {
       ctx.restore();
     }
 
-    // 12. Mythic: Black Hole / Cosmic Crystal Sword (Pedang Kristal Kosmik)
+    // 12. Mythic: Black Hole / Cosmic Crystal Sword (Pedang Kristal Kosmik Besar Sesuai Video)
     const hasBlackHole = hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.skillExpression && p.skillExpression !== "normal");
     if (hasBlackHole) {
       ctx.save();
       let swordX = drawW * 0.22;
       let swordY = -drawH * 0.22;
-      let swordRot = 0.52; // Default 45 deg ready slant
+      let swordRot = 0.45; // Default 45 deg ready slant
 
       if (p.swordAction === "slash") {
         swordX = drawW * 0.30;
-        swordY = -drawH * 0.10;
+        swordY = -drawH * 0.08;
         swordRot = 1.35; // Slashing forward
       } else if (p.swordAction === "cast") {
         swordX = drawW * 0.16;
@@ -2604,75 +2638,126 @@ class StageRenderer {
 
       ctx.translate(swordX, swordY);
       ctx.rotate(swordRot);
+      ctx.scale(1.05, 1.05);
 
-      // Void Aura on Sword
+      // Intense Purple Crystal Bloom Glow (Matching Video)
       ctx.shadowColor = "#d946ef";
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 18;
 
-      // Dark Pommel & Grip
+      // Dark Pommel & Grip with Golden Ring Bindings
       ctx.fillStyle = "#1e1b4b";
-      ctx.strokeStyle = "#0f172a";
+      ctx.strokeStyle = "#312e81";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.roundRect(-2.2, 5, 4.4, 12, 1.2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.strokeStyle = "#fbbf24";
+      ctx.lineWidth = 0.9;
+      for (let gy = 7; gy <= 15; gy += 3) {
+        ctx.beginPath();
+        ctx.moveTo(-2.2, gy);
+        ctx.lineTo(2.2, gy);
+        ctx.stroke();
+      }
+
+      // Faceted Octagonal Amethyst Pommel
+      ctx.fillStyle = "#a855f7";
+      ctx.strokeStyle = "#fbbf24";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(0, 19, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#f5d0fe";
+      ctx.beginPath();
+      ctx.arc(-0.8, 17.8, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Winged Royal Crossguard with Golden Quillons
+      ctx.fillStyle = "#581c87";
+      ctx.strokeStyle = "#fbbf24";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(-14, 5);
+      ctx.lineTo(-7, 3);
+      ctx.lineTo(0, 4.2);
+      ctx.lineTo(7, 3);
+      ctx.lineTo(14, 5);
+      ctx.lineTo(8, 7.5);
+      ctx.lineTo(0, 6.2);
+      ctx.lineTo(-8, 7.5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Central Gem Socket on Crossguard
+      ctx.fillStyle = "#d946ef";
+      ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 1.0;
       ctx.beginPath();
-      ctx.arc(0, 11, 2.2, 0, Math.PI * 2);
+      ctx.arc(0, 5, 2.5, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
 
+      // Large Faceted Crystal Blade (Length 44px, Width 14px)
+      // Left Facet (Light-reflecting crystalline lavender)
+      const leftGrad = ctx.createLinearGradient(-7, -44, 0, 4);
+      leftGrad.addColorStop(0, "#ffffff");
+      leftGrad.addColorStop(0.25, "#f5d0fe");
+      leftGrad.addColorStop(0.7, "#d946ef");
+      leftGrad.addColorStop(1, "#a855f7");
+      ctx.fillStyle = leftGrad;
       ctx.beginPath();
-      ctx.roundRect(-1.2, 5, 2.4, 6, 0.8);
-      ctx.fill();
-      ctx.stroke();
-
-      // Winged Crystal Crossguard
-      ctx.fillStyle = "#6b21a8";
-      ctx.strokeStyle = "#c084fc";
-      ctx.lineWidth = 1.1;
-      ctx.beginPath();
-      ctx.moveTo(-6.5, 5);
-      ctx.lineTo(-3, 3.5);
-      ctx.lineTo(0, 4.2);
-      ctx.lineTo(3, 3.5);
-      ctx.lineTo(6.5, 5);
-      ctx.lineTo(3, 6);
-      ctx.lineTo(-3, 6);
+      ctx.moveTo(0, -44); // Tip
+      ctx.lineTo(0, 4);
+      ctx.lineTo(-5.5, 3.5);
+      ctx.lineTo(-6.8, -30);
       ctx.closePath();
       ctx.fill();
+
+      // Right Facet (Deep royal crystal violet)
+      const rightGrad = ctx.createLinearGradient(0, -44, 7, 4);
+      rightGrad.addColorStop(0, "#fdf4ff");
+      rightGrad.addColorStop(0.25, "#e879f9");
+      rightGrad.addColorStop(0.7, "#9333ea");
+      rightGrad.addColorStop(1, "#6b21a8");
+      ctx.fillStyle = rightGrad;
+      ctx.beginPath();
+      ctx.moveTo(0, -44); // Tip
+      ctx.lineTo(6.8, -30);
+      ctx.lineTo(5.5, 3.5);
+      ctx.lineTo(0, 4);
+      ctx.closePath();
+      ctx.fill();
+
+      // Outer Blade Sharp Edge Outline
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.95)";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(0, -44);
+      ctx.lineTo(-6.8, -30);
+      ctx.lineTo(-5.5, 3.5);
+      ctx.lineTo(0, 4);
+      ctx.lineTo(5.5, 3.5);
+      ctx.lineTo(6.8, -30);
+      ctx.closePath();
       ctx.stroke();
 
-      // Glowing Faceted Crystal Blade
-      const bladeGrad = ctx.createLinearGradient(0, -18, 0, 4);
-      bladeGrad.addColorStop(0, "#ffffff");
-      bladeGrad.addColorStop(0.25, "#f0abfc");
-      bladeGrad.addColorStop(0.7, "#c084fc");
-      bladeGrad.addColorStop(1, "#9333ea");
-      ctx.fillStyle = bladeGrad;
+      // Central Ridge Line (Blinding white-hot diamond beam)
       ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 1.1;
-
+      ctx.lineWidth = 1.6;
       ctx.beginPath();
-      ctx.moveTo(0, -18); // Tip
-      ctx.lineTo(3.2, -13);
-      ctx.lineTo(2.8, 3.5);
-      ctx.lineTo(0, 4.2);
-      ctx.lineTo(-2.8, 3.5);
-      ctx.lineTo(-3.2, -13);
-      ctx.closePath();
-      ctx.fill();
+      ctx.moveTo(0, -44);
+      ctx.lineTo(0, 4);
       ctx.stroke();
 
-      // Center Crystal Ridge Line
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
-      ctx.lineWidth = 0.9;
+      // Star sparkle on tip
+      ctx.fillStyle = "#ffffff";
       ctx.beginPath();
-      ctx.moveTo(0, -17);
-      ctx.lineTo(0, 3.8);
-      ctx.stroke();
-
-      // Sparkling Star Glint near tip
-      const glint = 0.5 + 0.5 * Math.sin(now * 0.008);
-      ctx.fillStyle = `rgba(255, 255, 255, ${glint})`;
-      ctx.beginPath();
-      ctx.arc(0, -14, 1.5 * glint, 0, Math.PI * 2);
+      ctx.arc(0, -44, 2.2, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.restore();
@@ -2826,7 +2911,7 @@ class StageRenderer {
   }
 
   launchBlackHole(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
-    const duration = 920 / speedMult;
+    const duration = 1600 / speedMult;
     let hitTriggered = false;
 
     // Trigger standard casting animation on Capybara (stays in place at homePlayerX)
@@ -2864,74 +2949,31 @@ class StageRenderer {
       startTime: performance.now(),
       duration: duration,
       update: (progress) => {
-        // Dynamic authentic Capybara sprite poses from master artwork
-        if (this.blackHoleCapySprites) {
-          if (progress < 0.08) {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f01_idle;
-            this.playerState.blackHoleOx = -48;
-            this.playerState.blackHoleOy = -82;
-          } else if (progress < 0.16) {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f02_awaken;
-            this.playerState.blackHoleOx = -62;
-            this.playerState.blackHoleOy = -100;
-          } else if (progress < 0.25) {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f03_charge;
-            this.playerState.blackHoleOx = -64;
-            this.playerState.blackHoleOy = -100;
-          } else if (progress < 0.35) {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f04_slash;
-            this.playerState.blackHoleOx = -55;
-            this.playerState.blackHoleOy = -88;
-          } else if (progress < 0.48) {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f06_cast;
-            this.playerState.blackHoleOx = -46;
-            this.playerState.blackHoleOy = -78;
-          } else if (progress < 0.70) {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f07_push;
-            this.playerState.blackHoleOx = -46;
-            this.playerState.blackHoleOy = -80;
-          } else if (progress < 0.86) {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f08_recover;
-            this.playerState.blackHoleOx = -44;
-            this.playerState.blackHoleOy = -80;
-          } else if (progress < 0.94) {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f10_absorb;
-            this.playerState.blackHoleOx = -85;
-            this.playerState.blackHoleOy = -104;
-          } else if (progress < 0.98) {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f11_relief;
-            this.playerState.blackHoleOx = -60;
-            this.playerState.blackHoleOy = -95;
-          } else {
-            this.playerState.blackHoleSprite = this.blackHoleCapySprites.f12_idle2;
-            this.playerState.blackHoleOx = -55;
-            this.playerState.blackHoleOy = -95;
-          }
-        }
-
-        // Dynamic Capybara facial expression & crystal sword action matching 12-frame reference art
-        if (progress >= 0.08 && progress < 0.25) {
-          this.playerState.skillExpression = "void_eye"; // Frames 2 & 3: Void Awaken & Gravity Charge
-          this.playerState.swordAction = "cast";
-        } else if (progress >= 0.25 && progress < 0.35) {
-          this.playerState.skillExpression = "slash_squint"; // Frame 4: Rift Cast (Slashing)
+        // Smooth player animation choreography matching video reference
+        if (progress < 0.15) {
+          // Phase 1: Void Awaken (Ready stance, rising void flames)
+          if (this.playerState.currentAnim !== "skill") this.setPlayerAnim("skill", true);
+          this.playerState.swordAction = "ready";
+          this.playerState.skillExpression = "void_eye";
+        } else if (progress < 0.30) {
+          // Phase 2: Dimensional Rift Slash (Slashing arc forward)
+          if (this.playerState.currentAnim !== "attack") this.setPlayerAnim("attack", false);
           this.playerState.swordAction = "slash";
-        } else if (progress >= 0.35 && progress < 0.70) {
-          this.playerState.skillExpression = "void_eye"; // Frames 5, 6, 7: Singularity, Gravity Pull, Event Horizon
+          this.playerState.skillExpression = "slash_squint";
+        } else if (progress < 0.75) {
+          // Phase 3 & 4: Singularity Launch & Event Horizon (Channeling firmly in place)
+          if (this.playerState.currentAnim !== "skill") this.setPlayerAnim("skill", false);
           this.playerState.swordAction = "cast";
-        } else if (progress >= 0.70 && progress < 0.85) {
-          this.playerState.skillExpression = "flash_squint"; // Frames 8 & 9: Cosmic Crush & Supernova
-          this.playerState.swordAction = "ready";
-        } else if (progress >= 0.85 && progress < 0.96) {
-          this.playerState.skillExpression = "peaceful_relief"; // Frames 10 & 11: Void Absorb & Recovery
-          this.playerState.swordAction = "absorb";
+          this.playerState.skillExpression = "void_eye";
         } else {
-          this.playerState.skillExpression = null;
+          // Phase 7: Settle & recovery
+          if (this.playerState.currentAnim !== "idle") this.setPlayerAnim("idle", true);
           this.playerState.swordAction = "ready";
+          this.playerState.skillExpression = "peaceful_relief";
         }
 
-        // Supernova Implosion / Detonation at progress 0.70
-        if (progress >= 0.70 && !hitTriggered) {
+        // Supernova Implosion / Detonation at progress 0.78
+        if (progress >= 0.78 && !hitTriggered) {
           hitTriggered = true;
           Sound.playSfx("magicBurst");
           Sound.playSfx("bossRoar");
