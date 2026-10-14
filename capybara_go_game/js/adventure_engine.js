@@ -263,8 +263,10 @@ class AdventureEngine {
       const healAmt = Math.round(run.maxHp * opt.val);
       run.currentHp = Math.min(run.maxHp, run.currentHp + healAmt);
       Sound.playSfx("heal");
-      this.renderer.addVisualEffect("healRing", this.renderer.playerState.x, this.renderer.playerState.y);
-      this.renderer.addFloatingText(healAmt, this.renderer.playerState.x, this.renderer.playerState.y - 20, "heal");
+      this.renderer.setPlayerAnim("heal", false);
+      this.renderer.addVisualEffect("healRing", this.renderer.playerState.x, this.renderer.groundY - 30);
+      this.renderer.addMagicImpactSparks(this.renderer.playerState.x, this.renderer.groundY - 35, ["#4ade80", "#86efac", "#ffffff"]);
+      this.renderer.addFloatingText(healAmt, this.renderer.playerState.x, this.renderer.groundY - 50, "heal");
       resultMsg = `Restored ${healAmt} HP!`;
       if (window.Game && window.Game.ui) window.Game.ui.renderRunStatsBar(true);
     } else if (opt.action === "pray_blessing") {

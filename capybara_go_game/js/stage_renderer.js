@@ -107,6 +107,7 @@ class StageRenderer {
       run: 9,
       attack: 12,
       sword_slash: 12,
+      heal: 12,
       skill: 9,
       hurt: 9,
       die: 7
@@ -118,6 +119,8 @@ class StageRenderer {
         const frameNum = String(i).padStart(2, "0");
         const path = anim === "sword_slash"
           ? `assets/skills/animations/sword_slash/frame_${frameNum}.png`
+          : anim === "heal"
+          ? `assets/skills/animations/heal/frame_${frameNum}.png`
           : `assets/characters/player/${anim}/frame_${frameNum}.png`;
         const img = new Image();
         img.src = path;
@@ -238,6 +241,7 @@ class StageRenderer {
     this.playerState.loop = loop;
 
     if (animName === "attack" || animName === "sword_slash") this.playerState.fps = 18;
+    else if (animName === "heal") this.playerState.fps = 14;
     else if (animName === "skill") this.playerState.fps = 15;
     else if (animName === "walk") this.playerState.fps = 12;
     else if (animName === "run") this.playerState.fps = 14;
@@ -495,6 +499,30 @@ class StageRenderer {
     };
 
     requestAnimationFrame(forwardRunStep);
+  }
+
+  // --- Player Authentic 12-Frame Heal Animation (Nature Magic Circle & Protective Dome) ---
+
+  performPlayerHeal(amount, onComplete, speedMult = 1.0) {
+    const p = this.playerState;
+    this.setPlayerAnim("heal", false);
+
+    const castDuration = 380 / speedMult; // Frames 1-6 (Wind up, leaf focus, to peak burst dome)
+    const totalDuration = 820 / speedMult; // Full 12-frame loop
+
+    setTimeout(() => {
+      Sound.playSfx("heal");
+      this.addVisualEffect("healRing", p.x, this.groundY - 30);
+      this.addMagicImpactSparks(p.x, this.groundY - 35, ["#4ade80", "#86efac", "#bbf7d0", "#ffffff"]);
+      if (amount) {
+        this.addFloatingText(amount, p.x, this.groundY - 55, "heal");
+      }
+    }, castDuration);
+
+    setTimeout(() => {
+      this.setPlayerAnim("idle", true);
+      if (onComplete) onComplete();
+    }, totalDuration);
   }
 
   // --- Player Ultimate Ranged Mega Slash Wave (Restored to Authentic Original Ranged Form) ---
@@ -766,7 +794,7 @@ class StageRenderer {
             p.frameIndex = 0;
           } else {
             p.frameIndex = animFrames.length - 1;
-            if (p.currentAnim === "hurt") {
+            if (p.currentAnim === "hurt" || p.currentAnim === "heal") {
               this.setPlayerAnim("idle", true);
             }
           }
@@ -1315,14 +1343,25 @@ class StageRenderer {
     // Layer 2: Render Capybara Character Sprite (Clean, Crisp & Cute - Zero AI morphing/glitches)
     const isWiderFrame = frameImg.naturalWidth && frameImg.naturalWidth > 64;
     if (isWiderFrame) {
-      // 144x96 frame: Capybara body is anchored at (44, 88)
-      // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
-      const s = p.scale * 0.75;
-      const sprW = frameImg.naturalWidth * s;
-      const sprH = frameImg.naturalHeight * s;
-      const sprX = -44 * s;
-      const sprY = -88 * s;
-      ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
+      if (p.currentAnim === "heal") {
+        // 176x128 frame: Capybara body is anchored at (86, 114)
+        // Scale by 0.54 so the body height matches the 64x64 idle sprite exactly
+        const s = p.scale * 0.54;
+        const sprW = frameImg.naturalWidth * s;
+        const sprH = frameImg.naturalHeight * s;
+        const sprX = -86 * s;
+        const sprY = -114 * s;
+        ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
+      } else {
+        // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
+        // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
+        const s = p.scale * 0.75;
+        const sprW = frameImg.naturalWidth * s;
+        const sprH = frameImg.naturalHeight * s;
+        const sprX = -44 * s;
+        const sprY = -88 * s;
+        ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
+      }
     } else {
       ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
     }
