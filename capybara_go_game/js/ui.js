@@ -968,6 +968,11 @@ class UIManager {
       }
     }
 
+    const lawnPanel = document.getElementById("adventure-start-panel");
+    if (lawnPanel) {
+      lawnPanel.setAttribute("data-theme", `chapter-${chapterId}`);
+    }
+
     if (this.engine && this.engine.renderer) {
       this.engine.renderer.setMenuMode(true);
       if (ch && ch.bg) {

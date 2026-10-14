@@ -1848,7 +1848,7 @@ body {
   margin-top: -6px;
 }
 
-/* ================= MENU LAWN ACTION PANEL ================= */
+/* ================= MENU LAWN ACTION PANEL (THEMED GROUNDS) ================= */
 .menu-lawn-action-panel {
   flex: 0.95;
   min-height: 0;
@@ -1861,6 +1861,61 @@ body {
   padding: 10px 20px 14px 20px;
   overflow: hidden;
   box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+/* Chapter 1: Gale Town (Sunny Peaceful Lawn) */
+.menu-lawn-action-panel[data-theme="chapter-1"] {
+  background: linear-gradient(180deg, #8dc874 0%, #7cba64 50%, #68a350 100%);
+  box-shadow: inset 0 6px 16px rgba(0, 0, 0, 0.18), inset 0 -3px 8px rgba(0, 0, 0, 0.15);
+}
+.menu-lawn-action-panel[data-theme="chapter-1"] .milestone-chest-glow {
+  background: radial-gradient(circle, rgba(254, 240, 138, 0.5) 0%, transparent 70%);
+}
+
+/* Chapter 2: Whispering Woods (Deep Forest Moss & Grass) */
+.menu-lawn-action-panel[data-theme="chapter-2"] {
+  background: linear-gradient(180deg, #4f8738 0%, #3e7029 50%, #2b521b 100%);
+  box-shadow: inset 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 -3px 10px rgba(0, 0, 0, 0.25);
+}
+.menu-lawn-action-panel[data-theme="chapter-2"] .milestone-chest-glow {
+  background: radial-gradient(circle, rgba(134, 239, 172, 0.55) 0%, transparent 70%);
+}
+
+/* Chapter 3: Sunken Desert (Warm Desert Sand Dunes) */
+.menu-lawn-action-panel[data-theme="chapter-3"] {
+  background: linear-gradient(180deg, #e8be78 0%, #d5a55c 50%, #bc8c42 100%);
+  box-shadow: inset 0 6px 18px rgba(120, 75, 25, 0.25), inset 0 -3px 10px rgba(80, 45, 15, 0.3);
+}
+.menu-lawn-action-panel[data-theme="chapter-3"] .milestone-chest-glow {
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.6) 0%, transparent 70%);
+}
+
+/* Chapter 4: Frozen Peaks (Frosty Glacier Snow & Ice) */
+.menu-lawn-action-panel[data-theme="chapter-4"] {
+  background: linear-gradient(180deg, #d3ebf7 0%, #b5daf0 50%, #95c5e0 100%);
+  box-shadow: inset 0 6px 20px rgba(255, 255, 255, 0.5), inset 0 -4px 12px rgba(45, 95, 130, 0.35);
+}
+.menu-lawn-action-panel[data-theme="chapter-4"] .milestone-chest-glow {
+  background: radial-gradient(circle, rgba(186, 230, 253, 0.75) 0%, transparent 70%);
+}
+
+/* Chapter 5: Molten Core (Charred Basalt & Molten Magma) */
+.menu-lawn-action-panel[data-theme="chapter-5"] {
+  background: linear-gradient(180deg, #322121 0%, #221414 50%, #150b0b 100%);
+  box-shadow: inset 0 6px 22px rgba(255, 68, 0, 0.3), inset 0 -4px 14px rgba(0, 0, 0, 0.7);
+}
+.menu-lawn-action-panel[data-theme="chapter-5"] .milestone-chest-glow {
+  background: radial-gradient(circle, rgba(255, 95, 21, 0.65) 0%, transparent 70%);
+}
+
+/* Chapter 6: Moonlit Citadel (Mystical Midnight Blue Stone) */
+.menu-lawn-action-panel[data-theme="chapter-6"] {
+  background: linear-gradient(180deg, #223249 0%, #172334 50%, #0d1521 100%);
+  box-shadow: inset 0 6px 20px rgba(56, 189, 248, 0.25), inset 0 -4px 14px rgba(0, 0, 0, 0.7);
+}
+.menu-lawn-action-panel[data-theme="chapter-6"] .milestone-chest-glow {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.65) 0%, transparent 70%);
 }
 
 /* Symmetrical Center Column */
