@@ -899,6 +899,9 @@ class UIManager {
 
     if (this.engine && this.engine.renderer) {
       this.engine.renderer.setMenuMode(true);
+      if (ch && ch.bg) {
+        this.engine.renderer.setBackground(ch.bg);
+      }
     }
   }
 

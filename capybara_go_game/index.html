@@ -132,12 +132,12 @@
           <div id="menu-stage-overlay" class="menu-stage-overlay">
             <!-- Top Center: Chapter Title with Navigation & Longest Survived -->
             <div class="menu-chapter-select-wrap">
-              <div class="menu-chapter-title-pill">
+              <div class="menu-chapter-title-row">
                 <button id="btn-menu-chapter-prev" class="menu-ch-arrow-btn" title="Previous Chapter">‹</button>
-                <span id="menu-chapter-name" class="menu-chapter-title-text">1.Gale Town</span>
+                <h1 id="menu-chapter-name" class="menu-chapter-main-title">1.Gale Town</h1>
                 <button id="btn-menu-chapter-next" class="menu-ch-arrow-btn" title="Next Chapter">›</button>
               </div>
-              <div class="menu-longest-survived-pill">
+              <div class="menu-longest-survived-text">
                 <span class="longest-label">Longest Survived: </span>
                 <span id="menu-longest-days" class="longest-val">39 days</span>
               </div>
@@ -146,7 +146,7 @@
             <!-- Upper Left Floating Widgets: Hamburger Drawer & Newbie Gifts -->
             <div class="menu-left-widgets">
               <button id="btn-menu-drawer" class="btn-menu-drawer" title="Pengaturan & Menu">
-                <img src="assets/ui/menu/btn_hamburger.png" alt="Menu" class="drawer-icon-img">
+                <img src="assets/ui/menu/btn_hamburger.svg" alt="Menu" class="drawer-icon-img">
                 <span class="widget-notif-dot">!</span>
               </button>
               <div class="newbie-gifts-widget" id="btn-newbie-gifts" title="Newbie Gifts">
@@ -409,25 +409,26 @@
 
         <!-- Adventure State: Authentic Capybara Go Menu Hub (Lawn & Start Section) -->
         <div id="adventure-start-panel" class="menu-lawn-action-panel">
-          <!-- Milestone Reward Chest (Day 40) -->
-          <div class="menu-milestone-chest-wrap" id="btn-milestone-chest" title="Milestone Reward (Day 40)">
-            <div class="milestone-chest-glow"></div>
-            <img src="assets/ui/menu/milestone_chest.png" alt="Milestone Chest" class="milestone-chest-img">
-            <div class="milestone-chest-tag">40 days</div>
-          </div>
-
-          <!-- Giant Chunky Cartoon Start Button -->
-          <button id="btn-start-run" class="btn-menu-start-game" title="Mulai Petualangan">
-            <div class="btn-start-top-bevel"></div>
-            <div class="btn-start-content">
-              <span class="btn-start-text">Start</span>
-              <div class="btn-start-energy-tag">
-                <span class="tag-bolt">⚡</span>
-                <span class="tag-x">x</span>
-                <span class="tag-cost">5</span>
-              </div>
+          <div class="menu-action-center-col">
+            <!-- Milestone Reward Chest (Day 40) - Centered above Start button -->
+            <div class="menu-milestone-chest-wrap" id="btn-milestone-chest" title="Milestone Reward (Day 40)">
+              <div class="milestone-chest-glow"></div>
+              <img src="assets/ui/menu/milestone_chest.svg" alt="Milestone Chest" class="milestone-chest-img">
+              <div class="milestone-chest-tag">40 days</div>
             </div>
-          </button>
+
+            <!-- Giant Chunky Cartoon Start Button (Authentic Golden Yellow) -->
+            <button id="btn-start-run" class="btn-menu-start-game" title="Mulai Petualangan">
+              <div class="btn-start-gloss-line"></div>
+              <div class="btn-start-content">
+                <span class="btn-start-text">Start</span>
+                <div class="btn-start-energy-tag">
+                  <span class="tag-bolt">⚡</span>
+                  <span class="tag-cost">x5</span>
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
 
         <!-- Adventure State: Active Run Event Deck & Next Day Button (Matches Image 1) -->
@@ -647,39 +648,35 @@
     <nav id="bottom-nav" class="bottom-nav-authentic">
       <button class="nav-tab-btn" data-tab="chests" title="Shop">
         <div class="nav-tab-icon-wrap">
-          <img src="assets/ui/menu/nav_shop.png" alt="Shop" class="nav-tab-img">
+          <img src="assets/ui/menu/nav_shop.svg" alt="Shop" class="nav-tab-img">
           <span class="nav-tab-badge">!</span>
         </div>
-        <span class="nav-tab-label">Shop</span>
       </button>
 
       <button class="nav-tab-btn" data-tab="equipment" title="Hero">
         <div class="nav-tab-icon-wrap">
-          <img src="assets/ui/menu/nav_hero.png" alt="Hero" class="nav-tab-img">
+          <img src="assets/ui/menu/nav_hero.svg" alt="Hero" class="nav-tab-img">
         </div>
-        <span class="nav-tab-label">Hero</span>
       </button>
 
-      <button class="nav-tab-btn active" data-tab="adventure" title="Adventure">
-        <div class="nav-tab-icon-wrap tab-adventure-prominent">
-          <img src="assets/ui/menu/nav_adventure.png" alt="Adventure" class="nav-tab-img nav-adventure-img">
+      <button class="nav-tab-btn active tab-adventure-btn" data-tab="adventure" title="Adventure">
+        <div class="nav-adventure-capsule">
+          <img src="assets/ui/menu/nav_adventure.svg" alt="Adventure" class="nav-adventure-img">
+          <span class="nav-tab-label">Adventure</span>
         </div>
-        <span class="nav-tab-label">Adventure</span>
       </button>
 
       <button class="nav-tab-btn" data-tab="talents" title="Talents">
         <div class="nav-tab-icon-wrap">
-          <img src="assets/ui/menu/nav_talents.png" alt="Talents" class="nav-tab-img">
+          <img src="assets/ui/menu/nav_talents.svg" alt="Talents" class="nav-tab-img">
           <span class="nav-tab-badge">!</span>
         </div>
-        <span class="nav-tab-label">Talents</span>
       </button>
 
       <button class="nav-tab-btn" data-tab="bestiary" title="Dungeon">
         <div class="nav-tab-icon-wrap">
-          <img src="assets/ui/menu/nav_locked.png" alt="Dungeon" class="nav-tab-img">
+          <img src="assets/ui/menu/nav_locked.svg" alt="Dungeon" class="nav-tab-img">
         </div>
-        <span class="nav-tab-label">Dungeon</span>
       </button>
     </nav>
 

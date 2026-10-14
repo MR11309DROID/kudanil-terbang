@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Roof Awning Stripes -->
+    <linearGradient id="awningRed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+    <linearGradient id="awningWhite" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="woodBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#92400e"/>
+      <stop offset="100%" stop-color="#582404"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Wooden House Base / Stall -->
+  <rect x="10" y="28" width="44" height="28" rx="4" fill="url(#woodBase)" stroke="#111827" stroke-width="2.5"/>
+
+  <!-- Shop Window / Door Opening -->
+  <path d="M 17,56 L 17,38 C 17,34 22,34 22,38 L 22,56 Z" fill="#1e293b" stroke="#111827" stroke-width="2"/>
+  <rect x="29" y="36" width="18" height="12" rx="2" fill="#38bdf8" stroke="#111827" stroke-width="2"/>
+  <line x1="38" y1="36" x2="38" y2="48" stroke="#111827" stroke-width="1.5"/>
+
+  <!-- Scalloped Striped Awning Canopy -->
+  <g stroke="#111827" stroke-width="2.5" stroke-linejoin="round">
+    <!-- Stripe 1 (Red) -->
+    <path d="M 6,18 L 16,18 L 16,29 C 13.5,31 8.5,31 6,29 Z" fill="url(#awningRed)"/>
+    <!-- Stripe 2 (White) -->
+    <path d="M 16,18 L 26,18 L 26,29 C 23.5,31 18.5,31 16,29 Z" fill="url(#awningWhite)"/>
+    <!-- Stripe 3 (Red) -->
+    <path d="M 26,18 L 38,18 L 38,29 C 35.5,31 30.5,31 26,29 Z" fill="url(#awningRed)"/>
+    <!-- Stripe 4 (White) -->
+    <path d="M 38,18 L 48,18 L 48,29 C 45.5,31 40.5,31 38,29 Z" fill="url(#awningWhite)"/>
+    <!-- Stripe 5 (Red) -->
+    <path d="M 48,18 L 58,18 L 58,29 C 55.5,31 50.5,31 48,29 Z" fill="url(#awningRed)"/>
+  </g>
+
+  <!-- Top Roof Ridge -->
+  <path d="M 4,18 L 60,18" stroke="#111827" stroke-width="3" stroke-linecap="round"/>
+</svg>

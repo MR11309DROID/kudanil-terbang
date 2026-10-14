@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="52" height="52">
+  <defs>
+    <linearGradient id="btnDark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2d3748"/>
+      <stop offset="100%" stop-color="#1a202c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Button Rounded Square Container -->
+  <rect x="2" y="2" width="48" height="48" rx="10" fill="url(#btnDark)" stroke="#4a5568" stroke-width="2.5"/>
+
+  <!-- Bullet Points and Lines (List Icon Matching Screenshot) -->
+  <circle cx="14" cy="17" r="2.8" fill="#ffffff"/>
+  <rect x="20" y="15" width="20" height="4" rx="2" fill="#ffffff"/>
+
+  <circle cx="14" cy="26" r="2.8" fill="#ffffff"/>
+  <rect x="20" y="24" width="20" height="4" rx="2" fill="#ffffff"/>
+
+  <circle cx="14" cy="35" r="2.8" fill="#ffffff"/>
+  <rect x="20" y="33" width="20" height="4" rx="2" fill="#ffffff"/>
+</svg>

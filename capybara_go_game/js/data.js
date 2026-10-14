@@ -4,7 +4,7 @@ const GameData = {
     {
       id: 1,
       name: "Gale Town",
-      description: "A lush, serene woodland teeming with mysterious fauna.",
+      description: "A peaceful starting village with gentle breezes and rolling roads.",
       bg: "assets/backgrounds/panoramas/village_road_bg.png",
       enemies: ["sprout", "slime_green", "mushroom_red", "flower_red"],
       bossDays: { 20: "boss_crown_warrior", 40: "boss_blue_knight", 60: "boss_capbara_king" },
@@ -14,39 +14,50 @@ const GameData = {
     },
     {
       id: 2,
+      name: "Whispering Woods",
+      description: "A lush, serene woodland teeming with mysterious fauna and ancient castle ruins.",
+      bg: "assets/backgrounds/panoramas/meadow_castle_parallax.png",
+      enemies: ["sprout", "slime_green", "mushroom_red", "flower_red"],
+      bossDays: { 20: "boss_skeleton_guard", 40: "boss_crown_warrior", 60: "boss_purple_mage" },
+      maxDays: 60,
+      rewardGold: 1500,
+      rewardGems: 120
+    },
+    {
+      id: 3,
       name: "Sunken Desert",
       description: "Scorching dunes hiding forgotten ancient ruins.",
       bg: "assets/backgrounds/panoramas/desert_ruins_parallax.png",
       enemies: ["cactus_mimic", "bee", "purple_boar", "stone_golem"],
       bossDays: { 20: "boss_skeleton_guard", 40: "boss_crown_warrior", 60: "boss_purple_mage" },
       maxDays: 60,
-      rewardGold: 2000,
-      rewardGems: 150
+      rewardGold: 2500,
+      rewardGems: 180
     },
     {
-      id: 3,
+      id: 4,
       name: "Frozen Peaks",
       description: "Frostbitten mountains where icy chills slow the boldest warriors.",
       bg: "assets/backgrounds/panoramas/snow_mountain_parallax.png",
       enemies: ["blue_flyer", "stone_golem", "slime_green", "pink_flower"],
       bossDays: { 20: "boss_blue_knight", 40: "boss_skeleton_guard", 60: "boss_capbara_king" },
       maxDays: 60,
-      rewardGold: 3500,
-      rewardGems: 200
+      rewardGold: 4000,
+      rewardGems: 250
     },
     {
-      id: 4,
+      id: 5,
       name: "Molten Core",
       description: "Rivers of molten magma guarded by ferocious fiery creatures.",
       bg: "assets/backgrounds/panoramas/volcano_lava_parallax.png",
       enemies: ["purple_boar", "stone_golem", "bee", "cactus_mimic"],
       bossDays: { 20: "boss_crown_warrior", 40: "boss_purple_mage", 60: "boss_skeleton_guard" },
       maxDays: 60,
-      rewardGold: 5000,
-      rewardGems: 300
+      rewardGold: 6000,
+      rewardGems: 350
     },
     {
-      id: 5,
+      id: 6,
       name: "Moonlit Citadel",
       description: "The shadowed bastion of the legendary Capybara Monarch.",
       bg: "assets/backgrounds/panoramas/moonlit_castle_parallax.png",

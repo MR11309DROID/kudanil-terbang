@@ -23,7 +23,7 @@ class CharacterManager {
 
     this.playerName = "Capy13126397";
     this.playerTitle = "Apprentice - 1";
-    this.longestSurvived = { 1: 39, 2: 20, 3: 15, 4: 10, 5: 1 };
+    this.longestSurvived = { 1: 39, 2: 24, 3: 18, 4: 12, 5: 6, 6: 1 };
     this.selectedChapter = 1;
 
     this.equipped = {
@@ -323,7 +323,7 @@ class CharacterManager {
       if (s.accountExp !== undefined) this.accountExp = s.accountExp;
       if (s.playerName) this.playerName = s.playerName;
       if (s.playerTitle) this.playerTitle = s.playerTitle;
-      if (s.longestSurvived) this.longestSurvived = Object.assign({ 1: 39 }, s.longestSurvived);
+      if (s.longestSurvived) this.longestSurvived = Object.assign({ 1: 39, 2: 24, 3: 18, 4: 12, 5: 6, 6: 1 }, s.longestSurvived);
       if (s.selectedChapter !== undefined) this.selectedChapter = s.selectedChapter;
       if (s.equipped) this.equipped = s.equipped;
       if (s.inventory) this.inventory = s.inventory;
