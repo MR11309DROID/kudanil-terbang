@@ -1688,6 +1688,106 @@ class StageRenderer {
       ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
     }
 
+    // Dynamic Skill Facial Expressions on Capybara (Matching authentic reference frames)
+    if (p.skillExpression) {
+      const eyeX = drawW * 0.12;
+      const eyeY = -drawH * 0.62;
+
+      if (p.skillExpression === "void_eye") {
+        ctx.save();
+        ctx.fillStyle = "#d48b55";
+        ctx.beginPath();
+        ctx.arc(eyeX, eyeY, 3.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.translate(eyeX, eyeY);
+        ctx.shadowColor = "#f43f5e";
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = "#f472b6";
+        ctx.strokeStyle = "#e879f9";
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 4.2, 2.6, -0.15, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(0.9, -0.5, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+      } else if (p.skillExpression === "slash_squint") {
+        ctx.save();
+        ctx.fillStyle = "#d48b55";
+        ctx.beginPath();
+        ctx.arc(eyeX, eyeY, 3.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.translate(eyeX, eyeY);
+        ctx.strokeStyle = "#291003";
+        ctx.lineWidth = 2.2;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(-3.5, -2.0);
+        ctx.lineTo(3.5, 1.6);
+        ctx.stroke();
+
+        ctx.strokeStyle = "#c084fc";
+        ctx.lineWidth = 1.1;
+        ctx.shadowColor = "#a855f7";
+        ctx.shadowBlur = 5;
+        ctx.beginPath();
+        ctx.moveTo(3.5, 1.6);
+        ctx.lineTo(5.0, 0.2);
+        ctx.stroke();
+        ctx.restore();
+
+      } else if (p.skillExpression === "flash_squint") {
+        ctx.save();
+        ctx.fillStyle = "#d48b55";
+        ctx.beginPath();
+        ctx.arc(eyeX, eyeY, 3.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.translate(eyeX, eyeY);
+        ctx.strokeStyle = "#291003";
+        ctx.lineWidth = 2.2;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(-3.0, -1.8);
+        ctx.lineTo(2.0, 0);
+        ctx.lineTo(-3.0, 1.8);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(240, 171, 252, 0.85)";
+        ctx.lineWidth = 1.0;
+        ctx.shadowColor = "#fde047";
+        ctx.shadowBlur = 7;
+        ctx.beginPath();
+        ctx.moveTo(-2.0, -0.9);
+        ctx.lineTo(1.6, 0);
+        ctx.stroke();
+        ctx.restore();
+
+      } else if (p.skillExpression === "peaceful_relief") {
+        ctx.save();
+        ctx.fillStyle = "#d48b55";
+        ctx.beginPath();
+        ctx.arc(eyeX, eyeY, 3.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.translate(eyeX, eyeY);
+        ctx.strokeStyle = "#291003";
+        ctx.lineWidth = 2.0;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.arc(0, 1.5, 3.5, Math.PI * 1.15, Math.PI * 1.85);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
     // Layer 3: Render In-Front Skill Attachments (Halo, Dragon Head, Shields, Grimoire, Weapons, Cyclones)
     this.renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now);
 
@@ -2550,6 +2650,21 @@ class StageRenderer {
       startTime: performance.now(),
       duration: duration,
       update: (progress) => {
+        // Dynamic Capybara facial expression matching 12-frame reference art
+        if (progress >= 0.08 && progress < 0.25) {
+          this.playerState.skillExpression = "void_eye"; // Frames 2 & 3: Void Awaken & Gravity Charge
+        } else if (progress >= 0.25 && progress < 0.35) {
+          this.playerState.skillExpression = "slash_squint"; // Frame 4: Rift Cast
+        } else if (progress >= 0.35 && progress < 0.70) {
+          this.playerState.skillExpression = "void_eye"; // Frames 5, 6, 7: Singularity, Gravity Pull, Event Horizon
+        } else if (progress >= 0.70 && progress < 0.85) {
+          this.playerState.skillExpression = "flash_squint"; // Frames 8 & 9: Cosmic Crush & Supernova
+        } else if (progress >= 0.85 && progress < 0.96) {
+          this.playerState.skillExpression = "peaceful_relief"; // Frames 10 & 11: Void Absorb & Recovery
+        } else {
+          this.playerState.skillExpression = null;
+        }
+
         // Supernova Implosion / Detonation at progress 0.70
         if (progress >= 0.70 && !hitTriggered) {
           hitTriggered = true;
@@ -2850,6 +2965,7 @@ class StageRenderer {
         }
       },
       onComplete: () => {
+        this.playerState.skillExpression = null;
         this.setPlayerAnim("idle", true);
         if (onComplete) onComplete();
       }
