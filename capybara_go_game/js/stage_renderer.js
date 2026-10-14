@@ -140,16 +140,20 @@ class StageRenderer {
     // Preload Authentic HD Black Hole Assets (Feathered 60 FPS sprites)
     this.blackHoleHdImages = {
       eventHorizon: new Image(),
+      vortexSpiral: new Image(),
+      cometFlight: new Image(),
       singularity: new Image(),
       rift: new Image(),
       supernova: new Image(),
       crush: new Image()
     };
-    this.blackHoleHdImages.eventHorizon.src = "assets/skills/animations/black_hole/event_horizon_hd.png";
+    this.blackHoleHdImages.eventHorizon.src = "assets/skills/animations/black_hole/event_horizon_v2_hd.png";
+    this.blackHoleHdImages.vortexSpiral.src = "assets/skills/animations/black_hole/vortex_spiral_hd.png";
+    this.blackHoleHdImages.cometFlight.src = "assets/skills/animations/black_hole/comet_flight_hd.png";
     this.blackHoleHdImages.singularity.src = "assets/skills/animations/black_hole/singularity_hd.png";
     this.blackHoleHdImages.rift.src = "assets/skills/animations/black_hole/rift_hd.png";
     this.blackHoleHdImages.supernova.src = "assets/skills/animations/black_hole/supernova_hd.png";
-    this.blackHoleHdImages.crush.src = "assets/skills/animations/black_hole/crush_hd.png";
+    this.blackHoleHdImages.crush.src = "assets/skills/animations/black_hole/cosmic_crush_v2_hd.png";
   }
 
   setBackground(bgPath) {
@@ -2707,11 +2711,18 @@ class StageRenderer {
         // Flies from Capy (progress 0.0 -> 0.22) to in front of enemy (progress 0.22 -> 1.0)
         let currHoleX = finalHoleX;
         let currHoleY = finalHoleY;
+        let flyAngle = 0;
         if (p < 0.22) {
           const flyP = p / 0.22;
           const flyEase = 1 - Math.pow(1 - flyP, 3);
           currHoleX = startX + (finalHoleX - startX) * flyEase;
-          currHoleY = startY + (finalHoleY - startY) * flyEase - Math.sin(flyP * Math.PI) * 16;
+          currHoleY = startY + (finalHoleY - startY) * flyEase - Math.sin(flyP * Math.PI) * 20;
+
+          const nextP = Math.min(1, flyP + 0.02);
+          const nextEase = 1 - Math.pow(1 - nextP, 3);
+          const nextX = startX + (finalHoleX - startX) * nextEase;
+          const nextY = startY + (finalHoleY - startY) * nextEase - Math.sin(nextP * Math.PI) * 20;
+          flyAngle = Math.atan2(nextY - currHoleY, nextX - currHoleX);
         }
 
         // 1. Cosmic Void Nebula Screen Vignette
@@ -2757,26 +2768,23 @@ class StageRenderer {
           ctx.restore();
         }
 
-        // 2. Flying Authentic HD Cosmic Singularity (while in flight)
+        // 2. Flying Authentic HD Cosmic Comet Black Hole (Frames 9 & 10)
         if (p < 0.22) {
           ctx.save();
-          const tGrad = ctx.createLinearGradient(startX, startY, currHoleX, currHoleY);
-          tGrad.addColorStop(0, "rgba(168, 85, 247, 0)");
-          tGrad.addColorStop(0.5, "rgba(192, 132, 252, 0.6)");
-          tGrad.addColorStop(1, "rgba(255, 255, 255, 0.95)");
-          ctx.strokeStyle = tGrad;
-          ctx.lineWidth = 4.5;
-          ctx.shadowColor = "#c084fc";
-          ctx.shadowBlur = 14;
-          ctx.beginPath();
-          ctx.moveTo(startX, startY);
-          ctx.lineTo(currHoleX, currHoleY);
-          ctx.stroke();
-
-          // Authentic HD Singularity Sprite rotating in flight
           ctx.translate(currHoleX, currHoleY);
-          ctx.rotate(now * 0.008);
-          if (this.blackHoleHdImages && this.blackHoleHdImages.singularity.complete) {
+          ctx.rotate(flyAngle);
+
+          if (this.blackHoleHdImages && this.blackHoleHdImages.cometFlight && this.blackHoleHdImages.cometFlight.complete) {
+            // Authentic HD flying comet sprite with streaming purple plasma tail
+            const cWidth = 96;
+            const cHeight = 44;
+            const headOffsetX = -cWidth * (162 / 205);
+            const headOffsetY = -cHeight * (48 / 95);
+            ctx.shadowColor = "#d946ef";
+            ctx.shadowBlur = 18;
+            ctx.drawImage(this.blackHoleHdImages.cometFlight, headOffsetX, headOffsetY, cWidth, cHeight);
+          } else if (this.blackHoleHdImages && this.blackHoleHdImages.singularity.complete) {
+            ctx.rotate(now * 0.008);
             const sw = 42;
             const sh = 42;
             ctx.drawImage(this.blackHoleHdImages.singularity, -sw / 2, -sh / 2, sw, sh);
@@ -2825,17 +2833,29 @@ class StageRenderer {
             if (arrivalP > 0.85 && this.blackHoleHdImages && this.blackHoleHdImages.crush.complete) {
               ctx.save();
               ctx.rotate(now * 0.005);
-              const cw = 145 * vortexScale;
-              const ch = 145 * vortexScale;
+              const cw = 150 * vortexScale;
+              const ch = 150 * vortexScale;
               ctx.drawImage(this.blackHoleHdImages.crush, -cw / 2, -ch / 2, cw, ch);
               ctx.restore();
-            } else if (this.blackHoleHdImages && this.blackHoleHdImages.eventHorizon.complete) {
-              ctx.save();
-              ctx.rotate(now * 0.0035);
-              const hdW = 150 * vortexScale;
-              const hdH = 150 * vortexScale;
-              ctx.drawImage(this.blackHoleHdImages.eventHorizon, -hdW / 2, -hdH / 2, hdW, hdH);
-              ctx.restore();
+            } else {
+              // Frame 12: Smooth rotating accretion spiral galaxy underneath
+              if (this.blackHoleHdImages && this.blackHoleHdImages.vortexSpiral && this.blackHoleHdImages.vortexSpiral.complete) {
+                ctx.save();
+                ctx.rotate(-now * 0.004);
+                const vsW = 155 * vortexScale;
+                const vsH = 155 * vortexScale;
+                ctx.drawImage(this.blackHoleHdImages.vortexSpiral, -vsW / 2, -vsH / 2, vsW, vsH);
+                ctx.restore();
+              }
+              // Card 16: Event Horizon Vortex with orbiting meteors & lightning
+              if (this.blackHoleHdImages && this.blackHoleHdImages.eventHorizon.complete) {
+                ctx.save();
+                ctx.rotate(now * 0.0035);
+                const hdW = 155 * vortexScale;
+                const hdH = 155 * vortexScale;
+                ctx.drawImage(this.blackHoleHdImages.eventHorizon, -hdW / 2, -hdH / 2, hdW, hdH);
+                ctx.restore();
+              }
             }
 
             // C. Crackling Void Lightning Arcs
@@ -2966,7 +2986,7 @@ class StageRenderer {
 
         ctx.restore(); // currHoleX, currHoleY
 
-        // Frame 10: Cosmic Stardust Ribbon Stream returning from enemy to Capybara's sword
+        // Frame 10 & 11 / Card 20: Cosmic Stardust Ribbon Stream returning from enemy & swirling around Capybara
         if (p >= 0.82 && p < 0.99) {
           const streamT = (p - 0.82) / 0.17;
           const fadeAlpha = Math.sin(streamT * Math.PI);
@@ -2982,6 +3002,27 @@ class StageRenderer {
             ctx.quadraticCurveTo((startX + finalHoleX) / 2, this.groundY - 60 + i * 5, startX + 15, startY);
             ctx.stroke();
           }
+
+          // Card 20 (Void Absorb): Swirling purple stardust galaxy ribbon around Capybara
+          ctx.save();
+          ctx.translate(startX, startY);
+          ctx.rotate(now * 0.006);
+          ctx.scale(1, 0.42);
+          ctx.strokeStyle = `rgba(192, 132, 252, ${fadeAlpha * 0.9})`;
+          ctx.lineWidth = 4 * fadeAlpha;
+          ctx.shadowColor = "#e879f9";
+          ctx.shadowBlur = 14;
+          ctx.beginPath();
+          ctx.arc(0, 0, 48 * (1 - streamT * 0.25), 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.strokeStyle = `rgba(255, 255, 255, ${fadeAlpha * 0.85})`;
+          ctx.lineWidth = 2.2 * fadeAlpha;
+          ctx.beginPath();
+          ctx.arc(0, 0, 36 * (1 - streamT * 0.25), 0.5, Math.PI * 1.8);
+          ctx.stroke();
+          ctx.restore();
+
           ctx.restore();
         }
       },
