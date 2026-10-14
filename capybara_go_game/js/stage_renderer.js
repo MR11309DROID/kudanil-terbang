@@ -1675,20 +1675,24 @@ class StageRenderer {
         const sprY = -114 * s;
         ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
       } else if (p.currentAnim === "black_hole") {
-        // Capybara stays still in place; holds Frame 04 sword-slash casting pose during
-        // frames 4 to 8 while the HD Black Hole flies forward and manifests on the enemy!
-        let effectiveFrameImg = frameImg;
-        if (p.frameIndex >= 4 && p.frameIndex <= 8) {
-          effectiveFrameImg = animFrames[3] || frameImg;
-        }
-        // 192x144 frame: Capybara body is anchored at (106, 133)
-        // Scale by 0.50 so the body height matches the 64x64 idle sprite exactly
-        const s = p.scale * 0.50;
-        const sprW = effectiveFrameImg.naturalWidth * s;
-        const sprH = effectiveFrameImg.naturalHeight * s;
-        const sprX = -106 * s;
-        const sprY = -133 * s;
-        ctx.drawImage(effectiveFrameImg, sprX, sprY, sprW, sprH);
+        // Use clean, crisp, 100% transparent Capybara skill sprite with cosmic purple aura
+        // so there is zero cropped PNG background, zero twitching, and zero rough edges!
+        const skillFrames = this.playerAnimations["skill"] || this.playerAnimations["idle"];
+        const sIndex = Math.min(skillFrames.length - 1, Math.floor(p.frameIndex * 0.75));
+        const effectiveImg = skillFrames[sIndex] || frameImg;
+
+        ctx.drawImage(effectiveImg, -drawW / 2, -drawH, drawW, drawH);
+
+        // Glowing Cosmic Purple Eyes on Capybara during cast
+        ctx.save();
+        ctx.fillStyle = "#c084fc";
+        ctx.shadowColor = "#a855f7";
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(drawW * 0.08, -drawH * 0.58, 2.8, 0, Math.PI * 2);
+        ctx.arc(drawW * 0.22, -drawH * 0.58, 2.8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
       } else {
         // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
         // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
@@ -2697,24 +2701,29 @@ class StageRenderer {
             }
             ctx.restore();
 
-            // Authentic Event Horizon Sprite (or Procedural Singularity)
-            if (vortexImg && vortexImg.complete) {
-              ctx.save();
-              ctx.rotate(now * 0.005);
-              const vW = vortexImg.naturalWidth * 0.75 * vortexScale;
-              const vH = vortexImg.naturalHeight * 0.75 * vortexScale;
-              ctx.drawImage(vortexImg, -vW / 2, -vH / 2, vW, vH);
-              ctx.restore();
-            } else {
-              // Pure Black Hole Core with Neon Rim
-              ctx.fillStyle = "#020205";
-              ctx.beginPath();
-              ctx.arc(0, 0, Math.max(2, 22 * vortexScale), 0, Math.PI * 2);
-              ctx.fill();
-              ctx.strokeStyle = "#ffffff";
-              ctx.lineWidth = 2.0;
-              ctx.stroke();
-            }
+            // Pure HD Abyssal Black Hole Singularity Core & Glowing Photon Sphere
+            ctx.save();
+            ctx.fillStyle = "#010006";
+            ctx.shadowColor = "#a855f7";
+            ctx.shadowBlur = 24;
+            ctx.beginPath();
+            ctx.arc(0, 0, Math.max(3, 24 * vortexScale), 0, Math.PI * 2);
+            ctx.fill();
+
+            // Blinding White Photon Ring Rim
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2.4;
+            ctx.shadowColor = "#e9d5ff";
+            ctx.shadowBlur = 16;
+            ctx.stroke();
+
+            // Inner Gravitational Dark Halo
+            ctx.strokeStyle = "rgba(192, 132, 252, 0.85)";
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.arc(0, 0, Math.max(2, 21 * vortexScale), 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
 
             // 8 Spiraling Meteor Asteroid Boulders pulled into Singularity
             const pullP = Math.min(1, Math.max(0, arrivalP));
