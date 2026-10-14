@@ -308,7 +308,9 @@ class BattleSystem {
       // On Impact
       () => {
         const isCrit = Math.random() < c.critRate;
-        let dmg = Math.max(1, Math.round((c.atk * (isCrit ? c.critDmg : 1.0)) - (e.def * 0.4)));
+        const swordSlashSkill = c.skills.find(s => s.id === 201 || s.key === "common_01_sword_slash" || (s.name && s.name.toLowerCase().includes("sword slash")));
+        const swordMult = swordSlashSkill ? (swordSlashSkill.dmgMult || 1.30) : 1.0;
+        let dmg = Math.max(1, Math.round(((c.atk * swordMult) * (isCrit ? c.critDmg : 1.0)) - (e.def * 0.4)));
 
         if (e.isBoss) {
           const giantSlayer = c.skills.find(s => s.bossDmgBonus);
@@ -326,13 +328,17 @@ class BattleSystem {
 
           if (isCrit) {
             Sound.playSfx("attackHeavy");
-            // Clean cartoon hit spark for normal crit punch
+            // Clean cartoon hit spark for crit strike with neon cyan energy flecks
             r.addVisualEffect("hitSpark", r.enemyState.x, targetCenterY, 0.95);
+            r.addMagicImpactSparks(r.enemyState.x, targetCenterY, ["#38bdf8", "#0284c7", "#ffffff"]);
             r.addFloatingText(dmg, r.enemyState.x, targetCenterY - 15, "crit");
           } else {
-            Sound.playSfx("enemyHit");
-            // Simple subtle hit spark for normal punch
+            Sound.playSfx("slash");
+            // Clean subtle hit spark for sword strike
             r.addVisualEffect("hitSpark", r.enemyState.x, targetCenterY, 0.7);
+            if (swordSlashSkill) {
+              r.addMagicImpactSparks(r.enemyState.x, targetCenterY, ["#38bdf8", "#7dd3fc"]);
+            }
             r.addFloatingText(dmg, r.enemyState.x, targetCenterY - 15, "normal");
           }
         }

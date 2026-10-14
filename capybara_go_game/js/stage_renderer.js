@@ -105,7 +105,8 @@ class StageRenderer {
       idle: 9,
       walk: 9,
       run: 9,
-      attack: 9,
+      attack: 12,
+      sword_slash: 12,
       skill: 9,
       hurt: 9,
       die: 7
@@ -115,7 +116,9 @@ class StageRenderer {
       this.playerAnimations[anim] = [];
       for (let i = 1; i <= count; i++) {
         const frameNum = String(i).padStart(2, "0");
-        const path = `assets/characters/player/${anim}/frame_${frameNum}.png`;
+        const path = anim === "sword_slash"
+          ? `assets/skills/animations/sword_slash/frame_${frameNum}.png`
+          : `assets/characters/player/${anim}/frame_${frameNum}.png`;
         const img = new Image();
         img.src = path;
         this.playerAnimations[anim].push(img);
@@ -234,7 +237,7 @@ class StageRenderer {
     this.playerState.frameTimer = 0;
     this.playerState.loop = loop;
 
-    if (animName === "attack") this.playerState.fps = 16;
+    if (animName === "attack" || animName === "sword_slash") this.playerState.fps = 18;
     else if (animName === "skill") this.playerState.fps = 15;
     else if (animName === "walk") this.playerState.fps = 12;
     else if (animName === "run") this.playerState.fps = 14;
@@ -402,7 +405,7 @@ class StageRenderer {
     this.projectiles.push(p);
   }
 
-  // --- Player Authentic Running Charge Attack Action (Matches Reference Screenshot) ---
+  // --- Player Authentic 12-Frame Sword Slash Attack Action (3-Phase Sequence) ---
 
   performPlayerAttack(onHit, onComplete, speedMult = 1.0) {
     const p = this.playerState;
@@ -415,11 +418,12 @@ class StageRenderer {
     }
 
     const startX = this.homePlayerX;
-    // Capybara charges all the way to enemy's front (melee contact)
-    const targetContactX = e.x - 38;
-    const chargeDuration = 220 / speedMult;
-    const slashImpactDuration = 140 / speedMult;
-    const returnDuration = 200 / speedMult;
+    // Capybara charges all the way to enemy's front (melee contact with sword reach)
+    const targetContactX = e.x - 42;
+    const chargeDuration = 180 / speedMult;
+    const windupDuration = 150 / speedMult;
+    const slashImpactDuration = 180 / speedMult;
+    const returnDuration = 220 / speedMult;
 
     // Phase 1: Sprint forward towards enemy with "run" animation
     this.setPlayerAnim("run", true);
@@ -443,47 +447,50 @@ class StageRenderer {
       if (progress < 1) {
         requestAnimationFrame(forwardRunStep);
       } else {
-        // Phase 2: Reached enemy! Deliver clean normal punch / strike
+        // Reached enemy! Trigger 12-Frame Sword Slash animation
         p.x = targetContactX;
         p.offsetY = 0;
         this.setPlayerAnim("attack", false);
-        Sound.playSfx("hit");
 
-        // Subtle normal dust puff at feet
-        this.addRunDustPuff(p.x - 8, this.groundY - 2, -0.8);
-
-        // Deliver normal impact hit (clean without magic visuals)
-        if (onHit) onHit();
-
-        // Hold attack frame briefly for impact feel, then hop back
+        // Phase 1 (Frames 1-3): Wind up, ready stance, and energy gathering
         setTimeout(() => {
-          // Phase 3: Hop / leap back to home position
-          const returnStartTime = performance.now();
-          const startReturnX = p.x;
-          // While jumping backwards, face forward with idle/walk frame
-          this.setPlayerAnim("walk", true);
+          // Phase 2 (Frames 4-8): Peak Crescent Wave Slash Strike!
+          Sound.playSfx("slash");
 
-          const returnStep = (now2) => {
-            const relapsed = now2 - returnStartTime;
-            const rprogress = Math.min(1, relapsed / returnDuration);
-            // Ease-out jump curve
-            const rease = 1 - Math.pow(1 - rprogress, 2);
-            
-            p.x = startReturnX - (startReturnX - startX) * rease;
-            // Arc jump height on retreat
-            p.offsetY = -Math.sin(rprogress * Math.PI) * 12;
+          // Subtle cartoon dust puff at feet on strike
+          this.addRunDustPuff(p.x - 8, this.groundY - 2, -0.8);
 
-            if (rprogress < 1) {
-              requestAnimationFrame(returnStep);
-            } else {
-              p.x = startX;
-              p.offsetY = 0;
-              this.setPlayerAnim("idle", true);
-              if (onComplete) onComplete();
-            }
-          };
-          requestAnimationFrame(returnStep);
-        }, slashImpactDuration);
+          // Deliver impact hit to enemy (damage calculation, flash, sparks)
+          if (onHit) onHit();
+
+          // Hold through peak slash and follow-through, then hop back
+          setTimeout(() => {
+            // Phase 3 (Frames 9-12): Recovery & leap back to home position
+            const returnStartTime = performance.now();
+            const startReturnX = p.x;
+
+            const returnStep = (now2) => {
+              const relapsed = now2 - returnStartTime;
+              const rprogress = Math.min(1, relapsed / returnDuration);
+              // Ease-out jump curve
+              const rease = 1 - Math.pow(1 - rprogress, 2);
+              
+              p.x = startReturnX - (startReturnX - startX) * rease;
+              // Arc jump height on retreat
+              p.offsetY = -Math.sin(rprogress * Math.PI) * 12;
+
+              if (rprogress < 1) {
+                requestAnimationFrame(returnStep);
+              } else {
+                p.x = startX;
+                p.offsetY = 0;
+                this.setPlayerAnim("idle", true);
+                if (onComplete) onComplete();
+              }
+            };
+            requestAnimationFrame(returnStep);
+          }, slashImpactDuration);
+        }, windupDuration);
       }
     };
 
@@ -1306,7 +1313,19 @@ class StageRenderer {
     this.renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now);
 
     // Layer 2: Render Capybara Character Sprite (Clean, Crisp & Cute - Zero AI morphing/glitches)
-    ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
+    const isWiderFrame = frameImg.naturalWidth && frameImg.naturalWidth > 64;
+    if (isWiderFrame) {
+      // 144x96 frame: Capybara body is anchored at (44, 88)
+      // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
+      const s = p.scale * 0.75;
+      const sprW = frameImg.naturalWidth * s;
+      const sprH = frameImg.naturalHeight * s;
+      const sprX = -44 * s;
+      const sprY = -88 * s;
+      ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
+    } else {
+      ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
+    }
 
     // Layer 3: Render In-Front Skill Attachments (Halo, Dragon Head, Shields, Grimoire, Weapons, Cyclones)
     this.renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now);
