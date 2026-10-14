@@ -1231,8 +1231,8 @@ class StageRenderer {
 
   renderPlayerHpBar(x, y, p) {
     const ctx = this.ctx;
-    const barW = 80;
-    const barH = 9;
+    const barW = 50; // Shortened & snug overhead HP bar matching Capybara width
+    const barH = 7;
     const maxHp = p.maxHp || 1;
     const currentHp = Math.max(0, p.currentHp !== undefined ? p.currentHp : maxHp);
     const pct = Math.max(0, Math.min(1, currentHp / maxHp));
@@ -1248,20 +1248,20 @@ class StageRenderer {
 
     ctx.save();
     // Capy Name Tag
-    ctx.font = "bold 11px 'Fredoka', 'Nunito', sans-serif";
+    ctx.font = "bold 10px 'Fredoka', 'Nunito', sans-serif";
     ctx.textAlign = "center";
     ctx.strokeStyle = "rgba(0,0,0,0.9)";
     ctx.lineWidth = 3;
-    ctx.strokeText("🐾 Capy", x, y - 5);
+    ctx.strokeText("🐾 Capy", x, y - 4);
     ctx.fillStyle = "#ffffff";
-    ctx.fillText("🐾 Capy", x, y - 5);
+    ctx.fillText("🐾 Capy", x, y - 4);
 
     // Track Background
     ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
     ctx.strokeStyle = "#475569";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.roundRect(x - barW / 2, y, barW, barH, 4.5);
+    ctx.roundRect(x - barW / 2, y, barW, barH, 3.5);
     ctx.fill();
     ctx.stroke();
 
@@ -1269,7 +1269,7 @@ class StageRenderer {
     if (animPct > pct) {
       ctx.fillStyle = "#fef08a";
       ctx.beginPath();
-      ctx.roundRect(x - barW / 2, y, barW * animPct, barH, 4.5);
+      ctx.roundRect(x - barW / 2, y, barW * animPct, barH, 3.5);
       ctx.fill();
     }
 
@@ -1351,8 +1351,8 @@ class StageRenderer {
 
   renderEnemyHpBar(x, y, e) {
     const ctx = this.ctx;
-    const barW = e.isBoss ? 110 : 80;
-    const barH = 10;
+    const barW = e.isBoss ? 90 : 54;
+    const barH = e.isBoss ? 8 : 7;
     const pct = Math.max(0, Math.min(1, e.currentHp / e.maxHp));
 
     // Smooth lag catchup
@@ -1365,19 +1365,19 @@ class StageRenderer {
     const animPct = Math.max(0, Math.min(1, e.animHp / e.maxHp));
 
     ctx.save();
-    ctx.font = `bold ${e.isBoss ? 13 : 11}px 'Fredoka', 'Nunito', sans-serif`;
+    ctx.font = `bold ${e.isBoss ? 12 : 10}px 'Fredoka', 'Nunito', sans-serif`;
     ctx.textAlign = "center";
     ctx.strokeStyle = "rgba(0,0,0,0.9)";
     ctx.lineWidth = 3;
-    ctx.strokeText((e.isBoss ? "👑 " : "") + e.name, x, y - 5);
+    ctx.strokeText((e.isBoss ? "👑 " : "") + e.name, x, y - 4);
     ctx.fillStyle = e.isBoss ? "#ffd166" : "#ffffff";
-    ctx.fillText((e.isBoss ? "👑 " : "") + e.name, x, y - 5);
+    ctx.fillText((e.isBoss ? "👑 " : "") + e.name, x, y - 4);
 
     ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
     ctx.strokeStyle = "#475569";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.roundRect(x - barW / 2, y, barW, barH, 5);
+    ctx.roundRect(x - barW / 2, y, barW, barH, 3.5);
     ctx.fill();
     ctx.stroke();
 
@@ -1385,7 +1385,7 @@ class StageRenderer {
     if (animPct > pct) {
       ctx.fillStyle = "#ffffff";
       ctx.beginPath();
-      ctx.roundRect(x - barW / 2, y, barW * animPct, barH, 5);
+      ctx.roundRect(x - barW / 2, y, barW * animPct, barH, 3.5);
       ctx.fill();
     }
 
@@ -1395,7 +1395,7 @@ class StageRenderer {
       grad.addColorStop(1, "#f97316");
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.roundRect(x - barW / 2, y, barW * pct, barH, 5);
+      ctx.roundRect(x - barW / 2, y, barW * pct, barH, 3.5);
       ctx.fill();
     }
     ctx.restore();
