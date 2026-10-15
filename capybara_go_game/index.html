@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Fredoka:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -127,6 +128,12 @@
         <!-- Upper Stage Canvas (Visual Scene, Capybara, Enemies, Parallax) -->
         <div id="stage-viewport">
           <canvas id="stage-canvas" width="440" height="350"></canvas>
+
+          <!-- Quick Interactive Test Dragon Roar Button (1-Click Test) -->
+          <button id="btn-quick-dragon-test" class="btn-quick-dragon-test" onclick="window.testDragonRoar && window.testDragonRoar()" title="Klik untuk tes animasi Dragon Roar">
+            <span class="btn-dragon-icon">🐉</span>
+            <span class="btn-dragon-label">Tes Dragon Roar</span>
+          </button>
 
           <!-- ================= AUTHENTIC MENU STAGE OVERLAY ================= -->
           <div id="menu-stage-overlay" class="menu-stage-overlay">
