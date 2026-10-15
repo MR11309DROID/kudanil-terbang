@@ -1221,16 +1221,14 @@ body {
 /* Battle HUD Elements (Round Indicator & Speed Toggle) */
 .stage-battle-hud {
   position: absolute;
-  top: 12px;
-  left: 0;
-  right: 0;
+  inset: 0;
   pointer-events: none;
   z-index: 13;
 }
 
 .stage-round-pill {
   position: absolute;
-  top: 0;
+  top: 12px;
   left: 50%;
   transform: translateX(-50%);
   font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
@@ -1250,18 +1248,18 @@ body {
 
 .stage-speed-btn {
   position: absolute;
-  bottom: -332px;
+  bottom: 8px;
   right: 12px;
   pointer-events: auto;
   width: 44px;
-  height: 38px;
+  height: 34px;
   background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
-  border: 2.2px solid #0f172a;
+  border: 2px solid #0f172a;
   border-radius: 9px;
   box-shadow: 0 3px 0 #0f172a, 0 4px 8px rgba(0, 0, 0, 0.4);
   color: #ffffff;
   font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1653,31 +1651,38 @@ body {
 
 /* 2. HP Cute Heart & Percentage */
 .badge-hp-heart {
-  left: -11px;
-  top: calc(50% + 5px);
+  left: -8px;
+  top: 50%;
   transform: translateY(-50%);
-  width: 28px;
+  width: 26px;
+  height: 24px;
+  position: absolute;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .svg-heart-icon {
   width: 26px;
   height: 24px;
   overflow: visible;
+  display: block;
 }
 
 .hp-pct-tag {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%);
   font-family: 'Lilita One', 'Fredoka', sans-serif;
-  font-size: 11px;
+  font-size: 8.5px;
   font-weight: 900;
   color: #ffffff;
   text-shadow: 0 1px 2px #000, 1px 0 0 #000, -1px 0 0 #000, 0 -1px 0 #000;
-  margin-top: -6px;
   line-height: 1;
   z-index: 2;
   user-select: none;
+  pointer-events: none;
 }
 
 /* 3. ATK Sword */
@@ -1743,9 +1748,8 @@ body {
 }
 
 /* Real-Time Heart Damage Shake */
-.badge-hp-heart.heart-damaged-shake .svg-heart-icon,
-.heart-damaged-shake {
-  animation: heart-dmg-shake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+.badge-hp-heart.heart-damaged-shake .svg-heart-icon {
+  animation: heart-dmg-shake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
 
 @keyframes heart-dmg-shake {
@@ -1758,9 +1762,8 @@ body {
 }
 
 /* Real-Time Heart Heal Pulse */
-.badge-hp-heart.heart-heal-pulse .svg-heart-icon,
-.heart-heal-pulse {
-  animation: heart-heal-glow 0.45s ease-out both;
+.badge-hp-heart.heart-heal-pulse .svg-heart-icon {
+  animation: heart-heal-glow 0.45s ease-out;
 }
 
 @keyframes heart-heal-glow {
