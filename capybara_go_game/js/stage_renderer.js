@@ -2953,6 +2953,480 @@ class StageRenderer {
         if (onComplete) onComplete();
       }
     });
+  // --- 100% Procedural 120 FPS Ancient Red Dragon, Blast & Crater Vector Engine ---
+
+  drawDragonWing(ctx, side, now) {
+    const flapFlex = Math.sin(now * 0.007) * 0.18;
+    const isFront = side > 0;
+
+    ctx.save();
+    ctx.shadowColor = "#f97316";
+    ctx.shadowBlur = 14;
+
+    // Wing Membrane
+    const memGrad = ctx.createLinearGradient(0, -60, 40, 20);
+    memGrad.addColorStop(0, isFront ? "#f97316" : "#ea580c");
+    memGrad.addColorStop(0.4, isFront ? "#dc2626" : "#b91c1c");
+    memGrad.addColorStop(0.85, isFront ? "#991b1b" : "#7f1d1d");
+    memGrad.addColorStop(1, "rgba(69, 10, 10, 0.4)");
+    ctx.fillStyle = memGrad;
+    ctx.strokeStyle = "#450a0a";
+    ctx.lineWidth = 1.8;
+
+    // Wing Membrane Shape
+    ctx.beginPath();
+    ctx.moveTo(0, 0); // Shoulder
+    ctx.lineTo(-20, -45); // Elbow
+    ctx.lineTo(10, -78);  // Wing thumb spike
+    // Finger spars & scallops
+    ctx.quadraticCurveTo(35, -55 + flapFlex * 15, 52, -62);
+    ctx.quadraticCurveTo(48, -35 + flapFlex * 12, 60, -32);
+    ctx.quadraticCurveTo(45, -12 + flapFlex * 8, 48, 8);
+    ctx.quadraticCurveTo(25, 4, 0, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Bone Spar Struts radiating from elbow
+    ctx.strokeStyle = "#78350f";
+    ctx.lineWidth = 2.2;
+    const struts = [
+      { x: 52, y: -62 },
+      { x: 60, y: -32 },
+      { x: 48, y: 8 }
+    ];
+    struts.forEach(st => {
+      ctx.beginPath();
+      ctx.moveTo(10, -78);
+      ctx.lineTo(st.x, st.y);
+      ctx.stroke();
+    });
+
+    // Main Forearm Bone
+    ctx.strokeStyle = "#b91c1c";
+    ctx.lineWidth = 4.5;
+    ctx.beginPath();
+    ctx.moveTo(0, 0); ctx.lineTo(-20, -45); ctx.lineTo(10, -78);
+    ctx.stroke();
+
+    // Thumb claw
+    ctx.fillStyle = "#fef08a";
+    ctx.strokeStyle = "#451a03";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(8, -76); ctx.lineTo(12, -88); ctx.lineTo(15, -78);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  renderProceduralAncientDragon(ctx, x, y, scale, progress, now, isBreathing) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+
+    // Smooth sinusoidal cycles for 120 FPS animations
+    const flap = Math.sin(now * 0.007);
+    const hoverBob = Math.sin(now * 0.004) * 4;
+
+    // 1. Fiery Radiant Bloom Aura behind Dragon (Zero square edges)
+    const bloomGrad = ctx.createRadialGradient(0, -10, 15, 0, -10, 95);
+    bloomGrad.addColorStop(0, "rgba(254, 240, 138, 0.85)");
+    bloomGrad.addColorStop(0.25, "rgba(249, 115, 22, 0.65)");
+    bloomGrad.addColorStop(0.65, "rgba(220, 38, 38, 0.3)");
+    bloomGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = bloomGrad;
+    ctx.beginPath();
+    ctx.arc(0, -10, 95, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Far Wing (Behind Body)
+    ctx.save();
+    ctx.translate(-16, -26);
+    ctx.rotate(-0.35 + flap * 0.28);
+    this.drawDragonWing(ctx, -1, now);
+    ctx.restore();
+
+    // 3. Serpentine Tail
+    ctx.save();
+    ctx.translate(-35, 12);
+    const tailWave = Math.sin(now * 0.005) * 8;
+    ctx.fillStyle = "#991b1b";
+    ctx.strokeStyle = "#450a0a";
+    ctx.lineWidth = 2.0;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.quadraticCurveTo(-25, 8 + tailWave * 0.5, -45, -5 + tailWave);
+    ctx.quadraticCurveTo(-55, -12 + tailWave, -68, -2 + tailWave * 1.2);
+    ctx.lineTo(-72, 8 + tailWave * 1.2);
+    ctx.lineTo(-58, 12 + tailWave);
+    ctx.quadraticCurveTo(-38, 22 + tailWave * 0.5, 0, 10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Tail Spade Fin
+    ctx.fillStyle = "#f97316";
+    ctx.shadowColor = "#fde047";
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.moveTo(-60, 4 + tailWave);
+    ctx.lineTo(-78, -8 + tailWave * 1.2);
+    ctx.lineTo(-84, 5 + tailWave * 1.3);
+    ctx.lineTo(-72, 14 + tailWave * 1.2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // 4. Main Torso & Muscular Body
+    ctx.save();
+    ctx.shadowColor = "#f97316";
+    ctx.shadowBlur = 16;
+    const bodyGrad = ctx.createLinearGradient(-35, -25, 20, 20);
+    bodyGrad.addColorStop(0, "#ef4444");
+    bodyGrad.addColorStop(0.5, "#dc2626");
+    bodyGrad.addColorStop(1, "#7f1d1d");
+    ctx.fillStyle = bodyGrad;
+    ctx.strokeStyle = "#450a0a";
+    ctx.lineWidth = 2.2;
+
+    ctx.beginPath();
+    ctx.moveTo(-32, -15);
+    ctx.quadraticCurveTo(-15, -35, 12, -28); // Back line
+    ctx.quadraticCurveTo(28, -20, 24, 8);    // Chest bulge
+    ctx.quadraticCurveTo(18, 28, -5, 24);    // Belly
+    ctx.quadraticCurveTo(-28, 20, -32, 0);   // Pelvis
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Golden Layered Armored Underbelly Plates (Scutes)
+    const bellyGrad = ctx.createLinearGradient(-15, -10, 20, 24);
+    bellyGrad.addColorStop(0, "#fef08a");
+    bellyGrad.addColorStop(0.4, "#facc15");
+    bellyGrad.addColorStop(1, "#ca8a04");
+    ctx.fillStyle = bellyGrad;
+    ctx.strokeStyle = "#78350f";
+    ctx.lineWidth = 1.4;
+
+    ctx.beginPath();
+    ctx.moveTo(-8, -18);
+    ctx.quadraticCurveTo(14, -12, 18, 4);
+    ctx.quadraticCurveTo(12, 22, -2, 20);
+    ctx.quadraticCurveTo(-4, 4, -8, -18);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Underbelly horizontal segments
+    for (let s = 0; s < 4; s++) {
+      const sy = -10 + s * 8;
+      ctx.beginPath();
+      ctx.moveTo(-7 + s * 1.5, sy);
+      ctx.lineTo(16 - s * 1.8, sy + 3);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 5. Back Spinal Spikes
+    ctx.fillStyle = "#facc15";
+    ctx.strokeStyle = "#78350f";
+    ctx.lineWidth = 1.2;
+    const spinePoints = [
+      { x: -30, y: -10, rot: -0.6 },
+      { x: -22, y: -22, rot: -0.3 },
+      { x: -10, y: -30, rot: -0.1 },
+      { x: 2, y: -32, rot: 0.2 },
+      { x: 14, y: -26, rot: 0.4 }
+    ];
+    spinePoints.forEach(sp => {
+      ctx.save();
+      ctx.translate(sp.x, sp.y);
+      ctx.rotate(sp.rot);
+      ctx.beginPath();
+      ctx.moveTo(-3, 0); ctx.lineTo(0, -10); ctx.lineTo(3, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // 6. Muscular Front Claw / Forearm
+    ctx.save();
+    ctx.translate(8, 14);
+    ctx.rotate(0.25 + flap * 0.1);
+    ctx.fillStyle = "#b91c1c";
+    ctx.strokeStyle = "#450a0a";
+    ctx.lineWidth = 2.0;
+    ctx.beginPath();
+    ctx.moveTo(-5, -6); ctx.lineTo(10, 4); ctx.lineTo(6, 18); ctx.lineTo(-2, 16);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Talons
+    ctx.fillStyle = "#fef08a";
+    ctx.strokeStyle = "#451a03";
+    ctx.lineWidth = 1.2;
+    for (let c = -1; c <= 1; c++) {
+      ctx.beginPath();
+      ctx.moveTo(2 + c * 4, 16);
+      ctx.lineTo(6 + c * 6, 24);
+      ctx.lineTo(1 + c * 4, 21);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 7. Powerful S-Curved Neck & Horned Dragon Head
+    ctx.save();
+    ctx.translate(14, -22);
+    const neckSway = Math.sin(now * 0.005) * 3;
+    ctx.rotate(neckSway * 0.03);
+
+    // Neck
+    const neckGrad = ctx.createLinearGradient(0, -5, 26, -28);
+    neckGrad.addColorStop(0, "#dc2626");
+    neckGrad.addColorStop(0.5, "#ef4444");
+    neckGrad.addColorStop(1, "#b91c1c");
+    ctx.fillStyle = neckGrad;
+    ctx.strokeStyle = "#450a0a";
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(-4, 6);
+    ctx.quadraticCurveTo(8, -12, 18, -26);
+    ctx.lineTo(34, -24);
+    ctx.quadraticCurveTo(24, 0, 10, 16);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Dragon Head Center
+    ctx.translate(26, -26);
+
+    // Sweeping Golden Back Horns
+    ctx.fillStyle = "#fef08a";
+    ctx.strokeStyle = "#854d0e";
+    ctx.lineWidth = 1.6;
+    ctx.shadowColor = "#facc15";
+    ctx.shadowBlur = 8;
+    // Main Upper Horn
+    ctx.beginPath();
+    ctx.moveTo(-4, -6);
+    ctx.quadraticCurveTo(-16, -22, -32, -26);
+    ctx.quadraticCurveTo(-14, -14, 2, -2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    // Secondary Lower Horn
+    ctx.beginPath();
+    ctx.moveTo(-2, 2);
+    ctx.quadraticCurveTo(-12, -6, -24, -8);
+    ctx.quadraticCurveTo(-10, 0, 4, 6);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Dragon Cranium / Upper Snout
+    ctx.fillStyle = "#dc2626";
+    ctx.strokeStyle = "#450a0a";
+    ctx.lineWidth = 2.0;
+    ctx.shadowColor = "#f97316";
+    ctx.shadowBlur = 12;
+
+    ctx.beginPath();
+    ctx.moveTo(-4, -6);
+    ctx.lineTo(16, -8);
+    ctx.lineTo(28, -2); // Snout tip
+    ctx.lineTo(26, 4);  // Upper lip
+    ctx.lineTo(6, 4);   // Mouth roof
+    ctx.lineTo(0, 8);   // Jaw hinge
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Upper sharp teeth
+    ctx.fillStyle = "#ffffff";
+    for (let t = 0; t < 3; t++) {
+      const tx = 10 + t * 5;
+      ctx.beginPath();
+      ctx.moveTo(tx, 4); ctx.lineTo(tx + 2, 9); ctx.lineTo(tx + 4, 4);
+      ctx.fill();
+    }
+
+    // Glowing Dragon Slit Eye
+    ctx.fillStyle = "#facc15";
+    ctx.shadowColor = "#fde047";
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.ellipse(8, -2, 4.5, 2.8, -0.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#991b1b";
+    ctx.beginPath();
+    ctx.ellipse(8.5, -2, 1.2, 2.4, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(9.2, -2.6, 1.0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Articulated Roaring Lower Jaw
+    ctx.save();
+    ctx.translate(2, 6);
+    const jawOpen = isBreathing ? 0.48 : (0.15 + Math.sin(now * 0.006) * 0.1);
+    ctx.rotate(jawOpen);
+
+    ctx.fillStyle = "#b91c1c";
+    ctx.strokeStyle = "#450a0a";
+    ctx.lineWidth = 2.0;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(22, 2);  // Lower jaw tip
+    ctx.lineTo(18, 7);  // Chin
+    ctx.lineTo(0, 6);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Lower teeth
+    ctx.fillStyle = "#ffffff";
+    for (let t = 0; t < 3; t++) {
+      const tx = 6 + t * 5;
+      ctx.beginPath();
+      ctx.moveTo(tx, 1); ctx.lineTo(tx + 2, -4); ctx.lineTo(tx + 4, 1);
+      ctx.fill();
+    }
+
+    // Inner Throat White-Hot Inferno Core
+    if (isBreathing) {
+      const fireCore = ctx.createRadialGradient(2, 0, 1, 14, 0, 18);
+      fireCore.addColorStop(0, "#ffffff");
+      fireCore.addColorStop(0.3, "#fef08a");
+      fireCore.addColorStop(0.7, "#f97316");
+      fireCore.addColorStop(1, "rgba(220, 38, 38, 0)");
+      ctx.fillStyle = fireCore;
+      ctx.beginPath();
+      ctx.arc(8, -2, 14, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore(); // End Lower Jaw
+    ctx.restore(); // End Neck & Head
+
+    // 8. Near Wing (In Front of Body - Dynamic 120 FPS Flap)
+    ctx.save();
+    ctx.translate(6, -24);
+    ctx.rotate(-0.15 + flap * 0.35);
+    this.drawDragonWing(ctx, 1, now);
+    ctx.restore();
+
+    ctx.restore(); // End Whole Dragon
+  }
+
+  renderProceduralBlast(ctx, x, y, p, now) {
+    ctx.save();
+    const blastAlpha = Math.sin(p * Math.PI);
+    ctx.globalAlpha = Math.min(1, blastAlpha * 1.5);
+
+    // 1. Central White-Hot Supernova Core
+    const coreScale = 1.8 + p * 1.2;
+    const cGrad = ctx.createRadialGradient(x, y - 20, 4, x, y - 20, 65 * coreScale);
+    cGrad.addColorStop(0, "#ffffff");
+    cGrad.addColorStop(0.2, "rgba(254, 240, 138, 0.95)");
+    cGrad.addColorStop(0.55, "rgba(249, 115, 22, 0.85)");
+    cGrad.addColorStop(0.85, "rgba(220, 38, 38, 0.5)");
+    cGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = cGrad;
+    ctx.beginPath();
+    ctx.arc(x, y - 20, 65 * coreScale, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Jagged Cartoon Explosion Teeth (Spikes erupting outward)
+    ctx.save();
+    ctx.translate(x, y - 20);
+    ctx.rotate(now * 0.002);
+    ctx.fillStyle = "#fde047";
+    ctx.strokeStyle = "#ea580c";
+    ctx.lineWidth = 3.0;
+    ctx.shadowColor = "#ff4500";
+    ctx.shadowBlur = 24;
+
+    const spikeCount = 14;
+    ctx.beginPath();
+    for (let s = 0; s < spikeCount * 2; s++) {
+      const angle = (s / (spikeCount * 2)) * Math.PI * 2;
+      const isSpike = s % 2 === 0;
+      const r = (isSpike ? (55 + (s % 3) * 16) : 26) * coreScale;
+      const sx = Math.cos(angle) * r;
+      const sy = Math.sin(angle) * r;
+      if (s === 0) ctx.moveTo(sx, sy);
+      else ctx.lineTo(sx, sy);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    // 3. Expanding Concentric Shockwave Rings along Ground
+    ctx.strokeStyle = "#fef08a";
+    ctx.lineWidth = 7 * (1 - p);
+    ctx.shadowColor = "#f97316";
+    ctx.shadowBlur = 18;
+    ctx.beginPath();
+    ctx.ellipse(x, this.groundY, 125 * p, 34 * p, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#ef4444";
+    ctx.lineWidth = 4 * (1 - p);
+    ctx.beginPath();
+    ctx.ellipse(x, this.groundY, 155 * p, 42 * p, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  renderProceduralCrater(ctx, x, y, p, now) {
+    const crAlpha = Math.max(0, 1 - p);
+    ctx.save();
+    ctx.globalAlpha = crAlpha;
+
+    // 1. Scorched Black Ellipse
+    ctx.fillStyle = "rgba(28, 25, 23, 0.88)";
+    ctx.beginPath();
+    ctx.ellipse(x, y, 62, 20, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Molten Lava Cracks / Fissures radiating from center
+    ctx.strokeStyle = "#f97316";
+    ctx.lineWidth = 3.0 * crAlpha;
+    ctx.shadowColor = "#fde047";
+    ctx.shadowBlur = 14;
+
+    const fissureOffsets = [
+      [-38, -6], [-48, 5], [-22, 12], [0, 15],
+      [26, 12], [46, 4], [35, -8], [12, -14], [-15, -12]
+    ];
+    ctx.beginPath();
+    fissureOffsets.forEach(pt => {
+      ctx.moveTo(x, y);
+      ctx.quadraticCurveTo(x + pt[0] * 0.5 + Math.sin(pt[0]) * 4, y + pt[1] * 0.5, x + pt[0], y + pt[1]);
+    });
+    ctx.stroke();
+
+    // Inner Yellow Molten Heat
+    ctx.strokeStyle = "#fef08a";
+    ctx.lineWidth = 1.4 * crAlpha;
+    ctx.beginPath();
+    fissureOffsets.forEach(pt => {
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + pt[0] * 0.6, y + pt[1] * 0.6);
+    });
+    ctx.stroke();
+
+    ctx.restore();
   }
 
   launchDragonBreath(startX, startY, targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
@@ -3194,34 +3668,25 @@ class StageRenderer {
           ctx.restore();
         }
 
-        // 4. ANCIENT RED DRAGON AVATAR (Phase 3 & 4, 0.32 - 0.72) - EXACT Style from Image!
+        // 4. ANCIENT RED DRAGON AVATAR (Phase 3 & 4, 0.32 - 0.72) - 100% Procedural 120 FPS Vector Engine
         if (p >= 0.32 && p < 0.72) {
           const dp = (p - 0.32) / 0.40;
           const dragonAlpha = Math.sin(dp * Math.PI);
 
           // Dragon position: hovering majestic above Capy & surging toward enemy
-          const dragonX = this.playerState.x + 48 + dp * 35;
-          const dragonY = this.groundY - 110 + Math.sin(now * 0.005) * 6;
+          const dragonX = this.playerState.x + 52 + dp * 38;
+          const dragonY = this.groundY - 115 + Math.sin(now * 0.005) * 6;
+          const dScale = 1.35 + Math.sin(dp * Math.PI) * 0.15;
+          const isBreathing = (p >= 0.50 && p < 0.70);
 
           ctx.save();
           ctx.globalAlpha = Math.min(1, dragonAlpha * 1.3);
 
-          // Radiant Fiery Bloom behind Dragon
-          const bloomGrad = ctx.createRadialGradient(dragonX, dragonY, 20, dragonX, dragonY, 110);
-          bloomGrad.addColorStop(0, "rgba(254, 240, 138, 0.75)");
-          bloomGrad.addColorStop(0.3, "rgba(249, 115, 22, 0.55)");
-          bloomGrad.addColorStop(0.7, "rgba(220, 38, 38, 0.25)");
-          bloomGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
-          ctx.fillStyle = bloomGrad;
-          ctx.beginPath();
-          ctx.arc(dragonX, dragonY, 110, 0, Math.PI * 2);
-          ctx.fill();
-
           // 12 Orbiting Dragon Flame Wisps
           for (let w of dragonWisps) {
             const wAng = w.angle + now * w.speed * 0.04;
-            const wx = dragonX + Math.cos(wAng) * w.dist;
-            const wy = dragonY + Math.sin(wAng) * (w.dist * 0.55);
+            const wx = dragonX + Math.cos(wAng) * (w.dist * 1.2);
+            const wy = dragonY + Math.sin(wAng) * (w.dist * 0.65);
             ctx.fillStyle = w.color;
             ctx.shadowColor = w.color;
             ctx.shadowBlur = 10;
@@ -3230,16 +3695,8 @@ class StageRenderer {
             ctx.fill();
           }
 
-          // Authentic Ancient Red Dragon (Frame 07 from User Sprite Sheet!)
-          const imgDragon = this.dragonRoarAssets?.frame07Dragon || (this.playerAnimations.dragon_roar && this.playerAnimations.dragon_roar[6]);
-          if (imgDragon && imgDragon.complete) {
-            ctx.shadowColor = "#ff4500";
-            ctx.shadowBlur = 32;
-            const dScale = 2.4 + Math.sin(dp * Math.PI) * 0.3;
-            const dw = 85 * dScale;
-            const dh = 85 * dScale;
-            ctx.drawImage(imgDragon, dragonX - dw * 0.45, dragonY - dh * 0.5, dw, dh);
-          }
+          // Render 100% Custom Animated Vector Dragon (Zero Square Boxes, Pure 120 FPS)
+          this.renderProceduralAncientDragon(ctx, dragonX, dragonY, dScale, dp, now, isBreathing);
 
           ctx.restore();
         }
@@ -3249,8 +3706,13 @@ class StageRenderer {
           const bp = (p - 0.50) / 0.20;
           const beamAlpha = Math.sin(bp * Math.PI);
 
-          const dragonMawX = this.playerState.x + 75;
-          const dragonMawY = this.groundY - 80;
+          const dp = (p - 0.32) / 0.40;
+          const dragonX = this.playerState.x + 52 + dp * 38;
+          const dragonY = this.groundY - 115 + Math.sin(now * 0.005) * 6;
+          const dScale = 1.35 + Math.sin(dp * Math.PI) * 0.15;
+
+          const dragonMawX = dragonX + 38 * dScale;
+          const dragonMawY = dragonY - 26 * dScale;
           const reach = dragonMawX + (targetX - dragonMawX) * Math.min(1, bp * 1.8);
           const spread = 45 * Math.sin(bp * Math.PI);
 
@@ -3308,36 +3770,9 @@ class StageRenderer {
         // 6. CATACLYSMIC IMPACT & SUPERNOVA DRAGON BLAST (Phase 5, 0.70 - 0.86)
         if (p >= 0.70 && p < 0.86) {
           const expP = (p - 0.70) / 0.16;
-          const expAlpha = Math.sin(expP * Math.PI);
 
-          ctx.save();
-          ctx.globalAlpha = Math.min(1, expAlpha * 1.4);
-
-          // Authentic Frame 08 Blast from User Sprite Sheet!
-          const imgBlast = this.dragonRoarAssets?.frame08Blast || (this.playerAnimations.dragon_roar && this.playerAnimations.dragon_roar[7]);
-          if (imgBlast && imgBlast.complete) {
-            ctx.shadowColor = "#ff2200";
-            ctx.shadowBlur = 45;
-            const bScale = 2.2 + expP * 0.8;
-            const bw = 85 * bScale;
-            const bh = 85 * bScale;
-            ctx.drawImage(imgBlast, targetX - bw / 2, targetY - bh * 0.55, bw, bh);
-          }
-
-          // Procedural Expanding Double Shockwave Rings
-          ctx.strokeStyle = "#fde047";
-          ctx.lineWidth = 6 * (1 - expP);
-          ctx.shadowColor = "#f97316";
-          ctx.shadowBlur = 20;
-          ctx.beginPath();
-          ctx.ellipse(targetX, this.groundY, 115 * expP, 32 * expP, 0, 0, Math.PI * 2);
-          ctx.stroke();
-
-          ctx.strokeStyle = "#ef4444";
-          ctx.lineWidth = 3.5 * (1 - expP);
-          ctx.beginPath();
-          ctx.ellipse(targetX, this.groundY, 140 * expP, 38 * expP, 0, 0, Math.PI * 2);
-          ctx.stroke();
+          // Pure Procedural Supernova Blast (Zero square bitmaps)
+          this.renderProceduralBlast(ctx, targetX, targetY, expP, now);
 
           // Flying Fire Debris Shards
           for (let shard of explosionShards) {
@@ -3350,8 +3785,6 @@ class StageRenderer {
             ctx.arc(sx, sy, shard.size * (1 - expP * 0.7), 0, Math.PI * 2);
             ctx.fill();
           }
-
-          ctx.restore();
         }
 
         // 7. SCORCHED GROUND CRATER & SMOKE (Phase 6, 0.82 - 0.96)
@@ -3359,16 +3792,8 @@ class StageRenderer {
           const crP = (p - 0.82) / 0.14;
           const crAlpha = 1 - crP;
 
-          ctx.save();
-          ctx.globalAlpha = crAlpha * 0.9;
-
-          // Authentic Frame 09 Crater from User Sprite Sheet!
-          const imgCrater = this.dragonRoarAssets?.frame09Crater || (this.playerAnimations.dragon_roar && this.playerAnimations.dragon_roar[8]);
-          if (imgCrater && imgCrater.complete) {
-            const cw = 85 * 1.8;
-            const ch = 85 * 1.8;
-            ctx.drawImage(imgCrater, targetX - cw / 2, this.groundY - ch * 0.75, cw, ch);
-          }
+          // Pure Procedural Scorched Earth Lava Crater (Zero square bitmaps)
+          this.renderProceduralCrater(ctx, targetX, this.groundY, crP, now);
 
           // Procedural Rising Dark Smoke Puffs
           for (let sm = 0; sm < 6; sm++) {
@@ -3381,8 +3806,6 @@ class StageRenderer {
             ctx.arc(smX, smY, smSize, 0, Math.PI * 2);
             ctx.fill();
           }
-
-          ctx.restore();
         }
 
         // 8. DRAGON VORTEX SETTLE & FLOATING EMBERS (Phase 7, 0.88 - 1.00)
