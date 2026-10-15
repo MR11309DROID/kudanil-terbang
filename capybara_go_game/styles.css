@@ -1250,7 +1250,7 @@ body {
 
 .stage-speed-btn {
   position: absolute;
-  bottom: -320px;
+  bottom: -332px;
   right: 12px;
   pointer-events: auto;
   width: 44px;
@@ -1654,7 +1654,7 @@ body {
 /* 2. HP Cute Heart & Percentage */
 .badge-hp-heart {
   left: -11px;
-  top: 50%;
+  top: calc(50% + 5px);
   transform: translateY(-50%);
   width: 28px;
   display: flex;
@@ -1743,6 +1743,7 @@ body {
 }
 
 /* Real-Time Heart Damage Shake */
+.badge-hp-heart.heart-damaged-shake .svg-heart-icon,
 .heart-damaged-shake {
   animation: heart-dmg-shake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
@@ -1757,6 +1758,7 @@ body {
 }
 
 /* Real-Time Heart Heal Pulse */
+.badge-hp-heart.heart-heal-pulse .svg-heart-icon,
 .heart-heal-pulse {
   animation: heart-heal-glow 0.45s ease-out both;
 }
