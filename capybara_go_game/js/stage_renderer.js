@@ -115,6 +115,7 @@ class StageRenderer {
       sword_slash: 12,
       heal: 12,
       black_hole: 12,
+      dragon_roar: 12,
       skill: 9,
       hurt: 9,
       die: 7
@@ -130,12 +131,24 @@ class StageRenderer {
           ? `assets/skills/animations/heal/frame_${frameNum}.png`
           : anim === "black_hole"
           ? `assets/skills/animations/black_hole/frame_${frameNum}.png`
+          : anim === "dragon_roar"
+          ? `assets/skills/animations/dragon_roar/frame_${frameNum}.png`
           : `assets/characters/player/${anim}/frame_${frameNum}.png`;
         const img = new Image();
         img.src = path;
         this.playerAnimations[anim].push(img);
       }
     }
+
+    // Preload Authentic Dragon Roar VFX Assets
+    this.dragonRoarAssets = {
+      frame07Dragon: new Image(),
+      frame08Blast: new Image(),
+      frame09Crater: new Image()
+    };
+    this.dragonRoarAssets.frame07Dragon.src = "assets/skills/animations/dragon_roar/frame_07.png";
+    this.dragonRoarAssets.frame08Blast.src = "assets/skills/animations/dragon_roar/frame_08.png";
+    this.dragonRoarAssets.frame09Crater.src = "assets/skills/animations/dragon_roar/frame_09.png";
 
     // Preload Authentic HD Black Hole Assets (Feathered 60 FPS sprites)
     this.blackHoleHdImages = {
@@ -1126,7 +1139,7 @@ class StageRenderer {
             p.frameIndex = 0;
           } else {
             p.frameIndex = animFrames.length - 1;
-            if (p.currentAnim === "hurt" || p.currentAnim === "heal" || p.currentAnim === "black_hole") {
+            if (p.currentAnim === "hurt" || p.currentAnim === "heal" || p.currentAnim === "black_hole" || p.currentAnim === "dragon_roar") {
               this.setPlayerAnim("idle", true);
             }
           }
@@ -1733,6 +1746,15 @@ class StageRenderer {
         const sprX = -86 * s;
         const sprY = -114 * s;
         ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
+      } else if (p.currentAnim === "dragon_roar") {
+        // 85x85 frame: Capybara body anchored at (52, 66)
+        // Scale by 1.15 to match 64x64 idle sprite scale
+        const s = p.scale * 1.15;
+        const sprW = frameImg.naturalWidth * s;
+        const sprH = frameImg.naturalHeight * s;
+        const sprX = -52 * s;
+        const sprY = -66 * s;
+        ctx.drawImage(frameImg, sprX, sprY, sprW, sprH);
       } else {
         // 144x96 frame (attack / sword_slash): Capybara body anchored at (44, 88)
         // Scale by 0.75 so the body height matches the 64x64 idle sprite exactly
@@ -2276,7 +2298,7 @@ class StageRenderer {
     }
 
     // 2. Mythic: Dragon Roar (Ethereal Fiery Dragon Head Floating Overhead Diagonally)
-    if (hasSkill("dragon")) {
+    if (hasSkill("dragon") && p.currentAnim !== "dragon_roar") {
       ctx.save();
       const dragonBob = Math.sin(now * 0.0025) * 4;
       ctx.translate(drawW * 0.22, -drawH - 12 + dragonBob);
@@ -2632,7 +2654,7 @@ class StageRenderer {
     }
 
     // 12. Mythic: Black Hole / Cosmic Crystal Sword (Pedang Kristal Kosmik Besar Sesuai Video)
-    const hasBlackHole = hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.swordAction) || (p.skillExpression && p.skillExpression !== "normal");
+    const hasBlackHole = (hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.swordAction) || (p.skillExpression && p.skillExpression !== "normal")) && p.currentAnim !== "dragon_roar";
     if (hasBlackHole) {
       ctx.save();
       const swordBob = Math.sin(now * 0.003) * 1.8;
@@ -2887,51 +2909,173 @@ class StageRenderer {
   }
 
   launchDragonBreath(startX, startY, targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
-    const duration = 340 / speedMult;
+    const totalDuration = 1600 / speedMult;
     let hitTriggered = false;
+    let roarTriggered = false;
+    let breathSoundTriggered = false;
+
+    // Trigger dragon_roar 12-frame sprite animation on Capybara
+    this.setPlayerAnim("dragon_roar", false);
+    if (this.playerState) {
+      this.playerState.frameIndex = 0;
+      this.playerState.frameTimer = 0;
+      this.playerState.fps = (12 / (totalDuration / 1000));
+    }
+
+    // Play initial flame charge sound
+    Sound.playSfx("fire");
+
+    const effectStart = performance.now();
 
     this.skillCombatEffects.push({
-      startTime: performance.now(),
-      duration: duration + 100,
-      update: (progress) => {
-        if (progress >= 0.5 && !hitTriggered) {
-          hitTriggered = true;
+      startTime: effectStart,
+      duration: totalDuration,
+      update: (progress, elapsed) => {
+        // Sync Capy's frame index directly to progress
+        if (this.playerState && this.playerState.currentAnim === "dragon_roar") {
+          const currentFrame = Math.min(11, Math.floor(progress * 12));
+          this.playerState.frameIndex = currentFrame;
+        }
+
+        // At progress 0.45 (Frame 6 - Dragon Breath surge):
+        if (progress >= 0.45 && !breathSoundTriggered) {
+          breathSoundTriggered = true;
+          Sound.playSfx("fire");
+        }
+
+        // At progress 0.58 (Frame 7 - Ancient Dragon avatar descent & roar):
+        if (progress >= 0.58 && !roarTriggered) {
+          roarTriggered = true;
           Sound.playSfx("bossRoar");
+          this.addScreenShake(8, 300 / speedMult);
+        }
+
+        // At progress 0.68 (Frame 8 - Cataclysmic explosion impact on enemy):
+        if (progress >= 0.68 && !hitTriggered) {
+          hitTriggered = true;
           if (this.enemyState) {
-            this.enemyState.flashWhite = 0.8;
-            this.enemyState.shake = 1.8;
+            this.enemyState.flashWhite = 1.0;
+            this.enemyState.shake = 3.5;
+            this.enemyState.knockback = 28;
           }
-          this.addVisualEffect("critBurst", targetX, targetY - 20, 1.8);
-          this.addMagicImpactSparks(targetX, targetY - 20, ["#f97316", "#ef4444", "#fde047"]);
+          this.addScreenShake(14, 450 / speedMult);
+          this.addVisualEffect("critBurst", targetX, targetY - 20, 2.5);
+          this.addMagicImpactSparks(targetX, targetY - 20, ["#ff2200", "#f97316", "#fde047", "#ffffff"]);
           if (onHit) onHit();
         }
       },
       render: (ctx) => {
         const now = performance.now();
-        const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
-        const p = Math.min(1, elapsed / duration);
+        const elapsed = now - effectStart;
+        const progress = Math.min(1, Math.max(0, elapsed / totalDuration));
 
-        ctx.save();
-        ctx.globalAlpha = Math.max(0, 1 - Math.pow(p - 0.5, 2) * 3);
-        const coneGrad = ctx.createLinearGradient(startX, startY, targetX, targetY);
-        coneGrad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
-        coneGrad.addColorStop(0.2, "rgba(253, 224, 71, 0.9)");
-        coneGrad.addColorStop(0.7, "rgba(249, 115, 22, 0.8)");
-        coneGrad.addColorStop(1, "rgba(220, 38, 38, 0.2)");
-        ctx.fillStyle = coneGrad;
-        ctx.shadowColor = "#f97316";
-        ctx.shadowBlur = 20;
+        // 1. Phase 3: Fire breath beam from Capy to enemy (progress 0.42 to 0.64)
+        if (progress >= 0.42 && progress <= 0.64) {
+          const bp = (progress - 0.42) / 0.22;
+          const beamAlpha = Math.sin(bp * Math.PI);
+          ctx.save();
+          ctx.globalAlpha = beamAlpha;
 
-        const spread = 35 * Math.sin(p * Math.PI);
-        ctx.beginPath();
-        ctx.moveTo(startX + 20, startY);
-        ctx.lineTo(targetX + 15, targetY - spread);
-        ctx.lineTo(targetX + 15, targetY + spread);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
+          // Fiery energy cone
+          const coneGrad = ctx.createLinearGradient(startX + 15, startY, targetX, targetY);
+          coneGrad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
+          coneGrad.addColorStop(0.2, "rgba(254, 240, 138, 0.9)");
+          coneGrad.addColorStop(0.6, "rgba(249, 115, 22, 0.85)");
+          coneGrad.addColorStop(1, "rgba(220, 38, 38, 0.4)");
+          ctx.fillStyle = coneGrad;
+          ctx.shadowColor = "#f97316";
+          ctx.shadowBlur = 24;
+
+          const beamReach = startX + (targetX - startX) * Math.min(1, bp * 1.6);
+          const spread = 40 * Math.sin(bp * Math.PI);
+          ctx.beginPath();
+          ctx.moveTo(startX + 28, startY + 5);
+          ctx.lineTo(beamReach, targetY - spread);
+          ctx.lineTo(beamReach, targetY + spread);
+          ctx.closePath();
+          ctx.fill();
+
+          // Fiery lightning streaks within the breath
+          ctx.strokeStyle = "#fef08a";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(startX + 25, startY + 5);
+          for (let step = 0; step < 5; step++) {
+            const sx = startX + 25 + (beamReach - startX - 25) * (step / 5);
+            const sy = startY + (Math.random() * 20 - 10);
+            ctx.lineTo(sx, sy);
+          }
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // 2. Phase 4: Full Ancient Red Dragon Avatar (Frame 07) Overhead in the Sky (progress 0.55 to 0.74)
+        if (progress >= 0.55 && progress <= 0.74) {
+          const dp = (progress - 0.55) / 0.19;
+          const dragonAlpha = Math.sin(dp * Math.PI);
+          const imgDragon = this.dragonRoarAssets?.frame07Dragon || (this.playerAnimations.dragon_roar && this.playerAnimations.dragon_roar[6]);
+          if (imgDragon && imgDragon.complete) {
+            ctx.save();
+            ctx.globalAlpha = Math.min(1, dragonAlpha * 1.25);
+            ctx.shadowColor = "#f97316";
+            ctx.shadowBlur = 35;
+
+            // Grand Dragon apparition floating majestic overhead between Capy and Enemy
+            const midX = (startX + targetX) * 0.5;
+            const midY = this.groundY - 110;
+            const dScale = 2.0 + Math.sin(dp * Math.PI) * 0.25;
+            const dw = 85 * dScale;
+            const dh = 85 * dScale;
+
+            ctx.drawImage(imgDragon, midX - dw / 2, midY - dh / 2, dw, dh);
+            ctx.restore();
+          }
+        }
+
+        // 3. Phase 5: Massive Cataclysmic Blast & Impact (Frame 08) on Enemy (progress 0.66 to 0.82)
+        if (progress >= 0.66 && progress <= 0.82) {
+          const expP = (progress - 0.66) / 0.16;
+          const expAlpha = Math.sin(expP * Math.PI);
+          const imgBlast = this.dragonRoarAssets?.frame08Blast || (this.playerAnimations.dragon_roar && this.playerAnimations.dragon_roar[7]);
+          if (imgBlast && imgBlast.complete) {
+            ctx.save();
+            ctx.globalAlpha = Math.min(1, expAlpha * 1.3);
+            ctx.shadowColor = "#ff4500";
+            ctx.shadowBlur = 40;
+
+            const bScale = 1.8 + expP * 0.5;
+            const bw = 85 * bScale;
+            const bh = 85 * bScale;
+
+            ctx.drawImage(imgBlast, targetX - bw / 2, targetY - bh * 0.55, bw, bh);
+
+            // Ground Shockwave Expanding Ring
+            ctx.strokeStyle = "#facc15";
+            ctx.lineWidth = 5 * (1 - expP);
+            ctx.beginPath();
+            ctx.ellipse(targetX, this.groundY, 90 * expP, 28 * expP, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+
+        // 4. Phase 6: Smoking Crater & Debris (Frame 09) on Enemy (progress 0.78 to 0.90)
+        if (progress >= 0.78 && progress <= 0.90) {
+          const crP = (progress - 0.78) / 0.12;
+          const crAlpha = 1 - crP;
+          const imgCrater = this.dragonRoarAssets?.frame09Crater || (this.playerAnimations.dragon_roar && this.playerAnimations.dragon_roar[8]);
+          if (imgCrater && imgCrater.complete) {
+            ctx.save();
+            ctx.globalAlpha = crAlpha * 0.85;
+            const cw = 85 * 1.5;
+            const ch = 85 * 1.5;
+            ctx.drawImage(imgCrater, targetX - cw / 2, targetY - ch * 0.5, cw, ch);
+            ctx.restore();
+          }
+        }
       },
       onComplete: () => {
+        this.setPlayerAnim("idle", true);
         if (onComplete) onComplete();
       }
     });

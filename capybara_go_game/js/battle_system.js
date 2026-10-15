@@ -201,20 +201,35 @@ class BattleSystem {
       return;
     }
 
-    // Turn 1 Opener Skills (Dragon Roar & Bomb)
-    if (this.turnCount === 1 && r.enemyState) {
-      const dragonOpener = c.skills.find(s => (s.key === "mythic_02_dragon_roar" || (s.name && s.name.includes("Dragon"))) && s.startCombatDmg);
-      if (dragonOpener && r.launchDragonBreath) {
-        const mult = Math.min(0.40, dragonOpener.startCombatDmg || 0.40);
-        const roarDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.30)));
-        r.launchDragonBreath(r.playerState.x, r.groundY - 50, r.enemyState.x, r.groundY - 50, () => {
+    // Turn 1 Opener Skills or Periodic Procs (Dragon Roar & Bomb)
+    const dragonSkill = c.skills.find(s => (s.key === "mythic_02_dragon_roar" || (s.name && s.name.includes("Dragon"))));
+    const shouldDragonTrigger = dragonSkill && ((this.turnCount === 1 && dragonSkill.startCombatDmg) || (this.turnCount > 1 && this.turnCount % 4 === 0));
+
+    if (shouldDragonTrigger && r.enemyState && r.launchDragonBreath) {
+      const mult = this.turnCount === 1 ? Math.min(0.40, dragonSkill.startCombatDmg || 0.40) : 0.35;
+      const roarDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.30)));
+      r.launchDragonBreath(
+        r.playerState.x,
+        r.groundY - 50,
+        r.enemyState.x,
+        r.groundY - 50,
+        () => {
           e.hp -= roarDmg;
           if (r.enemyState) {
             r.enemyState.currentHp = Math.max(0, e.hp);
             r.addFloatingText(roarDmg, r.enemyState.x, r.groundY - 60, "crit");
           }
-        }, null, this.speedMultiplier);
-      }
+          this.syncPlayerRunStats();
+        },
+        () => {
+          callback();
+        },
+        this.speedMultiplier
+      );
+      return;
+    }
+
+    if (this.turnCount === 1 && r.enemyState) {
       const bombOpener = c.skills.find(s => (s.key === "common_10_bomb" || (s.name && s.name.includes("Bomb"))) && s.startCombatDmg);
       if (bombOpener && r.launchBombToss) {
         const mult = Math.min(0.35, bombOpener.startCombatDmg || 0.35);

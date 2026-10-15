@@ -2642,3 +2642,19 @@ window.triggerFallingChest = (opts = {}) => {
     window.Game.ui.triggerFallingChest(opts);
   }
 };
+
+// Global diagnostic & test trigger for 12-Frame Dragon Roar skill animation
+window.testDragonRoar = () => {
+  if (window.Game && window.Game.renderer) {
+    const r = window.Game.renderer;
+    const px = r.playerState ? r.playerState.x : 90;
+    const py = r.groundY - 50;
+    const ex = r.enemyState ? r.enemyState.x : (px + 180);
+    const ey = r.groundY - 50;
+    r.launchDragonBreath(px, py, ex, ey, () => {
+      console.log("Dragon Roar Hit Triggered!");
+    }, () => {
+      console.log("Dragon Roar Animation Completed!");
+    });
+  }
+};
