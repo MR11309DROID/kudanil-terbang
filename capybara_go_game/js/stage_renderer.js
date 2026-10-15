@@ -2685,9 +2685,10 @@ class StageRenderer {
 
     // 12. Mythic: Black Hole / Cosmic Crystal Sword or Dragon Flame Greatsword
     const isDragonCast = p.skillTheme === "dragon" || p.skillExpression === "dragon_glow";
-    const hasBlackHole = (hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.skillTheme === "black_hole") || (p.skillExpression === "void_eye"));
-    const isDragonTheme = isDragonCast || (!hasBlackHole && hasSkill("dragon"));
-    const hasEquippedSword = (hasBlackHole || isDragonCast || (p.swordAction && !hasSkill("blood_blade")));
+    const isBlackHoleCast = p.skillTheme === "black_hole" || p.skillExpression === "void_eye" || (p.currentAnim === "black_hole");
+    const isDragonTheme = isDragonCast || (!isBlackHoleCast && (p.skillTheme === "dragon" || (hasSkill("dragon") && !hasSkill("black_hole"))));
+    // The sword disappears once skill completes (only rendered when swordAction is actively present)
+    const hasEquippedSword = !!p.swordAction && (isDragonCast || isBlackHoleCast || ((hasSkill("black_hole") || hasSkill("dragon")) && !hasSkill("blood_blade")));
     if (hasEquippedSword) {
       ctx.save();
       const swordBob = Math.sin(now * 0.003) * 1.8;
@@ -3512,7 +3513,8 @@ class StageRenderer {
         } else {
           // Phase 6 & 7: Settle & Recovery
           if (this.playerState.currentAnim !== "idle") this.setPlayerAnim("idle", true);
-          this.playerState.swordAction = "ready";
+          this.playerState.swordAction = null;
+          this.playerState.skillTheme = null;
           this.playerState.skillExpression = "normal";
           if (this.enemyState && progress >= 0.88) {
             this.enemyState.knockback = 0;
@@ -3840,7 +3842,7 @@ class StageRenderer {
         this.setPlayerAnim("idle", true);
         if (this.playerState) {
           this.playerState.skillTheme = null;
-          this.playerState.swordAction = "ready";
+          this.playerState.swordAction = null;
           this.playerState.skillExpression = "normal";
         }
         if (this.enemyState) {
@@ -3942,7 +3944,8 @@ class StageRenderer {
         } else {
           // Phase 7: Settle & recovery
           if (this.playerState.currentAnim !== "idle") this.setPlayerAnim("idle", true);
-          this.playerState.swordAction = "ready";
+          this.playerState.swordAction = null;
+          this.playerState.skillTheme = null;
           this.playerState.skillExpression = "peaceful_relief";
           if (this.enemyState && progress >= 0.88) {
             this.enemyState.knockback = 0;
@@ -4389,6 +4392,7 @@ class StageRenderer {
       onComplete: () => {
         this.playerState.skillExpression = null;
         this.playerState.swordAction = null;
+        this.playerState.skillTheme = null;
         this.playerState.blackHoleSprite = null;
         if (this.enemyState) {
           this.enemyState.knockback = 0;
