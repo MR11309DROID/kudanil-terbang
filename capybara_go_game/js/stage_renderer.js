@@ -2959,69 +2959,114 @@ class StageRenderer {
   // --- 100% Procedural 120 FPS Ancient Red Dragon, Blast & Crater Vector Engine ---
 
   drawDragonWing(ctx, side, now) {
-    const flapFlex = Math.sin(now * 0.007) * 0.18;
+    const flapFlex = Math.sin(now * 0.007) * 0.20;
     const isFront = side > 0;
 
     ctx.save();
     ctx.shadowColor = "#f97316";
-    ctx.shadowBlur = 14;
+    ctx.shadowBlur = 15;
 
-    // Wing Membrane
-    const memGrad = ctx.createLinearGradient(0, -60, 40, 20);
+    // Wing Membrane with Searing Flame Gradient
+    const memGrad = ctx.createLinearGradient(0, -60, 42, 20);
     memGrad.addColorStop(0, isFront ? "#f97316" : "#ea580c");
-    memGrad.addColorStop(0.4, isFront ? "#dc2626" : "#b91c1c");
-    memGrad.addColorStop(0.85, isFront ? "#991b1b" : "#7f1d1d");
-    memGrad.addColorStop(1, "rgba(69, 10, 10, 0.4)");
+    memGrad.addColorStop(0.35, isFront ? "#dc2626" : "#b91c1c");
+    memGrad.addColorStop(0.75, isFront ? "#991b1b" : "#7f1d1d");
+    memGrad.addColorStop(1, "rgba(45, 10, 10, 0.45)");
     ctx.fillStyle = memGrad;
     ctx.strokeStyle = "#450a0a";
     ctx.lineWidth = 1.8;
 
-    // Wing Membrane Shape
+    // Aggressive Razor-Scalloped Wing Membrane Shape
     ctx.beginPath();
-    ctx.moveTo(0, 0); // Shoulder
-    ctx.lineTo(-20, -45); // Elbow
-    ctx.lineTo(10, -78);  // Wing thumb spike
-    // Finger spars & scallops
-    ctx.quadraticCurveTo(35, -55 + flapFlex * 15, 52, -62);
-    ctx.quadraticCurveTo(48, -35 + flapFlex * 12, 60, -32);
-    ctx.quadraticCurveTo(45, -12 + flapFlex * 8, 48, 8);
-    ctx.quadraticCurveTo(25, 4, 0, 0);
+    ctx.moveTo(0, 0);       // Shoulder joint
+    ctx.lineTo(-18, -42);   // Sharp elbow
+    ctx.lineTo(8, -74);     // Primary talon joint
+    // 4 Sinuous bat-draconic wing fingers & scallops
+    ctx.quadraticCurveTo(32, -54 + flapFlex * 14, 50, -58);
+    ctx.quadraticCurveTo(45, -34 + flapFlex * 10, 58, -28);
+    ctx.quadraticCurveTo(42, -10 + flapFlex * 7, 46, 10);
+    ctx.quadraticCurveTo(22, 6, 0, 0);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Bone Spar Struts radiating from elbow
-    ctx.strokeStyle = "#78350f";
-    ctx.lineWidth = 2.2;
+    // Fiery Dragon Wing Veins & Spar Struts radiating from joint
+    ctx.strokeStyle = "#fde047";
+    ctx.lineWidth = 1.2;
+    ctx.shadowColor = "#facc15";
+    ctx.shadowBlur = 6;
     const struts = [
-      { x: 52, y: -62 },
-      { x: 60, y: -32 },
-      { x: 48, y: 8 }
+      { x: 50, y: -58 },
+      { x: 58, y: -28 },
+      { x: 46, y: 10 }
     ];
     struts.forEach(st => {
       ctx.beginPath();
-      ctx.moveTo(10, -78);
+      ctx.moveTo(8, -74);
       ctx.lineTo(st.x, st.y);
       ctx.stroke();
     });
 
-    // Main Forearm Bone
-    ctx.strokeStyle = "#b91c1c";
-    ctx.lineWidth = 4.5;
+    // Main Forearm Bone Rod
+    ctx.strokeStyle = "#991b1b";
+    ctx.lineWidth = 4.2;
     ctx.beginPath();
-    ctx.moveTo(0, 0); ctx.lineTo(-20, -45); ctx.lineTo(10, -78);
+    ctx.moveTo(0, 0); ctx.lineTo(-18, -42); ctx.lineTo(8, -74);
     ctx.stroke();
 
-    // Thumb claw
+    // Sharp Curved Thumb Claw
     ctx.fillStyle = "#fef08a";
     ctx.strokeStyle = "#451a03";
     ctx.lineWidth = 1.2;
     ctx.beginPath();
-    ctx.moveTo(8, -76); ctx.lineTo(12, -88); ctx.lineTo(15, -78);
+    ctx.moveTo(6, -72); ctx.lineTo(11, -85); ctx.lineTo(14, -74);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
+    // Finger talons
+    struts.forEach(st => {
+      ctx.fillStyle = "#fef08a";
+      ctx.strokeStyle = "#451a03";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.moveTo(st.x - 2, st.y - 2);
+      ctx.lineTo(st.x + 6, st.y + (st.y < 0 ? -4 : 4));
+      ctx.lineTo(st.x + 1, st.y + 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    });
+
+    ctx.restore();
+  }
+
+  // Draw Individual Interlocking 3D Dragon Scale
+  drawDragonScale(ctx, x, y, size, angle, baseColor = "#dc2626", highlight = "#fca5a5") {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.fillStyle = baseColor;
+    ctx.strokeStyle = "#380606";
+    ctx.lineWidth = 1.1;
+
+    // Diamond Shield Scale Shape
+    ctx.beginPath();
+    ctx.moveTo(0, -size);
+    ctx.lineTo(size * 0.72, -size * 0.15);
+    ctx.lineTo(0, size * 1.1);
+    ctx.lineTo(-size * 0.72, -size * 0.15);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Sharp central ridge & specular sheen
+    ctx.strokeStyle = highlight;
+    ctx.lineWidth = 0.9;
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 0.65);
+    ctx.lineTo(0, size * 0.85);
+    ctx.stroke();
     ctx.restore();
   }
 
@@ -3032,81 +3077,92 @@ class StageRenderer {
 
     // Smooth sinusoidal cycles for 120 FPS animations
     const flap = Math.sin(now * 0.007);
-    const hoverBob = Math.sin(now * 0.004) * 4;
+    const hoverBob = Math.sin(now * 0.004) * 3.5;
 
     // 1. Fiery Radiant Bloom Aura behind Dragon (Zero square edges)
-    const bloomGrad = ctx.createRadialGradient(0, -10, 15, 0, -10, 95);
+    const bloomGrad = ctx.createRadialGradient(0, -10, 15, 0, -10, 85);
     bloomGrad.addColorStop(0, "rgba(254, 240, 138, 0.85)");
-    bloomGrad.addColorStop(0.25, "rgba(249, 115, 22, 0.65)");
-    bloomGrad.addColorStop(0.65, "rgba(220, 38, 38, 0.3)");
+    bloomGrad.addColorStop(0.25, "rgba(249, 115, 22, 0.60)");
+    bloomGrad.addColorStop(0.65, "rgba(220, 38, 38, 0.25)");
     bloomGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = bloomGrad;
     ctx.beginPath();
-    ctx.arc(0, -10, 95, 0, Math.PI * 2);
+    ctx.arc(0, -10, 85, 0, Math.PI * 2);
     ctx.fill();
 
     // 2. Far Wing (Behind Body)
     ctx.save();
-    ctx.translate(-16, -26);
+    ctx.translate(-14, -24);
     ctx.rotate(-0.35 + flap * 0.28);
     this.drawDragonWing(ctx, -1, now);
     ctx.restore();
 
-    // 3. Serpentine Tail
+    // 3. Lean & Sinuous Serpentine Tail
     ctx.save();
-    ctx.translate(-35, 12);
+    ctx.translate(-34, 4);
     const tailWave = Math.sin(now * 0.005) * 8;
     ctx.fillStyle = "#991b1b";
     ctx.strokeStyle = "#450a0a";
     ctx.lineWidth = 2.0;
+
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.quadraticCurveTo(-25, 8 + tailWave * 0.5, -45, -5 + tailWave);
-    ctx.quadraticCurveTo(-55, -12 + tailWave, -68, -2 + tailWave * 1.2);
-    ctx.lineTo(-72, 8 + tailWave * 1.2);
-    ctx.lineTo(-58, 12 + tailWave);
-    ctx.quadraticCurveTo(-38, 22 + tailWave * 0.5, 0, 10);
+    ctx.quadraticCurveTo(-24, 6 + tailWave * 0.5, -42, -6 + tailWave);
+    ctx.quadraticCurveTo(-52, -12 + tailWave, -66, -3 + tailWave * 1.2);
+    ctx.lineTo(-68, 4 + tailWave * 1.2);
+    ctx.lineTo(-56, 8 + tailWave);
+    ctx.quadraticCurveTo(-36, 14 + tailWave * 0.5, 0, 7);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Tail Spade Fin
+    // Tail Scales Along Sinuous Length
+    for (let ts = 0; ts < 4; ts++) {
+      const tx = -10 - ts * 12;
+      const ty = 2 + (tailWave * 0.25 * ts);
+      this.drawDragonScale(ctx, tx, ty, 3.2 - ts * 0.4, -0.25, "#b91c1c", "#fca5a5");
+    }
+
+    // Bladed Spiked Tail Spade
     ctx.fillStyle = "#f97316";
+    ctx.strokeStyle = "#78350f";
+    ctx.lineWidth = 1.2;
     ctx.shadowColor = "#fde047";
     ctx.shadowBlur = 10;
     ctx.beginPath();
-    ctx.moveTo(-60, 4 + tailWave);
-    ctx.lineTo(-78, -8 + tailWave * 1.2);
-    ctx.lineTo(-84, 5 + tailWave * 1.3);
-    ctx.lineTo(-72, 14 + tailWave * 1.2);
+    ctx.moveTo(-58, 2 + tailWave);
+    ctx.lineTo(-76, -10 + tailWave * 1.2);
+    ctx.lineTo(-84, 1 + tailWave * 1.3);
+    ctx.lineTo(-72, 10 + tailWave * 1.2);
     ctx.closePath();
     ctx.fill();
+    ctx.stroke();
     ctx.restore();
 
-    // 4. Main Torso & Muscular Body
+    // 4. Lean, Muscular & Athletic Torso (No Belly Fat! Tight predatory waist)
     ctx.save();
     ctx.shadowColor = "#f97316";
-    ctx.shadowBlur = 16;
-    const bodyGrad = ctx.createLinearGradient(-35, -25, 20, 20);
+    ctx.shadowBlur = 14;
+    const bodyGrad = ctx.createLinearGradient(-35, -22, 18, 16);
     bodyGrad.addColorStop(0, "#ef4444");
-    bodyGrad.addColorStop(0.5, "#dc2626");
+    bodyGrad.addColorStop(0.45, "#dc2626");
     bodyGrad.addColorStop(1, "#7f1d1d");
     ctx.fillStyle = bodyGrad;
     ctx.strokeStyle = "#450a0a";
     ctx.lineWidth = 2.2;
 
     ctx.beginPath();
-    ctx.moveTo(-32, -15);
-    ctx.quadraticCurveTo(-15, -35, 12, -28); // Back line
-    ctx.quadraticCurveTo(28, -20, 24, 8);    // Chest bulge
-    ctx.quadraticCurveTo(18, 28, -5, 24);    // Belly
-    ctx.quadraticCurveTo(-28, 20, -32, 0);   // Pelvis
+    ctx.moveTo(-34, -10);
+    ctx.quadraticCurveTo(-16, -26, 8, -20); // Back line
+    ctx.quadraticCurveTo(22, -12, 18, 4);   // Muscular chest bulge
+    ctx.quadraticCurveTo(6, 12, -12, 8);    // Lean, athletic tucked flank (NOT fat!)
+    ctx.quadraticCurveTo(-26, 6, -34, -2);  // Muscular pelvis
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Golden Layered Armored Underbelly Plates (Scutes)
-    const bellyGrad = ctx.createLinearGradient(-15, -10, 20, 24);
+    // Sharp Armored Underbelly Ventral Scutes (Gold Serrated Plates)
+    const bellyGrad = ctx.createLinearGradient(-10, -12, 18, 16);
     bellyGrad.addColorStop(0, "#fef08a");
     bellyGrad.addColorStop(0.4, "#facc15");
     bellyGrad.addColorStop(1, "#ca8a04");
@@ -3115,125 +3171,203 @@ class StageRenderer {
     ctx.lineWidth = 1.4;
 
     ctx.beginPath();
-    ctx.moveTo(-8, -18);
-    ctx.quadraticCurveTo(14, -12, 18, 4);
-    ctx.quadraticCurveTo(12, 22, -2, 20);
-    ctx.quadraticCurveTo(-4, 4, -8, -18);
+    ctx.moveTo(-6, -14);
+    ctx.quadraticCurveTo(12, -8, 16, 2);
+    ctx.quadraticCurveTo(8, 12, -8, 8);
+    ctx.quadraticCurveTo(-4, 0, -6, -14);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Underbelly horizontal segments
+    // Serrated plates horizontal segments with sharp shadow
     for (let s = 0; s < 4; s++) {
-      const sy = -10 + s * 8;
+      const sy = -8 + s * 6;
       ctx.beginPath();
-      ctx.moveTo(-7 + s * 1.5, sy);
-      ctx.lineTo(16 - s * 1.8, sy + 3);
+      ctx.moveTo(-5 + s * 1.2, sy);
+      ctx.lineTo(14 - s * 2.0, sy + 2.5);
       ctx.stroke();
     }
-    ctx.restore();
 
-    // 5. Back Spinal Spikes
+    // --- OVERLAPPING INTERLOCKING DRAGON SCALES (DORSAL & FLANK) ---
+    // Row 1: Upper Back Scales
+    const backScales = [
+      { x: -26, y: -14, rot: -0.3, s: 4.2 },
+      { x: -18, y: -19, rot: -0.2, s: 4.4 },
+      { x: -9,  y: -21, rot: -0.05, s: 4.5 },
+      { x: 0,   y: -20, rot: 0.15, s: 4.4 },
+      { x: 8,   y: -16, rot: 0.35, s: 4.0 }
+    ];
+    backScales.forEach(sc => {
+      this.drawDragonScale(ctx, sc.x, sc.y, sc.s, sc.rot, "#dc2626", "#fecaca");
+    });
+
+    // Row 2: Mid-Flank Scales
+    const midScales = [
+      { x: -22, y: -6, rot: -0.2, s: 3.8 },
+      { x: -14, y: -9, rot: -0.1, s: 4.0 },
+      { x: -4,  y: -10, rot: 0.1, s: 4.0 },
+      { x: 4,   y: -7, rot: 0.25, s: 3.8 }
+    ];
+    midScales.forEach(sc => {
+      this.drawDragonScale(ctx, sc.x, sc.y, sc.s, sc.rot, "#b91c1c", "#fca5a5");
+    });
+
+    ctx.restore(); // End Torso
+
+    // 5. Razor-Sharp Serrated Spinal Spikes
     ctx.fillStyle = "#facc15";
     ctx.strokeStyle = "#78350f";
     ctx.lineWidth = 1.2;
     const spinePoints = [
-      { x: -30, y: -10, rot: -0.6 },
-      { x: -22, y: -22, rot: -0.3 },
-      { x: -10, y: -30, rot: -0.1 },
-      { x: 2, y: -32, rot: 0.2 },
-      { x: 14, y: -26, rot: 0.4 }
+      { x: -32, y: -8,  rot: -0.65, h: 9 },
+      { x: -24, y: -18, rot: -0.40, h: 12 },
+      { x: -12, y: -25, rot: -0.15, h: 14 },
+      { x: 0,   y: -26, rot: 0.15,  h: 13 },
+      { x: 12,  y: -22, rot: 0.40,  h: 10 }
     ];
     spinePoints.forEach(sp => {
       ctx.save();
       ctx.translate(sp.x, sp.y);
       ctx.rotate(sp.rot);
       ctx.beginPath();
-      ctx.moveTo(-3, 0); ctx.lineTo(0, -10); ctx.lineTo(3, 0);
+      ctx.moveTo(-2.5, 0); ctx.lineTo(0, -sp.h); ctx.lineTo(2.5, 0);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
       ctx.restore();
     });
 
-    // 6. Muscular Front Claw / Forearm
+    // 6. Muscular Predatory Claw / Forelimb (Lean, Vascular & Deadly)
     ctx.save();
-    ctx.translate(8, 14);
-    ctx.rotate(0.25 + flap * 0.1);
+    ctx.translate(6, 8);
+    ctx.rotate(0.20 + flap * 0.1);
     ctx.fillStyle = "#b91c1c";
     ctx.strokeStyle = "#450a0a";
-    ctx.lineWidth = 2.0;
+    ctx.lineWidth = 1.8;
     ctx.beginPath();
-    ctx.moveTo(-5, -6); ctx.lineTo(10, 4); ctx.lineTo(6, 18); ctx.lineTo(-2, 16);
+    ctx.moveTo(-4, -6); ctx.lineTo(8, 2); ctx.lineTo(5, 15); ctx.lineTo(-2, 13);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Talons
+    // Arm Scales
+    this.drawDragonScale(ctx, 1, 4, 3.0, 0.4, "#991b1b", "#fca5a5");
+
+    // 3 Razor Sharp Hooked Talons
     ctx.fillStyle = "#fef08a";
     ctx.strokeStyle = "#451a03";
     ctx.lineWidth = 1.2;
     for (let c = -1; c <= 1; c++) {
       ctx.beginPath();
-      ctx.moveTo(2 + c * 4, 16);
-      ctx.lineTo(6 + c * 6, 24);
-      ctx.lineTo(1 + c * 4, 21);
+      ctx.moveTo(1 + c * 3.5, 13);
+      ctx.lineTo(5 + c * 5.2, 21);
+      ctx.lineTo(0 + c * 3.5, 18);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
     }
     ctx.restore();
 
-    // 7. Powerful S-Curved Neck & Horned Dragon Head
+    // 7. Sinuous S-Curved Neck & Menacing Horned Dragon Cranium
     ctx.save();
-    ctx.translate(14, -22);
+    ctx.translate(12, -18);
     const neckSway = Math.sin(now * 0.005) * 3;
     ctx.rotate(neckSway * 0.03);
 
-    // Neck
-    const neckGrad = ctx.createLinearGradient(0, -5, 26, -28);
+    // Lean, Muscular Serpentine Neck
+    const neckGrad = ctx.createLinearGradient(0, -4, 24, -26);
     neckGrad.addColorStop(0, "#dc2626");
     neckGrad.addColorStop(0.5, "#ef4444");
     neckGrad.addColorStop(1, "#b91c1c");
     ctx.fillStyle = neckGrad;
     ctx.strokeStyle = "#450a0a";
-    ctx.lineWidth = 2.2;
+    ctx.lineWidth = 2.0;
+
     ctx.beginPath();
-    ctx.moveTo(-4, 6);
-    ctx.quadraticCurveTo(8, -12, 18, -26);
-    ctx.lineTo(34, -24);
-    ctx.quadraticCurveTo(24, 0, 10, 16);
+    ctx.moveTo(-3, 4);
+    ctx.quadraticCurveTo(6, -10, 15, -22); // Dorsal neck curve
+    ctx.lineTo(28, -22);                   // Throat top
+    ctx.quadraticCurveTo(20, -2, 8, 12);   // Ventral throat curve (Lean, NOT puffy!)
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Dragon Head Center
-    ctx.translate(26, -26);
+    // Neck Armor Scales (2 Rows of Scaled Plating along neck)
+    const neckScales = [
+      { x: 3,  y: -2, rot: 0.6, s: 3.8 },
+      { x: 8,  y: -9, rot: 0.7, s: 3.8 },
+      { x: 14, y: -16, rot: 0.8, s: 3.6 },
+      { x: 9,  y: 2,  rot: 0.5, s: 3.4 },
+      { x: 15, y: -4, rot: 0.65, s: 3.4 }
+    ];
+    neckScales.forEach(sc => {
+      this.drawDragonScale(ctx, sc.x, sc.y, sc.s, sc.rot, "#b91c1c", "#fca5a5");
+    });
 
-    // Sweeping Golden Back Horns
+    // Neck Dorsal Crest Spikes
+    for (let ns = 0; ns < 3; ns++) {
+      ctx.save();
+      ctx.translate(2 + ns * 6, -3 - ns * 8);
+      ctx.rotate(-0.2 + ns * 0.3);
+      ctx.fillStyle = "#facc15";
+      ctx.strokeStyle = "#78350f";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.moveTo(-2, 0); ctx.lineTo(0, -8); ctx.lineTo(2, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // --- MENACING PREDATORY HEAD & HORNS ---
+    ctx.translate(24, -22);
+
+    // Multi-Tiered Sweeping Golden Dragon Horns (Sharp, Aggressive, Serrated)
     ctx.fillStyle = "#fef08a";
     ctx.strokeStyle = "#854d0e";
     ctx.lineWidth = 1.6;
     ctx.shadowColor = "#facc15";
-    ctx.shadowBlur = 8;
-    // Main Upper Horn
+    ctx.shadowBlur = 9;
+
+    // 1. Primary Giant Dragon Horn
     ctx.beginPath();
-    ctx.moveTo(-4, -6);
-    ctx.quadraticCurveTo(-16, -22, -32, -26);
-    ctx.quadraticCurveTo(-14, -14, 2, -2);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    // Secondary Lower Horn
-    ctx.beginPath();
-    ctx.moveTo(-2, 2);
-    ctx.quadraticCurveTo(-12, -6, -24, -8);
-    ctx.quadraticCurveTo(-10, 0, 4, 6);
+    ctx.moveTo(-4, -5);
+    ctx.quadraticCurveTo(-18, -20, -34, -24);
+    ctx.quadraticCurveTo(-16, -12, 2, -2);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Dragon Cranium / Upper Snout
+    // Horn ridges/rings
+    for (let hr = 0; hr < 3; hr++) {
+      const hx = -6 - hr * 7;
+      const hy = -6 - hr * 5;
+      ctx.strokeStyle = "#78350f";
+      ctx.lineWidth = 1.1;
+      ctx.beginPath();
+      ctx.moveTo(hx, hy); ctx.lineTo(hx + 3, hy + 4);
+      ctx.stroke();
+    }
+
+    // 2. Secondary Cheek Horn
+    ctx.beginPath();
+    ctx.moveTo(-2, 2);
+    ctx.quadraticCurveTo(-12, -4, -22, -6);
+    ctx.quadraticCurveTo(-10, 2, 3, 6);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // 3. Sharp Brow Hornlet
+    ctx.fillStyle = "#fde047";
+    ctx.beginPath();
+    ctx.moveTo(4, -7); ctx.lineTo(1, -13); ctx.lineTo(8, -6);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Sharp Menacing Cranium & Upper Snout
     ctx.fillStyle = "#dc2626";
     ctx.strokeStyle = "#450a0a";
     ctx.lineWidth = 2.0;
@@ -3241,69 +3375,108 @@ class StageRenderer {
     ctx.shadowBlur = 12;
 
     ctx.beginPath();
-    ctx.moveTo(-4, -6);
-    ctx.lineTo(16, -8);
+    ctx.moveTo(-4, -5);
+    ctx.lineTo(12, -7);
+    ctx.lineTo(20, -5); // Brow ridge
     ctx.lineTo(28, -2); // Snout tip
     ctx.lineTo(26, 4);  // Upper lip
-    ctx.lineTo(6, 4);   // Mouth roof
+    ctx.lineTo(4, 4);   // Palate
     ctx.lineTo(0, 8);   // Jaw hinge
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Upper sharp teeth
-    ctx.fillStyle = "#ffffff";
-    for (let t = 0; t < 3; t++) {
-      const tx = 10 + t * 5;
-      ctx.beginPath();
-      ctx.moveTo(tx, 4); ctx.lineTo(tx + 2, 9); ctx.lineTo(tx + 4, 4);
-      ctx.fill();
-    }
+    // Snout Scales & Nasal Spike
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.moveTo(25, -3); ctx.lineTo(28, -8); ctx.lineTo(29, -2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
 
-    // Glowing Dragon Slit Eye
+    this.drawDragonScale(ctx, 10, -3, 3.0, 0.2, "#991b1b", "#fca5a5");
+    this.drawDragonScale(ctx, 16, -2, 2.8, 0.1, "#991b1b", "#fca5a5");
+
+    // Upper Sharp Curved Fangs (Menacing & Dangerous)
+    ctx.fillStyle = "#ffffff";
+    const upperFangs = [
+      { x: 10, h: 6 },
+      { x: 16, h: 7 },
+      { x: 22, h: 5 }
+    ];
+    upperFangs.forEach(fg => {
+      ctx.beginPath();
+      ctx.moveTo(fg.x, 4);
+      ctx.lineTo(fg.x + 2, 4 + fg.h);
+      ctx.lineTo(fg.x + 3.5, 4);
+      ctx.closePath();
+      ctx.fill();
+    });
+
+    // Menacing Predatory Slit Eye (Glowing Crimson-Amber with Drifting Embers)
     ctx.fillStyle = "#facc15";
     ctx.shadowColor = "#fde047";
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = 12;
     ctx.beginPath();
-    ctx.ellipse(8, -2, 4.5, 2.8, -0.2, 0, Math.PI * 2);
+    ctx.ellipse(8, -2, 4.2, 2.6, -0.22, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "#991b1b";
+
+    // Razor-Sharp Vertical Slit Pupil
+    ctx.fillStyle = "#0a0a0a";
     ctx.beginPath();
-    ctx.ellipse(8.5, -2, 1.2, 2.4, 0, 0, Math.PI * 2);
+    ctx.ellipse(8.5, -2, 1.0, 2.4, 0, 0, Math.PI * 2);
     ctx.fill();
+
+    // Specular Gint Highlight
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
     ctx.arc(9.2, -2.6, 1.0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Articulated Roaring Lower Jaw
+    // Articulated Roaring Lower Jaw (Sharp Spiked Chin)
     ctx.save();
     ctx.translate(2, 6);
-    const jawOpen = isBreathing ? 0.48 : (0.15 + Math.sin(now * 0.006) * 0.1);
+    const jawOpen = isBreathing ? 0.48 : (0.16 + Math.sin(now * 0.006) * 0.09);
     ctx.rotate(jawOpen);
 
     ctx.fillStyle = "#b91c1c";
     ctx.strokeStyle = "#450a0a";
-    ctx.lineWidth = 2.0;
+    ctx.lineWidth = 1.9;
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(22, 2);  // Lower jaw tip
-    ctx.lineTo(18, 7);  // Chin
+    ctx.lineTo(22, 2);   // Lower jaw tip
+    ctx.lineTo(20, 5);   // Spiked Chin point
+    ctx.lineTo(16, 8);   // Spiked Chin barb
     ctx.lineTo(0, 6);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Lower teeth
-    ctx.fillStyle = "#ffffff";
-    for (let t = 0; t < 3; t++) {
-      const tx = 6 + t * 5;
-      ctx.beginPath();
-      ctx.moveTo(tx, 1); ctx.lineTo(tx + 2, -4); ctx.lineTo(tx + 4, 1);
-      ctx.fill();
-    }
+    // Chin Barb Spike
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.moveTo(18, 5); ctx.lineTo(20, 11); ctx.lineTo(15, 7);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
 
-    // Inner Throat White-Hot Inferno Core
+    // Lower Curved Fangs
+    ctx.fillStyle = "#ffffff";
+    const lowerFangs = [
+      { x: 5, h: 5 },
+      { x: 11, h: 6 },
+      { x: 17, h: 4 }
+    ];
+    lowerFangs.forEach(fg => {
+      ctx.beginPath();
+      ctx.moveTo(fg.x, 1);
+      ctx.lineTo(fg.x + 1.8, 1 - fg.h);
+      ctx.lineTo(fg.x + 3.2, 1);
+      ctx.closePath();
+      ctx.fill();
+    });
+
+    // Inner Throat White-Hot Plasma Core (during breath attack)
     if (isBreathing) {
       const fireCore = ctx.createRadialGradient(2, 0, 1, 14, 0, 18);
       fireCore.addColorStop(0, "#ffffff");
@@ -3321,7 +3494,7 @@ class StageRenderer {
 
     // 8. Near Wing (In Front of Body - Dynamic 120 FPS Flap)
     ctx.save();
-    ctx.translate(6, -24);
+    ctx.translate(4, -22);
     ctx.rotate(-0.15 + flap * 0.35);
     this.drawDragonWing(ctx, 1, now);
     ctx.restore();
@@ -3678,9 +3851,9 @@ class StageRenderer {
           const dragonAlpha = Math.sin(dp * Math.PI);
 
           // Dragon position: hovering majestic above Capy & surging toward enemy
-          const dragonX = this.playerState.x + 52 + dp * 38;
-          const dragonY = this.groundY - 115 + Math.sin(now * 0.005) * 6;
-          const dScale = 1.35 + Math.sin(dp * Math.PI) * 0.15;
+          const dragonX = this.playerState.x + 50 + dp * 36;
+          const dragonY = this.groundY - 110 + Math.sin(now * 0.005) * 5;
+          const dScale = 1.05 + Math.sin(dp * Math.PI) * 0.10;
           const isBreathing = (p >= 0.50 && p < 0.70);
 
           ctx.save();
@@ -3689,8 +3862,8 @@ class StageRenderer {
           // 12 Orbiting Dragon Flame Wisps
           for (let w of dragonWisps) {
             const wAng = w.angle + now * w.speed * 0.04;
-            const wx = dragonX + Math.cos(wAng) * (w.dist * 1.2);
-            const wy = dragonY + Math.sin(wAng) * (w.dist * 0.65);
+            const wx = dragonX + Math.cos(wAng) * (w.dist * 1.05);
+            const wy = dragonY + Math.sin(wAng) * (w.dist * 0.55);
             ctx.fillStyle = w.color;
             ctx.shadowColor = w.color;
             ctx.shadowBlur = 10;
@@ -3711,14 +3884,14 @@ class StageRenderer {
           const beamAlpha = Math.sin(bp * Math.PI);
 
           const dp = (p - 0.32) / 0.40;
-          const dragonX = this.playerState.x + 52 + dp * 38;
-          const dragonY = this.groundY - 115 + Math.sin(now * 0.005) * 6;
-          const dScale = 1.35 + Math.sin(dp * Math.PI) * 0.15;
+          const dragonX = this.playerState.x + 50 + dp * 36;
+          const dragonY = this.groundY - 110 + Math.sin(now * 0.005) * 5;
+          const dScale = 1.05 + Math.sin(dp * Math.PI) * 0.10;
 
-          const dragonMawX = dragonX + 38 * dScale;
-          const dragonMawY = dragonY - 26 * dScale;
+          const dragonMawX = dragonX + 36 * dScale;
+          const dragonMawY = dragonY - 24 * dScale;
           const reach = dragonMawX + (targetX - dragonMawX) * Math.min(1, bp * 1.8);
-          const spread = 45 * Math.sin(bp * Math.PI);
+          const spread = 40 * Math.sin(bp * Math.PI);
 
           ctx.save();
           ctx.globalAlpha = beamAlpha;
