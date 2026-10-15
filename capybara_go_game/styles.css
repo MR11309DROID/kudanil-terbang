@@ -5339,9 +5339,10 @@ body {
 
 .btn-settings-menu {
   width: 100%;
-  padding: 11px 0;
-  font-size: 14px;
-  font-weight: 800;
+  padding: 12px 0;
+  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.5px;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -5352,25 +5353,49 @@ body {
   color: #ffffff;
   box-shadow: 0 4px 0 #075985, 0 6px 12px rgba(2, 132, 199, 0.35);
   cursor: pointer;
-  transition: transform 0.1s ease, filter 0.15s ease;
+  transition: transform 0.08s ease, filter 0.1s ease, box-shadow 0.08s ease;
+  text-shadow: 0 1.5px 2px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
 }
 
 .btn-settings-menu:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
+  filter: brightness(1.08);
 }
 
 .btn-settings-menu:active {
   transform: translateY(2px);
-  box-shadow: 0 2px 0 #075985;
+  box-shadow: 0 1px 0 #075985;
+  filter: brightness(0.96);
 }
 
 .btn-settings-confirm {
   width: 100%;
-  padding: 11px 0;
-  font-size: 14px;
-  font-weight: 800;
+  padding: 12px 0;
+  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.5px;
   border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #fde047 0%, #eab308 50%, #ca8a04 100%);
+  border: 2px solid #78350f;
+  color: #451a03;
+  box-shadow: 0 4px 0 #78350f, 0 6px 12px rgba(202, 138, 4, 0.35);
+  cursor: pointer;
+  transition: transform 0.08s ease, filter 0.1s ease, box-shadow 0.08s ease;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+  box-sizing: border-box;
+}
+
+.btn-settings-confirm:hover {
+  filter: brightness(1.08);
+}
+
+.btn-settings-confirm:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #78350f;
+  filter: brightness(0.96);
 }
 
 /* ================= CHAPTER / MAP SELECT MODAL ================= */

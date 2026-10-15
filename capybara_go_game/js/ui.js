@@ -415,6 +415,9 @@ class UIManager {
     const openModal = () => {
       Sound.playSfx("click");
       syncUI();
+      if (btnToMenu) {
+        btnToMenu.style.display = Character.activeRun ? "flex" : "none";
+      }
       if (modal) {
         modal.style.display = "flex";
       }
@@ -477,6 +480,7 @@ class UIManager {
             }
           }
           Character.endRun(false);
+          this.showToast("Kembali ke Menu Utama 🏠");
         }
 
         // 2. Dismiss any open submodals (treasure chest, skill choice, etc.)
@@ -497,7 +501,6 @@ class UIManager {
         this.renderHeader();
         this.setTravelButtonState("ready", "Start Adventure");
         Sound.playMusic("menu");
-        this.showToast("Kembali ke Menu Utama 🏠");
       });
     }
 
