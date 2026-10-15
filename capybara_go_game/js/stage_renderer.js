@@ -2635,9 +2635,11 @@ class StageRenderer {
     const hasBlackHole = hasSkill("black_hole") || (p.currentAnim === "black_hole") || (p.swordAction) || (p.skillExpression && p.skillExpression !== "normal");
     if (hasBlackHole) {
       ctx.save();
-      let swordX = drawW * 0.22;
-      let swordY = -drawH * 0.22;
-      let swordRot = 0.45; // Default 45 deg ready slant
+      const swordBob = Math.sin(now * 0.003) * 1.8;
+      // In normal idle/walk: rest comfortably beside Capy's body, NOT piercing his face or chest!
+      let swordX = drawW * 0.35;
+      let swordY = -drawH * 0.42 + swordBob;
+      let swordRot = 0.22; // Natural upright tilt beside Capy (matching Idle 2 stance)
 
       if (p.swordAction === "slash") {
         swordX = drawW * 0.30;
@@ -2651,10 +2653,14 @@ class StageRenderer {
         swordX = drawW * 0.12;
         swordY = -drawH * 0.15;
         swordRot = 0.75; // Low diagonal absorb
+      } else if (p.swordAction === "ready") {
+        swordX = drawW * 0.24;
+        swordY = -drawH * 0.26;
+        swordRot = 0.35;
       }
 
       ctx.translate(swordX, swordY);
-      ctx.rotate(swordRot);
+      ctx.rotate(swordRot + (p.waddleAngle || 0) * 0.5);
       ctx.scale(1.05, 1.05);
 
       // Intense Purple Crystal Bloom Glow (Matching Video)
