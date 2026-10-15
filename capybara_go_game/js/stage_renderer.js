@@ -2954,6 +2954,8 @@ class StageRenderer {
         if (onComplete) onComplete();
       }
     });
+  }
+
   // --- 100% Procedural 120 FPS Ancient Red Dragon, Blast & Crater Vector Engine ---
 
   drawDragonWing(ctx, side, now) {
