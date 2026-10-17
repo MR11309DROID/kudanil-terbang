@@ -615,8 +615,14 @@
         </div>
 
         <div class="hero-stats-panel">
-          <!-- 6-Slot Paperdoll surrounding the Hero -->
+          <!-- 6-Slot Paperdoll surrounding the Hero (Framed in 3D Warm RPG Wooden-Parchment Board) -->
           <div class="paperdoll-container">
+            <!-- Brass corner studs -->
+            <span class="pd-corner-stud top-left"></span>
+            <span class="pd-corner-stud top-right"></span>
+            <span class="pd-corner-stud bottom-left"></span>
+            <span class="pd-corner-stud bottom-right"></span>
+
             <!-- Left 3 Slots: Weapon, Ring, Amulet -->
             <div class="paperdoll-col paperdoll-col-left">
               <div id="slot-weapon" class="paperdoll-slot empty" title="Weapon Slot">
@@ -630,9 +636,11 @@
               </div>
             </div>
             
-            <!-- Center Hero Arena: Authentic Game Capybara Standing with Weapon -->
+            <!-- Center Hero Arena: Authentic Game Capybara Standing with Weapon & Radial Sunburst -->
             <div class="paperdoll-center">
+              <div class="hero-stage-sunburst"></div>
               <div class="hero-mount-stage" id="hero-mount-stage">
+                <div class="hero-pedestal-dais"></div>
                 <img src="assets/characters/player/standing_gear_01.png" alt="Capybara Hero" class="hero-capy-character-img" id="hero-capy-avatar-img">
                 <div class="hero-shadow-oval"></div>
               </div>
@@ -653,24 +661,37 @@
           </div>
 
           <!-- Combat Power Ribbon Banner (Exactly matching Image 1) -->
-          <div class="hero-power-ribbon">
+          <div class="hero-power-ribbon" title="Combat Power">
+            <div class="power-ribbon-shine"></div>
             <span class="power-ribbon-swords">⚔️</span>
+            <span class="power-ribbon-title">POWER</span>
             <span class="power-ribbon-num" id="hero-total-cp">166.45K</span>
           </div>
 
           <!-- 3 Main Core Stats Bar (HP, ATK, DEF + Details) -->
           <div class="hero-core-stats-bar">
-            <div class="core-stat-item stat-c-hp">
+            <div class="core-stat-item stat-c-hp" title="Health Points">
               <span class="core-stat-icon">💖</span>
-              <strong id="stat-hp">350</strong>
+              <div class="core-stat-text">
+                <span class="core-stat-name">HP</span>
+                <strong id="stat-hp">350</strong>
+              </div>
             </div>
-            <div class="core-stat-item stat-c-atk">
+            <div class="core-stat-divider"></div>
+            <div class="core-stat-item stat-c-atk" title="Attack Power">
               <span class="core-stat-icon">🗡️</span>
-              <strong id="stat-atk">45</strong>
+              <div class="core-stat-text">
+                <span class="core-stat-name">ATK</span>
+                <strong id="stat-atk">45</strong>
+              </div>
             </div>
-            <div class="core-stat-item stat-c-def">
+            <div class="core-stat-divider"></div>
+            <div class="core-stat-item stat-c-def" title="Defense">
               <span class="core-stat-icon">🛡️</span>
-              <strong id="stat-def">12</strong>
+              <div class="core-stat-text">
+                <span class="core-stat-name">DEF</span>
+                <strong id="stat-def">12</strong>
+              </div>
             </div>
             <button class="btn-stat-details-icon" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()" title="View Detailed Stats">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="#78716c">
@@ -724,6 +745,13 @@
             <button class="btn-cyan-pill btn-merge-pill" onclick="window.Game && window.Game.ui && window.Game.ui.autoMergeEquipment()">
               Merge <span class="pill-notif-dot" id="merge-notif-dot">1</span>
             </button>
+          </div>
+          <!-- Filter pills row -->
+          <div class="backpack-filter-row">
+            <button class="bp-filter-pill active" id="filter-pill-all" onclick="window.Game && window.Game.ui && window.Game.ui.setInventoryFilter('all')">✨ All</button>
+            <button class="bp-filter-pill" id="filter-pill-weapon" onclick="window.Game && window.Game.ui && window.Game.ui.setInventoryFilter('weapon')">⚔️ Weapon</button>
+            <button class="bp-filter-pill" id="filter-pill-armor" onclick="window.Game && window.Game.ui && window.Game.ui.setInventoryFilter('armor')">🛡️ Armor</button>
+            <button class="bp-filter-pill" id="filter-pill-acc" onclick="window.Game && window.Game.ui && window.Game.ui.setInventoryFilter('acc')">💍 Accessory</button>
           </div>
           <div id="inventory-grid" class="inventory-grid"></div>
         </div>

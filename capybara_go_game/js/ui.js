@@ -2408,12 +2408,17 @@ class UIManager {
         const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
         const rankBadge = item.refineRank ? `<span class="item-rank-badge">+${item.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
         const upArrow = `<span class="item-up-arrow">▲</span>`;
+        const starCount = item.stars || (item.rarity === 'supreme' ? 3 : (item.rarity === 'mythic' ? 4 : (item.refineRank || 1)));
+        const starsHtml = `<div class="item-stars-row">${'★'.repeat(Math.min(5, starCount))}</div>`;
+        const gleamHtml = `<div class="item-card-gleam"></div>`;
 
         slotEl.className = `paperdoll-slot occupied rarity-${item.rarity}`;
         slotEl.innerHTML = `
+          ${gleamHtml}
           <span class="item-slot-mini-badge">${slotEmojis[slot] || "⚔️"}</span>
           <span class="item-lvl-badge">Lv.${item.level}</span>
           <img src="${item.icon}" class="slot-item-img" alt="${item.name}">
+          ${starsHtml}
           ${sBadge}
           <div class="slot-corner-badges">
             ${rankBadge}
@@ -2437,7 +2442,7 @@ class UIManager {
       petHexFace.textContent = compDef.icon || "🦆";
     }
 
-    // 6. Fill Inventory Grid (Sorted by Quality)
+    // 6. Fill Inventory Grid (Sorted by Quality & Filtered by Category)
     const invGrid = document.getElementById("inventory-grid");
     if (invGrid) {
       invGrid.innerHTML = "";
@@ -2453,34 +2458,70 @@ class UIManager {
           return (b.level || 1) - (a.level || 1);
         });
 
-        sortedInv.forEach(it => {
-          const itemEl = document.createElement("div");
-          itemEl.className = `inv-item-card rarity-${it.rarity}`;
-
-          const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(it.rarity);
-          const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
-          const rankBadge = it.refineRank ? `<span class="item-rank-badge">+${it.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
-          const slotIcon = slotEmojis[it.slot] || "⚔️";
-          const upArrow = `<span class="item-up-arrow">▲</span>`;
-
-          itemEl.innerHTML = `
-            <span class="item-slot-mini-badge">${slotIcon}</span>
-            <span class="item-lvl-badge">Lv.${it.level}</span>
-            <img src="${it.icon}" class="inv-item-img" alt="${it.name}">
-            ${sBadge}
-            <div class="slot-corner-badges">
-              ${rankBadge}
-              ${upArrow}
-            </div>
-          `;
-          itemEl.addEventListener("click", () => {
-            Sound.playSfx("click");
-            this.showItemDetailsModal(it, false);
-          });
-          invGrid.appendChild(itemEl);
+        // Apply active category filter
+        const curFilter = this.inventoryFilter || 'all';
+        const filteredInv = sortedInv.filter(it => {
+          if (curFilter === 'weapon') return it.slot === 'weapon';
+          if (curFilter === 'armor') return ['armor', 'helmet', 'boots'].includes(it.slot);
+          if (curFilter === 'acc') return ['ring', 'amulet'].includes(it.slot);
+          return true;
         });
+
+        if (filteredInv.length === 0) {
+          invGrid.innerHTML = `<div class="empty-inv-msg">Tidak ada gear pada kategori ini.</div>`;
+        } else {
+          filteredInv.forEach(it => {
+            const itemEl = document.createElement("div");
+            itemEl.className = `inv-item-card rarity-${it.rarity}`;
+
+            const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(it.rarity);
+            const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
+            const rankBadge = it.refineRank ? `<span class="item-rank-badge">+${it.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
+            const slotIcon = slotEmojis[it.slot] || "⚔️";
+            const upArrow = `<span class="item-up-arrow">▲</span>`;
+            const starCount = it.stars || (it.rarity === 'supreme' ? 3 : (it.rarity === 'mythic' ? 4 : (it.refineRank || 1)));
+            const starsHtml = `<div class="item-stars-row">${'★'.repeat(Math.min(5, starCount))}</div>`;
+            const gleamHtml = `<div class="item-card-gleam"></div>`;
+
+            itemEl.innerHTML = `
+              ${gleamHtml}
+              <span class="item-slot-mini-badge">${slotIcon}</span>
+              <span class="item-lvl-badge">Lv.${it.level}</span>
+              <img src="${it.icon}" class="inv-item-img" alt="${it.name}">
+              ${starsHtml}
+              ${sBadge}
+              <div class="slot-corner-badges">
+                ${rankBadge}
+                ${upArrow}
+              </div>
+            `;
+            itemEl.addEventListener("click", () => {
+              Sound.playSfx("click");
+              this.showItemDetailsModal(it, false);
+            });
+            invGrid.appendChild(itemEl);
+          });
+
+          // Pad out with aesthetic empty slot placeholders so grid fills cleanly to a multiple of 5 (min 15 slots)
+          const targetSlots = Math.max(15, Math.ceil(filteredInv.length / 5) * 5);
+          for (let i = filteredInv.length; i < targetSlots; i++) {
+            const emptyTile = document.createElement("div");
+            emptyTile.className = "inv-empty-slot-tile";
+            emptyTile.innerHTML = `<span class="empty-slot-cross">+</span>`;
+            invGrid.appendChild(emptyTile);
+          }
+        }
       }
     }
+  }
+
+  setInventoryFilter(filter = 'all') {
+    Sound.playSfx && Sound.playSfx("click");
+    this.inventoryFilter = filter;
+    document.querySelectorAll('.bp-filter-pill').forEach(btn => {
+      btn.classList.toggle('active', btn.id === `filter-pill-${filter}`);
+    });
+    this.renderEquipmentScreen();
   }
 
   startHeroIdleAnim() {
