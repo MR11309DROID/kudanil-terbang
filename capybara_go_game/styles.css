@@ -3758,11 +3758,18 @@ body {
 }
 
 .slot-item-img {
-  width: 78%;
-  height: 78%;
-  object-fit: contain;
-  filter: drop-shadow(0 2.5px 4px rgba(0, 0, 0, 0.6));
-  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
+  z-index: 1;
+  display: block;
 }
 
 .slot-ghost-icon {
@@ -3776,51 +3783,44 @@ body {
 .slot-badge-type,
 .item-slot-mini-badge {
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 15px;
-  height: 15px;
-  background: rgba(18, 14, 14, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  top: 2.5px;
+  left: 2.5px;
+  width: 16px;
+  height: 16px;
+  background: rgba(18, 14, 14, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 8.5px;
   color: #fff;
-  z-index: 4;
+  z-index: 5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .slot-item-lvl,
 .item-lvl-badge {
   position: absolute;
-  top: 2px;
-  right: 3px;
+  top: 2.5px;
+  left: 20px;
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 900;
   color: #ffffff;
-  text-shadow: 0 1px 2px #000, 0 0 2px #000;
-  line-height: 1;
-  z-index: 4;
+  background: rgba(18, 14, 14, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  padding: 0 4px;
+  line-height: 14px;
+  text-shadow: 0 1px 2px #000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  z-index: 5;
 }
 
 /* Stars Rating Row matching authentic Capybara Go cards */
 .item-stars-row {
-  position: absolute;
-  bottom: 2px;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5px;
-  font-size: 7px;
-  color: #facc15;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 3px #ca8a04;
-  line-height: 1;
-  pointer-events: none;
-  z-index: 4;
+  display: none; /* Authentic cards already feature native star rows */
 }
 
 .item-s-badge {
@@ -3838,7 +3838,7 @@ body {
   line-height: 1.1;
   text-shadow: 0 1px 1px #451a03;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  z-index: 4;
+  z-index: 5;
 }
 
 .slot-corner-badges {
@@ -3848,7 +3848,7 @@ body {
   display: flex;
   align-items: center;
   gap: 2px;
-  z-index: 3;
+  z-index: 5;
 }
 
 .item-rank-badge {
@@ -3861,6 +3861,124 @@ body {
   border-radius: 3px;
   padding: 0 2px;
   line-height: 1.1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
+   SHIMMERING WAVE EFFECT (GELOMBANG BERKILAU)
+   Radiant sweeping light waves for Mythic and Supreme weapons
+   ============================================================ */
+.item-shimmer-wave {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.shimmer-sweep-light {
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 220%;
+  height: 220%;
+  transform: rotate(32deg);
+  pointer-events: none;
+}
+
+/* MYTHIC WEAPONS: Fiery crimson, ruby & incandescent gold radiance */
+.shimmer-wave-mythic .shimmer-sweep-light {
+  background: linear-gradient(115deg,
+    transparent 20%,
+    rgba(239, 68, 68, 0.15) 32%,
+    rgba(255, 180, 200, 0.75) 44%,
+    rgba(255, 255, 255, 0.98) 50%,
+    rgba(254, 240, 138, 0.9) 55%,
+    rgba(249, 115, 22, 0.4) 65%,
+    transparent 80%
+  );
+  animation: mythicShimmerSweep 2.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.paperdoll-slot.rarity-mythic.slot-is-weapon,
+.inv-item-card.rarity-mythic.slot-is-weapon {
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.9), inset 0 0 8px rgba(255, 180, 200, 0.6) !important;
+  animation: mythicWeaponBorderPulse 2s infinite alternate ease-in-out !important;
+}
+
+@keyframes mythicShimmerSweep {
+  0% { transform: translateY(-135%) rotate(32deg); }
+  50%, 100% { transform: translateY(135%) rotate(32deg); }
+}
+
+@keyframes mythicWeaponBorderPulse {
+  0% {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.7), inset 0 0 6px rgba(255, 100, 100, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 22px rgba(239, 68, 68, 1), 0 0 35px rgba(251, 146, 60, 0.6), inset 0 0 12px rgba(255, 220, 150, 0.8);
+  }
+}
+
+/* SUPREME WEAPONS: Primordial cosmic violet, starlight cyan & prismatic aurora */
+.shimmer-wave-supreme .shimmer-sweep-light {
+  background: linear-gradient(115deg,
+    transparent 20%,
+    rgba(168, 85, 247, 0.2) 32%,
+    rgba(216, 180, 254, 0.8) 43%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(56, 189, 248, 0.95) 56%,
+    rgba(168, 85, 247, 0.4) 66%,
+    transparent 80%
+  );
+  animation: supremeCosmicSweep 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.paperdoll-slot.rarity-supreme.slot-is-weapon,
+.inv-item-card.rarity-supreme.slot-is-weapon {
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.95), 0 0 30px rgba(56, 189, 248, 0.6), inset 0 0 10px rgba(224, 200, 255, 0.7) !important;
+  animation: supremeWeaponCosmicPulse 2.2s infinite alternate ease-in-out !important;
+}
+
+@keyframes supremeCosmicSweep {
+  0% { transform: translateY(-135%) rotate(32deg); }
+  50%, 100% { transform: translateY(135%) rotate(32deg); }
+}
+
+@keyframes supremeWeaponCosmicPulse {
+  0% {
+    box-shadow: 0 0 12px rgba(192, 132, 252, 0.7), inset 0 0 6px rgba(192, 132, 252, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 26px rgba(216, 180, 254, 1), 0 0 40px rgba(56, 189, 248, 0.75), inset 0 0 14px rgba(255, 255, 255, 0.85);
+  }
+}
+
+/* Pulsing starlight sparkle cross on mythic & supreme weapons */
+.shimmer-sparkle-stars {
+  position: absolute;
+  top: 3px;
+  right: 22px;
+  font-size: 11px;
+  color: #ffffff;
+  text-shadow: 0 0 6px #fff, 0 0 12px currentColor;
+  animation: sparklePulse 1.5s infinite alternate ease-in-out;
+  pointer-events: none;
+  z-index: 4;
+}
+.shimmer-wave-mythic .shimmer-sparkle-stars {
+  color: #fef08a;
+  text-shadow: 0 0 6px #fef08a, 0 0 12px #ef4444;
+}
+.shimmer-wave-supreme .shimmer-sparkle-stars {
+  color: #e0f2fe;
+  text-shadow: 0 0 6px #ffffff, 0 0 14px #38bdf8;
+}
+
+@keyframes sparklePulse {
+  0% { opacity: 0.3; transform: scale(0.7) rotate(0deg); }
+  100% { opacity: 1; transform: scale(1.35) rotate(45deg); }
 }
 
 .item-up-arrow {
@@ -4438,12 +4556,24 @@ body {
   animation: supremeCosmicGlow 2.5s infinite alternate ease-in-out;
 }
 
+.inv-item-card {
+  position: relative;
+  overflow: hidden;
+}
+
 .inv-item-img {
-  width: 78%;
-  height: 78%;
-  object-fit: contain;
-  filter: drop-shadow(0 2.5px 4px rgba(0, 0, 0, 0.6));
-  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
+  z-index: 1;
+  display: block;
 }
 
 /* Empty slot placeholder tile to pad inventory grid */

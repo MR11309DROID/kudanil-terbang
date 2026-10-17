@@ -2404,21 +2404,25 @@ class UIManager {
       if (!slotEl) continue;
 
       if (item) {
+        const displayImg = item.cardImg || item.icon;
+        const isWeapon = (slot === "weapon");
+        const isMythicWeapon = isWeapon && (item.rarity === "mythic");
+        const isSupremeWeapon = isWeapon && (item.rarity === "supreme");
+        const shimmerClass = isSupremeWeapon ? "shimmer-wave-supreme" : (isMythicWeapon ? "shimmer-wave-mythic" : (item.rarity === "supreme" ? "shimmer-wave-supreme" : (item.rarity === "mythic" ? "shimmer-wave-mythic" : "")));
+        const shimmerHtml = shimmerClass ? `<div class="item-shimmer-wave ${shimmerClass}"><div class="shimmer-sweep-light"></div><div class="shimmer-sparkle-stars">✦</div></div>` : "";
         const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(item.rarity);
         const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
         const rankBadge = item.refineRank ? `<span class="item-rank-badge">+${item.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
         const upArrow = `<span class="item-up-arrow">▲</span>`;
-        const starCount = item.stars || (item.rarity === 'supreme' ? 3 : (item.rarity === 'mythic' ? 4 : (item.refineRank || 1)));
-        const starsHtml = `<div class="item-stars-row">${'★'.repeat(Math.min(5, starCount))}</div>`;
         const gleamHtml = `<div class="item-card-gleam"></div>`;
 
-        slotEl.className = `paperdoll-slot occupied rarity-${item.rarity}`;
+        slotEl.className = `paperdoll-slot occupied rarity-${item.rarity} ${isWeapon ? 'slot-is-weapon' : ''}`;
         slotEl.innerHTML = `
+          <img src="${displayImg}" class="slot-item-img" alt="${item.name}">
           ${gleamHtml}
+          ${shimmerHtml}
           <span class="item-slot-mini-badge">${slotEmojis[slot] || "⚔️"}</span>
           <span class="item-lvl-badge">Lv.${item.level}</span>
-          <img src="${item.icon}" class="slot-item-img" alt="${item.name}">
-          ${starsHtml}
           ${sBadge}
           <div class="slot-corner-badges">
             ${rankBadge}
@@ -2472,23 +2476,26 @@ class UIManager {
         } else {
           filteredInv.forEach(it => {
             const itemEl = document.createElement("div");
-            itemEl.className = `inv-item-card rarity-${it.rarity}`;
-
+            const displayImg = it.cardImg || it.icon;
+            const isWeapon = (it.slot === "weapon");
+            const isMythicWeapon = isWeapon && (it.rarity === "mythic");
+            const isSupremeWeapon = isWeapon && (it.rarity === "supreme");
+            const shimmerClass = isSupremeWeapon ? "shimmer-wave-supreme" : (isMythicWeapon ? "shimmer-wave-mythic" : (it.rarity === "supreme" ? "shimmer-wave-supreme" : (it.rarity === "mythic" ? "shimmer-wave-mythic" : "")));
+            const shimmerHtml = shimmerClass ? `<div class="item-shimmer-wave ${shimmerClass}"><div class="shimmer-sweep-light"></div><div class="shimmer-sparkle-stars">✦</div></div>` : "";
             const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(it.rarity);
             const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
             const rankBadge = it.refineRank ? `<span class="item-rank-badge">+${it.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
             const slotIcon = slotEmojis[it.slot] || "⚔️";
             const upArrow = `<span class="item-up-arrow">▲</span>`;
-            const starCount = it.stars || (it.rarity === 'supreme' ? 3 : (it.rarity === 'mythic' ? 4 : (it.refineRank || 1)));
-            const starsHtml = `<div class="item-stars-row">${'★'.repeat(Math.min(5, starCount))}</div>`;
             const gleamHtml = `<div class="item-card-gleam"></div>`;
 
+            itemEl.className = `inv-item-card rarity-${it.rarity} ${isWeapon ? 'slot-is-weapon' : ''}`;
             itemEl.innerHTML = `
+              <img src="${displayImg}" class="inv-item-img" alt="${it.name}">
               ${gleamHtml}
+              ${shimmerHtml}
               <span class="item-slot-mini-badge">${slotIcon}</span>
               <span class="item-lvl-badge">Lv.${it.level}</span>
-              <img src="${it.icon}" class="inv-item-img" alt="${it.name}">
-              ${starsHtml}
               ${sBadge}
               <div class="slot-corner-badges">
                 ${rankBadge}
