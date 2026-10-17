@@ -927,6 +927,13 @@ class UIManager {
       if (headerChapter) headerChapter.textContent = "Select Chapter";
       if (dayProgress) dayProgress.style.width = "0%";
     }
+
+    // Update in-run companion quick icon
+    const runPetIcon = document.getElementById("run-pet-icon");
+    if (runPetIcon && GameData.companions) {
+      const activeComp = GameData.companions.find(c => c.id === (Character.activeCompanion || "duck"));
+      if (activeComp) runPetIcon.textContent = activeComp.icon || "🐾";
+    }
   }
 
   renderMenuHub() {
@@ -2255,6 +2262,21 @@ class UIManager {
         slotEl.innerHTML = `<img src="${tmplIcon}" class="slot-ghost-icon" alt="${slot}">`;
         slotEl.onclick = null;
       }
+    }
+
+    // Fill Companion Banner in Equipment Tab
+    const compId = Character.activeCompanion || "duck";
+    const compDef = (GameData.companions || []).find(c => c.id === compId);
+    const compLv = (Character.companionLevels && Character.companionLevels[compId]) || 1;
+    const petBadgeEl = document.getElementById("hero-pet-badge");
+    const petTitleEl = document.getElementById("hero-pet-title");
+    const petLvlEl = document.getElementById("hero-pet-lvl");
+    const petSubEl = document.getElementById("hero-pet-sub");
+    if (compDef) {
+      if (petBadgeEl) petBadgeEl.textContent = compDef.icon || "🐾";
+      if (petTitleEl) petTitleEl.textContent = compDef.name;
+      if (petLvlEl) petLvlEl.textContent = `Lv. ${compLv}`;
+      if (petSubEl) petSubEl.textContent = `🐾 Pasif: ${compDef.passiveDesc || ''}`;
     }
 
     // Fill Inventory Grid
@@ -3983,6 +4005,8 @@ class UIManager {
     if (Character.equipCompanion(id)) {
       Sound.playSfx && Sound.playSfx("click");
       this.renderCompanionsModal();
+      this.renderEquipmentScreen();
+      this.renderHeader();
       this.showToast && this.showToast("Pet berhasil dipasang! 🐾", "success");
     }
   }
@@ -3991,6 +4015,7 @@ class UIManager {
     if (Character.unlockCompanion(id)) {
       Sound.playSfx && Sound.playSfx("chest");
       this.renderCompanionsModal();
+      this.renderEquipmentScreen();
       this.renderHeader();
       this.showToast && this.showToast("Pet baru berhasil dibuka! 🎉", "success");
     } else {
@@ -4002,6 +4027,7 @@ class UIManager {
     if (Character.upgradeCompanion(id)) {
       Sound.playSfx && Sound.playSfx("magicBurst");
       this.renderCompanionsModal();
+      this.renderEquipmentScreen();
       this.renderHeader();
       this.showToast && this.showToast("Pet berhasil naik level! ⭐", "success");
     } else {

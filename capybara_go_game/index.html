@@ -296,8 +296,12 @@
               </div>
             </div>
 
-            <!-- Mini Gold & Gem Counters (Only pop in during loot animations) -->
+            <!-- Mini Gold & Gem Counters (Only pop in during loot animations) + Quick Pet Sanctuary -->
             <div class="stage-top-right-group">
+              <button id="btn-run-pet-quick" class="stage-run-pet-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Pet & Mount Sanctuary">
+                <span id="run-pet-icon">🐾</span>
+                <span class="run-pet-tag">Pet</span>
+              </button>
               <div id="stage-gold-pill" class="stage-top-gold-pill" title="Current Run Gold">
                 <span class="gold-mini-icon">🪙</span>
                 <span id="stage-gold-num">0</span>
@@ -605,6 +609,19 @@
               <div id="slot-ring" class="paperdoll-slot" title="Ring Slot"></div>
               <div id="slot-amulet" class="paperdoll-slot" title="Amulet Slot"></div>
             </div>
+          </div>
+
+          <!-- Dedicated Pet & Mount Companion Slot / Banner -->
+          <div class="hero-pet-banner" id="hero-pet-banner" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Buka Pet & Mount Sanctuary">
+            <div class="hero-pet-badge" id="hero-pet-badge">🦆</div>
+            <div class="hero-pet-info">
+              <div class="hero-pet-name-row">
+                <span class="hero-pet-title" id="hero-pet-title">Bebek Santai</span>
+                <span class="hero-pet-lvl-tag" id="hero-pet-lvl">Lv. 1</span>
+              </div>
+              <div class="hero-pet-sub" id="hero-pet-sub">🐾 Pet & Mount Sanctuary (Klik untuk Kelola / Upgrade)</div>
+            </div>
+            <button class="btn-pet-swap" type="button">Sanctuary ➔</button>
           </div>
 
           <!-- Attributes Grid -->
