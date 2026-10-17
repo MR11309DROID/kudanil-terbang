@@ -222,6 +222,13 @@ class AdventureEngine {
       const run = Character.activeRun;
       run.day++;
 
+      Character.trackStat && Character.trackStat("totalBattlesWon");
+      if (result.isBoss) Character.trackStat && Character.trackStat("totalBossesDefeated");
+      Character.addBattlePassExp && Character.addBattlePassExp(result.isBoss ? 20 : 5);
+      if (Character.stats && run.day > (Character.stats.maxDayReached || 0)) {
+        Character.stats.maxDayReached = run.day;
+      }
+
       // Check if boss defeated on Day 60 -> Chapter Clear!
       if (result.isBoss && run.day > run.maxDays) {
         this.handleChapterVictory();
@@ -276,6 +283,13 @@ class AdventureEngine {
       Character.addGold(-opt.costGold);
     }
 
+    // Track merchant/spring visits for achievements
+    if (this.currentEvent && this.currentEvent.eventDef) {
+      const evId = this.currentEvent.eventDef.id;
+      if (evId === "mysterious_merchant" && opt.costGold) Character.trackStat && Character.trackStat("merchantBuys");
+      if (evId === "rainbow_spring") Character.trackStat && Character.trackStat("springVisits");
+    }
+
     let resultMsg = "";
     if (opt.action === "heal_pct") {
       const healAmt = Math.round(run.maxHp * opt.val);
@@ -291,6 +305,49 @@ class AdventureEngine {
       }
       resultMsg = `Restored ${healAmt} HP!`;
       if (window.Game && window.Game.ui) window.Game.ui.renderRunStatsBar(true);
+    } else if (opt.action === "atk_boost") {
+      run.bonusAtkPct = (run.bonusAtkPct || 0) + (opt.val || 0.15);
+      Sound.playSfx("magicBurst");
+      resultMsg = opt.result || `ATK +${Math.round((opt.val || 0.15) * 100)}%!`;
+    } else if (opt.action === "hp_boost") {
+      run.bonusHpPct = (run.bonusHpPct || 0) + (opt.val || 0.20);
+      const extra = Math.round(run.maxHp * (opt.val || 0.20));
+      run.maxHp += extra;
+      run.currentHp = Math.min(run.maxHp, run.currentHp + extra);
+      Sound.playSfx("heal");
+      resultMsg = opt.result || `Max HP +${Math.round((opt.val || 0.20) * 100)}%!`;
+    } else if (opt.action === "gold_reward") {
+      const goldAmt = opt.val || 200;
+      Character.addGold(goldAmt);
+      Character.trackStat && Character.trackStat("single_event_gold", goldAmt);
+      Sound.playSfx("chest");
+      resultMsg = opt.result || `+${goldAmt} Gold!`;
+    } else if (opt.action === "gems_reward") {
+      Character.gems = (Character.gems || 0) + (opt.val || 5);
+      Character.save();
+      Sound.playSfx("gem");
+      resultMsg = opt.result || `+${opt.val} Gems!`;
+    } else if (opt.action === "heal_full") {
+      run.currentHp = run.maxHp;
+      run.bonusDef = (run.bonusDef || 0) + 10;
+      Sound.playSfx("heal");
+      this.renderer && this.renderer.addVisualEffect && this.renderer.addVisualEffect("healRing", this.renderer.playerState.x, this.renderer.groundY - 30);
+      resultMsg = opt.result || "HP fully restored + DEF boosted!";
+      if (window.Game && window.Game.ui) window.Game.ui.renderRunStatsBar(true);
+    } else if (opt.action === "cursed_chest_gamble") {
+      if (Math.random() < 0.55) {
+        const prize = Math.round(800 + Math.random() * 700);
+        Character.addGold(prize);
+        Character.trackStat && Character.trackStat("single_event_gold", prize);
+        Sound.playSfx("chest");
+        resultMsg = `✨ LUCKY! Found ${prize} Gold inside the cursed chest!`;
+      } else {
+        const lostHp = Math.round(run.currentHp * 0.30);
+        run.currentHp = Math.max(1, run.currentHp - lostHp);
+        Sound.playSfx("hurt");
+        resultMsg = `💀 CURSED! A dark shockwave saps ${lostHp} HP!`;
+        if (window.Game && window.Game.ui) window.Game.ui.renderRunStatsBar(true);
+      }
     } else if (opt.action === "pray_blessing") {
       run.bonusAtkPct = (run.bonusAtkPct || 0) + 0.15;
       Sound.playSfx("magicBurst");
@@ -364,8 +421,10 @@ class AdventureEngine {
         this.advanceAfterNarrative();
       });
       return { success: true, pendingSkill: true };
+    } else if (opt.action === "nothing") {
+      resultMsg = opt.result || "You walk onwards peacefully.";
     } else {
-      resultMsg = "You travel onwards.";
+      resultMsg = opt.result || "You travel onwards.";
     }
 
     Character.save();
@@ -443,6 +502,13 @@ class AdventureEngine {
 
     Character.gold += chapter.rewardGold;
     Character.gems += chapter.rewardGems;
+
+    Character.trackStat && Character.trackStat("totalRuns");
+    if (Character.stats) {
+      if (!Character.stats.chaptersCleared) Character.stats.chaptersCleared = {};
+      Character.stats.chaptersCleared[run.chapterId] = true;
+    }
+    Character.checkAchievements && Character.checkAchievements();
 
     Character.endRun(true);
     Sound.playSfx("stageClear");

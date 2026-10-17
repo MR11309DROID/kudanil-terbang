@@ -344,6 +344,100 @@ const GameData = {
         { label: "Bath in Yuzu Hot Spring", desc: "Fully restore HP & fill Rage to 100%!", action: "yuzu_spa" },
         { label: "Harvest Golden Yuzu (Gain 20 💎)", desc: "Store the precious fruits for gems", action: "add_gems", val: 20 }
       ]
+    },
+    // Mysterious Merchant
+    {
+      id: "mysterious_merchant",
+      title: "Mysterious Merchant",
+      dialog: "A cloaked figure steps out of the shadows, showing you a collection of rare items. \"For the right price... anything can be yours,\" he whispers.",
+      icon: "🛒",
+      options: [
+        { label: "Buy Rare Potion (200 Gold)", costGold: 200, action: "heal_pct", val: 0.50, result: "You chug the potion! Restored 50% HP!" },
+        { label: "Buy Attack Scroll (350 Gold)", costGold: 350, action: "atk_boost", val: 0.20, result: "Power surges through you! +20% ATK for this run!" },
+        { label: "Decline & Walk Away", action: "nothing", result: "You walk away. Perhaps he'll appear again..." }
+      ]
+    },
+    // Ancient Shrine
+    {
+      id: "ancient_shrine",
+      title: "Ancient Shrine",
+      dialog: "A moss-covered stone shrine stands at the crossroads, emanating a warm, golden glow. Ancient runes shimmer invitingly.",
+      icon: "⛩️",
+      options: [
+        { label: "Pray for Strength", action: "atk_boost", val: 0.15, result: "The shrine glows! ATK blessed by +15%!" },
+        { label: "Pray for Endurance", action: "hp_boost", val: 0.20, result: "You feel invincible! Max HP +20% for this run!" },
+        { label: "Pray for Fortune", action: "gold_reward", val: 280, result: "Golden coins rain from the shrine! +280 Gold!" }
+      ]
+    },
+    // Dragon Egg Found
+    {
+      id: "dragon_egg",
+      title: "Dragon Egg!",
+      dialog: "Hidden under a pile of ancient rubble, you discover a pulsating crimson egg. It hums with fierce draconic energy...",
+      icon: "🥚",
+      options: [
+        { label: "Absorb its power", action: "atk_boost", val: 0.25, result: "Dragon power surges through you! ATK +25%!" },
+        { label: "Smash it open", action: "gold_reward", val: 450, result: "Ancient gold coins spill out! +450 Gold!" },
+        { label: "Leave it alone", action: "nothing", result: "You decide to leave the mysterious egg undisturbed." }
+      ]
+    },
+    // Rainbow Spring
+    {
+      id: "rainbow_spring",
+      title: "Rainbow Spring",
+      dialog: "A magical spring bubbles with water of every color of the rainbow. Creatures flock here from all over the realm to be healed.",
+      icon: "🌈",
+      options: [
+        { label: "Take a full bath", action: "heal_full", result: "Fully refreshed! HP fully restored + DEF +10!" },
+        { label: "Just sip a little", action: "heal_pct", val: 0.30, result: "Feeling better! Restored 30% HP." }
+      ]
+    },
+    // Lost Traveler
+    {
+      id: "lost_traveler",
+      title: "Lost Traveler",
+      dialog: "A bewildered adventurer sits by the road, muttering about monsters and treasure. They look like they need help.",
+      icon: "🧙",
+      options: [
+        { label: "Help them find the way", action: "gems_reward", val: 5, result: "Grateful, they reward you with 5 Gems!" },
+        { label: "Share your food (50 Gold)", costGold: 50, action: "atk_boost", val: 0.10, result: "They share battle tips in return! ATK +10%!" },
+        { label: "Ignore them", action: "nothing", result: "You walk on. Every adventurer for themselves." }
+      ]
+    },
+    // Cursed Chest
+    {
+      id: "cursed_chest",
+      title: "Cursed Chest",
+      dialog: "A glittering chest sits in the middle of the road. But dark energy swirls around it... Opening it could be glorious or catastrophic.",
+      icon: "🗃️",
+      options: [
+        { label: "Open it! (Risk/Reward)", action: "cursed_chest_gamble", result: "" },
+        { label: "Leave it alone", action: "nothing", result: "Better safe than sorry. You leave the chest." }
+      ]
+    },
+    // Capy Village Festival
+    {
+      id: "capy_village",
+      title: "Capy Village Festival!",
+      dialog: "You stumble upon a festive Capybara village! The smell of roasted food fills the air. The villagers recognize you as a hero!",
+      icon: "🏘️",
+      options: [
+        { label: "Feast & Rest", action: "heal_pct", val: 0.40, result: "Feasted like a king! Restored 40% HP!" },
+        { label: "Trade with merchants", action: "gold_reward", val: 200, result: "Good trades! Earned 200 Gold!" },
+        { label: "Train with the guards", action: "atk_boost", val: 0.12, result: "Trained hard! ATK +12%!" }
+      ]
+    },
+    // Meteor Strike
+    {
+      id: "meteor_strike",
+      title: "METEOR STRIKE!",
+      dialog: "The sky darkens... a searing streak of light tears through the clouds and CRASHES nearby! The shockwave knocks you off your feet!",
+      icon: "☄️",
+      options: [
+        { label: "Investigate the crater", action: "atk_boost", val: 0.30, result: "Cosmic energy absorbed! ATK +30%! But HP -10%!" },
+        { label: "Collect meteor fragments", action: "gold_reward", val: 600, result: "Rare meteor ore! +600 Gold!" },
+        { label: "Run away!", action: "nothing", result: "You sprint away. The meteor narrowly missed you!" }
+      ]
     }
   ],
 
@@ -541,7 +635,72 @@ const GameData = {
       type: "dmg_pct",
       val: 0.10
     }
-  ]
+  ],
+
+  achievements: [
+    { id: "first_blood", name: "First Blood", desc: "Win your very first battle", icon: "🗡️", condition: "battles_won", target: 1, reward: { gold: 100 } },
+    { id: "survivalist", name: "Survivalist", desc: "Survive until Day 40 in any run", icon: "🛡️", condition: "max_day_reached", target: 40, reward: { gold: 500, gems: 10 } },
+    { id: "dragon_slayer", name: "Dragon Slayer", desc: "Use Dragon Roar skill 10 times", icon: "🐉", condition: "dragon_roar_used", target: 10, reward: { gold: 300, gems: 5 } },
+    { id: "void_master", name: "Void Master", desc: "Use Black Hole skill 5 times", icon: "🌑", condition: "black_hole_used", target: 5, reward: { gold: 300, gems: 5 } },
+    { id: "collector", name: "Skill Collector", desc: "Collect 10 different skills in one run", icon: "⭐", condition: "skills_in_run", target: 10, reward: { gems: 20 } },
+    { id: "gold_rush", name: "Gold Rush", desc: "Accumulate 50,000 total Gold", icon: "💰", condition: "total_gold_earned", target: 50000, reward: { gems: 50 } },
+    { id: "chapter_master", name: "Chapter Master", desc: "Clear all 6 chapters", icon: "👑", condition: "chapters_cleared", target: 6, reward: { gems: 100 } },
+    { id: "boss_hunter", name: "Boss Hunter", desc: "Defeat 10 bosses", icon: "💀", condition: "bosses_defeated", target: 10, reward: { gold: 800, gems: 15 } },
+    { id: "iron_will", name: "Iron Will", desc: "Complete 20 runs total", icon: "⚔️", condition: "total_runs", target: 20, reward: { gold: 1000, gems: 25 } },
+    { id: "speedrunner", name: "Speedrunner", desc: "Beat a chapter boss within 30 seconds", icon: "⚡", condition: "boss_fast_kill", target: 1, reward: { gold: 500, gems: 10 } },
+    { id: "lucky_star", name: "Lucky Star", desc: "Spin the Fortune Wheel 10 times", icon: "🎰", condition: "wheel_spins", target: 10, reward: { gold: 200, gems: 5 } },
+    { id: "perfect_run", name: "Perfect Run", desc: "Complete a run without dying", icon: "💎", condition: "perfect_runs", target: 1, reward: { gems: 30 } },
+    { id: "merchant_friend", name: "Merchant Friend", desc: "Buy from the Mysterious Merchant 5 times", icon: "🛒", condition: "merchant_buys", target: 5, reward: { gold: 400 } },
+    { id: "nature_lover", name: "Nature Lover", desc: "Visit the Rainbow Spring 3 times", icon: "🌈", condition: "spring_visits", target: 3, reward: { gold: 300, gems: 5 } },
+    { id: "chapter_1_clear", name: "Gale Town Hero", desc: "Clear Gale Town (Chapter 1)", icon: "🏙️", condition: "chapter_cleared", target: 1, reward: { gold: 500, gems: 10 } },
+    { id: "chapter_2_clear", name: "Forest Ranger", desc: "Clear Whispering Woods (Chapter 2)", icon: "🌲", condition: "chapter_cleared", target: 2, reward: { gold: 800, gems: 15 } },
+    { id: "chapter_3_clear", name: "Desert Fox", desc: "Clear Sunken Desert (Chapter 3)", icon: "🏜️", condition: "chapter_cleared", target: 3, reward: { gold: 1200, gems: 20 } },
+    { id: "chapter_4_clear", name: "Frost Walker", desc: "Clear Frozen Peaks (Chapter 4)", icon: "❄️", condition: "chapter_cleared", target: 4, reward: { gold: 1800, gems: 30 } },
+    { id: "chapter_5_clear", name: "Lava Strider", desc: "Clear Molten Core (Chapter 5)", icon: "🌋", condition: "chapter_cleared", target: 5, reward: { gold: 2500, gems: 40 } },
+    { id: "high_roller", name: "High Roller", desc: "Win 1000+ gold from a single event", icon: "🎲", condition: "single_event_gold", target: 1000, reward: { gems: 15 } }
+  ],
+
+  fortuneWheelSlots: [
+    { label: "500 Gold", type: "gold", value: 500, color: "#f59e0b", icon: "🪙", weight: 25 },
+    { label: "1000 Gold", type: "gold", value: 1000, color: "#f97316", icon: "💰", weight: 15 },
+    { label: "5 Gems", type: "gems", value: 5, color: "#3b82f6", icon: "💎", weight: 20 },
+    { label: "15 Gems", type: "gems", value: 15, color: "#8b5cf6", icon: "💎", weight: 10 },
+    { label: "200 Gold", type: "gold", value: 200, color: "#eab308", icon: "🪙", weight: 30 },
+    { label: "ATK +20%", type: "atk_boost", value: 0.20, color: "#ef4444", icon: "⚔️", weight: 8 },
+    { label: "Full Heal", type: "heal_full", value: 1, color: "#22c55e", icon: "💚", weight: 10 },
+    { label: "JACKPOT!", type: "gems", value: 50, color: "#ec4899", icon: "🌟", weight: 2 }
+  ],
+
+  dailyLoginRewards: [
+    { day: 1, gold: 200, gems: 0, icon: "🪙" },
+    { day: 2, gold: 300, gems: 0, icon: "🪙" },
+    { day: 3, gold: 300, gems: 3, icon: "💎" },
+    { day: 4, gold: 500, gems: 0, icon: "🪙" },
+    { day: 5, gold: 500, gems: 5, icon: "💎" },
+    { day: 6, gold: 800, gems: 0, icon: "🪙" },
+    { day: 7, gold: 1000, gems: 20, icon: "🌟" }
+  ],
+
+  battlePassTracks: {
+    season: "Season 1: Rise of the Dragon",
+    endDate: "2026-11-30",
+    free: [
+      { level: 1, reward: { gold: 500 }, icon: "🪙" },
+      { level: 5, reward: { gold: 1000 }, icon: "🪙" },
+      { level: 10, reward: { gold: 2000, gems: 10 }, icon: "💎" },
+      { level: 15, reward: { gold: 3000 }, icon: "🪙" },
+      { level: 20, reward: { gold: 5000, gems: 25 }, icon: "💎" },
+      { level: 25, reward: { gold: 8000, gems: 50 }, icon: "🌟" }
+    ],
+    premium: [
+      { level: 1, reward: { gems: 10 }, icon: "💎" },
+      { level: 5, reward: { gems: 20, gold: 1000 }, icon: "💎" },
+      { level: 10, reward: { gems: 50, gold: 3000 }, icon: "🌟" },
+      { level: 15, reward: { gems: 80, gold: 5000 }, icon: "🌟" },
+      { level: 20, reward: { gems: 150, gold: 10000 }, icon: "👑" },
+      { level: 25, reward: { gems: 300, gold: 20000 }, icon: "👑" }
+    ]
+  }
 };
 
 if (typeof module !== "undefined") module.exports = GameData;

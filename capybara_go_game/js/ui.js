@@ -12,6 +12,7 @@ class UIManager {
     this.initEngineCallbacks();
     this.renderHeader();
     this.renderActiveTab();
+    setTimeout(() => this.checkAndShowDailyLogin && this.checkAndShowDailyLogin(), 1800);
   }
 
   initEngineCallbacks() {
@@ -2680,6 +2681,421 @@ window.testDragonRoar = () => {
         }, 1200);
       }
     });
+  }
+
+  // ===== DAILY LOGIN BONUS CONTROLLER =====
+  openDailyLogin() {
+    const modal = document.getElementById("daily-login-modal");
+    if (!modal) return;
+    this.renderDailyLoginModal();
+    modal.style.display = "flex";
+  }
+
+  claimDailyLogin() {
+    const reward = Character.checkDailyLogin && Character.checkDailyLogin();
+    if (!reward) {
+      document.getElementById("daily-login-modal").style.display = "none";
+      if (this.showToast) this.showToast("Already claimed today! Come back tomorrow! 🌟", "info");
+      return;
+    }
+    Sound.playSfx && Sound.playSfx("chest");
+    this.renderDailyLoginModal();
+    this.renderHeader();
+    const btn = document.getElementById("btn-daily-claim");
+    if (btn) { btn.textContent = "✅ Claimed!"; btn.disabled = true; }
+    setTimeout(() => {
+      const modal = document.getElementById("daily-login-modal");
+      if (modal) modal.style.display = "none";
+      if (btn) { btn.textContent = "Claim Reward!"; btn.disabled = false; }
+    }, 1500);
+  }
+
+  renderDailyLoginModal() {
+    const streak = (Character.dailyLogin && Character.dailyLogin.streak) || 1;
+    const rewardsEl = document.getElementById("daily-login-rewards");
+    const streakEl = document.getElementById("daily-login-streak");
+    const dlrValue = document.getElementById("dlr-value");
+
+    if (streakEl) streakEl.textContent = `Streak: ${streak} day${streak > 1 ? "s" : ""} 🔥`;
+
+    if (rewardsEl && GameData.dailyLoginRewards) {
+      rewardsEl.innerHTML = GameData.dailyLoginRewards.map((r, i) => {
+        const dayNum = i + 1;
+        const isClaimed = streak > dayNum;
+        const isToday = streak === dayNum;
+        let cls = "dlr-day-pill";
+        if (isClaimed) cls += " claimed";
+        if (isToday) cls += " today";
+        const valText = r.gems > 0 ? `+${r.gems}💎` : `+${r.gold}🪙`;
+        return `<div class="${cls}"><span class="pill-icon">${r.icon}</span><span class="pill-day">Day ${dayNum}</span><small>${valText}</small></div>`;
+      }).join("");
+    }
+
+    const rewardIdx = (Math.max(0, streak - 1)) % 7;
+    const todayReward = GameData.dailyLoginRewards && GameData.dailyLoginRewards[rewardIdx];
+    if (dlrValue && todayReward) {
+      const parts = [];
+      if (todayReward.gold) parts.push(`+${todayReward.gold} 🪙`);
+      if (todayReward.gems) parts.push(`+${todayReward.gems} 💎`);
+      dlrValue.textContent = parts.join("  ");
+    }
+  }
+
+  checkAndShowDailyLogin() {
+    const today = new Date().toISOString().slice(0, 10);
+    const lastLogin = Character.dailyLogin && Character.dailyLogin.lastLoginDate;
+    if (lastLogin !== today) {
+      this.openDailyLogin();
+    }
+  }
+
+  // ===== ACHIEVEMENTS SYSTEM CONTROLLER =====
+  openAchievements() {
+    const modal = document.getElementById("achievements-modal");
+    if (!modal) return;
+    this.renderAchievementsPanel();
+    modal.style.display = "flex";
+  }
+
+  renderAchievementsPanel() {
+    const list = document.getElementById("achievements-list");
+    if (!list || !GameData.achievements) return;
+    Character.checkAchievements && Character.checkAchievements();
+    const prog = Character.achievementProgress || {};
+    const claimed = Character.claimedAchievements || [];
+
+    list.innerHTML = GameData.achievements.map(ach => {
+      const isDone = claimed.includes(ach.id);
+      const p = prog[ach.id] || { progress: 0, target: ach.target };
+      const pct = Math.min(100, Math.round((p.progress / p.target) * 100));
+      const rewardText = [ach.reward.gold ? `+${ach.reward.gold}🪙` : "", ach.reward.gems ? `+${ach.reward.gems}💎` : ""].filter(Boolean).join(" ");
+      return `<div class="ach-item${isDone ? " unlocked" : ""}">
+        <div class="ach-icon">${ach.icon}</div>
+        <div class="ach-info">
+          <div class="ach-name">${ach.name} ${isDone ? '<span class="ach-badge">✓ Done</span>' : ''}</div>
+          <div class="ach-desc">${ach.desc}</div>
+          <div class="ach-progress-wrap">
+            <div class="ach-progress-bar"><div class="ach-progress-fill" style="width:${pct}%"></div></div>
+            <div class="ach-progress-text">${p.progress}/${p.target} — Reward: ${rewardText}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  showAchievementToast(ach) {
+    const toast = document.getElementById("achievement-toast");
+    const iconEl = document.getElementById("achievement-toast-icon");
+    const nameEl = document.getElementById("achievement-toast-name");
+    if (!toast) return;
+    if (iconEl) iconEl.textContent = ach.icon || "⭐";
+    if (nameEl) nameEl.textContent = ach.name;
+    toast.style.display = "flex";
+    toast.classList.remove("show");
+    void toast.offsetWidth;
+    toast.classList.add("show");
+    Sound.playSfx && Sound.playSfx("fanfare");
+    setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => { toast.style.display = "none"; }, 400);
+    }, 3500);
+  }
+
+  // ===== FORTUNE WHEEL CONTROLLER =====
+  openFortuneWheel() {
+    const modal = document.getElementById("fortune-wheel-modal");
+    if (!modal) return;
+    this.drawFortuneWheel();
+    this.updateWheelStatus();
+    const resEl = document.getElementById("fortune-wheel-result");
+    if (resEl) resEl.style.display = "none";
+    modal.style.display = "flex";
+  }
+
+  drawFortuneWheel(highlightIndex = -1) {
+    const canvas = document.getElementById("fortune-wheel-canvas");
+    if (!canvas || !GameData.fortuneWheelSlots) return;
+    const ctx = canvas.getContext("2d");
+    const slots = GameData.fortuneWheelSlots;
+    const cx = canvas.width / 2, cy = canvas.height / 2;
+    const r = cx - 12;
+    const arc = (Math.PI * 2) / slots.length;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Outer glow ring
+    ctx.save();
+    ctx.strokeStyle = "#7c3aed";
+    ctx.lineWidth = 6;
+    ctx.shadowColor = "#a855f7";
+    ctx.shadowBlur = 14;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r + 4, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    slots.forEach((slot, i) => {
+      const startAngle = arc * i - Math.PI / 2;
+      const endAngle = startAngle + arc;
+
+      ctx.save();
+      ctx.fillStyle = slot.color || "#6d28d9";
+      ctx.globalAlpha = highlightIndex === i ? 1.0 : 0.90;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "#1c1917";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(startAngle + arc / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 11px Fredoka, sans-serif";
+      ctx.shadowColor = "#000000";
+      ctx.shadowBlur = 4;
+      ctx.fillText(slot.icon + " " + slot.label, r - 8, 4);
+      ctx.restore();
+    });
+
+    // Center Hub
+    ctx.save();
+    const hub = ctx.createRadialGradient(cx, cy, 3, cx, cy, 22);
+    hub.addColorStop(0, "#fef08a");
+    hub.addColorStop(1, "#d97706");
+    ctx.fillStyle = hub;
+    ctx.shadowColor = "#f59e0b";
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 20, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  drawFortuneWheelRotated(angle, highlightIndex = -1) {
+    const canvas = document.getElementById("fortune-wheel-canvas");
+    if (!canvas || !GameData.fortuneWheelSlots) return;
+    const ctx = canvas.getContext("2d");
+    const slots = GameData.fortuneWheelSlots;
+    const cx = canvas.width / 2, cy = canvas.height / 2;
+    const r = cx - 12;
+    const arc = (Math.PI * 2) / slots.length;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.save();
+    ctx.strokeStyle = "#7c3aed";
+    ctx.lineWidth = 6;
+    ctx.shadowColor = "#a855f7";
+    ctx.shadowBlur = 14;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r + 4, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    ctx.translate(-cx, -cy);
+
+    slots.forEach((slot, i) => {
+      const startAngle = arc * i - Math.PI / 2;
+      const endAngle = startAngle + arc;
+
+      ctx.save();
+      ctx.fillStyle = slot.color || "#6d28d9";
+      ctx.globalAlpha = highlightIndex === i ? 1.0 : 0.90;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "#1c1917";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(startAngle + arc / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 11px Fredoka, sans-serif";
+      ctx.shadowColor = "#000000";
+      ctx.shadowBlur = 4;
+      ctx.fillText(slot.icon + " " + slot.label, r - 8, 4);
+      ctx.restore();
+    });
+    ctx.restore();
+
+    // Center Hub
+    ctx.save();
+    const hub = ctx.createRadialGradient(cx, cy, 3, cx, cy, 22);
+    hub.addColorStop(0, "#fef08a");
+    hub.addColorStop(1, "#d97706");
+    ctx.fillStyle = hub;
+    ctx.shadowColor = "#f59e0b";
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 20, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  spinFortuneWheel() {
+    if (!Character.canSpinWheel || !Character.canSpinWheel()) {
+      this.updateWheelStatus();
+      return;
+    }
+    const btn = document.getElementById("btn-spin-wheel");
+    if (btn) btn.disabled = true;
+
+    const slots = GameData.fortuneWheelSlots;
+    const totalWeight = slots.reduce((s, sl) => s + (sl.weight || 10), 0);
+    let rand = Math.random() * totalWeight;
+    let selectedIndex = 0;
+    for (let i = 0; i < slots.length; i++) {
+      rand -= (slots[i].weight || 10);
+      if (rand <= 0) { selectedIndex = i; break; }
+    }
+
+    const canvas = document.getElementById("fortune-wheel-canvas");
+    if (!canvas) return;
+    const arc = (2 * Math.PI) / slots.length;
+    const totalSpins = 5 + Math.floor(Math.random() * 3);
+    const targetAngle = totalSpins * Math.PI * 2 + (arc * (slots.length - selectedIndex)) - arc / 2;
+    let currentAngle = 0;
+    const duration = 2800;
+    const startTime = performance.now();
+
+    Sound.playSfx && Sound.playSfx("uiClick");
+
+    const animate = (now) => {
+      const elapsed = now - startTime;
+      const t = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - t, 4);
+      currentAngle = eased * targetAngle;
+
+      this.drawFortuneWheelRotated(currentAngle, -1);
+
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        this.drawFortuneWheelRotated(currentAngle, selectedIndex);
+        const reward = Character.claimWheelSpin && Character.claimWheelSpin(selectedIndex);
+        const resultEl = document.getElementById("fortune-wheel-result");
+        if (resultEl && reward) {
+          resultEl.innerHTML = `${reward.icon} <strong>${reward.label}</strong> claimed!`;
+          resultEl.style.display = "block";
+        }
+        this.renderHeader();
+        if (btn) btn.disabled = false;
+        this.updateWheelStatus();
+        Sound.playSfx && Sound.playSfx("chest");
+      }
+    };
+    requestAnimationFrame(animate);
+  }
+
+  updateWheelStatus() {
+    const canSpin = Character.canSpinWheel && Character.canSpinWheel();
+    const btn = document.getElementById("btn-spin-wheel");
+    const cdEl = document.getElementById("fortune-wheel-cd");
+    if (btn) btn.disabled = !canSpin;
+    if (cdEl) {
+      if (canSpin) {
+        cdEl.textContent = "✨ Free spin available!";
+        cdEl.style.color = "#4ade80";
+      } else {
+        cdEl.textContent = "Next free spin available tomorrow ⏰";
+        cdEl.style.color = "#a8a29e";
+      }
+    }
+  }
+
+  // ===== BATTLE PASS CONTROLLER =====
+  openBattlePass() {
+    const modal = document.getElementById("battle-pass-modal");
+    if (!modal) return;
+    this.renderBattlePassPanel();
+    modal.style.display = "flex";
+  }
+
+  renderBattlePassPanel() {
+    const bp = Character.battlePass || { level: 0, exp: 0, isPremium: false, claimedFree: [], claimedPremium: [] };
+    const lvEl = document.getElementById("bp-level");
+    const expEl = document.getElementById("bp-exp");
+    const fillEl = document.getElementById("bp-progress-fill");
+    const tracksEl = document.getElementById("battle-pass-tracks");
+
+    if (lvEl) lvEl.textContent = bp.level || 0;
+    if (expEl) expEl.textContent = bp.exp || 0;
+    if (fillEl) fillEl.style.width = `${Math.min(100, bp.exp || 0)}%`;
+
+    const season = GameData.battlePassTracks;
+    if (!tracksEl || !season) return;
+
+    let html = '<div style="font-size:0.78rem;color:#86efac;margin-bottom:8px;font-weight:800;">🆓 Free Pass Track</div>';
+    season.free.forEach(tier => {
+      const isUnlocked = (bp.level || 0) >= tier.level;
+      const isClaimed = (bp.claimedFree || []).includes(tier.level);
+      const rewardText = [tier.reward.gold ? `${tier.reward.gold}🪙` : "", tier.reward.gems ? `${tier.reward.gems}💎` : ""].filter(Boolean).join(" + ");
+      html += `<div class="bp-track-row${isUnlocked ? " unlocked" : ""}">
+        <span class="bp-track-lv">Lv.${tier.level}</span>
+        <span class="bp-track-icon">${tier.icon}</span>
+        <span class="bp-track-reward">${rewardText}</span>
+        <span class="bp-track-badge ${isClaimed ? "bp-claimed-badge" : "bp-free-badge"}">${isClaimed ? "Claimed" : (isUnlocked ? "Unlocked!" : "Locked")}</span>
+      </div>`;
+    });
+
+    html += '<div style="font-size:0.78rem;color:#c084fc;margin:14px 0 8px;font-weight:800;">👑 Premium Pass Track</div>';
+    season.premium.forEach(tier => {
+      const isUnlocked = bp.isPremium && (bp.level || 0) >= tier.level;
+      const isClaimed = (bp.claimedPremium || []).includes(tier.level);
+      const rewardText = [tier.reward.gold ? `${tier.reward.gold}🪙` : "", tier.reward.gems ? `${tier.reward.gems}💎` : ""].filter(Boolean).join(" + ");
+      html += `<div class="bp-track-row premium-track${isUnlocked ? " unlocked" : ""}">
+        <span class="bp-track-lv">Lv.${tier.level}</span>
+        <span class="bp-track-icon">${tier.icon}</span>
+        <span class="bp-track-reward">${rewardText}</span>
+        <span class="bp-track-badge ${isClaimed ? "bp-claimed-badge" : (isUnlocked ? "bp-premium-badge" : "bp-claimed-badge")}">${isClaimed ? "Claimed" : (isUnlocked ? "Unlocked!" : (bp.isPremium ? "Locked" : "🔒 Premium"))}</span>
+      </div>`;
+    });
+
+    tracksEl.innerHTML = html;
+  }
+
+  // ===== STATS SCREEN CONTROLLER =====
+  openStats() {
+    const modal = document.getElementById("stats-modal");
+    if (!modal) return;
+    this.renderStatsPanel();
+    modal.style.display = "flex";
+  }
+
+  renderStatsPanel() {
+    const grid = document.getElementById("stats-grid");
+    if (!grid) return;
+    const s = Character.stats || {};
+    const cards = [
+      { icon: "⚔️", value: s.totalBattlesWon || 0, label: "Battles Won" },
+      { icon: "💀", value: s.totalBossesDefeated || 0, label: "Bosses Defeated" },
+      { icon: "🏃", value: s.totalRuns || 0, label: "Total Runs" },
+      { icon: "📅", value: `${s.maxDayReached || 0} days`, label: "Best Survival" },
+      { icon: "🐉", value: s.dragonRoarUsed || 0, label: "Dragon Roars" },
+      { icon: "🌑", value: s.blackHoleUsed || 0, label: "Black Holes" },
+      { icon: "🪙", value: (s.totalGoldEarned || 0).toLocaleString(), label: "Total Gold" },
+      { icon: "🎰", value: s.wheelSpins || 0, label: "Wheel Spins" },
+      { icon: "🏆", value: (Character.claimedAchievements || []).length, label: "Achievements" },
+      { icon: "🏅", value: `Lv. ${(Character.battlePass && Character.battlePass.level) || 0}`, label: "Battle Pass" }
+    ];
+    grid.innerHTML = cards.map(c =>
+      `<div class="stat-card"><div class="stat-card-icon">${c.icon}</div><div class="stat-card-value">${c.value}</div><div class="stat-card-label">${c.label}</div></div>`
+    ).join("");
   }
 };
 

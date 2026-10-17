@@ -61,6 +61,45 @@ class CharacterManager {
     // Current Run State (Day 1 - 60)
     this.activeRun = null;
 
+    // Daily Login tracking
+    this.dailyLogin = {
+      lastLoginDate: null,
+      streak: 0,
+      claimedDays: []
+    };
+
+    // Achievement progress
+    this.achievementProgress = {};
+    this.claimedAchievements = [];
+
+    // Lifetime stats
+    this.stats = {
+      totalGoldEarned: 0,
+      totalRuns: 0,
+      totalBattlesWon: 0,
+      totalBossesDefeated: 0,
+      dragonRoarUsed: 0,
+      blackHoleUsed: 0,
+      wheelSpins: 0,
+      merchantBuys: 0,
+      springVisits: 0,
+      maxDayReached: 0,
+      chaptersCleared: {},
+      perfectRuns: 0
+    };
+
+    // Fortune Wheel
+    this.lastWheelSpin = null; // ISO date string
+
+    // Battle Pass
+    this.battlePass = {
+      level: 0,
+      exp: 0,
+      isPremium: false,
+      claimedFree: [],
+      claimedPremium: []
+    };
+
     this.load();
     this.ensureStarterGear();
   }
@@ -279,6 +318,7 @@ class CharacterManager {
 
   addGold(amount) {
     this.gold = Math.max(0, (this.gold || 0) + amount);
+    if (amount > 0) this.stats.totalGoldEarned = (this.stats.totalGoldEarned || 0) + amount;
     if (this.activeRun && amount > 0) {
       this.activeRun.runGold = (this.activeRun.runGold || 0) + amount;
     }
@@ -309,6 +349,115 @@ class CharacterManager {
     this.save();
   }
 
+  checkDailyLogin() {
+    const today = new Date().toISOString().slice(0, 10);
+    if (this.dailyLogin.lastLoginDate === today) return null; // already claimed today
+
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    if (this.dailyLogin.lastLoginDate === yesterday) {
+      this.dailyLogin.streak = Math.min(7, (this.dailyLogin.streak || 0) + 1);
+    } else {
+      this.dailyLogin.streak = 1; // reset streak
+      this.dailyLogin.claimedDays = [];
+    }
+
+    this.dailyLogin.lastLoginDate = today;
+    const rewardIndex = (this.dailyLogin.streak - 1) % 7;
+    const reward = (GameData.dailyLoginRewards && GameData.dailyLoginRewards[rewardIndex]) || { day: 1, gold: 200, gems: 0, icon: "🪙" };
+
+    if (reward.gold) this.addGold(reward.gold);
+    if (reward.gems) { this.gems += reward.gems; }
+
+    if (!this.dailyLogin.claimedDays) this.dailyLogin.claimedDays = [];
+    this.dailyLogin.claimedDays.push(this.dailyLogin.streak);
+    this.save();
+    return reward;
+  }
+
+  canSpinWheel() {
+    const today = new Date().toISOString().slice(0, 10);
+    return this.lastWheelSpin !== today;
+  }
+
+  claimWheelSpin(slotIndex) {
+    if (!this.canSpinWheel()) return null;
+    const today = new Date().toISOString().slice(0, 10);
+    this.lastWheelSpin = today;
+    if (!this.stats) this.stats = {};
+    this.stats.wheelSpins = (this.stats.wheelSpins || 0) + 1;
+
+    const slot = (GameData.fortuneWheelSlots && GameData.fortuneWheelSlots[slotIndex]) || GameData.fortuneWheelSlots[0];
+    if (!slot) return null;
+
+    if (slot.type === "gold") this.addGold(slot.value);
+    if (slot.type === "gems") { this.gems += slot.value; }
+    if (slot.type === "atk_boost") {
+      if (this.activeRun) this.activeRun.bonusAtkPct = (this.activeRun.bonusAtkPct || 0) + slot.value;
+    }
+    if (slot.type === "heal_full") {
+      if (this.activeRun) this.activeRun.currentHp = this.activeRun.maxHp;
+    }
+
+    this.checkAchievements();
+    this.save();
+    return slot;
+  }
+
+  trackStat(stat, amount = 1) {
+    if (!this.stats) this.stats = {};
+    this.stats[stat] = (this.stats[stat] || 0) + amount;
+    this.checkAchievements();
+    this.save();
+  }
+
+  checkAchievements() {
+    if (!GameData.achievements) return;
+    for (const ach of GameData.achievements) {
+      if (this.claimedAchievements && this.claimedAchievements.includes(ach.id)) continue;
+      let progress = 0;
+      switch (ach.condition) {
+        case "battles_won": progress = this.stats.totalBattlesWon || 0; break;
+        case "max_day_reached": progress = this.stats.maxDayReached || 0; break;
+        case "dragon_roar_used": progress = this.stats.dragonRoarUsed || 0; break;
+        case "black_hole_used": progress = this.stats.blackHoleUsed || 0; break;
+        case "bosses_defeated": progress = this.stats.totalBossesDefeated || 0; break;
+        case "total_runs": progress = this.stats.totalRuns || 0; break;
+        case "wheel_spins": progress = this.stats.wheelSpins || 0; break;
+        case "merchant_buys": progress = this.stats.merchantBuys || 0; break;
+        case "spring_visits": progress = this.stats.springVisits || 0; break;
+        case "perfect_runs": progress = this.stats.perfectRuns || 0; break;
+        case "total_gold_earned": progress = this.stats.totalGoldEarned || 0; break;
+        case "chapters_cleared": progress = Object.keys(this.stats.chaptersCleared || {}).length; break;
+        case "chapter_cleared": progress = (this.stats.chaptersCleared || {})[ach.target] ? ach.target : 0; break;
+        case "single_event_gold": progress = this.stats.single_event_gold || 0; break;
+        default: progress = this.stats[ach.condition] || 0; break;
+      }
+      if (!this.achievementProgress) this.achievementProgress = {};
+      this.achievementProgress[ach.id] = { progress, target: ach.target };
+
+      if (progress >= ach.target) {
+        if (!this.claimedAchievements) this.claimedAchievements = [];
+        this.claimedAchievements.push(ach.id);
+        if (ach.reward.gold) this.addGold(ach.reward.gold);
+        if (ach.reward.gems) { this.gems += ach.reward.gems; }
+        if (window.Game && window.Game.ui && window.Game.ui.showAchievementToast) {
+          window.Game.ui.showAchievementToast(ach);
+        }
+      }
+    }
+  }
+
+  addBattlePassExp(amount) {
+    if (!this.battlePass) this.battlePass = { level: 0, exp: 0, isPremium: false, claimedFree: [], claimedPremium: [] };
+    this.battlePass.exp += amount;
+    const expPerLevel = 100;
+    while (this.battlePass.exp >= expPerLevel) {
+      this.battlePass.exp -= expPerLevel;
+      this.battlePass.level++;
+    }
+    this.save();
+  }
+
   save() {
     const state = {
       gold: this.gold,
@@ -327,7 +476,13 @@ class CharacterManager {
       unlockedChapters: this.unlockedChapters,
       bestiary: this.bestiary,
       gachaPity: this.gachaPity,
-      activeRun: this.activeRun
+      activeRun: this.activeRun,
+      dailyLogin: this.dailyLogin,
+      achievementProgress: this.achievementProgress,
+      claimedAchievements: this.claimedAchievements,
+      stats: this.stats,
+      lastWheelSpin: this.lastWheelSpin,
+      battlePass: this.battlePass
     };
     try {
       localStorage.setItem(this.SAVE_KEY, JSON.stringify(state));
@@ -364,9 +519,33 @@ class CharacterManager {
           heroAds: 1
         }, s.gachaPity);
       }
+      if (s.dailyLogin) this.dailyLogin = Object.assign({ lastLoginDate: null, streak: 0, claimedDays: [] }, s.dailyLogin);
+      if (s.achievementProgress) this.achievementProgress = s.achievementProgress;
+      if (s.claimedAchievements) this.claimedAchievements = s.claimedAchievements;
+      if (s.stats) this.stats = Object.assign({
+        totalGoldEarned: 0,
+        totalRuns: 0,
+        totalBattlesWon: 0,
+        totalBossesDefeated: 0,
+        dragonRoarUsed: 0,
+        blackHoleUsed: 0,
+        wheelSpins: 0,
+        merchantBuys: 0,
+        springVisits: 0,
+        maxDayReached: 0,
+        chaptersCleared: {},
+        perfectRuns: 0
+      }, s.stats);
+      if (s.lastWheelSpin !== undefined) this.lastWheelSpin = s.lastWheelSpin;
+      if (s.battlePass) this.battlePass = Object.assign({
+        level: 0,
+        exp: 0,
+        isPremium: false,
+        claimedFree: [],
+        claimedPremium: []
+      }, s.battlePass);
       if (s.activeRun) {
         this.activeRun = s.activeRun;
-        // Fix any saved skills that might have emoji string icons instead of file paths
         if (this.activeRun.skills && Array.isArray(this.activeRun.skills)) {
           this.activeRun.skills.forEach(sk => {
             if (sk.id === 101 && (!sk.icon || !sk.icon.includes('.'))) sk.icon = "assets/skills/skill_016.png";

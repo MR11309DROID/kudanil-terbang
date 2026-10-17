@@ -96,8 +96,90 @@ class StageRenderer {
     // 3D Depth Elements
     this.init3DDepthEngine();
 
+    // Weather System
+    this.weather = "none"; // "none", "rain", "snow", "storm"
+    this.weatherParticles = [];
+    this.weatherIntensity = 0;
+    this.initWeatherParticles();
+
     this.lastTime = performance.now();
     this.startRenderLoop();
+  }
+
+  initWeatherParticles() {
+    this.weatherParticles = [];
+    for (let i = 0; i < 120; i++) {
+      this.weatherParticles.push({
+        x: Math.random() * (this.width || 440),
+        y: Math.random() * (this.height || 350),
+        speed: 2 + Math.random() * 4,
+        size: 0.8 + Math.random() * 1.8,
+        opacity: 0.4 + Math.random() * 0.5,
+        drift: (Math.random() - 0.5) * 1.2
+      });
+    }
+  }
+
+  setWeather(type) {
+    this.weather = type || "none";
+    this.weatherIntensity = type === "storm" ? 1.0 : (type === "rain" ? 0.7 : (type === "snow" ? 0.5 : 0));
+  }
+
+  renderWeather(ctx) {
+    if (!this.weather || this.weather === "none" || !this.weatherParticles) return;
+
+    ctx.save();
+
+    if (this.weather === "rain" || this.weather === "storm") {
+      const windStrength = this.weather === "storm" ? 3.5 : 1.2;
+      ctx.strokeStyle = this.weather === "storm" ? "rgba(180, 200, 255, 0.65)" : "rgba(160, 190, 255, 0.55)";
+      ctx.lineWidth = this.weather === "storm" ? 1.5 : 1.0;
+
+      for (const p of this.weatherParticles) {
+        p.y += p.speed * (this.weather === "storm" ? 2.2 : 1.4);
+        p.x += windStrength + p.drift;
+        if (p.y > this.height + 10) { p.y = -8; p.x = Math.random() * this.width; }
+        if (p.x > this.width + 10) { p.x = -5; }
+
+        ctx.globalAlpha = p.opacity * this.weatherIntensity;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - windStrength * 2.5, p.y - p.speed * 3.5);
+        ctx.stroke();
+      }
+
+      // Storm lightning flash
+      if (this.weather === "storm" && Math.random() < 0.003) {
+        ctx.globalAlpha = 0.18;
+        ctx.fillStyle = "#dbeafe";
+        ctx.fillRect(0, 0, this.width, this.height);
+      }
+
+      // Rain darkening overlay
+      ctx.globalAlpha = 0.18;
+      ctx.fillStyle = "#1e3a5f";
+      ctx.fillRect(0, 0, this.width, this.height);
+
+    } else if (this.weather === "snow") {
+      for (const p of this.weatherParticles) {
+        p.y += p.speed * 0.65;
+        p.x += Math.sin(Date.now() * 0.001 + p.y * 0.02) * 0.6 + p.drift * 0.4;
+        if (p.y > this.height + 10) { p.y = -5; p.x = Math.random() * this.width; }
+
+        ctx.globalAlpha = p.opacity * this.weatherIntensity;
+        ctx.fillStyle = "#f0f8ff";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Snow mist overlay
+      ctx.globalAlpha = 0.08;
+      ctx.fillStyle = "#e0f2fe";
+      ctx.fillRect(0, 0, this.width, this.height);
+    }
+
+    ctx.restore();
   }
 
   loadImg(src) {
@@ -1432,6 +1514,9 @@ class StageRenderer {
     // Authentic Treasure Chest & Landing Dust
     this.renderTreasureChest();
     this.renderChestDustPuffs();
+
+    // ================= 7.5 DRAW WEATHER EFFECTS =================
+    this.renderWeather(ctx);
 
     // ================= 8. DRAW PROJECTILES & SPARK PARTICLES =================
     ctx.save();

@@ -160,6 +160,30 @@
                 <img src="assets/ui/menu/widget_newbie_gifts.svg" alt="Newbie Gifts" class="newbie-gifts-img">
                 <div class="newbie-timer-badge">6d 23h</div>
               </div>
+
+              <!-- Quick Event & Feature Buttons -->
+              <div class="quick-btn-stack">
+                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openDailyLogin()" title="Daily Bonus">
+                  <span class="qbtn-icon">🎁</span>
+                  <span>Daily</span>
+                </button>
+                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openFortuneWheel()" title="Fortune Wheel">
+                  <span class="qbtn-icon">🎰</span>
+                  <span>Wheel</span>
+                </button>
+                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openAchievements()" title="Achievements">
+                  <span class="qbtn-icon">🏆</span>
+                  <span>Achieve</span>
+                </button>
+                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openBattlePass()" title="Battle Pass">
+                  <span class="qbtn-icon">🏅</span>
+                  <span>Pass</span>
+                </button>
+                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()" title="My Stats">
+                  <span class="qbtn-icon">📊</span>
+                  <span>Stats</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1032,6 +1056,90 @@
 
         <button id="btn-treasure-claim" class="btn-game btn-gold btn-treasure-claim-action" disabled>Select a Skill</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== DAILY LOGIN BONUS MODAL ===== -->
+  <div id="daily-login-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-panel daily-login-panel">
+      <div class="daily-login-header">
+        <span class="daily-login-title-icon">🎁</span>
+        <h2 class="daily-login-title">Daily Login Bonus!</h2>
+        <p class="daily-login-subtitle">Log in every day for bigger rewards!</p>
+      </div>
+      <div class="daily-login-streak" id="daily-login-streak">Streak: 1 day 🔥</div>
+      <div class="daily-login-rewards" id="daily-login-rewards"><!-- JS populated --></div>
+      <div class="daily-login-reward-display" id="daily-login-reward-display">
+        <div class="dlr-label">Today's Reward</div>
+        <div class="dlr-value" id="dlr-value">+200 🪙</div>
+      </div>
+      <button class="btn-daily-claim" id="btn-daily-claim" onclick="window.Game && window.Game.ui && window.Game.ui.claimDailyLogin()">Claim Reward!</button>
+      <button class="modal-close-link" onclick="document.getElementById('daily-login-modal').style.display='none'">Maybe Later</button>
+    </div>
+  </div>
+
+  <!-- ===== ACHIEVEMENT TOAST ===== -->
+  <div id="achievement-toast" class="achievement-toast" style="display:none;">
+    <span id="achievement-toast-icon">⭐</span>
+    <div class="achievement-toast-text">
+      <div class="achievement-toast-title">Achievement Unlocked!</div>
+      <div id="achievement-toast-name">First Blood</div>
+    </div>
+  </div>
+
+  <!-- ===== ACHIEVEMENTS PANEL MODAL ===== -->
+  <div id="achievements-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-panel achievements-panel">
+      <div class="modal-header-row">
+        <h2 class="modal-title">🏆 Achievements</h2>
+        <button class="modal-close-btn" onclick="document.getElementById('achievements-modal').style.display='none'">✕</button>
+      </div>
+      <div class="achievements-list" id="achievements-list"><!-- JS populated --></div>
+    </div>
+  </div>
+
+  <!-- ===== FORTUNE WHEEL MODAL ===== -->
+  <div id="fortune-wheel-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-panel fortune-wheel-panel">
+      <div class="modal-header-row">
+        <h2 class="modal-title">🎰 Fortune Wheel</h2>
+        <button class="modal-close-btn" onclick="document.getElementById('fortune-wheel-modal').style.display='none'">✕</button>
+      </div>
+      <div class="fortune-wheel-container">
+        <canvas id="fortune-wheel-canvas" width="260" height="260"></canvas>
+        <div class="fortune-wheel-arrow">▼</div>
+      </div>
+      <div class="fortune-wheel-result" id="fortune-wheel-result" style="display:none;"></div>
+      <button class="btn-spin-wheel" id="btn-spin-wheel" onclick="window.Game && window.Game.ui && window.Game.ui.spinFortuneWheel()">🎰 Spin! (1x Free Daily)</button>
+      <div class="fortune-wheel-cd" id="fortune-wheel-cd"></div>
+    </div>
+  </div>
+
+  <!-- ===== BATTLE PASS MODAL ===== -->
+  <div id="battle-pass-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-panel battle-pass-panel">
+      <div class="modal-header-row">
+        <h2 class="modal-title">🏅 Battle Pass</h2>
+        <button class="modal-close-btn" onclick="document.getElementById('battle-pass-modal').style.display='none'">✕</button>
+      </div>
+      <div class="battle-pass-season" id="battle-pass-season">Season 1: Rise of the Dragon</div>
+      <div class="battle-pass-level-bar">
+        <div class="bp-level-label">Level <span id="bp-level">0</span></div>
+        <div class="bp-progress-bar"><div class="bp-progress-fill" id="bp-progress-fill" style="width:0%"></div></div>
+        <div class="bp-exp-label"><span id="bp-exp">0</span>/100 XP</div>
+      </div>
+      <div class="battle-pass-tracks" id="battle-pass-tracks"><!-- JS populated --></div>
+    </div>
+  </div>
+
+  <!-- ===== STATS MODAL ===== -->
+  <div id="stats-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-panel stats-panel">
+      <div class="modal-header-row">
+        <h2 class="modal-title">📊 My Stats</h2>
+        <button class="modal-close-btn" onclick="document.getElementById('stats-modal').style.display='none'">✕</button>
+      </div>
+      <div class="stats-grid" id="stats-grid"><!-- JS populated --></div>
     </div>
   </div>
 
