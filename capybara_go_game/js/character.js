@@ -115,31 +115,54 @@ class CharacterManager {
   }
 
   ensureStarterGear() {
-    if (!this.equipped.weapon && this.inventory.length === 0) {
-      // Starter gifts from authentic collection
-      const weapon = this.createItemFromTemplate("gear_21", 1); // Carved Wooden Sword
-      const armor = this.createItemFromTemplate("gear_02", 1);  // Straw Leaf Armor
-      const helmet = this.createItemFromTemplate("gear_00", 1); // Vine Crown
-      const boots = this.createItemFromTemplate("gear_01", 1);  // Clover Boots
-      const ring = this.createItemFromTemplate("gear_11", 1);   // Sprout Wood Ring
-      const amulet = this.createItemFromTemplate("gear_20", 1); // Seashell Pendant
+    const slots = ["weapon", "armor", "helmet", "boots", "ring", "amulet"];
+    const starterTemplates = {
+      weapon: "gear_21",
+      armor: "gear_02",
+      helmet: "gear_00",
+      boots: "gear_01",
+      ring: "gear_11",
+      amulet: "gear_20"
+    };
 
-      this.equip(weapon);
-      this.equip(armor);
-      this.equip(helmet);
-      this.equip(boots);
-      this.equip(ring);
-      this.equip(amulet);
+    let needsSave = false;
 
-      // Starter inventory stash so backpack immediately showcases items
-      this.inventory.push(
-        this.createItemFromTemplate("gear_04", 1), // Sprout Twig Wand
-        this.createItemFromTemplate("gear_05", 1), // Wooden Slingshot
-        this.createItemFromTemplate("gear_07", 1), // Vine Wooden Shield
-        this.createItemFromTemplate("gear_09", 1), // Explorer Feather Hat
-        this.createItemFromTemplate("gear_10", 1), // Beast Tooth Necklace
-        this.createItemFromTemplate("gear_24", 1)  // Red Mushroom Cap
-      );
+    // First try equipping from inventory if slot is empty
+    slots.forEach(slot => {
+      if (!this.equipped[slot] && this.inventory && this.inventory.length > 0) {
+        const idx = this.inventory.findIndex(i => i && i.slot === slot);
+        if (idx !== -1) {
+          this.equipped[slot] = this.inventory.splice(idx, 1)[0];
+          needsSave = true;
+        }
+      }
+    });
+
+    // If any slot is still empty, equip starter item
+    slots.forEach(slot => {
+      if (!this.equipped[slot]) {
+        const tmplId = starterTemplates[slot];
+        this.equipped[slot] = this.createItemFromTemplate(tmplId, 1);
+        needsSave = true;
+      }
+    });
+
+    // Ensure inventory has showcase gear across tiers
+    if (!this.inventory || this.inventory.length < 5) {
+      if (!this.inventory) this.inventory = [];
+      const showcaseIds = [
+        "gear_04", "gear_05", "gear_07", "gear_09", "gear_10", "gear_24",
+        "rare_00", "rare_05", "myth_00", "sup_00"
+      ];
+      showcaseIds.forEach(id => {
+        if (!this.inventory.some(it => it && it.templateId === id)) {
+          this.inventory.push(this.createItemFromTemplate(id, 1));
+          needsSave = true;
+        }
+      });
+    }
+
+    if (needsSave) {
       this.save();
     }
   }

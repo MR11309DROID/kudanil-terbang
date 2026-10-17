@@ -11,6 +11,8 @@ class UIManager {
     this.initEventListeners();
     this.initEngineCallbacks();
     this.renderHeader();
+    this.renderEquipmentScreen();
+    this.startHeroIdleAnim();
     this.renderActiveTab();
     setTimeout(() => this.checkAndShowDailyLogin && this.checkAndShowDailyLogin(), 1800);
   }
@@ -2463,6 +2465,17 @@ class UIManager {
         });
       }
     }
+  }
+
+  startHeroIdleAnim() {
+    let frame = 1;
+    setInterval(() => {
+      const img = document.getElementById("hero-capy-avatar-img");
+      if (!img || this.activeTab !== "equipment") return;
+      frame = (frame % 9) + 1;
+      const numStr = frame < 10 ? `0${frame}` : `${frame}`;
+      img.src = `assets/characters/player/idle/frame_${numStr}.png`;
+    }, 125);
   }
 
   cycleSortQuality() {

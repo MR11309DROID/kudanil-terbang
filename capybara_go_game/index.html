@@ -612,19 +612,26 @@
         </div>
 
         <div class="hero-stats-panel">
-          <!-- 6-Slot Paperdoll surrounding the Dragon Rider Hero -->
+          <!-- 6-Slot Paperdoll surrounding the Authentic Capybara Hero -->
           <div class="paperdoll-container">
             <!-- Left 3 Slots: Weapon, Ring, Amulet -->
             <div class="paperdoll-col paperdoll-col-left">
-              <div id="slot-weapon" class="paperdoll-slot" title="Weapon Slot"></div>
-              <div id="slot-ring" class="paperdoll-slot" title="Ring Slot"></div>
-              <div id="slot-amulet" class="paperdoll-slot" title="Amulet Slot"></div>
+              <div id="slot-weapon" class="paperdoll-slot empty" title="Weapon Slot">
+                <img src="assets/ui/capybara_cartoon_kit/equipment_icons/equipment_sword.png" class="slot-ghost-icon" alt="weapon">
+              </div>
+              <div id="slot-ring" class="paperdoll-slot empty" title="Ring Slot">
+                <img src="assets/ui/capybara_cartoon_kit/equipment_icons/equipment_ring.png" class="slot-ghost-icon" alt="ring">
+              </div>
+              <div id="slot-amulet" class="paperdoll-slot empty" title="Amulet Slot">
+                <img src="assets/ui/capybara_cartoon_kit/equipment_icons/equipment_amulet.png" class="slot-ghost-icon" alt="amulet">
+              </div>
             </div>
             
-            <!-- Center Hero Arena: Dragon Rider + Pet Badge -->
+            <!-- Center Hero Arena: Authentic Game Capybara Hero -->
             <div class="paperdoll-center">
               <div class="hero-mount-stage" id="hero-mount-stage">
-                <img src="assets/characters/player/hero_dragon_rider.png" alt="Capybara Dragon Rider" class="hero-dragon-rider-img">
+                <div class="hero-grass-podium"></div>
+                <img src="assets/characters/player/idle/frame_01.png" alt="Capybara Hero" class="hero-capy-character-img" id="hero-capy-avatar-img">
                 <div class="hero-shadow-oval"></div>
                 <!-- Pet Hexagon Badge (Top-Right) -->
                 <div class="pet-hex-badge" id="pet-hex-badge" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Pet Companion">
@@ -637,9 +644,15 @@
 
             <!-- Right 3 Slots: Armor, Helmet, Boots -->
             <div class="paperdoll-col paperdoll-col-right">
-              <div id="slot-armor" class="paperdoll-slot" title="Armor Slot"></div>
-              <div id="slot-helmet" class="paperdoll-slot" title="Helmet Slot"></div>
-              <div id="slot-boots" class="paperdoll-slot" title="Boots Slot"></div>
+              <div id="slot-armor" class="paperdoll-slot empty" title="Armor Slot">
+                <img src="assets/ui/capybara_cartoon_kit/equipment_icons/equipment_armor.png" class="slot-ghost-icon" alt="armor">
+              </div>
+              <div id="slot-helmet" class="paperdoll-slot empty" title="Helmet Slot">
+                <img src="assets/ui/capybara_cartoon_kit/equipment_icons/equipment_helmet.png" class="slot-ghost-icon" alt="helmet">
+              </div>
+              <div id="slot-boots" class="paperdoll-slot empty" title="Boots Slot">
+                <img src="assets/ui/capybara_cartoon_kit/equipment_icons/equipment_boots.png" class="slot-ghost-icon" alt="boots">
+              </div>
             </div>
           </div>
 

@@ -3496,10 +3496,14 @@ body {
 #tab-equipment {
   background: #f8f2e4;
   color: #292524;
-  display: flex;
+  display: none;
   flex-direction: column;
   height: 100%;
   overflow-y: auto;
+}
+
+#tab-equipment.active {
+  display: flex;
 }
 
 /* 1. Top Screen Currency Header */
@@ -3709,42 +3713,51 @@ body {
 
 .hero-mount-stage {
   position: relative;
-  width: 130px;
-  height: 130px;
+  width: 140px;
+  height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.hero-dragon-rider-img {
-  width: 120px;
-  height: 120px;
-  object-fit: contain;
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
-  animation: dragonRiderHover 3s ease-in-out infinite alternate;
-  z-index: 2;
+.hero-grass-podium {
+  position: absolute;
+  bottom: 12px;
+  width: 108px;
+  height: 28px;
+  background: radial-gradient(ellipse at center, #86efac 0%, #22c55e 60%, #15803d 100%);
+  border: 2.5px solid #14532d;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18), inset 0 2px 4px rgba(255, 255, 255, 0.45);
+  z-index: 1;
 }
 
-@keyframes dragonRiderHover {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-7px); }
+.hero-capy-character-img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.35));
+  z-index: 2;
+  margin-bottom: 14px;
+  animation: heroCapyBreath 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes heroCapyBreath {
+  0% { transform: translateY(0) scale(1, 1); }
+  100% { transform: translateY(-5px) scale(1.02, 0.98); }
 }
 
 .hero-shadow-oval {
   position: absolute;
   bottom: 8px;
-  width: 90px;
-  height: 20px;
+  width: 74px;
+  height: 16px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.22);
-  filter: blur(4px);
-  z-index: 1;
-  animation: shadowPulse 3s ease-in-out infinite alternate;
-}
-
-@keyframes shadowPulse {
-  0% { transform: scale(1); opacity: 0.22; }
-  100% { transform: scale(0.85); opacity: 0.14; }
+  background: rgba(0, 0, 0, 0.25);
+  filter: blur(3px);
+  z-index: 0;
 }
 
 /* Pet Hexagon Badge (Top-Right of Hero Area) */
