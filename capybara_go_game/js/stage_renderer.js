@@ -393,6 +393,12 @@ class StageRenderer {
     else if (animName === "run") this.playerState.fps = 14;
     else if (animName === "hurt") this.playerState.fps = 14;
     else if (animName === "die") this.playerState.fps = 9;
+    else if (animName === "idle") {
+      this.playerState.fps = 8;
+      this.playerState.offsetY = 0;
+      this.playerState.waddleAngle = 0;
+      this.playerState.skillExpression = null;
+    }
     else this.playerState.fps = 10;
   }
 
@@ -1211,10 +1217,11 @@ class StageRenderer {
     const p = this.playerState;
     const animFrames = this.playerAnimations[p.currentAnim];
     if (animFrames && animFrames.length > 0) {
-      p.frameTimer += dt;
-      const frameDuration = 1 / p.fps;
+      const safeDt = Math.min(dt, 0.1);
+      p.frameTimer += safeDt;
+      const frameDuration = 1 / (p.fps || 10);
       if (p.frameTimer >= frameDuration) {
-        p.frameTimer -= frameDuration;
+        p.frameTimer %= frameDuration;
         p.frameIndex++;
         if (p.frameIndex >= animFrames.length) {
           if (p.loop) {
@@ -1229,13 +1236,13 @@ class StageRenderer {
       }
     }
 
-    // Waddle effect during walk
+    // Waddle effect during walk / Ground lock during idle
     if (p.currentAnim === "walk" || p.currentAnim === "run") {
       p.waddleAngle = Math.sin(now * 0.012) * 0.06;
       p.offsetY = -Math.abs(Math.sin(now * 0.012)) * 4;
     } else if (p.currentAnim === "idle") {
       p.waddleAngle = 0;
-      p.offsetY = Math.sin(now * 0.003) * 1.5;
+      p.offsetY = 0;
     }
 
     if (p.flashWhite > 0) p.flashWhite -= dt * 4;
@@ -1781,15 +1788,15 @@ class StageRenderer {
     const frameImg = animFrames[p.frameIndex] || animFrames[0];
     if (!frameImg || !frameImg.complete) return;
 
-    const drawW = 64 * p.scale;
-    const drawH = 64 * p.scale;
+    const drawW = Math.round(64 * p.scale);
+    const drawH = Math.round(64 * p.scale);
 
-    let px = p.x - (p.knockback || 0);
-    let py = this.groundY;
+    let px = Math.round(p.x - (p.knockback || 0));
+    let py = Math.round(this.groundY);
 
     if (p.shake > 0) {
-      px += (Math.random() * 6 - 3) * p.shake;
-      py += (Math.random() * 4 - 2) * p.shake;
+      px += Math.round((Math.random() * 6 - 3) * p.shake);
+      py += Math.round((Math.random() * 4 - 2) * p.shake);
     }
 
     ctx.save();
@@ -1801,7 +1808,7 @@ class StageRenderer {
     ctx.fill();
 
     // Position actor anchored bottom-center
-    ctx.translate(px, py + (p.offsetY || 0));
+    ctx.translate(px, py + Math.round(p.offsetY || 0));
     ctx.rotate(p.waddleAngle || 0);
 
     if (p.facing < 0) {
@@ -1855,7 +1862,7 @@ class StageRenderer {
     }
 
     // Dynamic Skill Facial Expressions on Capybara (Matching authentic reference frames)
-    if (p.skillExpression) {
+    if (p.skillExpression && p.skillExpression !== "normal") {
       const eyeX = drawW * 0.12;
       const eyeY = -drawH * 0.62;
 
