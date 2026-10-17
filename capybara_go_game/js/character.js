@@ -379,23 +379,67 @@ class CharacterManager {
     return this.lastWheelSpin !== today;
   }
 
-  claimWheelSpin(slotIndex) {
-    if (!this.canSpinWheel()) return null;
-    const today = new Date().toISOString().slice(0, 10);
-    this.lastWheelSpin = today;
+  canAffordGoldSpin() {
+    return (this.gold || 0) >= 100;
+  }
+
+  claimWheelSpin(slotIndex, isPaid = false) {
+    const canFree = this.canSpinWheel();
+    if (!canFree && !isPaid) return null;
+
+    if (isPaid) {
+      if ((this.gold || 0) < 100) return null;
+      this.addGold(-100);
+    } else {
+      const today = new Date().toISOString().slice(0, 10);
+      this.lastWheelSpin = today;
+    }
+
     if (!this.stats) this.stats = {};
     this.stats.wheelSpins = (this.stats.wheelSpins || 0) + 1;
 
-    const slot = (GameData.fortuneWheelSlots && GameData.fortuneWheelSlots[slotIndex]) || GameData.fortuneWheelSlots[0];
+    const slots = GameData.fortuneWheelSlots;
+    const slot = (slots && slots[slotIndex]) || slots[0];
     if (!slot) return null;
 
-    if (slot.type === "gold") this.addGold(slot.value);
-    if (slot.type === "gems") { this.gems += slot.value; }
-    if (slot.type === "atk_boost") {
-      if (this.activeRun) this.activeRun.bonusAtkPct = (this.activeRun.bonusAtkPct || 0) + slot.value;
-    }
-    if (slot.type === "heal_full") {
-      if (this.activeRun) this.activeRun.currentHp = this.activeRun.maxHp;
+    if (slot.type === "gold") {
+      this.addGold(slot.value);
+    } else if (slot.type === "gems") {
+      this.gems = (this.gems || 0) + slot.value;
+    } else if (slot.type === "exp") {
+      this.addBattlePassExp(slot.value);
+      if (this.activeRun) {
+        this.activeRun.exp = (this.activeRun.exp || 0) + slot.value;
+        const needed = this.activeRun.expNeeded || 100;
+        if (this.activeRun.exp >= needed) {
+          this.activeRun.exp -= needed;
+          this.activeRun.level = (this.activeRun.level || 1) + 1;
+          this.activeRun.expNeeded = Math.round(needed * 1.35);
+        }
+      }
+    } else if (slot.type === "atk_boost") {
+      if (this.activeRun) {
+        this.activeRun.bonusAtkPct = (this.activeRun.bonusAtkPct || 0) + slot.value;
+      } else {
+        this.addGold(300);
+      }
+    } else if (slot.type === "heal_pct" || slot.type === "heal_full") {
+      if (this.activeRun) {
+        const healAmt = Math.round(this.activeRun.maxHp * (slot.value || 0.15));
+        this.activeRun.currentHp = Math.min(this.activeRun.maxHp, this.activeRun.currentHp + healAmt);
+      } else {
+        this.addGold(250);
+      }
+    } else if (slot.type === "skill") {
+      if (this.activeRun && Array.isArray(this.activeRun.skills) && GameData.skills) {
+        const unowned = GameData.skills.filter(s => !this.activeRun.skills.some(os => os.id === s.id));
+        if (unowned.length > 0) {
+          const picked = unowned[Math.floor(Math.random() * unowned.length)];
+          this.activeRun.skills.push(Object.assign({}, picked, { level: 1 }));
+        }
+      }
+      this.gems = (this.gems || 0) + 10;
+      this.addGold(200);
     }
 
     this.checkAchievements();

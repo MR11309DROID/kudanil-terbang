@@ -2755,10 +2755,15 @@ class UIManager {
   }
 
   // ===== FORTUNE WHEEL CONTROLLER =====
+  // ===== FORTUNE WHEEL CONTROLLER (AUTHENTIC CAPYBARA GO STYLE) =====
   openFortuneWheel() {
     const modal = document.getElementById("fortune-wheel-modal");
     if (!modal) return;
-    this.drawFortuneWheel();
+    this.wheelCurrentAngle = this.wheelCurrentAngle || 0;
+    this.wheelPointerAngle = 0;
+    this.wheelPointerVelocity = 0;
+    this.wheelParticles = [];
+    this.drawFortuneWheelCanvas(this.wheelCurrentAngle, -1);
     this.updateWheelStatus();
     const resEl = document.getElementById("fortune-wheel-result");
     if (resEl) resEl.style.display = "none";
@@ -2766,148 +2771,580 @@ class UIManager {
   }
 
   drawFortuneWheel(highlightIndex = -1) {
-    const canvas = document.getElementById("fortune-wheel-canvas");
-    if (!canvas || !GameData.fortuneWheelSlots) return;
-    const ctx = canvas.getContext("2d");
-    const slots = GameData.fortuneWheelSlots;
-    const cx = canvas.width / 2, cy = canvas.height / 2;
-    const r = cx - 12;
-    const arc = (Math.PI * 2) / slots.length;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Outer glow ring
-    ctx.save();
-    ctx.strokeStyle = "#7c3aed";
-    ctx.lineWidth = 6;
-    ctx.shadowColor = "#a855f7";
-    ctx.shadowBlur = 14;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r + 4, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.restore();
-
-    slots.forEach((slot, i) => {
-      const startAngle = arc * i - Math.PI / 2;
-      const endAngle = startAngle + arc;
-
-      ctx.save();
-      ctx.fillStyle = slot.color || "#6d28d9";
-      ctx.globalAlpha = highlightIndex === i ? 1.0 : 0.90;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, r, startAngle, endAngle);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = "#1c1917";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.restore();
-
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(startAngle + arc / 2);
-      ctx.textAlign = "right";
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 11px Fredoka, sans-serif";
-      ctx.shadowColor = "#000000";
-      ctx.shadowBlur = 4;
-      ctx.fillText(slot.icon + " " + slot.label, r - 8, 4);
-      ctx.restore();
-    });
-
-    // Center Hub
-    ctx.save();
-    const hub = ctx.createRadialGradient(cx, cy, 3, cx, cy, 22);
-    hub.addColorStop(0, "#fef08a");
-    hub.addColorStop(1, "#d97706");
-    ctx.fillStyle = hub;
-    ctx.shadowColor = "#f59e0b";
-    ctx.shadowBlur = 10;
-    ctx.beginPath();
-    ctx.arc(cx, cy, 20, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+    this.drawFortuneWheelCanvas(this.wheelCurrentAngle || 0, highlightIndex);
   }
 
   drawFortuneWheelRotated(angle, highlightIndex = -1) {
+    this.drawFortuneWheelCanvas(angle, highlightIndex);
+  }
+
+  drawFortuneWheelCanvas(currentAngle = 0, highlightIndex = -1) {
     const canvas = document.getElementById("fortune-wheel-canvas");
     if (!canvas || !GameData.fortuneWheelSlots) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    if (canvas.width !== 320 * dpr || canvas.height !== 360 * dpr) {
+      canvas.width = 320 * dpr;
+      canvas.height = 360 * dpr;
+    }
     const ctx = canvas.getContext("2d");
+    ctx.save();
+    ctx.resetTransform && ctx.resetTransform();
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, 320, 360);
+
+    const cx = 160;
+    const cy = 162;
+    const wheelR = 118;
+    const innerR = 98;
     const slots = GameData.fortuneWheelSlots;
-    const cx = canvas.width / 2, cy = canvas.height / 2;
-    const r = cx - 12;
     const arc = (Math.PI * 2) / slots.length;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    // -------------------------------------------------------------
+    // 1. DRAW WOODEN STAND & BUSHES (BEHIND WHEEL)
+    // -------------------------------------------------------------
+    // Pedestal wooden pillar
     ctx.save();
-    ctx.strokeStyle = "#7c3aed";
-    ctx.lineWidth = 6;
-    ctx.shadowColor = "#a855f7";
-    ctx.shadowBlur = 14;
+    const standGrad = ctx.createLinearGradient(130, 160, 190, 320);
+    standGrad.addColorStop(0, "#6b3715");
+    standGrad.addColorStop(0.5, "#542a0e");
+    standGrad.addColorStop(1, "#3d1c07");
+    ctx.fillStyle = standGrad;
+    ctx.strokeStyle = "#241104";
+    ctx.lineWidth = 3;
+
     ctx.beginPath();
-    ctx.arc(cx, cy, r + 4, 0, Math.PI * 2);
+    ctx.moveTo(132, 165);
+    ctx.lineTo(112, 314);
+    ctx.lineTo(208, 314);
+    ctx.lineTo(188, 165);
+    ctx.closePath();
+    ctx.fill();
     ctx.stroke();
+
+    // Wood streaks on pillar
+    ctx.strokeStyle = "rgba(168, 92, 43, 0.45)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(148, 185); ctx.lineTo(138, 305);
+    ctx.moveTo(160, 175); ctx.lineTo(160, 310);
+    ctx.moveTo(172, 185); ctx.lineTo(182, 305);
+    ctx.stroke();
+
+    // Base horizontal bar
+    const baseGrad = ctx.createLinearGradient(60, 312, 60, 338);
+    baseGrad.addColorStop(0, "#7d3f1a");
+    baseGrad.addColorStop(0.3, "#632f11");
+    baseGrad.addColorStop(1, "#441e08");
+    ctx.fillStyle = baseGrad;
+    ctx.strokeStyle = "#241104";
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(62, 312, 196, 26, 7);
+    } else {
+      ctx.rect(62, 312, 196, 26);
+    }
+    ctx.fill();
+    ctx.stroke();
+
+    // Top shine on base bar
+    ctx.strokeStyle = "#a75929";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(68, 314);
+    ctx.lineTo(252, 314);
+    ctx.stroke();
+
+    // Screw rivets on base
+    ctx.fillStyle = "#facc15";
+    ctx.strokeStyle = "#451a03";
+    ctx.lineWidth = 1.2;
+    [80, 240].forEach(bx => {
+      ctx.beginPath();
+      ctx.arc(bx, 325, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    });
+
+    // --- Cute Shrub Bushes (Left & Right) Matching Screenshot ---
+    const drawBushCluster = (baseX, baseY) => {
+      ctx.save();
+      const bubbles = [
+        { dx: -14, dy: -4, r: 13 },
+        { dx: 14, dy: -4, r: 13 },
+        { dx: -6, dy: -14, r: 15 },
+        { dx: 8, dy: -13, r: 15 },
+        { dx: 0, dy: -3, r: 17 }
+      ];
+      // Dark outlines
+      ctx.strokeStyle = "#162e03";
+      ctx.lineWidth = 2.5;
+      bubbles.forEach(b => {
+        ctx.beginPath();
+        ctx.arc(baseX + b.dx, baseY + b.dy, b.r, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+      // Foliage fill
+      bubbles.forEach(b => {
+        const leafGrad = ctx.createRadialGradient(baseX + b.dx - 3, baseY + b.dy - 4, 2, baseX + b.dx, baseY + b.dy, b.r);
+        leafGrad.addColorStop(0, "#a3e635");
+        leafGrad.addColorStop(0.45, "#65a30d");
+        leafGrad.addColorStop(1, "#3f6212");
+        ctx.fillStyle = leafGrad;
+        ctx.beginPath();
+        ctx.arc(baseX + b.dx, baseY + b.dy, b.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      // Leafy highlight dots
+      ctx.fillStyle = "#d9f99d";
+      ctx.beginPath();
+      ctx.arc(baseX - 4, baseY - 16, 2.2, 0, Math.PI * 2);
+      ctx.arc(baseX + 6, baseY - 15, 2.2, 0, Math.PI * 2);
+      ctx.arc(baseX - 10, baseY - 7, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    drawBushCluster(78, 324);
+    drawBushCluster(242, 324);
     ctx.restore();
 
+    // -------------------------------------------------------------
+    // 2. DRAW ROTATING WHEEL (RIM, SLICES, ICONS, PEGS, HUB)
+    // -------------------------------------------------------------
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.rotate(angle);
-    ctx.translate(-cx, -cy);
+    ctx.rotate(currentAngle);
 
+    // Outer Wooden Rim
+    const rimGrad = ctx.createRadialGradient(0, 0, innerR, 0, 0, wheelR);
+    rimGrad.addColorStop(0, "#8a461e");
+    rimGrad.addColorStop(0.5, "#6b3313");
+    rimGrad.addColorStop(1, "#4d230b");
+    ctx.fillStyle = rimGrad;
+    ctx.strokeStyle = "#271104";
+    ctx.lineWidth = 3.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, wheelR, 0, Math.PI * 2);
+    ctx.arc(0, 0, innerR, 0, Math.PI * 2, true);
+    ctx.fill();
+    ctx.stroke();
+
+    // Wooden plank dividers on rim
+    ctx.strokeStyle = "rgba(39, 17, 4, 0.75)";
+    ctx.lineWidth = 1.8;
+    for (let i = 0; i < slots.length; i++) {
+      const pAngle = arc * i - Math.PI / 2;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(pAngle) * innerR, Math.sin(pAngle) * innerR);
+      ctx.lineTo(Math.cos(pAngle) * wheelR, Math.sin(pAngle) * wheelR);
+      ctx.stroke();
+    }
+
+    // Inner rim decorative gold wire
+    ctx.strokeStyle = "#b45309";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, innerR + 1.5, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Draw Slices
     slots.forEach((slot, i) => {
       const startAngle = arc * i - Math.PI / 2;
       const endAngle = startAngle + arc;
 
+      // Slice background
       ctx.save();
-      ctx.fillStyle = slot.color || "#6d28d9";
-      ctx.globalAlpha = highlightIndex === i ? 1.0 : 0.90;
+      ctx.fillStyle = slot.color || "#fffdf5";
       ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, innerR, startAngle, endAngle);
       ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = "#1c1917";
+
+      // Slice border
+      ctx.strokeStyle = "#271104";
       ctx.lineWidth = 2;
       ctx.stroke();
+
+      // Winning Slot Highlight
+      if (highlightIndex === i) {
+        ctx.fillStyle = "rgba(255, 234, 0, 0.38)";
+        ctx.fill();
+      }
       ctx.restore();
 
+      // Slice Content (Text & Vector Icon)
       ctx.save();
-      ctx.translate(cx, cy);
       ctx.rotate(startAngle + arc / 2);
+
+      // --- Label Text (outer curve area) ---
       ctx.textAlign = "right";
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 11px Fredoka, sans-serif";
-      ctx.shadowColor = "#000000";
-      ctx.shadowBlur = 4;
-      ctx.fillText(slot.icon + " " + slot.label, r - 8, 4);
+      ctx.font = "900 12px 'Lilita One', 'Fredoka', cursive, sans-serif";
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#271104";
+      ctx.strokeText(slot.label, innerR - 9, 4);
+      ctx.fillStyle = slot.textColor || "#271104";
+      ctx.fillText(slot.label, innerR - 9, 4);
+
+      // --- Custom Vector Icon (inner slice area) ---
+      const iconX = 42;
+      const iconY = 0;
+      ctx.translate(iconX, iconY);
+
+      if (slot.icon === "exp") {
+        // Hexagon EXP Badge
+        ctx.save();
+        const hexR = 12;
+        ctx.beginPath();
+        for (let h = 0; h < 6; h++) {
+          const ha = (Math.PI / 3) * h;
+          const hx = Math.cos(ha) * hexR;
+          const hy = Math.sin(ha) * hexR;
+          if (h === 0) ctx.moveTo(hx, hy);
+          else ctx.lineTo(hx, hy);
+        }
+        ctx.closePath();
+        ctx.fillStyle = "#15803d";
+        ctx.fill();
+        ctx.strokeStyle = "#14532d";
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+        ctx.strokeStyle = "#86efac";
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        ctx.font = "900 8.5px 'Lilita One', 'Fredoka', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#000000";
+        ctx.strokeText("EXP", 0, 1);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText("EXP", 0, 1);
+        ctx.restore();
+
+      } else if (slot.icon === "sword") {
+        // RPG Sword
+        ctx.save();
+        ctx.rotate(-Math.PI / 5);
+        // Blade
+        ctx.fillStyle = "#f8fafc";
+        ctx.strokeStyle = "#1e293b";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(0, -12);
+        ctx.lineTo(3.5, -6);
+        ctx.lineTo(2.5, 3);
+        ctx.lineTo(-2.5, 3);
+        ctx.lineTo(-3.5, -6);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        // Guard
+        ctx.fillStyle = "#facc15";
+        ctx.strokeStyle = "#78350f";
+        ctx.lineWidth = 1.2;
+        ctx.fillRect(-6, 3, 12, 3);
+        ctx.strokeRect(-6, 3, 12, 3);
+        // Grip & Pommel
+        ctx.fillStyle = "#92400e";
+        ctx.fillRect(-1.5, 6, 3, 4);
+        ctx.fillStyle = "#facc15";
+        ctx.beginPath();
+        ctx.arc(0, 11, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+      } else if (slot.icon === "heart") {
+        // Cute Pink/Red Heart
+        ctx.save();
+        ctx.scale(0.85, 0.85);
+        ctx.fillStyle = "#ff3366";
+        ctx.strokeStyle = "#700018";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, 9);
+        ctx.bezierCurveTo(-9, 3, -11, -5, -5, -9);
+        ctx.bezierCurveTo(-1, -11, 0, -6, 0, -5);
+        ctx.bezierCurveTo(0, -6, 1, -11, 5, -9);
+        ctx.bezierCurveTo(11, -5, 9, 3, 0, 9);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        // Specular highlight
+        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        ctx.beginPath();
+        ctx.ellipse(-4, -5, 3, 1.8, -Math.PI / 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+      } else if (slot.icon === "gold") {
+        // Shiny Gold Coins
+        ctx.save();
+        ctx.fillStyle = "#eab308";
+        ctx.strokeStyle = "#713f12";
+        ctx.lineWidth = 2;
+        // Back coin
+        ctx.beginPath();
+        ctx.arc(3, -2, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        // Front coin
+        const coinGrad = ctx.createLinearGradient(-8, -6, 4, 8);
+        coinGrad.addColorStop(0, "#fef08a");
+        coinGrad.addColorStop(1, "#ca8a04");
+        ctx.fillStyle = coinGrad;
+        ctx.beginPath();
+        ctx.arc(-2, 3, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        // Sparkle glint
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 11px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("✦", 4, -7);
+        ctx.restore();
+
+      } else if (slot.icon === "skill") {
+        // Mystical Purple Skill Card
+        ctx.save();
+        ctx.fillStyle = "#7c3aed";
+        ctx.strokeStyle = "#facc15";
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(-7, -10, 14, 20, 3);
+        else ctx.rect(-7, -10, 14, 20);
+        ctx.fill();
+        ctx.stroke();
+        // Glowing question mark
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 11px 'Lilita One', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("?", 0, 0);
+        ctx.restore();
+      }
+
       ctx.restore();
     });
+
+    // Outer Rim Golden Pegs (Pins) at Slice Dividers
+    for (let i = 0; i < slots.length; i++) {
+      const pegAngle = arc * i - Math.PI / 2;
+      const pegR = 107;
+      const px = Math.cos(pegAngle) * pegR;
+      const py = Math.sin(pegAngle) * pegR;
+
+      ctx.save();
+      const pegGrad = ctx.createRadialGradient(px - 1, py - 1, 1, px, py, 4.5);
+      pegGrad.addColorStop(0, "#fffbeb");
+      pegGrad.addColorStop(0.35, "#facc15");
+      pegGrad.addColorStop(1, "#a16207");
+      ctx.fillStyle = pegGrad;
+      ctx.strokeStyle = "#381702";
+      ctx.lineWidth = 1.5;
+
+      ctx.beginPath();
+      ctx.arc(px, py, 4.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Center Axle Hub
+    ctx.save();
+    // Outer wooden circle
+    const hubGrad = ctx.createRadialGradient(-2, -3, 3, 0, 0, 24);
+    hubGrad.addColorStop(0, "#8a471e");
+    hubGrad.addColorStop(0.6, "#5c2e12");
+    hubGrad.addColorStop(1, "#381907");
+    ctx.fillStyle = hubGrad;
+    ctx.strokeStyle = "#241104";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, 24, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Brass inner bevel
+    ctx.strokeStyle = "#d97706";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.arc(0, 0, 18, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Center disc with etched screw cross
+    ctx.fillStyle = "#4a240c";
+    ctx.beginPath();
+    ctx.arc(0, 0, 14, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#271104";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-5, -5); ctx.lineTo(5, 5);
+    ctx.moveTo(5, -5); ctx.lineTo(-5, 5);
+    ctx.stroke();
     ctx.restore();
 
-    // Center Hub
+    ctx.restore(); // End Rotating Wheel
+
+    // -------------------------------------------------------------
+    // 3. DRAW TOP BRACKET MOUNT & SPRING TICKER POINTER (IN FRONT)
+    // -------------------------------------------------------------
+    // Golden-Trimmed Wooden Arch Mount
     ctx.save();
-    const hub = ctx.createRadialGradient(cx, cy, 3, cx, cy, 22);
-    hub.addColorStop(0, "#fef08a");
-    hub.addColorStop(1, "#d97706");
-    ctx.fillStyle = hub;
-    ctx.shadowColor = "#f59e0b";
-    ctx.shadowBlur = 10;
+    const mountGrad = ctx.createLinearGradient(142, 26, 178, 48);
+    mountGrad.addColorStop(0, "#b45309");
+    mountGrad.addColorStop(0.5, "#78350f");
+    mountGrad.addColorStop(1, "#451a03");
+    ctx.fillStyle = mountGrad;
+    ctx.strokeStyle = "#241104";
+    ctx.lineWidth = 2.5;
+
     ctx.beginPath();
-    ctx.arc(cx, cy, 20, 0, Math.PI * 2);
+    if (ctx.roundRect) ctx.roundRect(142, 26, 36, 22, [10, 10, 4, 4]);
+    else ctx.rect(142, 26, 36, 22);
     ctx.fill();
+    ctx.stroke();
+
+    // Golden border trim
+    ctx.strokeStyle = "#fde047";
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+
+    // Mount mini screws
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.arc(148, 33, 2, 0, Math.PI * 2);
+    ctx.arc(172, 33, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Spring Ticker Pointer (Physics Recoil on Peg Hit)
+    ctx.save();
+    ctx.translate(cx, 44);
+    ctx.rotate(this.wheelPointerAngle || 0);
+
+    // Tapered pointer path pointing down towards y = 26
+    ctx.beginPath();
+    ctx.moveTo(-10, -4);
+    ctx.quadraticCurveTo(-9, 12, 0, 27);
+    ctx.quadraticCurveTo(9, 12, 10, -4);
+    ctx.closePath();
+
+    const ptrGrad = ctx.createLinearGradient(-10, -4, 10, 26);
+    ptrGrad.addColorStop(0, "#fb7185");
+    ptrGrad.addColorStop(0.6, "#e11d48");
+    ptrGrad.addColorStop(1, "#9f1239");
+    ctx.fillStyle = ptrGrad;
+    ctx.fill();
+
+    // Golden bevel outline
+    ctx.strokeStyle = "#fde047";
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    ctx.strokeStyle = "#241104";
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    // Center Gold Rivet Pivot
+    ctx.fillStyle = "#facc15";
+    ctx.strokeStyle = "#451a03";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(0, 1, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(-1, 0, 1.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // -------------------------------------------------------------
+    // 4. CELEBRATION CONFETTI & PARTICLES
+    // -------------------------------------------------------------
+    if (this.wheelParticles && this.wheelParticles.length > 0) {
+      ctx.save();
+      for (let pIdx = this.wheelParticles.length - 1; pIdx >= 0; pIdx--) {
+        const p = this.wheelParticles[pIdx];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.22; // gravity
+        p.rot += p.vrot;
+        p.alpha -= 0.015;
+
+        if (p.alpha <= 0) {
+          this.wheelParticles.splice(pIdx, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+
+        if (p.isStar) {
+          ctx.beginPath();
+          for (let s = 0; s < 5; s++) {
+            const a1 = (Math.PI * 2 / 5) * s;
+            const a2 = a1 + Math.PI / 5;
+            const rx1 = Math.cos(a1) * p.size;
+            const ry1 = Math.sin(a1) * p.size;
+            const rx2 = Math.cos(a2) * (p.size * 0.45);
+            const ry2 = Math.sin(a2) * (p.size * 0.45);
+            if (s === 0) ctx.moveTo(rx1, ry1);
+            else ctx.lineTo(rx1, ry1);
+            ctx.lineTo(rx2, ry2);
+          }
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.7);
+        }
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+
     ctx.restore();
   }
 
   spinFortuneWheel() {
-    if (!Character.canSpinWheel || !Character.canSpinWheel()) {
+    if (this.wheelIsSpinning) return;
+
+    const canFree = Character.canSpinWheel && Character.canSpinWheel();
+    const canPaid = Character.canAffordGoldSpin && Character.canAffordGoldSpin();
+
+    if (!canFree && !canPaid) {
+      if (this.showToast) this.showToast("Need 100 🪙 or wait until tomorrow! ⏰", "info");
       this.updateWheelStatus();
       return;
     }
-    const btn = document.getElementById("btn-spin-wheel");
-    if (btn) btn.disabled = true;
 
+    const isPaid = !canFree && canPaid;
+
+    const btn = document.getElementById("btn-spin-wheel");
+    const btnText = document.getElementById("btn-spin-wheel-text");
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add("spinning");
+    }
+    if (btnText) btnText.textContent = "Spinning...";
+
+    const resEl = document.getElementById("fortune-wheel-result");
+    if (resEl) resEl.style.display = "none";
+
+    this.wheelIsSpinning = true;
+
+    // Pick winning index according to weighted odds
     const slots = GameData.fortuneWheelSlots;
     const totalWeight = slots.reduce((s, sl) => s + (sl.weight || 10), 0);
     let rand = Math.random() * totalWeight;
@@ -2917,55 +3354,160 @@ class UIManager {
       if (rand <= 0) { selectedIndex = i; break; }
     }
 
-    const canvas = document.getElementById("fortune-wheel-canvas");
-    if (!canvas) return;
+    // Mathematical alignment for top pointer (-PI/2)
     const arc = (2 * Math.PI) / slots.length;
-    const totalSpins = 5 + Math.floor(Math.random() * 3);
-    const targetAngle = totalSpins * Math.PI * 2 + (arc * (slots.length - selectedIndex)) - arc / 2;
-    let currentAngle = 0;
-    const duration = 2800;
+    const finalOffset = (2 * Math.PI) - ((arc * selectedIndex + arc / 2) % (2 * Math.PI));
+    const jitter = (Math.random() - 0.5) * (arc * 0.45); // slight natural variance inside slice
+    const fullSpins = 6 + Math.floor(Math.random() * 2);
+    const startAngle = this.wheelCurrentAngle || 0;
+    const totalTargetAngle = (fullSpins * 2 * Math.PI) + finalOffset + jitter;
+
+    const duration = 3800; // ms
     const startTime = performance.now();
+    this.wheelLastTickSlot = -1;
+    this.wheelLastTickTime = 0;
 
-    Sound.playSfx && Sound.playSfx("uiClick");
+    Sound.playSfx && Sound.playSfx("click");
 
-    const animate = (now) => {
+    const animateWheel = (now) => {
       const elapsed = now - startTime;
-      const t = Math.min(1, elapsed / duration);
-      const eased = 1 - Math.pow(1 - t, 4);
-      currentAngle = eased * targetAngle;
+      const progress = Math.min(1, elapsed / duration);
 
-      this.drawFortuneWheelRotated(currentAngle, -1);
+      // Smooth Quintic ease-out
+      const ease = 1 - Math.pow(1 - progress, 4.2);
 
-      if (t < 1) {
-        requestAnimationFrame(animate);
+      // Silky elastic overshoot bounce in the final 12%
+      let currentAngle = startAngle + ease * (totalTargetAngle - startAngle);
+      if (progress > 0.88) {
+        const settleT = (progress - 0.88) / 0.12;
+        const bounce = Math.sin(settleT * Math.PI * 2) * Math.exp(-settleT * 4) * 0.035;
+        currentAngle += bounce * (totalTargetAngle - startAngle) * 0.01;
+      }
+
+      this.wheelCurrentAngle = currentAngle;
+
+      // Peg Ticker Physics Collision Detection
+      const normalizedAngle = ((currentAngle + arc / 2) % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI);
+      const currentPegIndex = Math.floor(normalizedAngle / arc);
+
+      if (currentPegIndex !== this.wheelLastTickSlot) {
+        this.wheelLastTickSlot = currentPegIndex;
+        // Pointer deflects backwards
+        this.wheelPointerAngle = -0.32;
+        // Audio tick throttled for realistic feel
+        if (now - this.wheelLastTickTime > 45) {
+          Sound.playSfx && Sound.playSfx("click");
+          this.wheelLastTickTime = now;
+        }
+      }
+
+      // Spring vibration update for ticker
+      this.wheelPointerVelocity = (this.wheelPointerVelocity || 0) + (0 - (this.wheelPointerAngle || 0)) * 0.32 - (this.wheelPointerVelocity || 0) * 0.22;
+      this.wheelPointerAngle = (this.wheelPointerAngle || 0) + this.wheelPointerVelocity;
+
+      this.drawFortuneWheelCanvas(currentAngle, -1);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateWheel);
       } else {
-        this.drawFortuneWheelRotated(currentAngle, selectedIndex);
-        const reward = Character.claimWheelSpin && Character.claimWheelSpin(selectedIndex);
-        const resultEl = document.getElementById("fortune-wheel-result");
-        if (resultEl && reward) {
-          resultEl.innerHTML = `${reward.icon} <strong>${reward.label}</strong> claimed!`;
-          resultEl.style.display = "block";
+        // --- SPIN COMPLETE ---
+        this.wheelIsSpinning = false;
+        this.wheelPointerAngle = 0;
+        this.wheelPointerVelocity = 0;
+
+        // Claim reward in character data
+        const reward = Character.claimWheelSpin && Character.claimWheelSpin(selectedIndex, isPaid);
+
+        // Spawn celebration confetti & star burst
+        this.wheelParticles = [];
+        const colors = ["#facc15", "#f43f5e", "#22c55e", "#38bdf8", "#a855f7", "#fb923c", "#ffffff"];
+        for (let p = 0; p < 45; p++) {
+          const pAngle = Math.random() * Math.PI * 2;
+          const speed = 2.5 + Math.random() * 5.5;
+          this.wheelParticles.push({
+            x: 160,
+            y: 162,
+            vx: Math.cos(pAngle) * speed,
+            vy: Math.sin(pAngle) * speed - 2.5,
+            rot: Math.random() * Math.PI * 2,
+            vrot: (Math.random() - 0.5) * 0.3,
+            size: 4 + Math.random() * 6,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: 1.0,
+            isStar: Math.random() < 0.4
+          });
+        }
+
+        // Keep animating particles until they settle
+        const animateParticles = () => {
+          this.drawFortuneWheelCanvas(this.wheelCurrentAngle, selectedIndex);
+          if (this.wheelParticles && this.wheelParticles.length > 0) {
+            requestAnimationFrame(animateParticles);
+          }
+        };
+        requestAnimationFrame(animateParticles);
+
+        // Play authentic celebratory fanfare
+        if (Sound.playSfx) {
+          if (reward && (reward.type === "gems" || reward.type === "skill" || reward.value >= 500)) {
+            Sound.playSfx("bigWin");
+          } else {
+            Sound.playSfx("fortune");
+          }
+        }
+
+        // Show celebration result banner
+        if (resEl && reward) {
+          const typeDesc = reward.type === "gold" ? `+${reward.value} 🪙` :
+                           reward.type === "gems" ? `+${reward.value} 💎` :
+                           reward.type === "exp" ? `+${reward.value} EXP 🌟` :
+                           reward.type === "atk_boost" ? `ATK +${Math.round(reward.value * 100)}%! ⚔️` :
+                           reward.type === "heal_pct" ? `Healed HP +${Math.round(reward.value * 100)}%! 💚` :
+                           "Special Reward! ⭐";
+          resEl.innerHTML = `🎉 <strong>${reward.label}</strong> (${typeDesc})`;
+          resEl.style.display = "block";
+        }
+
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove("spinning");
         }
         this.renderHeader();
-        if (btn) btn.disabled = false;
         this.updateWheelStatus();
-        Sound.playSfx && Sound.playSfx("chest");
       }
     };
-    requestAnimationFrame(animate);
+
+    requestAnimationFrame(animateWheel);
   }
 
   updateWheelStatus() {
-    const canSpin = Character.canSpinWheel && Character.canSpinWheel();
+    const canFree = Character.canSpinWheel && Character.canSpinWheel();
+    const canPaid = Character.canAffordGoldSpin && Character.canAffordGoldSpin();
     const btn = document.getElementById("btn-spin-wheel");
+    const btnText = document.getElementById("btn-spin-wheel-text");
     const cdEl = document.getElementById("fortune-wheel-cd");
-    if (btn) btn.disabled = !canSpin;
-    if (cdEl) {
-      if (canSpin) {
-        cdEl.textContent = "✨ Free spin available!";
+
+    if (this.wheelIsSpinning) return;
+
+    if (canFree) {
+      if (btn) btn.disabled = false;
+      if (btnText) btnText.textContent = "Spin! (Free Daily)";
+      if (cdEl) {
+        cdEl.textContent = "✨ 1x Free Daily Spin Ready!";
         cdEl.style.color = "#4ade80";
-      } else {
-        cdEl.textContent = "Next free spin available tomorrow ⏰";
+      }
+    } else if (canPaid) {
+      if (btn) btn.disabled = false;
+      if (btnText) btnText.textContent = "Spin (100 🪙)";
+      if (cdEl) {
+        cdEl.textContent = "Daily free spin used. Extra spin: 100 Gold 🪙";
+        cdEl.style.color = "#facc15";
+      }
+    } else {
+      if (btn) btn.disabled = true;
+      if (btnText) btnText.textContent = "Need 100 🪙";
+      if (cdEl) {
+        cdEl.textContent = "Next free spin tomorrow ⏰ (Need 100 🪙 for extra spin)";
         cdEl.style.color = "#a8a29e";
       }
     }

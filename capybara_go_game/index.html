@@ -1102,15 +1102,16 @@
   <div id="fortune-wheel-modal" class="modal-overlay" style="display:none;">
     <div class="modal-panel fortune-wheel-panel">
       <div class="modal-header-row">
-        <h2 class="modal-title">🎰 Fortune Wheel</h2>
+        <h2 class="modal-title">🎰 Lucky Roulette</h2>
         <button class="modal-close-btn" onclick="document.getElementById('fortune-wheel-modal').style.display='none'">✕</button>
       </div>
       <div class="fortune-wheel-container">
-        <canvas id="fortune-wheel-canvas" width="260" height="260"></canvas>
-        <div class="fortune-wheel-arrow">▼</div>
+        <canvas id="fortune-wheel-canvas" width="320" height="360"></canvas>
       </div>
       <div class="fortune-wheel-result" id="fortune-wheel-result" style="display:none;"></div>
-      <button class="btn-spin-wheel" id="btn-spin-wheel" onclick="window.Game && window.Game.ui && window.Game.ui.spinFortuneWheel()">🎰 Spin! (1x Free Daily)</button>
+      <button class="btn-spin-wheel" id="btn-spin-wheel" onclick="window.Game && window.Game.ui && window.Game.ui.spinFortuneWheel()">
+        <span id="btn-spin-wheel-text">Spin!</span>
+      </button>
       <div class="fortune-wheel-cd" id="fortune-wheel-cd"></div>
     </div>
   </div>

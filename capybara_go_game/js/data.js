@@ -661,14 +661,12 @@ const GameData = {
   ],
 
   fortuneWheelSlots: [
-    { label: "500 Gold", type: "gold", value: 500, color: "#f59e0b", icon: "🪙", weight: 25 },
-    { label: "1000 Gold", type: "gold", value: 1000, color: "#f97316", icon: "💰", weight: 15 },
-    { label: "5 Gems", type: "gems", value: 5, color: "#3b82f6", icon: "💎", weight: 20 },
-    { label: "15 Gems", type: "gems", value: 15, color: "#8b5cf6", icon: "💎", weight: 10 },
-    { label: "200 Gold", type: "gold", value: 200, color: "#eab308", icon: "🪙", weight: 30 },
-    { label: "ATK +20%", type: "atk_boost", value: 0.20, color: "#ef4444", icon: "⚔️", weight: 8 },
-    { label: "Full Heal", type: "heal_full", value: 1, color: "#22c55e", icon: "💚", weight: 10 },
-    { label: "JACKPOT!", type: "gems", value: 50, color: "#ec4899", icon: "🌟", weight: 2 }
+    { id: "exp_100", label: "EXP +100", type: "exp", value: 100, color: "#86efac", textColor: "#14532d", icon: "exp", weight: 22 },
+    { id: "atk_10", label: "ATK +10%", type: "atk_boost", value: 0.10, color: "#fffdf5", textColor: "#451a03", icon: "sword", weight: 18 },
+    { id: "gold_500", label: "500 Gold", type: "gold", value: 500, color: "#c4b5fd", textColor: "#3b0764", icon: "gold", weight: 25 },
+    { id: "hp_15", label: "HP +15%", type: "heal_pct", value: 0.15, color: "#fffdf5", textColor: "#451a03", icon: "heart", weight: 17 },
+    { id: "skill_bonus", label: "Skill", type: "skill", value: 1, color: "#fde047", textColor: "#713f12", icon: "skill", weight: 12 },
+    { id: "exp_30", label: "EXP +30", type: "exp", value: 30, color: "#fffdf5", textColor: "#14532d", icon: "exp", weight: 25 }
   ],
 
   dailyLoginRewards: [
