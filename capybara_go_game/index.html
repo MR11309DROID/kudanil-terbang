@@ -129,11 +129,20 @@
         <div id="stage-viewport">
           <canvas id="stage-canvas" width="440" height="350"></canvas>
 
-          <!-- Quick Interactive Test Dragon Roar Button (1-Click Test) -->
-          <button id="btn-quick-dragon-test" class="btn-quick-dragon-test" onclick="window.testDragonRoar && window.testDragonRoar()" title="Klik untuk tes animasi Dragon Roar">
-            <span class="btn-dragon-icon">🐉</span>
-            <span class="btn-dragon-label">Tes Dragon Roar</span>
-          </button>
+          <!-- Top Right Controls: Quick Dragon Test & Hide UI Button -->
+          <div class="stage-top-controls">
+            <!-- Quick Interactive Test Dragon Roar Button (1-Click Test) -->
+            <button id="btn-quick-dragon-test" class="btn-quick-dragon-test" onclick="window.testDragonRoar && window.testDragonRoar()" title="Klik untuk tes animasi Dragon Roar">
+              <span class="btn-dragon-icon">🐉</span>
+              <span class="btn-dragon-label">Tes Dragon</span>
+            </button>
+
+            <!-- Global Zen / Hide UI Button -->
+            <button id="btn-toggle-zen-ui" class="btn-toggle-zen-ui" onclick="window.Game && window.Game.ui && window.Game.ui.toggleFullUI()" title="Sembunyikan Seluruh UI (Mode Bersih)">
+              <span class="zen-ui-icon">👁️</span>
+              <span class="zen-ui-label">Sembunyi UI</span>
+            </button>
+          </div>
 
           <!-- ================= AUTHENTIC MENU STAGE OVERLAY ================= -->
           <div id="menu-stage-overlay" class="menu-stage-overlay">
@@ -150,7 +159,7 @@
               </div>
             </div>
 
-            <!-- Upper Left Floating Widgets: Hamburger Drawer & Newbie Gifts -->
+            <!-- Upper Left Floating Widgets: Hamburger Drawer, Newbie Gifts, & Straight Vertical Quick Stack -->
             <div class="menu-left-widgets">
               <button id="btn-menu-drawer" class="btn-menu-drawer" title="Pengaturan & Menu">
                 <img src="assets/ui/menu/btn_hamburger.svg" alt="Menu" class="drawer-icon-img">
@@ -161,8 +170,14 @@
                 <div class="newbie-timer-badge">6d 23h</div>
               </div>
 
-              <!-- Quick Event & Feature Buttons -->
-              <div class="quick-btn-stack">
+              <!-- Toggle Hide/Show Quick Sidebar Buttons -->
+              <button id="btn-toggle-quick-stack" class="btn-toggle-quick-stack" onclick="window.Game && window.Game.ui && window.Game.ui.toggleQuickStack()" title="Sembunyikan / Tampilkan Menu Cepat">
+                <span class="toggle-stack-icon">▲</span>
+                <span class="toggle-stack-label">Sembunyi</span>
+              </button>
+
+              <!-- Quick Event & Feature Buttons (Lurus ke bawah / Single Column) -->
+              <div class="quick-btn-stack" id="quick-btn-stack">
                 <button class="quick-sidebar-btn qbtn-daily" onclick="window.Game && window.Game.ui && window.Game.ui.openDailyLogin()" title="Daily Bonus">
                   <span class="qbtn-icon">🎁</span>
                   <span>Daily</span>

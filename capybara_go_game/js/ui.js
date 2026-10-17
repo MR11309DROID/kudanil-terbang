@@ -190,6 +190,17 @@ class UIManager {
 
     // Authentic Menu Hub Event Listeners
     this.initMenuEventListeners();
+
+    // Zen Mode canvas tap to restore UI
+    const stageCanvas = document.getElementById("stage-canvas");
+    if (stageCanvas) {
+      stageCanvas.addEventListener("click", () => {
+        const container = document.getElementById("game-container");
+        if (container && container.classList.contains("zen-ui-hidden")) {
+          this.toggleFullUI();
+        }
+      });
+    }
   }
 
   initMenuEventListeners() {
@@ -4147,6 +4158,43 @@ class UIManager {
       this.showToast && this.showToast("Pet berhasil naik level! ⭐", "success");
     } else {
       this.showToast && this.showToast("Gold tidak cukup untuk upgrade!", "error");
+    }
+  }
+
+  // Toggle Hide / Show Quick Sidebar Buttons (Lurus ke bawah)
+  toggleQuickStack() {
+    Sound.playSfx && Sound.playSfx("click");
+    const stack = document.getElementById("quick-btn-stack") || document.querySelector(".quick-btn-stack");
+    const btn = document.getElementById("btn-toggle-quick-stack");
+    if (!stack) return;
+    const isCollapsed = stack.classList.toggle("collapsed");
+    if (btn) {
+      btn.classList.toggle("collapsed", isCollapsed);
+      const icon = btn.querySelector(".toggle-stack-icon");
+      const label = btn.querySelector(".toggle-stack-label");
+      if (icon) icon.textContent = isCollapsed ? "▼" : "▲";
+      if (label) label.textContent = isCollapsed ? "Menu" : "Sembunyi";
+      btn.title = isCollapsed ? "Tampilkan Menu Pintas" : "Sembunyikan Menu Pintas";
+    }
+  }
+
+  // Toggle Global Zen Mode / Hide Entire UI
+  toggleFullUI() {
+    Sound.playSfx && Sound.playSfx("click");
+    const container = document.getElementById("game-container");
+    if (!container) return;
+    const isHidden = container.classList.toggle("zen-ui-hidden");
+    const zenBtn = document.getElementById("btn-toggle-zen-ui");
+    if (zenBtn) {
+      zenBtn.classList.toggle("active", isHidden);
+      const label = zenBtn.querySelector(".zen-ui-label");
+      const icon = zenBtn.querySelector(".zen-ui-icon");
+      if (label) label.textContent = isHidden ? "Tampilkan UI" : "Sembunyi UI";
+      if (icon) icon.textContent = isHidden ? "👁️‍🗨️" : "👁️";
+      zenBtn.title = isHidden ? "Kembalikan Tampilan UI" : "Sembunyikan Seluruh UI (Mode Bersih)";
+    }
+    if (this.showToast && isHidden) {
+      this.showToast("Mode Bersih aktif! Ketuk tombol atau panggung untuk menampilkan UI ✨", "info");
     }
   }
 }
