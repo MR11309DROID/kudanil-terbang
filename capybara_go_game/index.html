@@ -163,27 +163,27 @@
 
               <!-- Quick Event & Feature Buttons -->
               <div class="quick-btn-stack">
-                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openDailyLogin()" title="Daily Bonus">
+                <button class="quick-sidebar-btn qbtn-daily" onclick="window.Game && window.Game.ui && window.Game.ui.openDailyLogin()" title="Daily Bonus">
                   <span class="qbtn-icon">🎁</span>
                   <span>Daily</span>
                 </button>
-                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openFortuneWheel()" title="Fortune Wheel">
+                <button class="quick-sidebar-btn qbtn-wheel" onclick="window.Game && window.Game.ui && window.Game.ui.openFortuneWheel()" title="Fortune Wheel">
                   <span class="qbtn-icon">🎰</span>
                   <span>Wheel</span>
                 </button>
-                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openAchievements()" title="Achievements">
+                <button class="quick-sidebar-btn qbtn-achieve" onclick="window.Game && window.Game.ui && window.Game.ui.openAchievements()" title="Achievements">
                   <span class="qbtn-icon">🏆</span>
                   <span>Achieve</span>
                 </button>
-                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openBattlePass()" title="Battle Pass">
+                <button class="quick-sidebar-btn qbtn-pass" onclick="window.Game && window.Game.ui && window.Game.ui.openBattlePass()" title="Battle Pass">
                   <span class="qbtn-icon">🏅</span>
                   <span>Pass</span>
                 </button>
-                <button class="quick-sidebar-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()" title="My Stats">
+                <button class="quick-sidebar-btn qbtn-stats" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()" title="My Stats">
                   <span class="qbtn-icon">📊</span>
                   <span>Stats</span>
                 </button>
-                <button class="quick-sidebar-btn btn-pet-quick" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Pet & Mount">
+                <button class="quick-sidebar-btn qbtn-pets btn-pet-quick" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Pet & Mount">
                   <span class="qbtn-icon">🐾</span>
                   <span>Pets</span>
                 </button>
@@ -600,7 +600,11 @@
             </div>
             
             <div class="paperdoll-center">
-              <img src="assets/characters/player/idle/frame_01.png" alt="Capybara Hero" class="hero-avatar-large">
+              <div class="hero-pedestal-wrap">
+                <div class="hero-pedestal-aura"></div>
+                <div class="hero-pedestal-base"></div>
+                <img src="assets/characters/player/idle/frame_01.png" alt="Capybara Hero" class="hero-avatar-large">
+              </div>
               <div class="hero-title-badge">Capybara Knight</div>
             </div>
 
@@ -626,18 +630,21 @@
 
           <!-- Attributes Grid -->
           <div class="stats-summary-grid">
-            <div class="stat-cell"><span class="stat-name">💖 Max HP:</span> <strong id="stat-hp">350</strong></div>
-            <div class="stat-cell"><span class="stat-name">⚔️ Attack:</span> <strong id="stat-atk">45</strong></div>
-            <div class="stat-cell"><span class="stat-name">🛡️ Defense:</span> <strong id="stat-def">12</strong></div>
-            <div class="stat-cell"><span class="stat-name">🎯 Crit:</span> <strong id="stat-crit">10%</strong></div>
-            <div class="stat-cell"><span class="stat-name">💨 Dodge:</span> <strong id="stat-dodge">5%</strong></div>
-            <div class="stat-cell"><span class="stat-name">🩸 Lifesteal:</span> <strong id="stat-lifesteal">0%</strong></div>
+            <div class="stat-cell stat-hp"><span class="stat-name">💖 HP</span> <strong id="stat-hp">350</strong></div>
+            <div class="stat-cell stat-atk"><span class="stat-name">⚔️ ATK</span> <strong id="stat-atk">45</strong></div>
+            <div class="stat-cell stat-def"><span class="stat-name">🛡️ DEF</span> <strong id="stat-def">12</strong></div>
+            <div class="stat-cell stat-crit"><span class="stat-name">🎯 Crit</span> <strong id="stat-crit">10%</strong></div>
+            <div class="stat-cell stat-dodge"><span class="stat-name">💨 Dodge</span> <strong id="stat-dodge">5%</strong></div>
+            <div class="stat-cell stat-lifesteal"><span class="stat-name">🩸 Vamp</span> <strong id="stat-lifesteal">0%</strong></div>
           </div>
         </div>
 
         <!-- Inventory Backpack -->
         <div class="backpack-panel">
-          <h3 class="backpack-title">Inventory Backpack</h3>
+          <div class="backpack-header-row">
+            <h3 class="backpack-title">🎒 Inventory Backpack</h3>
+            <span class="backpack-count-badge" id="backpack-count-badge">0 item</span>
+          </div>
           <div id="inventory-grid" class="inventory-grid"></div>
         </div>
       </div>

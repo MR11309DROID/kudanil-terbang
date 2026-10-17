@@ -2376,10 +2376,15 @@ class UIManager {
 
     // Fill Inventory Grid
     const invGrid = document.getElementById("inventory-grid");
+    const bpBadge = document.getElementById("backpack-count-badge");
+    if (bpBadge) {
+      const count = Character.inventory ? Character.inventory.length : 0;
+      bpBadge.textContent = `${count} item${count === 1 ? '' : 's'}`;
+    }
     if (invGrid) {
       invGrid.innerHTML = "";
       if (Character.inventory.length === 0) {
-        invGrid.innerHTML = `<div class="empty-inv-msg">No spare items in backpack. Open chests to obtain gear!</div>`;
+        invGrid.innerHTML = `<div class="empty-inv-msg">🎒 Tas ransel kosong. Buka peti di Shop untuk mendapatkan perlengkapan!</div>`;
       } else {
         Character.inventory.forEach(it => {
           const itemEl = document.createElement("div");
@@ -2464,36 +2469,51 @@ class UIManager {
       const curRank = Character.talents[t.id] || 0;
       const isMax = curRank >= t.maxRank;
       const cost = isMax ? 0 : Math.round(t.costBase * Math.pow(t.costMult, curRank));
+      const canAfford = (Character.gold || 0) >= cost;
+      const pct = Math.min(100, Math.round((curRank / t.maxRank) * 100));
 
       const card = document.createElement("div");
-      card.className = "talent-card";
+      card.className = `talent-card ${isMax ? 'talent-card-max' : ''}`;
       card.innerHTML = `
         <div class="talent-icon-wrap">
           <img src="${t.icon}" class="talent-img" alt="${t.name}">
+          ${isMax ? '<span class="talent-max-badge">★</span>' : ''}
         </div>
         <div class="talent-info">
-          <h4>${t.name} <span class="talent-rank">${curRank} / ${t.maxRank}</span></h4>
-          <p>${t.desc}</p>
+          <div class="talent-title-row">
+            <h4 class="talent-title-text">${t.name}</h4>
+            <span class="talent-rank-pill ${isMax ? 'rank-max' : ''}">${isMax ? 'MAX' : `Lv. ${curRank}/${t.maxRank}`}</span>
+          </div>
+          <p class="talent-desc-text">${t.desc}</p>
+          <div class="talent-bar-track">
+            <div class="talent-bar-fill" style="width: ${pct}%"></div>
+          </div>
         </div>
         <div class="talent-action">
           ${isMax 
-            ? `<button class="btn-game btn-slate" disabled>MAX</button>` 
-            : `<button class="btn-game btn-gold talent-upgrade-btn" data-id="${t.id}">🪙 ${cost}</button>`}
+            ? `<button class="btn-talent-max" disabled>Maksimal ✨</button>` 
+            : `<button class="btn-game btn-talent-upgrade ${canAfford ? 'can-afford' : 'cant-afford'}" data-id="${t.id}" ${canAfford ? '' : 'disabled'}>
+                <span class="talent-cost-tag">🪙 ${cost.toLocaleString()}</span>
+                <span class="talent-up-label">Upgrade</span>
+              </button>`}
         </div>
       `;
 
       if (!isMax) {
-        card.querySelector(".talent-upgrade-btn").addEventListener("click", () => {
-          Sound.playSfx("click");
-          if (Character.upgradeTalent(t.id)) {
-            Sound.playSfx("confirm");
-            this.showToast(`Upgraded ${t.name} to Rank ${curRank + 1}!`);
-            this.renderTalentsScreen();
-            this.renderHeader();
-          } else {
-            this.showToast("Not enough Gold!");
-          }
-        });
+        const btn = card.querySelector(".btn-talent-upgrade");
+        if (btn && canAfford) {
+          btn.addEventListener("click", () => {
+            Sound.playSfx("click");
+            if (Character.upgradeTalent(t.id)) {
+              Sound.playSfx("confirm");
+              this.showToast(`✨ Berhasil meningkatkan ${t.name} ke Rank ${curRank + 1}!`, "success");
+              this.renderTalentsScreen();
+              this.renderHeader();
+            } else {
+              this.showToast("Koin Gold tidak mencukupi!", "error");
+            }
+          });
+        }
       }
 
       container.appendChild(card);
