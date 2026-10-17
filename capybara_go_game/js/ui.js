@@ -2484,13 +2484,13 @@ class UIManager {
   }
 
   startHeroIdleAnim() {
-    let frame = 2;
+    let frame = 1;
     setInterval(() => {
       const img = document.getElementById("hero-capy-avatar-img");
       if (!img || this.activeTab !== "equipment") return;
-      frame = frame === 2 ? 3 : 2;
-      img.src = `assets/characters/player/attack/frame_0${frame}.png`;
-    }, 450);
+      frame = frame === 1 ? 2 : 1;
+      img.src = `assets/characters/player/standing_gear_0${frame}.png`;
+    }, 550);
   }
 
   cycleSortQuality() {
