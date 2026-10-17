@@ -152,7 +152,7 @@ class CharacterManager {
       if (!this.inventory) this.inventory = [];
       const showcaseIds = [
         "gear_04", "gear_05", "gear_07", "gear_09", "gear_10", "gear_24",
-        "rare_00", "rare_05", "myth_00", "sup_00"
+        "rare_00", "rare_05", "leg_00", "leg_09", "myth_00", "sup_00"
       ];
       showcaseIds.forEach(id => {
         if (!this.inventory.some(it => it && it.templateId === id)) {
