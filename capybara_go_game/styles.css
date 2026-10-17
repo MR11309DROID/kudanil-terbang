@@ -3899,8 +3899,8 @@ body {
 /* Warm magical rotating sunburst behind the Hero */
 .hero-stage-sunburst {
   position: absolute;
-  width: 175px;
-  height: 175px;
+  width: 135px;
+  height: 135px;
   top: 48%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -3918,22 +3918,22 @@ body {
 
 .hero-mount-stage {
   position: relative;
-  width: 155px;
-  height: 160px;
+  width: 130px;
+  height: 130px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end; /* Planted on the ground */
-  padding-bottom: 2px;
+  padding-bottom: 0px;
   z-index: 2;
 }
 
 /* 3D Carved Pedestal Dais under Capybara's feet */
 .hero-pedestal-dais {
   position: absolute;
-  bottom: 0px;
-  width: 108px;
-  height: 18px;
+  bottom: 4px;
+  width: 92px;
+  height: 16px;
   border-radius: 50%;
   background: radial-gradient(ellipse at 50% 25%, #fdf4e3 0%, #ecd4ad 50%, #c9a573 85%, #8f6434 100%);
   border: 1.8px solid #633b17;
@@ -3942,13 +3942,14 @@ body {
 }
 
 .hero-capy-character-img {
-  width: 125px;
-  height: auto;
-  max-height: 145px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
-  filter: drop-shadow(0 4px 6px rgba(45, 25, 10, 0.45));
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 3px 5px rgba(45, 25, 10, 0.4));
   z-index: 3;
-  margin-bottom: -5px; /* Directly touching ground shadow */
+  margin-bottom: 7px; /* Planted precisely onto the dais surface */
   transform-origin: bottom center;
   animation: heroCapyBreath 2.6s ease-in-out infinite alternate;
 }
@@ -3959,13 +3960,15 @@ body {
 }
 
 .hero-shadow-oval {
-  width: 90px;
-  height: 14px;
+  position: absolute;
+  bottom: 11px;
+  width: 64px;
+  height: 10px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(60, 35, 15, 0.55) 0%, rgba(60, 35, 15, 0) 75%);
-  filter: blur(1.2px);
+  background: radial-gradient(ellipse at center, rgba(60, 35, 15, 0.65) 0%, rgba(60, 35, 15, 0) 75%);
+  filter: blur(1px);
   z-index: 2;
-  margin-bottom: 2px;
+  pointer-events: none;
 }
 
 /* Pet Hexagon Badge removed as requested */

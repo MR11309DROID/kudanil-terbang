@@ -2529,9 +2529,10 @@ class UIManager {
     setInterval(() => {
       const img = document.getElementById("hero-capy-avatar-img");
       if (!img || this.activeTab !== "equipment") return;
-      frame = frame === 1 ? 2 : 1;
-      img.src = `assets/characters/player/standing_gear_0${frame}.png`;
-    }, 550);
+      frame = (frame % 9) + 1;
+      const frameStr = frame < 10 ? `0${frame}` : `${frame}`;
+      img.src = `assets/characters/player/idle/frame_${frameStr}.png`;
+    }, 160);
   }
 
   cycleSortQuality() {
