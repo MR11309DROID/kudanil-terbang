@@ -2342,24 +2342,69 @@ class UIManager {
   renderEquipmentScreen() {
     const stats = Character.getEffectiveStats();
 
-    // Fill Hero Stats Labels
-    document.getElementById("stat-hp").textContent = stats.hp;
-    document.getElementById("stat-atk").textContent = stats.atk;
-    document.getElementById("stat-def").textContent = stats.def;
-    document.getElementById("stat-crit").textContent = Math.round(stats.critRate * 100) + "%";
-    document.getElementById("stat-dodge").textContent = Math.round(stats.dodgeRate * 100) + "%";
-    document.getElementById("stat-lifesteal").textContent = Math.round(stats.lifesteal * 100) + "%";
+    // 1. Update In-Screen Currency Header
+    const energyEl = document.getElementById("gear-h-energy");
+    const gemsEl = document.getElementById("gear-h-gems");
+    const goldEl = document.getElementById("gear-h-gold");
+    if (energyEl) energyEl.textContent = "60/60";
+    if (gemsEl) gemsEl.textContent = Character.gems >= 1000 ? (Character.gems / 1000).toFixed(1) + "K" : Character.gems;
+    if (goldEl) goldEl.textContent = Character.gold >= 1000000 ? (Character.gold / 1000000).toFixed(2) + "M" : (Character.gold >= 1000 ? (Character.gold / 1000).toFixed(1) + "K" : Character.gold);
 
-    // Fill Paperdoll Slots
+    // 2. Calculate and Display Combat Power (CP)
+    const totalCp = Math.floor(
+      (stats.atk || 0) * 4.2 +
+      (stats.hp || 0) * 0.65 +
+      (stats.def || 0) * 3.5 +
+      ((stats.critRate || 0) * 1200) +
+      ((stats.dodgeRate || 0) * 1200) +
+      ((stats.lifesteal || 0) * 1000)
+    );
+    const cpEl = document.getElementById("hero-total-cp");
+    if (cpEl) {
+      if (totalCp >= 1000000) {
+        cpEl.textContent = (totalCp / 1000000).toFixed(2) + "M";
+      } else if (totalCp >= 1000) {
+        cpEl.textContent = (totalCp / 1000).toFixed(2) + "K";
+      } else {
+        cpEl.textContent = totalCp.toLocaleString();
+      }
+    }
+
+    // 3. Fill Core 3 Hero Stats Labels
+    const hpEl = document.getElementById("stat-hp");
+    const atkEl = document.getElementById("stat-atk");
+    const defEl = document.getElementById("stat-def");
+    if (hpEl) hpEl.textContent = stats.hp >= 10000 ? (stats.hp / 1000).toFixed(1) + "K" : stats.hp;
+    if (atkEl) atkEl.textContent = stats.atk >= 10000 ? (stats.atk / 1000).toFixed(1) + "K" : stats.atk;
+    if (defEl) defEl.textContent = stats.def >= 10000 ? (stats.def / 1000).toFixed(1) + "K" : stats.def;
+
+    // Slot type emoji map
+    const slotEmojis = {
+      weapon: "⚔️",
+      armor: "🛡️",
+      helmet: "👑",
+      boots: "🥾",
+      ring: "💍",
+      amulet: "📿"
+    };
+
+    // 4. Fill Paperdoll Slots
     for (const [slot, item] of Object.entries(Character.equipped)) {
       const slotEl = document.getElementById(`slot-${slot}`);
       if (!slotEl) continue;
 
       if (item) {
+        const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(item.rarity);
+        const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
+        const rankBadge = item.refineRank ? `<span class="item-rank-badge">+${item.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
+
         slotEl.className = `paperdoll-slot occupied rarity-${item.rarity}`;
         slotEl.innerHTML = `
+          <span class="item-slot-mini-badge">${slotEmojis[slot] || "⚔️"}</span>
+          <span class="item-lvl-badge">Lv.${item.level}</span>
           <img src="${item.icon}" class="slot-item-img" alt="${item.name}">
-          <span class="slot-item-lvl">Lv.${item.level}</span>
+          ${sBadge}
+          ${rankBadge}
         `;
         slotEl.onclick = () => this.showItemDetailsModal(item, true);
       } else {
@@ -2370,39 +2415,45 @@ class UIManager {
       }
     }
 
-    // Fill Companion Banner in Equipment Tab
+    // 5. Fill Companion Badge
     const compId = Character.activeCompanion || "duck";
     const compDef = (GameData.companions || []).find(c => c.id === compId);
-    const compLv = (Character.companionLevels && Character.companionLevels[compId]) || 1;
-    const petBadgeEl = document.getElementById("hero-pet-badge");
-    const petTitleEl = document.getElementById("hero-pet-title");
-    const petLvlEl = document.getElementById("hero-pet-lvl");
-    const petSubEl = document.getElementById("hero-pet-sub");
-    if (compDef) {
-      if (petBadgeEl) petBadgeEl.textContent = compDef.icon || "🐾";
-      if (petTitleEl) petTitleEl.textContent = compDef.name;
-      if (petLvlEl) petLvlEl.textContent = `Lv. ${compLv}`;
-      if (petSubEl) petSubEl.textContent = `🐾 Pasif: ${compDef.passiveDesc || ''}`;
+    const petHexFace = document.getElementById("pet-hex-face");
+    if (petHexFace && compDef) {
+      petHexFace.textContent = compDef.icon || "🦆";
     }
 
-    // Fill Inventory Grid
+    // 6. Fill Inventory Grid (Sorted by Quality)
     const invGrid = document.getElementById("inventory-grid");
-    const bpBadge = document.getElementById("backpack-count-badge");
-    if (bpBadge) {
-      const count = Character.inventory ? Character.inventory.length : 0;
-      bpBadge.textContent = `${count} item${count === 1 ? '' : 's'}`;
-    }
     if (invGrid) {
       invGrid.innerHTML = "";
-      if (Character.inventory.length === 0) {
-        invGrid.innerHTML = `<div class="empty-inv-msg">🎒 Tas ransel kosong. Buka peti di Shop untuk mendapatkan perlengkapan!</div>`;
+      if (!Character.inventory || Character.inventory.length === 0) {
+        invGrid.innerHTML = `<div class="empty-inv-msg">🎒 Tas perlengkapan kosong. Buka peti di Shop untuk mendapatkan gear!</div>`;
       } else {
-        Character.inventory.forEach(it => {
+        // Sort inventory by rarity priority: supreme > mythic > legendary > epic > rare > uncommon > common
+        const rarityRanks = { supreme: 7, mythic: 6, legendary: 5, epic: 4, rare: 3, uncommon: 2, common: 1 };
+        const sortedInv = [...Character.inventory].sort((a, b) => {
+          const rankA = rarityRanks[a.rarity] || 0;
+          const rankB = rarityRanks[b.rarity] || 0;
+          if (rankA !== rankB) return rankB - rankA;
+          return (b.level || 1) - (a.level || 1);
+        });
+
+        sortedInv.forEach(it => {
           const itemEl = document.createElement("div");
           itemEl.className = `inv-item-card rarity-${it.rarity}`;
+
+          const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(it.rarity);
+          const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
+          const rankBadge = it.refineRank ? `<span class="item-rank-badge">+${it.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
+          const slotIcon = slotEmojis[it.slot] || "⚔️";
+
           itemEl.innerHTML = `
+            <span class="item-slot-mini-badge">${slotIcon}</span>
+            <span class="item-lvl-badge">Lv.${it.level}</span>
             <img src="${it.icon}" class="inv-item-img" alt="${it.name}">
-            <span class="inv-item-lvl">Lv.${it.level}</span>
+            ${sBadge}
+            ${rankBadge}
           `;
           itemEl.addEventListener("click", () => {
             Sound.playSfx("click");
@@ -2411,6 +2462,58 @@ class UIManager {
           invGrid.appendChild(itemEl);
         });
       }
+    }
+  }
+
+  cycleSortQuality() {
+    Sound.playSfx && Sound.playSfx("click");
+    this.showToast && this.showToast("Sorted by Quality (Supreme ➔ Common) 🌟", "info");
+    this.renderEquipmentScreen();
+  }
+
+  autoMergeEquipment() {
+    Sound.playSfx && Sound.playSfx("click");
+    if (!Character.inventory || Character.inventory.length < 3) {
+      this.showToast && this.showToast("Need at least 3 duplicate items to merge!", "info");
+      return;
+    }
+
+    // Group items by templateId and rarity
+    const groups = {};
+    Character.inventory.forEach(item => {
+      const key = `${item.templateId || item.id}_${item.rarity}`;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(item);
+    });
+
+    let mergedCount = 0;
+    for (const [key, items] of Object.entries(groups)) {
+      if (items.length >= 3) {
+        // Merge 3 items into 1 refined item
+        const keepItem = items[0];
+        keepItem.refineRank = (keepItem.refineRank || 1) + 1;
+        keepItem.level = (keepItem.level || 1) + 1;
+        if (keepItem.atk) keepItem.atk = Math.round(keepItem.atk * 1.25);
+        if (keepItem.hp) keepItem.hp = Math.round(keepItem.hp * 1.25);
+        if (keepItem.def) keepItem.def = Math.round(keepItem.def * 1.25);
+
+        // Remove the other 2 items
+        const removeUids = [items[1].uid, items[2].uid];
+        Character.inventory = Character.inventory.filter(it => !removeUids.includes(it.uid));
+
+        mergedCount++;
+        Sound.playSfx && Sound.playSfx("confirm");
+        this.showToast && this.showToast(`✨ Merged 3x duplicate! ${keepItem.name} now +${keepItem.refineRank}!`, "success");
+        break;
+      }
+    }
+
+    if (mergedCount === 0) {
+      this.showToast && this.showToast("No 3x duplicates ready to merge yet! Keep collecting gear!", "info");
+    } else {
+      Character.save();
+      this.renderEquipmentScreen();
+      this.renderHeader();
     }
   }
 

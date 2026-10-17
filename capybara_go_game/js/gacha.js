@@ -65,13 +65,14 @@ class GachaSystem {
     Character.gems -= costGems;
     const droppedItems = [];
 
-    // Weights: Mythic 3%, S-Epic (legendary) 7%, Epic 25%, Rare 40%, Great (uncommon) 25%
+    // Weights: Supreme 1%, Mythic 4%, S-Epic (legendary) 8%, Epic 25%, Rare 38%, Great (uncommon) 24%
     const weights = {
-      mythic: 0.03,
-      legendary: 0.07,
+      supreme: 0.01,
+      mythic: 0.04,
+      legendary: 0.08,
       epic: 0.25,
-      rare: 0.40,
-      uncommon: 0.25
+      rare: 0.38,
+      uncommon: 0.24
     };
 
     for (let i = 0; i < pullCount; i++) {
@@ -82,20 +83,21 @@ class GachaSystem {
 
       // Pity checks
       if (Character.gachaPity.legendarySEpic <= 0) {
-        forceRarity = Math.random() < 0.2 ? "mythic" : "legendary";
+        const pRoll = Math.random();
+        forceRarity = pRoll < 0.15 ? "supreme" : (pRoll < 0.45 ? "mythic" : "legendary");
         Character.gachaPity.legendarySEpic = 60;
         Character.gachaPity.legendaryEpic = 10;
       } else if (Character.gachaPity.legendaryEpic <= 0) {
         forceRarity = "epic";
         Character.gachaPity.legendaryEpic = 10;
-      } else if (pullCount === 10 && i === 9 && !droppedItems.some(it => it.rarity === "epic" || it.rarity === "legendary" || it.rarity === "mythic")) {
-        // Guarantee at least 1 Epic/Legendary/Mythic in 10-pull
+      } else if (pullCount === 10 && i === 9 && !droppedItems.some(it => ["epic", "legendary", "mythic", "supreme"].includes(it.rarity))) {
+        // Guarantee at least 1 Epic/Legendary/Mythic/Supreme in 10-pull
         forceRarity = "epic";
         Character.gachaPity.legendaryEpic = 10;
       }
 
       const item = this.rollItemByWeights(weights, forceRarity);
-      if (item.rarity === "mythic" || item.rarity === "legendary") {
+      if (item.rarity === "supreme" || item.rarity === "mythic" || item.rarity === "legendary") {
         Character.gachaPity.legendarySEpic = 60;
         Character.gachaPity.legendaryEpic = 10;
       } else if (item.rarity === "epic") {

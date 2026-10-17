@@ -595,62 +595,116 @@
 
       <!-- ================= TAB 2: EQUIPMENT / HERO ================= -->
       <div id="tab-equipment" class="tab-page">
-        <div class="hero-stats-panel">
-          <h2 class="panel-title">Hero Equipment</h2>
-          
-          <!-- 6-Slot Paperdoll -->
-          <div class="paperdoll-container">
-            <div class="paperdoll-col">
-              <div id="slot-weapon" class="paperdoll-slot" title="Weapon Slot"></div>
-              <div id="slot-armor" class="paperdoll-slot" title="Armor Slot"></div>
-              <div id="slot-helmet" class="paperdoll-slot" title="Helmet Slot"></div>
-            </div>
-            
-            <div class="paperdoll-center">
-              <div class="hero-pedestal-wrap">
-                <div class="hero-pedestal-aura"></div>
-                <div class="hero-pedestal-base"></div>
-                <img src="assets/characters/player/idle/frame_01.png" alt="Capybara Hero" class="hero-avatar-large">
-              </div>
-              <div class="hero-title-badge">Capybara Knight</div>
-            </div>
-
-            <div class="paperdoll-col">
-              <div id="slot-boots" class="paperdoll-slot" title="Boots Slot"></div>
-              <div id="slot-ring" class="paperdoll-slot" title="Ring Slot"></div>
-              <div id="slot-amulet" class="paperdoll-slot" title="Amulet Slot"></div>
-            </div>
+        <!-- Top Screen Currency Header inside tab -->
+        <div class="gear-screen-header">
+          <div class="gear-header-stat stat-energy" title="Energy">
+            <span class="gear-h-icon">⚡</span>
+            <span id="gear-h-energy" class="gear-h-val">60/60</span>
           </div>
-
-          <!-- Dedicated Pet & Mount Companion Slot / Banner -->
-          <div class="hero-pet-banner" id="hero-pet-banner" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Buka Pet & Mount Sanctuary">
-            <div class="hero-pet-badge" id="hero-pet-badge">🦆</div>
-            <div class="hero-pet-info">
-              <div class="hero-pet-name-row">
-                <span class="hero-pet-title" id="hero-pet-title">Bebek Santai</span>
-                <span class="hero-pet-lvl-tag" id="hero-pet-lvl">Lv. 1</span>
-              </div>
-              <div class="hero-pet-sub" id="hero-pet-sub">🐾 Pet & Mount Sanctuary (Klik untuk Kelola / Upgrade)</div>
-            </div>
-            <button class="btn-pet-swap" type="button">Sanctuary ➔</button>
+          <div class="gear-header-stat stat-gems" title="Gems">
+            <span class="gear-h-icon">💎</span>
+            <span id="gear-h-gems" class="gear-h-val">0</span>
           </div>
-
-          <!-- Attributes Grid -->
-          <div class="stats-summary-grid">
-            <div class="stat-cell stat-hp"><span class="stat-name">💖 HP</span> <strong id="stat-hp">350</strong></div>
-            <div class="stat-cell stat-atk"><span class="stat-name">⚔️ ATK</span> <strong id="stat-atk">45</strong></div>
-            <div class="stat-cell stat-def"><span class="stat-name">🛡️ DEF</span> <strong id="stat-def">12</strong></div>
-            <div class="stat-cell stat-crit"><span class="stat-name">🎯 Crit</span> <strong id="stat-crit">10%</strong></div>
-            <div class="stat-cell stat-dodge"><span class="stat-name">💨 Dodge</span> <strong id="stat-dodge">5%</strong></div>
-            <div class="stat-cell stat-lifesteal"><span class="stat-name">🩸 Vamp</span> <strong id="stat-lifesteal">0%</strong></div>
+          <div class="gear-header-stat stat-gold" title="Gold">
+            <span class="gear-h-icon">🪙</span>
+            <span id="gear-h-gold" class="gear-h-val">0</span>
           </div>
         </div>
 
-        <!-- Inventory Backpack -->
+        <div class="hero-stats-panel">
+          <!-- 6-Slot Paperdoll surrounding the Dragon Rider Hero -->
+          <div class="paperdoll-container">
+            <!-- Left 3 Slots: Weapon, Ring, Amulet -->
+            <div class="paperdoll-col paperdoll-col-left">
+              <div id="slot-weapon" class="paperdoll-slot" title="Weapon Slot"></div>
+              <div id="slot-ring" class="paperdoll-slot" title="Ring Slot"></div>
+              <div id="slot-amulet" class="paperdoll-slot" title="Amulet Slot"></div>
+            </div>
+            
+            <!-- Center Hero Arena: Dragon Rider + Pet Badge -->
+            <div class="paperdoll-center">
+              <div class="hero-mount-stage" id="hero-mount-stage">
+                <img src="assets/characters/player/hero_dragon_rider.png" alt="Capybara Dragon Rider" class="hero-dragon-rider-img">
+                <div class="hero-shadow-oval"></div>
+                <!-- Pet Hexagon Badge (Top-Right) -->
+                <div class="pet-hex-badge" id="pet-hex-badge" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Pet Companion">
+                  <span class="pet-hex-bone">🦴</span>
+                  <div class="pet-hex-face" id="pet-hex-face">🦆</div>
+                  <span class="hex-notif-dot">1</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 3 Slots: Armor, Helmet, Boots -->
+            <div class="paperdoll-col paperdoll-col-right">
+              <div id="slot-armor" class="paperdoll-slot" title="Armor Slot"></div>
+              <div id="slot-helmet" class="paperdoll-slot" title="Helmet Slot"></div>
+              <div id="slot-boots" class="paperdoll-slot" title="Boots Slot"></div>
+            </div>
+          </div>
+
+          <!-- Combat Power Ribbon Banner (Exactly matching Image 1) -->
+          <div class="hero-power-ribbon">
+            <span class="power-ribbon-swords">⚔️</span>
+            <span class="power-ribbon-num" id="hero-total-cp">166.45K</span>
+          </div>
+
+          <!-- 3 Main Core Stats Bar (HP, ATK, DEF + Details) -->
+          <div class="hero-core-stats-bar">
+            <div class="core-stat-item stat-c-hp">
+              <span class="core-stat-icon">💖</span>
+              <strong id="stat-hp">350</strong>
+            </div>
+            <div class="core-stat-item stat-c-atk">
+              <span class="core-stat-icon">⚔️</span>
+              <strong id="stat-atk">45</strong>
+            </div>
+            <div class="core-stat-item stat-c-def">
+              <span class="core-stat-icon">🛡️</span>
+              <strong id="stat-def">12</strong>
+            </div>
+            <button class="btn-stat-details-icon" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()" title="View Detailed Stats">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="#78716c">
+                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- 5 Quick Sub-Tab Shortcut Buttons (Pet, Collection, Artifact, All Forge, Skin) -->
+          <div class="gear-sub-tabs-row">
+            <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()">
+              <span class="gear-sub-icon">🐣</span>
+              <span class="gear-sub-label">Pet</span>
+              <span class="gear-sub-notif">1</span>
+            </button>
+            <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openAchievements()">
+              <span class="gear-sub-icon">🏆</span>
+              <span class="gear-sub-label">Collection</span>
+            </button>
+            <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openBattlePass()">
+              <span class="gear-sub-icon">🧲</span>
+              <span class="gear-sub-label">Artifact</span>
+              <span class="gear-sub-notif">1</span>
+            </button>
+            <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.autoMergeEquipment()">
+              <span class="gear-sub-icon">🔨</span>
+              <span class="gear-sub-label">All Forge</span>
+            </button>
+            <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()">
+              <span class="gear-sub-icon">🥋</span>
+              <span class="gear-sub-label">Skin</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Inventory Backpack Section -->
         <div class="backpack-panel">
           <div class="backpack-header-row">
-            <h3 class="backpack-title">🎒 Inventory Backpack</h3>
-            <span class="backpack-count-badge" id="backpack-count-badge">0 item</span>
+            <button class="btn-cyan-pill btn-sort-quality" onclick="window.Game && window.Game.ui && window.Game.ui.cycleSortQuality()">By Quality</button>
+            <h3 class="my-equipment-title">My Equipment</h3>
+            <button class="btn-cyan-pill btn-merge-pill" onclick="window.Game && window.Game.ui && window.Game.ui.autoMergeEquipment()">
+              Merge <span class="pill-notif-dot" id="merge-notif-dot">1</span>
+            </button>
           </div>
           <div id="inventory-grid" class="inventory-grid"></div>
         </div>
