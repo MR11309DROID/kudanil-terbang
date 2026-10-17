@@ -3493,8 +3493,13 @@ body {
 
 /* ================= EQUIPMENT TAB ================= */
 /* ================= AUTHENTIC CAPYBARA GO EQUIPMENT TAB ================= */
+#game-container.tab-is-equipment #game-header,
+#game-container.tab-is-equipment #header-stats {
+  display: none !important;
+}
+
 #tab-equipment {
-  background: #f8f2e4;
+  background: #fcf7ea;
   color: #292524;
   display: none;
   flex-direction: column;
@@ -3506,42 +3511,66 @@ body {
   display: flex;
 }
 
-/* 1. Top Screen Currency Header */
+/* 1. Top Screen Currency Header (Authentic Capybara Go - Dark Top Bar) */
 .gear-screen-header {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background: #ecd9ba;
-  border-bottom: 2px solid #d5bc94;
-  padding: 6px 10px;
+  background: #191a21;
+  border-bottom: 1.5px solid #2a2b36;
+  padding: 8px 14px 7px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .gear-header-stat {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background: #2b2520;
-  border: 1.5px solid #443a32;
-  border-radius: 9999px;
-  padding: 2px 10px 2px 6px;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
   color: #fff;
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 11px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+  box-shadow: none;
 }
 
 .gear-h-icon {
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1;
 }
 
 .gear-h-val {
   letter-spacing: 0.3px;
-  color: #fef08a;
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.gear-h-plus {
+  width: 15px;
+  height: 15px;
+  background: #0284c7;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.gear-h-plus.plus-green {
+  background: #22c55e;
 }
 
 /* 2. Hero Arena & Stats Panel */
 .hero-stats-panel {
-  padding: 10px 12px 8px;
+  padding: 6px 14px 10px;
   background: #fbf7ee;
   border-bottom: 2px solid #dfd3bd;
   display: flex;
@@ -3549,7 +3578,7 @@ body {
   align-items: center;
 }
 
-/* 6-Slot Paperdoll surrounding the Dragon Rider */
+/* 6-Slot Paperdoll surrounding the Hero */
 .paperdoll-container {
   width: 100%;
   display: flex;
@@ -3562,17 +3591,17 @@ body {
 .paperdoll-col {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 9px;
   z-index: 5;
 }
 
 .paperdoll-slot {
-  width: 54px;
-  height: 54px;
-  border-radius: 12px;
-  border: 2.5px solid #d4c5a9;
+  width: 58px;
+  height: 58px;
+  border-radius: 13px;
+  border: 2.5px solid #231f20;
   background: #ede3cc;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3582,78 +3611,83 @@ body {
 }
 
 .paperdoll-slot:hover {
-  transform: scale(1.06);
+  transform: scale(1.05);
 }
 
 .paperdoll-slot.empty {
   border-style: dashed;
+  border-color: #baa27c;
+  background: #ecdcc3;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .paperdoll-slot.occupied {
   border-style: solid;
+  border-color: #231f20;
 }
 
-/* Paperdoll Slot Rarity Backgrounds */
+/* Paperdoll Slot Rarity Backgrounds matching Capybara Go authentic palette */
 .paperdoll-slot.rarity-common {
-  background: linear-gradient(145deg, #16a34a, #14532d);
-  border-color: #86efac !important;
+  background: linear-gradient(145deg, #22c55e 0%, #15803d 100%);
+  border-color: #231f20 !important;
 }
 .paperdoll-slot.rarity-uncommon {
-  background: linear-gradient(145deg, #10b981, #065f46);
-  border-color: #6ee7b7 !important;
+  background: linear-gradient(145deg, #10b981 0%, #065f46 100%);
+  border-color: #231f20 !important;
 }
 .paperdoll-slot.rarity-rare {
-  background: linear-gradient(145deg, #2563eb, #1e3a8a);
-  border-color: #93c5fd !important;
+  background: linear-gradient(145deg, #38bdf8 0%, #0284c7 100%);
+  border-color: #231f20 !important;
 }
 .paperdoll-slot.rarity-epic {
-  background: linear-gradient(145deg, #9333ea, #581c87);
-  border-color: #d8b4fe !important;
+  background: linear-gradient(145deg, #c084fc 0%, #7e22ce 100%);
+  border-color: #231f20 !important;
 }
 .paperdoll-slot.rarity-legendary {
-  background: linear-gradient(145deg, #ea580c, #9a3412);
-  border-color: #fdba74 !important;
-  box-shadow: 0 0 10px rgba(234, 88, 12, 0.5) !important;
+  background: linear-gradient(145deg, #fb923c 0%, #c2410c 100%);
+  border-color: #231f20 !important;
+  box-shadow: 0 0 10px rgba(234, 88, 12, 0.45) !important;
 }
 .paperdoll-slot.rarity-mythic {
-  background: linear-gradient(145deg, #dc2626, #7f1d1d);
-  border-color: #fca5a5 !important;
-  box-shadow: 0 0 12px rgba(239, 68, 68, 0.7) !important;
+  background: linear-gradient(145deg, #f87171 0%, #b91c1c 100%);
+  border-color: #231f20 !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.65) !important;
 }
 .paperdoll-slot.rarity-supreme {
-  background: linear-gradient(145deg, #4c1d95, #2e1065);
-  border-color: #e9d5ff !important;
-  box-shadow: 0 0 14px rgba(192, 132, 252, 0.85), inset 0 0 6px rgba(192, 132, 252, 0.4) !important;
+  background: linear-gradient(145deg, #a855f7 0%, #4c1d95 100%);
+  border-color: #231f20 !important;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.8), inset 0 0 6px rgba(192, 132, 252, 0.4) !important;
 }
 
 .slot-item-img {
-  width: 78%;
-  height: 78%;
+  width: 80%;
+  height: 80%;
   object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .slot-ghost-icon {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   opacity: 0.35;
   filter: grayscale(1);
 }
 
-/* Badges inside slots & cards matching Image 1 */
+/* Badges inside slots & cards matching Image 1 & YouTube Ref */
 .slot-badge-type,
 .item-slot-mini-badge {
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 14px;
-  height: 14px;
-  background: rgba(15, 23, 42, 0.85);
+  width: 15px;
+  height: 15px;
+  background: rgba(18, 14, 14, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 8.5px;
+  font-size: 9px;
   color: #fff;
   z-index: 3;
 }
@@ -3662,42 +3696,71 @@ body {
 .item-lvl-badge {
   position: absolute;
   top: 2px;
-  right: 2px;
+  right: 3px;
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 8.5px;
+  font-size: 9px;
   font-weight: 900;
   color: #ffffff;
-  text-shadow: 0 1px 2px #000;
+  text-shadow: 0 1px 2px #000, 0 0 1px #000;
   line-height: 1;
   z-index: 3;
 }
 
 .item-s-badge {
   position: absolute;
-  bottom: 1px;
-  left: 2px;
+  bottom: 2px;
+  left: 3px;
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 900;
-  color: #fbbf24;
+  color: #fef08a;
   text-shadow: -1px -1px 0 #78350f, 1px -1px 0 #78350f, -1px 1px 0 #78350f, 1px 1px 0 #78350f;
   line-height: 1;
   z-index: 3;
 }
 
-.item-rank-badge {
+.slot-corner-badges {
   position: absolute;
   bottom: 2px;
   right: 2px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  z-index: 3;
+}
+
+.item-rank-badge {
   font-family: 'Lilita One', 'Fredoka', cursive;
   font-size: 8px;
   font-weight: 900;
   color: #ffffff;
-  background: rgba(220, 38, 38, 0.85);
+  background: #ea580c;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 3px;
   padding: 0 2px;
+  line-height: 1.1;
+}
+
+.item-up-arrow {
+  width: 11px;
+  height: 11px;
+  background: #22c55e;
+  border: 1px solid #86efac;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 6.5px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   line-height: 1;
-  z-index: 3;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  animation: upArrowBob 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes upArrowBob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-2px); }
 }
 
 /* Center Avatar Dais / Mount Stage */
@@ -3708,65 +3771,51 @@ body {
   justify-content: center;
   position: relative;
   flex: 1;
-  min-height: 150px;
+  min-height: 165px;
 }
 
 .hero-mount-stage {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 175px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.hero-grass-podium {
-  position: absolute;
-  bottom: 12px;
-  width: 108px;
-  height: 28px;
-  background: radial-gradient(ellipse at center, #86efac 0%, #22c55e 60%, #15803d 100%);
-  border: 2.5px solid #14532d;
-  border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18), inset 0 2px 4px rgba(255, 255, 255, 0.45);
-  z-index: 1;
-}
-
 .hero-capy-character-img {
-  width: 96px;
-  height: 96px;
+  width: 145px;
+  height: 145px;
   object-fit: contain;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
   z-index: 2;
-  margin-bottom: 14px;
-  animation: heroCapyBreath 2.2s ease-in-out infinite alternate;
+  margin-bottom: 6px;
+  animation: heroCapyBreath 2.4s ease-in-out infinite alternate;
 }
 
 @keyframes heroCapyBreath {
   0% { transform: translateY(0) scale(1, 1); }
-  100% { transform: translateY(-5px) scale(1.02, 0.98); }
+  100% { transform: translateY(-4px) scale(1.02, 0.98); }
 }
 
 .hero-shadow-oval {
   position: absolute;
   bottom: 8px;
-  width: 74px;
-  height: 16px;
+  width: 110px;
+  height: 20px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.25);
-  filter: blur(3px);
-  z-index: 0;
+  filter: blur(3.5px);
+  z-index: 1;
 }
 
 /* Pet Hexagon Badge (Top-Right of Hero Area) */
 .pet-hex-badge {
   position: absolute;
-  top: -6px;
-  right: -8px;
-  width: 38px;
-  height: 42px;
+  top: -2px;
+  right: 2px;
+  width: 42px;
+  height: 46px;
   background: #1e1b4b;
   border: 2px solid #e0c27b;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
@@ -3812,32 +3861,33 @@ body {
   line-height: 1;
 }
 
-/* 3. Combat Power Ribbon Banner */
+/* 3. Combat Power Ribbon Banner (Authentic Capybara Go) */
 .hero-power-ribbon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   background: linear-gradient(180deg, #7f1d1d 0%, #450a0a 100%);
-  border: 2px solid #ca8a04;
-  border-radius: 8px;
-  padding: 3px 18px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  margin-top: 2px;
-  margin-bottom: 6px;
+  border: 2px solid #eab308;
+  border-radius: 9999px;
+  padding: 3px 22px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  margin-top: 3px;
+  margin-bottom: 7px;
 }
 
 .power-ribbon-swords {
-  font-size: 14px;
+  font-size: 15px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
 }
 
 .power-ribbon-num {
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 15px;
+  font-size: 16.5px;
   font-weight: 900;
   color: #fef08a;
-  letter-spacing: 0.5px;
-  text-shadow: 0 1px 3px #000;
+  letter-spacing: 0.6px;
+  text-shadow: 0 1.5px 3px #000;
 }
 
 /* 4. Core 3 Stats Bar (HP, ATK, DEF + Details) */
@@ -3845,27 +3895,27 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  background: rgba(0, 0, 0, 0.05);
-  padding: 4px 12px;
+  gap: 16px;
+  background: rgba(235, 222, 200, 0.7);
+  padding: 4px 16px;
   border-radius: 9999px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1.5px solid #d5c3a5;
   margin-bottom: 8px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .core-stat-item {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 11px;
+  gap: 5px;
+  font-size: 12.5px;
   font-family: 'Lilita One', 'Fredoka', cursive;
   color: #44403c;
 }
 
 .core-stat-item strong {
-  font-size: 12px;
-  color: #1c1917;
-  letter-spacing: 0.2px;
+  font-size: 13px;
+  letter-spacing: 0.3px;
 }
 
 .stat-c-hp strong { color: #dc2626; }
@@ -3880,21 +3930,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.7;
-  transition: opacity 0.12s;
+  opacity: 0.75;
+  transition: opacity 0.12s, transform 0.12s;
 }
 
 .btn-stat-details-icon:hover {
   opacity: 1;
+  transform: scale(1.1);
 }
 
-/* 5. Quick Sub-Tabs Row */
+/* 5. Quick Sub-Tabs Row (Pet, Collection, Artifact, All Forge, Skin) */
 .gear-sub-tabs-row {
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  gap: 4px;
+  gap: 6px;
   margin-top: 4px;
 }
 
@@ -3907,47 +3958,68 @@ body {
   border: none;
   cursor: pointer;
   position: relative;
-  padding: 2px 6px;
-  transition: transform 0.1s;
+  padding: 2px 4px;
+  transition: transform 0.12s;
 }
 
 .gear-sub-btn:hover {
   transform: translateY(-2px);
 }
 
+.gear-sub-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff7ed 0%, #ede3ce 100%);
+  border: 1.8px solid #c8b99c;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.gear-sub-btn:hover .gear-sub-circle {
+  transform: scale(1.08);
+  border-color: #f59e0b;
+}
+
 .gear-sub-icon {
-  font-size: 18px;
+  font-size: 19px;
   line-height: 1;
 }
 
 .gear-sub-label {
-  font-size: 9px;
-  font-weight: 700;
-  color: #78716c;
-  margin-top: 2px;
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #57534e;
+  margin-top: 4px;
 }
 
 .gear-sub-notif {
   position: absolute;
   top: -2px;
-  right: 2px;
-  width: 13px;
-  height: 13px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
   background: #ef4444;
+  border: 1.5px solid #fff;
   border-radius: 50%;
   color: #fff;
-  font-size: 7.5px;
+  font-size: 8px;
   font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
 }
 
 /* 6. Inventory Backpack Section */
 .backpack-panel {
-  padding: 10px 10px 24px;
+  padding: 12px 10px 24px;
   flex: 1;
-  background: #251f2e;
+  background: #1e1828;
   overflow-y: auto;
 }
 
@@ -4024,7 +4096,7 @@ body {
   justify-content: center;
   position: relative;
   cursor: pointer;
-  border: 2px solid #57534e;
+  border: 2px solid #231f20;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45);
   transition: transform 0.12s ease;
   overflow: hidden;
@@ -4038,53 +4110,53 @@ body {
 /* Cards Colored Strictly According to Tier */
 /* COMMON = GREEN ("dan yang backgorund hijau itu common") */
 .inv-item-card.rarity-common {
-  background: linear-gradient(145deg, #16a34a, #14532d);
-  border-color: #86efac;
+  background: linear-gradient(145deg, #22c55e 0%, #15803d 100%);
+  border-color: #231f20;
 }
 
 .inv-item-card.rarity-uncommon {
-  background: linear-gradient(145deg, #10b981, #065f46);
-  border-color: #6ee7b7;
+  background: linear-gradient(145deg, #10b981 0%, #065f46 100%);
+  border-color: #231f20;
 }
 
 /* RARE = BLUE (From Image 2) */
 .inv-item-card.rarity-rare {
-  background: linear-gradient(145deg, #2563eb, #1e3a8a);
-  border-color: #93c5fd;
+  background: linear-gradient(145deg, #38bdf8 0%, #0284c7 100%);
+  border-color: #231f20;
 }
 
 /* EPIC = PURPLE */
 .inv-item-card.rarity-epic {
-  background: linear-gradient(145deg, #9333ea, #581c87);
-  border-color: #d8b4fe;
+  background: linear-gradient(145deg, #c084fc 0%, #7e22ce 100%);
+  border-color: #231f20;
 }
 
 /* LEGENDARY = GOLD/ORANGE */
 .inv-item-card.rarity-legendary {
-  background: linear-gradient(145deg, #ea580c, #9a3412);
-  border-color: #fdba74;
-  box-shadow: 0 0 10px rgba(234, 88, 12, 0.5);
+  background: linear-gradient(145deg, #fb923c 0%, #c2410c 100%);
+  border-color: #231f20;
+  box-shadow: 0 0 10px rgba(234, 88, 12, 0.45);
 }
 
 /* MYTHIC = CRIMSON / FIERY RED (From Image 3) */
 .inv-item-card.rarity-mythic {
-  background: linear-gradient(145deg, #dc2626, #7f1d1d);
-  border-color: #fca5a5;
+  background: linear-gradient(145deg, #f87171 0%, #b91c1c 100%);
+  border-color: #231f20;
   box-shadow: 0 0 12px rgba(239, 68, 68, 0.65);
 }
 
 /* SUPREME = COSMIC VIOLET (From Image 4, "tier di atas mythic") */
 .inv-item-card.rarity-supreme {
-  background: linear-gradient(145deg, #4c1d95, #2e1065);
-  border-color: #e9d5ff;
-  box-shadow: 0 0 14px rgba(192, 132, 252, 0.8), inset 0 0 6px rgba(192, 132, 252, 0.4);
+  background: linear-gradient(145deg, #a855f7 0%, #4c1d95 100%);
+  border-color: #231f20;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.8), inset 0 0 6px rgba(192, 132, 252, 0.4);
 }
 
 .inv-item-img {
-  width: 78%;
-  height: 78%;
+  width: 82%;
+  height: 82%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .empty-inv-msg {

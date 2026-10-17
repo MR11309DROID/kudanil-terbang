@@ -878,6 +878,14 @@ class UIManager {
 
   switchTab(tabName) {
     this.activeTab = tabName;
+    const container = document.getElementById("game-container");
+    if (container) {
+      container.classList.toggle("tab-is-equipment", tabName === "equipment");
+    }
+    const gameHeader = document.getElementById("game-header");
+    if (gameHeader) {
+      gameHeader.style.display = tabName === "equipment" ? "none" : "";
+    }
     document.querySelectorAll(".nav-tab-btn").forEach(b => {
       b.classList.toggle("active", b.dataset.tab === tabName);
     });
@@ -2399,6 +2407,7 @@ class UIManager {
         const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(item.rarity);
         const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
         const rankBadge = item.refineRank ? `<span class="item-rank-badge">+${item.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
+        const upArrow = `<span class="item-up-arrow">▲</span>`;
 
         slotEl.className = `paperdoll-slot occupied rarity-${item.rarity}`;
         slotEl.innerHTML = `
@@ -2406,7 +2415,10 @@ class UIManager {
           <span class="item-lvl-badge">Lv.${item.level}</span>
           <img src="${item.icon}" class="slot-item-img" alt="${item.name}">
           ${sBadge}
-          ${rankBadge}
+          <div class="slot-corner-badges">
+            ${rankBadge}
+            ${upArrow}
+          </div>
         `;
         slotEl.onclick = () => this.showItemDetailsModal(item, true);
       } else {
@@ -2449,13 +2461,17 @@ class UIManager {
           const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
           const rankBadge = it.refineRank ? `<span class="item-rank-badge">+${it.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
           const slotIcon = slotEmojis[it.slot] || "⚔️";
+          const upArrow = `<span class="item-up-arrow">▲</span>`;
 
           itemEl.innerHTML = `
             <span class="item-slot-mini-badge">${slotIcon}</span>
             <span class="item-lvl-badge">Lv.${it.level}</span>
             <img src="${it.icon}" class="inv-item-img" alt="${it.name}">
             ${sBadge}
-            ${rankBadge}
+            <div class="slot-corner-badges">
+              ${rankBadge}
+              ${upArrow}
+            </div>
           `;
           itemEl.addEventListener("click", () => {
             Sound.playSfx("click");
@@ -2468,14 +2484,13 @@ class UIManager {
   }
 
   startHeroIdleAnim() {
-    let frame = 1;
+    let frame = 2;
     setInterval(() => {
       const img = document.getElementById("hero-capy-avatar-img");
       if (!img || this.activeTab !== "equipment") return;
-      frame = (frame % 9) + 1;
-      const numStr = frame < 10 ? `0${frame}` : `${frame}`;
-      img.src = `assets/characters/player/idle/frame_${numStr}.png`;
-    }, 125);
+      frame = frame === 2 ? 3 : 2;
+      img.src = `assets/characters/player/attack/frame_0${frame}.png`;
+    }, 450);
   }
 
   cycleSortQuality() {

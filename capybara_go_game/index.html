@@ -595,24 +595,27 @@
 
       <!-- ================= TAB 2: EQUIPMENT / HERO ================= -->
       <div id="tab-equipment" class="tab-page">
-        <!-- Top Screen Currency Header inside tab -->
+        <!-- Top Screen Currency Header inside tab (Authentic Capybara Go style) -->
         <div class="gear-screen-header">
           <div class="gear-header-stat stat-energy" title="Energy">
             <span class="gear-h-icon">⚡</span>
             <span id="gear-h-energy" class="gear-h-val">60/60</span>
+            <span class="gear-h-plus">+</span>
           </div>
           <div class="gear-header-stat stat-gems" title="Gems">
             <span class="gear-h-icon">💎</span>
             <span id="gear-h-gems" class="gear-h-val">0</span>
+            <span class="gear-h-plus">+</span>
           </div>
           <div class="gear-header-stat stat-gold" title="Gold">
             <span class="gear-h-icon">🪙</span>
             <span id="gear-h-gold" class="gear-h-val">0</span>
+            <span class="gear-h-plus plus-green">+</span>
           </div>
         </div>
 
         <div class="hero-stats-panel">
-          <!-- 6-Slot Paperdoll surrounding the Authentic Capybara Hero -->
+          <!-- 6-Slot Paperdoll surrounding the Hero -->
           <div class="paperdoll-container">
             <!-- Left 3 Slots: Weapon, Ring, Amulet -->
             <div class="paperdoll-col paperdoll-col-left">
@@ -627,11 +630,10 @@
               </div>
             </div>
             
-            <!-- Center Hero Arena: Authentic Game Capybara Hero -->
+            <!-- Center Hero Arena: Authentic Game Capybara Standing with Weapon -->
             <div class="paperdoll-center">
               <div class="hero-mount-stage" id="hero-mount-stage">
-                <div class="hero-grass-podium"></div>
-                <img src="assets/characters/player/idle/frame_01.png" alt="Capybara Hero" class="hero-capy-character-img" id="hero-capy-avatar-img">
+                <img src="assets/characters/player/attack/frame_02.png" alt="Capybara Hero" class="hero-capy-character-img" id="hero-capy-avatar-img">
                 <div class="hero-shadow-oval"></div>
                 <!-- Pet Hexagon Badge (Top-Right) -->
                 <div class="pet-hex-badge" id="pet-hex-badge" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Pet Companion">
@@ -669,7 +671,7 @@
               <strong id="stat-hp">350</strong>
             </div>
             <div class="core-stat-item stat-c-atk">
-              <span class="core-stat-icon">⚔️</span>
+              <span class="core-stat-icon">🗡️</span>
               <strong id="stat-atk">45</strong>
             </div>
             <div class="core-stat-item stat-c-def">
@@ -686,25 +688,35 @@
           <!-- 5 Quick Sub-Tab Shortcut Buttons (Pet, Collection, Artifact, All Forge, Skin) -->
           <div class="gear-sub-tabs-row">
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()">
-              <span class="gear-sub-icon">🐣</span>
+              <div class="gear-sub-circle">
+                <span class="gear-sub-icon">🐣</span>
+                <span class="gear-sub-notif">1</span>
+              </div>
               <span class="gear-sub-label">Pet</span>
-              <span class="gear-sub-notif">1</span>
             </button>
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openAchievements()">
-              <span class="gear-sub-icon">🏆</span>
+              <div class="gear-sub-circle">
+                <span class="gear-sub-icon">🏆</span>
+              </div>
               <span class="gear-sub-label">Collection</span>
             </button>
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openBattlePass()">
-              <span class="gear-sub-icon">🧲</span>
+              <div class="gear-sub-circle">
+                <span class="gear-sub-icon">🧲</span>
+                <span class="gear-sub-notif">1</span>
+              </div>
               <span class="gear-sub-label">Artifact</span>
-              <span class="gear-sub-notif">1</span>
             </button>
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.autoMergeEquipment()">
-              <span class="gear-sub-icon">🔨</span>
+              <div class="gear-sub-circle">
+                <span class="gear-sub-icon">🔨</span>
+              </div>
               <span class="gear-sub-label">All Forge</span>
             </button>
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()">
-              <span class="gear-sub-icon">🥋</span>
+              <div class="gear-sub-circle">
+                <span class="gear-sub-icon">🥋</span>
+              </div>
               <span class="gear-sub-label">Skin</span>
             </button>
           </div>
