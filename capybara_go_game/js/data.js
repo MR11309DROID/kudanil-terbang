@@ -698,7 +698,90 @@ const GameData = {
       { level: 20, reward: { gems: 150, gold: 10000 }, icon: "👑" },
       { level: 25, reward: { gems: 300, gold: 20000 }, icon: "👑" }
     ]
-  }
+  },
+
+  companions: [
+    {
+      id: "duck",
+      name: "Bebek Santai (Cozy Ducky)",
+      tagline: "Sahabat Sejati di Atas Kepala",
+      desc: "Bebek kuning imut yang setia bertengger di atas kepala Capybara. Suka berenang dan melempar remah roti hangat!",
+      icon: "🦆",
+      type: "head",
+      rarity: "rare",
+      rarityColor: "#3b82f6",
+      passiveDesc: "Max HP +10% & Regenerasi HP 5% setiap giliran",
+      passive: { maxHpBonus: 0.10, hpRegenPct: 0.05 },
+      skillName: "Lemparan Roti & Cipratan Air",
+      skillDesc: "Setiap 3 ronde: Melempar roti renyah ke monster (50% ATK) dan menyemprotkan air segar memulihkan 8% Max HP Capybara!",
+      skillCooldown: 3,
+      skillEffect: "heal_and_splash",
+      unlockedByDefault: true,
+      costGold: 0,
+      costGems: 0,
+      upgradeCostBase: 200
+    },
+    {
+      id: "turtle",
+      name: "Kura-kura Raksasa (Guardian Turtle)",
+      tagline: "Pelindung Karang Abadi",
+      desc: "Kura-kura purba yang bijak dengan cangkang berlapis batu lumut dan kristal runik. Selalu melindungi Capybara dari bahaya!",
+      icon: "🐢",
+      type: "ground_back",
+      rarity: "epic",
+      rarityColor: "#8b5cf6",
+      passiveDesc: "DEF +20 & Pengurangan Damage Diterima 10%",
+      passive: { defBonus: 20, damageReduction: 0.10 },
+      skillName: "Cangkang Pelindung Abadi",
+      skillDesc: "Setiap 4 ronde: Menghentak bumi dan memancarkan kubah perisai zamrud, memberikan Shield sebesar 16% Max HP!",
+      skillCooldown: 4,
+      skillEffect: "shield_buff",
+      unlockedByDefault: false,
+      costGold: 1500,
+      costGems: 0,
+      upgradeCostBase: 350
+    },
+    {
+      id: "croc",
+      name: "Sahabat Buaya (Chill Gator)",
+      tagline: "Gigitan Baja Berhati Hangat",
+      desc: "Buaya rawa yang bersahabat erat dengan Capybara. Senang berjemur bersama, namun sangat ganas menyergap musuh!",
+      icon: "🐊",
+      type: "ground_front",
+      rarity: "epic",
+      rarityColor: "#8b5cf6",
+      passiveDesc: "ATK +15% & Critical Hit Rate +8%",
+      passive: { atkBonusPct: 0.15, critRate: 0.08 },
+      skillName: "Gigitan Buaya Rahang Baja",
+      skillDesc: "Setiap 3 ronde: Meluncur cepat ke depan dan mencabik musuh dengan rahang kuat, menghasilkan 135% ATK Physical DMG!",
+      skillCooldown: 3,
+      skillEffect: "bite_attack",
+      unlockedByDefault: false,
+      costGold: 2500,
+      costGems: 15,
+      upgradeCostBase: 450
+    },
+    {
+      id: "dragon",
+      name: "Bayi Naga Api (Baby Pyro Dragon)",
+      tagline: "Sayap Api Mistis",
+      desc: "Naga kecil legendaris dengan kobaran api di ekornya. Melayang lincah di udara sambil menyemburkan bola api panas!",
+      icon: "🐲",
+      type: "flying",
+      rarity: "legendary",
+      rarityColor: "#f59e0b",
+      passiveDesc: "ATK +22% & Efek Burn Damage Musuh +15%",
+      passive: { atkBonusPct: 0.22, burnDamage: 0.15 },
+      skillName: "Nafas Api Mungil",
+      skillDesc: "Setiap 3 ronde: Menyemburkan pusaran api membara ke seluruh monster (90% ATK) dan memberikan efek Bakar (Burn) selama 2 ronde!",
+      skillCooldown: 3,
+      skillEffect: "burn_breath",
+      unlockedByDefault: false,
+      costGold: 0,
+      costGems: 40,
+      upgradeCostBase: 600
+    }
+  ]
 };
 
 if (typeof module !== "undefined") module.exports = GameData;

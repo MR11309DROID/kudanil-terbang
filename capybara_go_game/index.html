@@ -183,6 +183,10 @@
                   <span class="qbtn-icon">📊</span>
                   <span>Stats</span>
                 </button>
+                <button class="quick-sidebar-btn btn-pet-quick" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Pet & Mount">
+                  <span class="qbtn-icon">🐾</span>
+                  <span>Pets</span>
+                </button>
               </div>
             </div>
           </div>
@@ -1191,6 +1195,18 @@
         <button class="modal-close-btn" onclick="document.getElementById('stats-modal').style.display='none'">✕</button>
       </div>
       <div class="stats-grid" id="stats-grid"><!-- JS populated --></div>
+    </div>
+  </div>
+
+  <!-- ===== COMPANIONS (PET & MOUNT) MODAL ===== -->
+  <div id="companions-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-panel companions-panel">
+      <div class="modal-header-row">
+        <h2 class="modal-title">🐾 Pet & Mount Sanctuary</h2>
+        <button class="modal-close-btn" onclick="document.getElementById('companions-modal').style.display='none'">✕</button>
+      </div>
+      <p class="companions-subtitle">Sahabat setia yang menemanimu berpetualang, memperkuat stats, dan menyerang monster!</p>
+      <div class="companions-list" id="companions-list"><!-- JS populated --></div>
     </div>
   </div>
 

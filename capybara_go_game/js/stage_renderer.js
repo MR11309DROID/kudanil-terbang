@@ -1994,6 +1994,9 @@ class StageRenderer {
     // Layer 3: Render In-Front Skill Attachments (Halo, Dragon Head, Shields, Grimoire, Weapons, Cyclones)
     this.renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now);
 
+    // Layer 4: Pet & Mount Companions (Duck on head, Turtle back, Crocodile front, Baby Dragon fly)
+    this.renderCompanion(ctx, drawW, drawH, p, now);
+
     ctx.restore();
 
     // In-Battle Player Overhead HP Bar
@@ -2076,6 +2079,738 @@ class StageRenderer {
     }
 
     ctx.restore();
+  }
+
+  // --- PET & MOUNT COMPANION SYSTEM RENDERING & ANIMATION ---
+
+  renderCompanion(ctx, drawW, drawH, p, now) {
+    const comp = window.Character && window.Character.getActiveCompanionData && window.Character.getActiveCompanionData();
+    if (!comp) return;
+
+    if (!this.companionParticles) this.companionParticles = [];
+
+    if (comp.id === "duck") {
+      // 1. BEBEK SANTAI (COZY DUCKY) - Sits on Capybara's Head with gentle bobbing
+      ctx.save();
+      const duckBob = Math.sin(now * 0.005) * 1.5;
+      const headX = (p.facing < 0 ? -4 : 4);
+      const headY = -drawH * 0.95 + duckBob;
+      ctx.translate(headX, headY);
+
+      // Duck Body (Chubby golden-yellow duckling)
+      const bGrad = ctx.createRadialGradient(-2, -3, 2, 0, 0, 10);
+      bGrad.addColorStop(0, "#fef08a");
+      bGrad.addColorStop(0.7, "#facc15");
+      bGrad.addColorStop(1, "#eab308");
+      ctx.fillStyle = bGrad;
+      ctx.strokeStyle = "#ca8a04";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 9, 6.5, -0.05, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Cute Little Flapping Wing
+      ctx.save();
+      const wingFlap = Math.sin(now * 0.01) * 0.15;
+      ctx.translate(-2, 0);
+      ctx.rotate(wingFlap);
+      ctx.fillStyle = "#facc15";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 5, 3.2, 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      // Duck Head
+      const hGrad = ctx.createRadialGradient(4, -6, 1, 4, -6, 7);
+      hGrad.addColorStop(0, "#fef9c3");
+      hGrad.addColorStop(0.8, "#facc15");
+      hGrad.addColorStop(1, "#ca8a04");
+      ctx.fillStyle = hGrad;
+      ctx.beginPath();
+      ctx.arc(4.5, -6, 5.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Orange Bill
+      ctx.fillStyle = "#f97316";
+      ctx.strokeStyle = "#c2410c";
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(8, -7);
+      ctx.lineTo(13.5, -5.5);
+      ctx.lineTo(8, -4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Happy Curved Eyes (^_^)
+      ctx.strokeStyle = "#451a03";
+      ctx.lineWidth = 1.2;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.arc(4.2, -7.2, 1.6, Math.PI * 1.1, Math.PI * 1.9);
+      ctx.stroke();
+
+      // Cheerful Pink Blush
+      ctx.fillStyle = "rgba(244, 114, 182, 0.55)";
+      ctx.beginPath();
+      ctx.arc(2.8, -5.2, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Tiny Green Leaf Sprout Hat
+      ctx.save();
+      const leafSway = Math.sin(now * 0.007) * 0.2;
+      ctx.translate(4.5, -11.5);
+      ctx.rotate(leafSway);
+      ctx.strokeStyle = "#15803d";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, 3);
+      ctx.stroke();
+      ctx.fillStyle = "#22c55e";
+      ctx.beginPath();
+      ctx.ellipse(2, -1, 3.5, 1.8, -0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      // Floating Shimmering Water Droplets
+      if (Math.random() < 0.04) {
+        this.companionParticles.push({
+          x: headX + (Math.random() * 16 - 8),
+          y: headY - 14,
+          vx: (Math.random() - 0.5) * 0.6,
+          vy: -0.8 - Math.random() * 0.8,
+          alpha: 0.8,
+          size: 1.5 + Math.random() * 1.5,
+          color: "#38bdf8"
+        });
+      }
+
+      ctx.restore();
+
+    } else if (comp.id === "turtle") {
+      // 2. KURA-KURA RAKSASA (GUARDIAN TURTLE) - Walks Behind Capybara
+      ctx.save();
+      const turtleX = -drawW * 0.55;
+      const turtleY = 0;
+      ctx.translate(turtleX, turtleY);
+
+      // Turtle Ground Shadow
+      ctx.beginPath();
+      ctx.ellipse(0, 1, 16, 4.5, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(55, 45, 25, 0.25)";
+      ctx.fill();
+
+      // 4 Chunky Webbed Feet
+      const fWalk = (p.waddleAngle ? Math.sin(now * 0.012) * 2.5 : 0);
+      ctx.fillStyle = "#22543d";
+      ctx.strokeStyle = "#14532d";
+      ctx.lineWidth = 0.8;
+      [
+        { x: -10 + fWalk, y: -2, r: 3.2 },
+        { x: -4 - fWalk, y: -1, r: 3.0 },
+        { x: 4 + fWalk, y: -1, r: 3.0 },
+        { x: 10 - fWalk, y: -2, r: 3.2 }
+      ].forEach(f => {
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      });
+
+      // Mossy Domed Shell
+      const sGrad = ctx.createLinearGradient(-14, -18, 14, 0);
+      sGrad.addColorStop(0, "#166534");
+      sGrad.addColorStop(0.5, "#15803d");
+      sGrad.addColorStop(1, "#14532d");
+      ctx.fillStyle = sGrad;
+      ctx.strokeStyle = "#052e16";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.ellipse(0, -9, 14, 10, 0, Math.PI, 0);
+      ctx.lineTo(14, -5);
+      ctx.lineTo(-14, -5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Runic Hexagon Markings on Shell (Glowing Cyan/Emerald)
+      ctx.save();
+      ctx.shadowColor = "#38bdf8";
+      ctx.shadowBlur = 8;
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 1.2;
+      [-6, 0, 6].forEach((hx, idx) => {
+        const hy = -9 - (idx === 1 ? 3 : 0);
+        ctx.beginPath();
+        ctx.arc(hx, hy, 2.8, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+      ctx.restore();
+
+      // Turtle Head (Extended Forward)
+      const headNod = Math.sin(now * 0.004) * 1.0;
+      ctx.fillStyle = "#22543d";
+      ctx.strokeStyle = "#14532d";
+      ctx.beginPath();
+      ctx.ellipse(13, -7 + headNod, 5, 3.8, 0.15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Warm Brown Turtle Eye
+      ctx.fillStyle = "#fef3c7";
+      ctx.beginPath();
+      ctx.arc(14.5, -8 + headNod, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#451a03";
+      ctx.beginPath();
+      ctx.arc(14.8, -8 + headNod, 1.0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Shell Moss Sprout
+      ctx.fillStyle = "#86efac";
+      ctx.beginPath();
+      ctx.arc(-2, -18, 2.0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Ambient Protective Jade Aura Rings
+      ctx.save();
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.35)";
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.ellipse(drawW * 0.28, -drawH * 0.45, drawW * 0.48, drawH * 0.48, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.restore();
+
+    } else if (comp.id === "croc") {
+      // 3. SAHABAT BUAYA (CHILL GATOR) - Waddles Beside Capybara
+      ctx.save();
+      const crocX = drawW * 0.46;
+      const crocY = 0;
+      ctx.translate(crocX, crocY);
+
+      // Gator Ground Shadow
+      ctx.beginPath();
+      ctx.ellipse(2, 1, 18, 4.5, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(55, 45, 25, 0.25)";
+      ctx.fill();
+
+      // Swaying Tail
+      ctx.save();
+      const tailSway = Math.sin(now * 0.008) * 0.25;
+      ctx.translate(-10, -5);
+      ctx.rotate(tailSway);
+      ctx.fillStyle = "#059669";
+      ctx.strokeStyle = "#064e3b";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(-10, -3, -15, -1);
+      ctx.quadraticCurveTo(-8, 3, 0, 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      // Gator Body
+      const cGrad = ctx.createLinearGradient(0, -12, 0, 0);
+      cGrad.addColorStop(0, "#10b981");
+      cGrad.addColorStop(0.6, "#059669");
+      cGrad.addColorStop(1, "#fef08a"); // Pale cream belly
+      ctx.fillStyle = cGrad;
+      ctx.strokeStyle = "#064e3b";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.ellipse(0, -5, 12, 6, 0.05, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Scaly Back Spikes
+      ctx.fillStyle = "#047857";
+      [-6, -2, 2, 6].forEach(sx => {
+        ctx.beginPath();
+        ctx.moveTo(sx - 1.5, -10.5);
+        ctx.lineTo(sx, -13);
+        ctx.lineTo(sx + 1.5, -10.5);
+        ctx.closePath();
+        ctx.fill();
+      });
+
+      // Snout & Happy Jaw
+      ctx.fillStyle = "#10b981";
+      ctx.beginPath();
+      ctx.moveTo(7, -8.5);
+      ctx.lineTo(18, -6.5);
+      ctx.quadraticCurveTo(20, -4, 18, -2);
+      ctx.lineTo(7, -2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Nostril Bump
+      ctx.fillStyle = "#047857";
+      ctx.beginPath();
+      ctx.arc(17, -6.8, 0.9, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sleepy Smiling Eyes
+      ctx.strokeStyle = "#022c22";
+      ctx.lineWidth = 1.2;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.arc(8, -8, 2.0, Math.PI * 1.1, Math.PI * 1.9);
+      ctx.stroke();
+
+      // Cute White Tooth
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.moveTo(13, -3.5);
+      ctx.lineTo(14.5, -0.5);
+      ctx.lineTo(16, -3.5);
+      ctx.closePath();
+      ctx.fill();
+
+      // 4 Stubby Paws
+      const pWalk = (p.waddleAngle ? Math.sin(now * 0.012) * 2.0 : 0);
+      ctx.fillStyle = "#047857";
+      [
+        { x: -6 + pWalk, y: 0 },
+        { x: -2 - pWalk, y: 0 },
+        { x: 4 + pWalk, y: 0 },
+        { x: 8 - pWalk, y: 0 }
+      ].forEach(pt => {
+        ctx.beginPath();
+        ctx.ellipse(pt.x, pt.y, 2.5, 1.6, 0, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.restore();
+
+    } else if (comp.id === "dragon") {
+      // 4. BAYI NAGA API (BABY PYRO DRAGON) - Floats Above & Behind Capybara
+      ctx.save();
+      const dragonHover = Math.sin(now * 0.004) * 5;
+      const dragonX = -drawW * 0.46;
+      const dragonY = -drawH * 1.15 + dragonHover;
+      ctx.translate(dragonX, dragonY);
+
+      // 2 Cute Flapping Bat Wings
+      const wingAng = Math.sin(now * 0.016) * 0.38;
+      ctx.save();
+      ctx.rotate(wingAng);
+      ctx.fillStyle = "#b91c1c";
+      ctx.strokeStyle = "#7f1d1d";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.moveTo(-2, -5);
+      ctx.lineTo(-12, -18);
+      ctx.lineTo(-6, -11);
+      ctx.lineTo(-2, -14);
+      ctx.lineTo(0, -5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      // Baby Dragon Body
+      const dGrad = ctx.createRadialGradient(2, -2, 2, 0, 0, 11);
+      dGrad.addColorStop(0, "#ef4444");
+      dGrad.addColorStop(0.7, "#dc2626");
+      dGrad.addColorStop(1, "#991b1b");
+      ctx.fillStyle = dGrad;
+      ctx.strokeStyle = "#7f1d1d";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 10, 7.5, 0.15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Peach Belly Scales
+      ctx.fillStyle = "#fed7aa";
+      ctx.beginPath();
+      ctx.ellipse(2, 2, 6, 3.8, 0.15, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Curled Tail with Flame Tip
+      ctx.strokeStyle = "#dc2626";
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(-8, 2);
+      ctx.quadraticCurveTo(-14, 6, -16, 0);
+      ctx.stroke();
+
+      // Radiant Fiery Flame Tip
+      ctx.save();
+      ctx.shadowColor = "#f97316";
+      ctx.shadowBlur = 12;
+      const fGrad = ctx.createRadialGradient(-16, 0, 1, -16, 0, 6);
+      fGrad.addColorStop(0, "#ffffff");
+      fGrad.addColorStop(0.4, "#fde047");
+      fGrad.addColorStop(0.8, "#f97316");
+      fGrad.addColorStop(1, "rgba(239, 68, 68, 0)");
+      ctx.fillStyle = fGrad;
+      ctx.beginPath();
+      ctx.arc(-16, 0, 5.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Dragon Head
+      ctx.fillStyle = "#ef4444";
+      ctx.beginPath();
+      ctx.ellipse(7, -5, 6.5, 5.5, -0.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Golden Hornlets
+      ctx.fillStyle = "#f59e0b";
+      ctx.strokeStyle = "#b45309";
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(5, -9);
+      ctx.lineTo(3, -15);
+      ctx.lineTo(7, -10);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Large Amber Dragon Eye
+      ctx.fillStyle = "#fef08a";
+      ctx.beginPath();
+      ctx.arc(8, -5.5, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#7f1d1d";
+      ctx.beginPath();
+      ctx.ellipse(8.3, -5.5, 0.8, 1.8, 0.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(8.8, -6.2, 0.7, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Ambient Floating Embers
+      if (Math.random() < 0.12) {
+        this.companionParticles.push({
+          x: dragonX - 16 + (Math.random() * 4 - 2),
+          y: dragonY + (Math.random() * 4 - 2),
+          vx: -0.8 - Math.random() * 0.8,
+          vy: (Math.random() - 0.5) * 0.8,
+          alpha: 1.0,
+          size: 1.8 + Math.random() * 1.5,
+          color: ["#fde047", "#f97316", "#ef4444"][Math.floor(Math.random() * 3)]
+        });
+      }
+
+      ctx.restore();
+    }
+
+    // Render & Update Ambient Companion Particles
+    if (this.companionParticles.length > 0) {
+      ctx.save();
+      for (let i = this.companionParticles.length - 1; i >= 0; i--) {
+        const pt = this.companionParticles[i];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.alpha -= 0.025;
+        if (pt.alpha <= 0) {
+          this.companionParticles.splice(i, 1);
+          continue;
+        }
+        ctx.globalAlpha = Math.max(0, pt.alpha);
+        ctx.fillStyle = pt.color;
+        ctx.shadowColor = pt.color;
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  // --- COMPANION COMBAT SUPPORT ACTIONS ---
+
+  triggerCompanionCombatAction(companionId, startX, startY, targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
+    const duration = 480 / speedMult;
+    let hitTriggered = false;
+
+    if (companionId === "duck") {
+      // 🦆 DUCK BREAD TOSS & SPLASH
+      this.skillCombatEffects.push({
+        startTime: performance.now(),
+        duration: duration + 150,
+        update: (progress) => {
+          if (progress >= 0.85 && !hitTriggered) {
+            hitTriggered = true;
+            Sound.playSfx && Sound.playSfx("magicBurst");
+            if (this.enemyState) {
+              this.enemyState.flashWhite = 0.8;
+              this.enemyState.shake = 1.6;
+            }
+            this.addVisualEffect("healRing", startX, startY, 1.4);
+            this.addVisualEffect("hitSpark", targetX, targetY - 25, 1.6);
+            this.addMagicImpactSparks(targetX, targetY - 25, ["#38bdf8", "#fde047", "#ffffff"]);
+            if (onHit) onHit();
+          }
+        },
+        render: (ctx) => {
+          const now = performance.now();
+          const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+          const p = Math.min(1, elapsed / duration);
+          if (p < 1) {
+            // Spinning Golden Loaf of Bread in Parabolic Arc
+            const bx = startX + (targetX - startX) * p;
+            const by = startY + (targetY - startY) * p - Math.sin(p * Math.PI) * 75;
+
+            ctx.save();
+            ctx.translate(bx, by);
+            ctx.rotate(now * 0.02);
+            ctx.shadowColor = "#f59e0b";
+            ctx.shadowBlur = 12;
+
+            // Toast / Bread Loaf
+            ctx.fillStyle = "#f59e0b";
+            ctx.strokeStyle = "#78350f";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.roundRect(-8, -6, 16, 12, 3);
+            ctx.fill();
+            ctx.stroke();
+
+            // Inner Warm Bread Crust
+            ctx.fillStyle = "#fef3c7";
+            ctx.beginPath();
+            ctx.roundRect(-5, -4, 10, 8, 2);
+            ctx.fill();
+
+            // Sparkly Water Droplets Trail
+            ctx.fillStyle = "rgba(56, 189, 248, 0.85)";
+            ctx.beginPath();
+            ctx.arc(-10, 2, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+          }
+        },
+        onComplete: () => {
+          if (onComplete) onComplete();
+        }
+      });
+
+    } else if (companionId === "turtle") {
+      // 🐢 TURTLE ANCIENT CRYSTAL BARRIER
+      this.skillCombatEffects.push({
+        startTime: performance.now(),
+        duration: duration + 200,
+        update: (progress) => {
+          if (progress >= 0.4 && !hitTriggered) {
+            hitTriggered = true;
+            Sound.playSfx && Sound.playSfx("shield");
+            this.playerState.shake = 1.0;
+            this.addVisualEffect("shieldPulse", startX, startY - 25, 2.0);
+            this.addMagicImpactSparks(startX, startY - 25, ["#38bdf8", "#86efac", "#ffffff"]);
+            if (onHit) onHit();
+          }
+        },
+        render: (ctx) => {
+          const now = performance.now();
+          const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+          const p = Math.min(1, elapsed / duration);
+          if (p < 1) {
+            // Expanding Hexagonal Shield Dome around Capybara
+            const shieldScale = Math.sin(p * Math.PI) * 1.15;
+            ctx.save();
+            ctx.translate(startX, startY - 28);
+            ctx.scale(shieldScale, shieldScale);
+            ctx.shadowColor = "#38bdf8";
+            ctx.shadowBlur = 22;
+
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.95)";
+            ctx.lineWidth = 3.5;
+            ctx.fillStyle = "rgba(14, 165, 233, 0.22)";
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+              const ang = (i / 6) * Math.PI * 2 + now * 0.003;
+              const hx = Math.cos(ang) * 44;
+              const hy = Math.sin(ang) * 44;
+              if (i === 0) ctx.moveTo(hx, hy);
+              else ctx.lineTo(hx, hy);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Inner Sacred Rune
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(0, 0, 22, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          }
+        },
+        onComplete: () => {
+          if (onComplete) onComplete();
+        }
+      });
+
+    } else if (companionId === "croc") {
+      // 🐊 CHILL GATOR SNAP BITE CHOMP
+      this.skillCombatEffects.push({
+        startTime: performance.now(),
+        duration: duration + 100,
+        update: (progress) => {
+          if (progress >= 0.55 && !hitTriggered) {
+            hitTriggered = true;
+            Sound.playSfx && Sound.playSfx("attackHeavy");
+            if (this.enemyState) {
+              this.enemyState.flashWhite = 1.0;
+              this.enemyState.shake = 2.4;
+            }
+            this.addVisualEffect("critBurst", targetX, targetY - 20, 1.8);
+            this.addMagicImpactSparks(targetX, targetY - 20, ["#ef4444", "#f59e0b", "#ffffff"]);
+            if (onHit) onHit();
+          }
+        },
+        render: (ctx) => {
+          const now = performance.now();
+          const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+          const p = Math.min(1, elapsed / duration);
+
+          // Gator Lunges to Enemy & Snaps Jaws
+          if (p < 0.6) {
+            const lp = p / 0.6;
+            const gx = startX + (targetX - startX - 25) * lp;
+            const gy = targetY;
+
+            ctx.save();
+            ctx.translate(gx, gy);
+            ctx.shadowColor = "#10b981";
+            ctx.shadowBlur = 14;
+
+            // Giant Comic Crocodile Jaws Snapping
+            const mouthOpen = (1 - lp) * 0.55;
+            // Upper Jaw
+            ctx.save();
+            ctx.rotate(-mouthOpen);
+            ctx.fillStyle = "#10b981";
+            ctx.strokeStyle = "#064e3b";
+            ctx.lineWidth = 2.0;
+            ctx.beginPath();
+            ctx.ellipse(12, -8, 16, 7, 0, Math.PI, 0);
+            ctx.fill();
+            ctx.stroke();
+            // Upper Teeth
+            ctx.fillStyle = "#ffffff";
+            [6, 12, 18, 24].forEach(tx => {
+              ctx.beginPath();
+              ctx.moveTo(tx - 2, -1);
+              ctx.lineTo(tx, 5);
+              ctx.lineTo(tx + 2, -1);
+              ctx.fill();
+            });
+            ctx.restore();
+
+            // Lower Jaw
+            ctx.save();
+            ctx.rotate(mouthOpen);
+            ctx.fillStyle = "#059669";
+            ctx.strokeStyle = "#064e3b";
+            ctx.lineWidth = 2.0;
+            ctx.beginPath();
+            ctx.ellipse(12, 2, 16, 6, 0, 0, Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            // Lower Teeth
+            ctx.fillStyle = "#ffffff";
+            [8, 14, 20].forEach(tx => {
+              ctx.beginPath();
+              ctx.moveTo(tx - 2, 0);
+              ctx.lineTo(tx, -5);
+              ctx.lineTo(tx + 2, 0);
+              ctx.fill();
+            });
+            ctx.restore();
+
+            ctx.restore();
+          }
+        },
+        onComplete: () => {
+          if (onComplete) onComplete();
+        }
+      });
+
+    } else if (companionId === "dragon") {
+      // 🐲 BABY PYRO DRAGON FIRE BREATH CONE
+      this.skillCombatEffects.push({
+        startTime: performance.now(),
+        duration: duration + 200,
+        update: (progress) => {
+          if (progress >= 0.5 && !hitTriggered) {
+            hitTriggered = true;
+            Sound.playSfx && Sound.playSfx("magicBurst");
+            if (this.enemyState) {
+              this.enemyState.flashWhite = 0.9;
+              this.enemyState.shake = 2.0;
+            }
+            this.addVisualEffect("hitSpark", targetX, targetY - 25, 2.0);
+            this.addMagicImpactSparks(targetX, targetY - 25, ["#ef4444", "#f97316", "#fde047", "#ffffff"]);
+            if (onHit) onHit();
+          }
+        },
+        render: (ctx) => {
+          const now = performance.now();
+          const elapsed = now - (this.skillCombatEffects.find(f => f.update)?.startTime || now);
+          const p = Math.min(1, elapsed / duration);
+          if (p < 1) {
+            const bx = startX + 25;
+            const by = startY - 30;
+
+            // Flaming Breath Cone Towards Enemy
+            ctx.save();
+            ctx.shadowColor = "#f97316";
+            ctx.shadowBlur = 24;
+
+            const fCone = ctx.createRadialGradient(bx, by, 10, targetX, targetY - 20, 110);
+            fCone.addColorStop(0, "rgba(255, 255, 255, 0.95)");
+            fCone.addColorStop(0.2, "rgba(253, 224, 71, 0.85)");
+            fCone.addColorStop(0.6, "rgba(249, 115, 22, 0.75)");
+            fCone.addColorStop(1, "rgba(239, 68, 68, 0)");
+
+            ctx.fillStyle = fCone;
+            ctx.beginPath();
+            ctx.moveTo(bx, by);
+            const spread = Math.sin(p * Math.PI) * 35;
+            ctx.lineTo(targetX + 15, targetY - 20 - spread);
+            ctx.lineTo(targetX + 15, targetY - 20 + spread);
+            ctx.closePath();
+            ctx.fill();
+
+            // Swirling Fireballs inside stream
+            for (let i = 0; i < 3; i++) {
+              const fbP = (p * 1.5 + i * 0.3) % 1;
+              const fx = bx + (targetX - bx) * fbP;
+              const fy = by + (targetY - by - 20) * fbP + Math.sin(now * 0.02 + i) * 12;
+              ctx.fillStyle = "#ffffff";
+              ctx.beginPath();
+              ctx.arc(fx, fy, 4 * (1 - fbP * 0.5), 0, Math.PI * 2);
+              ctx.fill();
+            }
+
+            ctx.restore();
+          }
+        },
+        onComplete: () => {
+          if (onComplete) onComplete();
+        }
+      });
+    }
   }
 
   // --- Skill Idle Visual Attachments (Authentic 60FPS Procedural & Vector Auras) ---

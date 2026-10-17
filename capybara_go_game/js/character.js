@@ -100,6 +100,11 @@ class CharacterManager {
       claimedPremium: []
     };
 
+    // Pet / Mount Companion System
+    this.activeCompanion = "duck";
+    this.unlockedCompanions = ["duck"];
+    this.companionLevels = { duck: 1, turtle: 1, croc: 1, dragon: 1 };
+
     this.load();
     this.ensureStarterGear();
   }
@@ -176,6 +181,17 @@ class CharacterManager {
         if (it.lifesteal) s.lifesteal += it.lifesteal;
         if (it.critDmg) s.critDmg += it.critDmg;
       }
+    }
+
+    // Apply Active Companion Passives
+    const comp = this.getActiveCompanionData();
+    if (comp && comp.passive) {
+      const lv = (this.companionLevels && this.companionLevels[comp.id]) || 1;
+      const lvMult = 1 + (lv - 1) * 0.12; // +12% stat effectiveness per pet level!
+      if (comp.passive.atkBonusPct) s.atk = Math.round(s.atk * (1 + comp.passive.atkBonusPct * lvMult));
+      if (comp.passive.maxHpBonus) s.hp = Math.round(s.hp * (1 + comp.passive.maxHpBonus * lvMult));
+      if (comp.passive.defBonus) s.def += Math.round(comp.passive.defBonus * lvMult);
+      if (comp.passive.critRate) s.critRate += comp.passive.critRate * lvMult;
     }
 
     // Apply In-Run Skills & Buffs
@@ -526,7 +542,10 @@ class CharacterManager {
       claimedAchievements: this.claimedAchievements,
       stats: this.stats,
       lastWheelSpin: this.lastWheelSpin,
-      battlePass: this.battlePass
+      battlePass: this.battlePass,
+      activeCompanion: this.activeCompanion,
+      unlockedCompanions: this.unlockedCompanions,
+      companionLevels: this.companionLevels
     };
     try {
       localStorage.setItem(this.SAVE_KEY, JSON.stringify(state));
@@ -588,6 +607,9 @@ class CharacterManager {
         claimedFree: [],
         claimedPremium: []
       }, s.battlePass);
+      if (s.activeCompanion) this.activeCompanion = s.activeCompanion;
+      if (s.unlockedCompanions && Array.isArray(s.unlockedCompanions)) this.unlockedCompanions = s.unlockedCompanions;
+      if (s.companionLevels) this.companionLevels = Object.assign({ duck: 1, turtle: 1, croc: 1, dragon: 1 }, s.companionLevels);
       if (s.activeRun) {
         this.activeRun = s.activeRun;
         if (this.activeRun.skills && Array.isArray(this.activeRun.skills)) {
@@ -599,6 +621,73 @@ class CharacterManager {
         }
       }
     } catch (e) {}
+  }
+
+  // ===== PET & MOUNT COMPANION SYSTEM =====
+  getActiveCompanionData() {
+    if (!this.activeCompanion || !GameData.companions) return null;
+    return GameData.companions.find(c => c.id === this.activeCompanion) || null;
+  }
+
+  equipCompanion(id) {
+    if (!this.unlockedCompanions.includes(id)) return false;
+    this.activeCompanion = id;
+    this.save();
+    if (window.Game && window.Game.ui) {
+      window.Game.ui.renderHeader();
+      window.Game.ui.renderStageFloatingHeader();
+    }
+    return true;
+  }
+
+  unlockCompanion(id) {
+    const comp = GameData.companions && GameData.companions.find(c => c.id === id);
+    if (!comp) return false;
+    if (this.unlockedCompanions.includes(id)) return true;
+
+    if (comp.costGold > 0) {
+      if ((this.gold || 0) < comp.costGold) return false;
+      this.addGold(-comp.costGold);
+    }
+    if (comp.costGems > 0) {
+      if ((this.gems || 0) < comp.costGems) return false;
+      this.gems -= comp.costGems;
+    }
+
+    this.unlockedCompanions.push(id);
+    if (!this.companionLevels[id]) this.companionLevels[id] = 1;
+    this.activeCompanion = id;
+    this.save();
+    if (window.Game && window.Game.ui) {
+      window.Game.ui.renderHeader();
+      window.Game.ui.renderStageFloatingHeader();
+    }
+    return true;
+  }
+
+  getCompanionUpgradeCost(id) {
+    const comp = GameData.companions && GameData.companions.find(c => c.id === id);
+    if (!comp) return 0;
+    const curLv = (this.companionLevels && this.companionLevels[id]) || 1;
+    return Math.round((comp.upgradeCostBase || 200) * Math.pow(1.35, curLv - 1));
+  }
+
+  upgradeCompanion(id) {
+    if (!this.unlockedCompanions.includes(id)) return false;
+    const curLv = (this.companionLevels && this.companionLevels[id]) || 1;
+    if (curLv >= 30) return false;
+
+    const costGold = this.getCompanionUpgradeCost(id);
+    if ((this.gold || 0) < costGold) return false;
+
+    this.addGold(-costGold);
+    this.companionLevels[id] = curLv + 1;
+    this.save();
+    if (window.Game && window.Game.ui) {
+      window.Game.ui.renderHeader();
+      window.Game.ui.renderStageFloatingHeader();
+    }
+    return true;
   }
 }
 

@@ -3904,6 +3904,110 @@ class UIManager {
       `<div class="stat-card"><div class="stat-card-icon">${c.icon}</div><div class="stat-card-value">${c.value}</div><div class="stat-card-label">${c.label}</div></div>`
     ).join("");
   }
+
+  // ===== PET & MOUNT COMPANIONS SANCTUARY =====
+  openCompanions() {
+    const modal = document.getElementById("companions-modal");
+    if (!modal) return;
+    this.renderCompanionsModal();
+    modal.style.display = "flex";
+  }
+
+  renderCompanionsModal() {
+    const list = document.getElementById("companions-list");
+    if (!list || !GameData.companions) return;
+
+    const activeId = Character.activeCompanion || "duck";
+    const unlocked = Character.unlockedCompanions || ["duck"];
+    const levels = Character.companionLevels || { duck: 1, turtle: 1, croc: 1, dragon: 1 };
+
+    list.innerHTML = GameData.companions.map(comp => {
+      const isUnlocked = unlocked.includes(comp.id);
+      const isActive = activeId === comp.id;
+      const curLv = levels[comp.id] || 1;
+      const upgradeCost = Character.getCompanionUpgradeCost(comp.id);
+      const canAffordUpgrade = (Character.gold || 0) >= upgradeCost;
+
+      let actionBtnHtml = "";
+      if (isActive) {
+        actionBtnHtml = `<button class="btn-comp-action btn-comp-active">✅ Sedang Aktif</button>`;
+      } else if (isUnlocked) {
+        actionBtnHtml = `<button class="btn-comp-action btn-comp-equip" onclick="window.Game && window.Game.ui.equipCompanion('${comp.id}')">Pilih Pet</button>`;
+      } else {
+        const costText = comp.costGems > 0 ? `${comp.costGems} 💎` : `${comp.costGold} 🪙`;
+        const canAffordUnlock = comp.costGems > 0 ? (Character.gems || 0) >= comp.costGems : (Character.gold || 0) >= comp.costGold;
+        actionBtnHtml = `<button class="btn-comp-action btn-comp-unlock" ${canAffordUnlock ? "" : "disabled"} onclick="window.Game && window.Game.ui.unlockCompanion('${comp.id}')">Buka (${costText})</button>`;
+      }
+
+      const upgradeBtnHtml = isUnlocked && curLv < 30 ? `
+        <button class="btn-comp-action btn-comp-upgrade" ${canAffordUpgrade ? "" : "disabled"} onclick="window.Game && window.Game.ui.upgradeCompanion('${comp.id}')">
+          Level Up (${upgradeCost} 🪙)
+        </button>
+      ` : "";
+
+      return `
+        <div class="comp-card ${isActive ? 'active-comp' : ''}">
+          <div class="comp-card-top">
+            <div class="comp-avatar-wrap ${comp.rarity}">${comp.icon}</div>
+            <div class="comp-info-col">
+              <div class="comp-name-row">
+                <span class="comp-name">${comp.name}</span>
+                <span class="comp-level-badge">Lv. ${curLv}</span>
+              </div>
+              <div class="comp-tagline">${comp.tagline}</div>
+              <div class="comp-desc">${comp.desc}</div>
+            </div>
+          </div>
+
+          <div class="comp-perks-box">
+            <div class="comp-perk-row">
+              <span class="comp-perk-label">✨ Efek Pasif:</span>
+              <span class="comp-perk-val">${comp.passiveDesc}</span>
+            </div>
+            <div class="comp-perk-row">
+              <span class="comp-perk-label">⚔️ Skill Tempur:</span>
+              <span class="comp-perk-val"><strong>${comp.skillName}</strong> — ${comp.skillDesc}</span>
+            </div>
+          </div>
+
+          <div class="comp-actions-row">
+            ${upgradeBtnHtml}
+            ${actionBtnHtml}
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  equipCompanion(id) {
+    if (Character.equipCompanion(id)) {
+      Sound.playSfx && Sound.playSfx("click");
+      this.renderCompanionsModal();
+      this.showToast && this.showToast("Pet berhasil dipasang! 🐾", "success");
+    }
+  }
+
+  unlockCompanion(id) {
+    if (Character.unlockCompanion(id)) {
+      Sound.playSfx && Sound.playSfx("chest");
+      this.renderCompanionsModal();
+      this.renderHeader();
+      this.showToast && this.showToast("Pet baru berhasil dibuka! 🎉", "success");
+    } else {
+      this.showToast && this.showToast("Koin atau Gems tidak mencukupi!", "error");
+    }
+  }
+
+  upgradeCompanion(id) {
+    if (Character.upgradeCompanion(id)) {
+      Sound.playSfx && Sound.playSfx("magicBurst");
+      this.renderCompanionsModal();
+      this.renderHeader();
+      this.showToast && this.showToast("Pet berhasil naik level! ⭐", "success");
+    } else {
+      this.showToast && this.showToast("Gold tidak cukup untuk upgrade!", "error");
+    }
+  }
 }
 
 // Global diagnostic & gameplay trigger for Falling Treasure Chest

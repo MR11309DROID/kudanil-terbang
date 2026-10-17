@@ -305,6 +305,99 @@ class BattleSystem {
       }, null, this.speedMultiplier);
     }
 
+    // Companion Combat Support Action (Duck, Turtle, Crocodile, Baby Dragon)
+    const activeCompanion = window.Character && window.Character.getActiveCompanionData && window.Character.getActiveCompanionData();
+    const shouldCompanionTrigger = activeCompanion && (this.turnCount === 1 || (this.turnCount % (activeCompanion.skillCooldown || 3) === 0));
+
+    if (shouldCompanionTrigger && r.enemyState && r.triggerCompanionCombatAction) {
+      const compLv = (window.Character && window.Character.companionLevels && window.Character.companionLevels[activeCompanion.id]) || 1;
+      const compPowerMult = 1 + (compLv - 1) * 0.15;
+
+      if (activeCompanion.id === "duck") {
+        // Duck: Heal Capybara + Splash Damage on Enemy
+        const healAmt = Math.round(c.maxHp * 0.08 * compPowerMult);
+        const splashDmg = Math.max(1, Math.round(c.atk * 0.50 * compPowerMult - e.def * 0.25));
+        r.triggerCompanionCombatAction(
+          "duck",
+          r.playerState.x,
+          r.groundY - 50,
+          r.enemyState.x,
+          r.groundY - 20,
+          () => {
+            c.hp = Math.min(c.maxHp, c.hp + healAmt);
+            r.addFloatingText(healAmt, r.playerState.x, r.groundY - 60, "heal");
+            e.hp -= splashDmg;
+            if (r.enemyState) {
+              r.enemyState.currentHp = Math.max(0, e.hp);
+              r.addFloatingText(splashDmg, r.enemyState.x, r.groundY - 50, "normal");
+            }
+            this.syncPlayerRunStats();
+          },
+          null,
+          this.speedMultiplier
+        );
+
+      } else if (activeCompanion.id === "turtle") {
+        // Turtle: Deploy Protective Shield
+        const shieldAmt = Math.round(c.maxHp * 0.16 * compPowerMult);
+        r.triggerCompanionCombatAction(
+          "turtle",
+          r.playerState.x,
+          r.groundY - 20,
+          r.enemyState.x,
+          r.groundY - 20,
+          () => {
+            c.shield = (c.shield || 0) + shieldAmt;
+            r.addFloatingText(shieldAmt, r.playerState.x, r.groundY - 65, "shield");
+            this.syncPlayerRunStats();
+          },
+          null,
+          this.speedMultiplier
+        );
+
+      } else if (activeCompanion.id === "croc") {
+        // Crocodile: Fast Snap Bite
+        const crocDmg = Math.max(1, Math.round(c.atk * 1.35 * compPowerMult - e.def * 0.35));
+        r.triggerCompanionCombatAction(
+          "croc",
+          r.playerState.x,
+          r.groundY - 15,
+          r.enemyState.x,
+          r.groundY - 15,
+          () => {
+            e.hp -= crocDmg;
+            if (r.enemyState) {
+              r.enemyState.currentHp = Math.max(0, e.hp);
+              r.addFloatingText(crocDmg, r.enemyState.x, r.groundY - 60, "crit");
+            }
+          },
+          null,
+          this.speedMultiplier
+        );
+
+      } else if (activeCompanion.id === "dragon") {
+        // Baby Dragon: Fire Breath + Burn DoT
+        const flameDmg = Math.max(1, Math.round(c.atk * 0.90 * compPowerMult - e.def * 0.25));
+        r.triggerCompanionCombatAction(
+          "dragon",
+          r.playerState.x,
+          r.groundY - 45,
+          r.enemyState.x,
+          r.groundY - 25,
+          () => {
+            e.hp -= flameDmg;
+            e.burnDoT = Math.max(e.burnDoT || 0, Math.round(c.atk * 0.30));
+            if (r.enemyState) {
+              r.enemyState.currentHp = Math.max(0, e.hp);
+              r.addFloatingText(flameDmg, r.enemyState.x, r.groundY - 60, "crit");
+            }
+          },
+          null,
+          this.speedMultiplier
+        );
+      }
+    }
+
     // Check Rage Ultimate (True Magic Hit / Meteor Strike!)
     if (c.rage >= 100) {
       c.rage = 0;
