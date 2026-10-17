@@ -129,18 +129,10 @@
         <div id="stage-viewport">
           <canvas id="stage-canvas" width="440" height="350"></canvas>
 
-          <!-- Top Right Controls: Quick Dragon Test & Hide UI Button -->
+          <!-- Top Right Compact Controls: Mini Hide UI Button -->
           <div class="stage-top-controls">
-            <!-- Quick Interactive Test Dragon Roar Button (1-Click Test) -->
-            <button id="btn-quick-dragon-test" class="btn-quick-dragon-test" onclick="window.testDragonRoar && window.testDragonRoar()" title="Klik untuk tes animasi Dragon Roar">
-              <span class="btn-dragon-icon">🐉</span>
-              <span class="btn-dragon-label">Tes Dragon</span>
-            </button>
-
-            <!-- Global Zen / Hide UI Button -->
-            <button id="btn-toggle-zen-ui" class="btn-toggle-zen-ui" onclick="window.Game && window.Game.ui && window.Game.ui.toggleFullUI()" title="Sembunyikan Seluruh UI (Mode Bersih)">
+            <button id="btn-toggle-zen-ui" class="btn-toggle-zen-ui btn-zen-mini" onclick="window.Game && window.Game.ui && window.Game.ui.toggleFullUI()" title="Sembunyikan / Tampilkan UI (Mode Bersih)">
               <span class="zen-ui-icon">👁️</span>
-              <span class="zen-ui-label">Sembunyi UI</span>
             </button>
           </div>
 
