@@ -4775,12 +4775,23 @@ body {
   border-color: #f59e0b !important; 
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
 }
+.rarity-mythic { 
+  border-color: #ef4444 !important; 
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.75), inset 0 0 6px rgba(239, 68, 68, 0.45) !important;
+  animation: mythicGlowPulse 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes mythicGlowPulse {
+  0% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.6), inset 0 0 4px rgba(239, 68, 68, 0.3); }
+  100% { box-shadow: 0 0 18px rgba(239, 68, 68, 0.95), inset 0 0 8px rgba(239, 68, 68, 0.6); }
+}
 
 .rarity-text-common { color: #94a3b8; }
 .rarity-text-uncommon { color: #4ade80; }
 .rarity-text-rare { color: #60a5fa; }
 .rarity-text-epic { color: #c084fc; }
 .rarity-text-legendary { color: #fbbf24; text-shadow: 0 0 6px rgba(251,191,36,0.5); }
+.rarity-text-mythic { color: #f87171; text-shadow: 0 0 8px rgba(239, 68, 68, 0.85); font-weight: 900; }
 
 /* ================= MODALS & POPUPS ================= */
 .modal-overlay {
@@ -5648,6 +5659,17 @@ body {
 @keyframes multiCardFlip {
   0% { transform: translateY(30px) rotateY(180deg) scale(0.4); opacity: 0; }
   100% { transform: translateY(0) rotateY(0deg) scale(1); opacity: 1; }
+}
+
+.gacha-item-card.rarity-mythic {
+  border-color: #ef4444;
+  background: linear-gradient(145deg, #450a0a, #7f1d1d);
+  box-shadow: 0 0 22px rgba(239, 68, 68, 0.75), inset 0 0 10px rgba(239, 68, 68, 0.4);
+  animation: mythicCardAura 2s ease-in-out infinite alternate;
+}
+@keyframes mythicCardAura {
+  0% { box-shadow: 0 0 14px rgba(239, 68, 68, 0.6), inset 0 0 6px rgba(239, 68, 68, 0.3); }
+  100% { box-shadow: 0 0 26px rgba(239, 68, 68, 0.95), inset 0 0 12px rgba(239, 68, 68, 0.6); }
 }
 
 .gacha-item-card.rarity-legendary {
