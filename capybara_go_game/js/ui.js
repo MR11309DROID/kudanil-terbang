@@ -2418,7 +2418,7 @@ class UIManager {
     const modal = document.getElementById("modal-item-detail");
     if (!modal) return;
 
-    document.getElementById("item-modal-icon").src = item.icon;
+    document.getElementById("item-modal-icon").src = item.cardImg || item.icon;
     document.getElementById("item-modal-name").textContent = item.name;
     document.getElementById("item-modal-name").className = `item-modal-title rarity-text-${item.rarity}`;
     document.getElementById("item-modal-rarity").textContent = `${item.rarity.toUpperCase()} ${item.slot.toUpperCase()}`;
@@ -2887,15 +2887,17 @@ class UIManager {
         singleWrap.innerHTML = `
           <div class="gacha-hero-card rarity-${it.rarity}">
             <div class="gacha-hero-badge badge-${it.rarity}">★ ${it.rarity.toUpperCase()} ★</div>
-            <div class="gacha-hero-icon-wrap">
-              <img src="${it.icon}" class="gacha-hero-icon" alt="${it.name}">
+            <div class="gacha-hero-icon-wrap ${it.cardImg ? 'is-gear-card' : ''}">
+              <img src="${it.cardImg || it.icon}" class="gacha-hero-icon ${it.cardImg ? 'is-gear-card' : ''}" alt="${it.name}">
             </div>
             <div class="gacha-hero-name rarity-text-${it.rarity}">${it.name}</div>
             <div class="gacha-hero-stats">
-              ${it.baseAtk ? `<span class="gacha-stat-pill">⚔️ ATK +${it.baseAtk}</span>` : ""}
-              ${it.baseHp ? `<span class="gacha-stat-pill">❤️ HP +${it.baseHp}</span>` : ""}
-              ${it.defBonus ? `<span class="gacha-stat-pill">🛡️ DEF +${it.defBonus}</span>` : ""}
-              ${it.critBonus ? `<span class="gacha-stat-pill">⚡ CRIT +${Math.round(it.critBonus * 100)}%</span>` : ""}
+              ${(it.baseAtk || it.atk) ? `<span class="gacha-stat-pill">⚔️ ATK +${it.baseAtk || it.atk}</span>` : ""}
+              ${(it.baseHp || it.hp) ? `<span class="gacha-stat-pill">💖 HP +${it.baseHp || it.hp}</span>` : ""}
+              ${(it.defBonus || it.def || it.baseDef) ? `<span class="gacha-stat-pill">🛡️ DEF +${it.defBonus || it.def || it.baseDef}</span>` : ""}
+              ${(it.critBonus || it.crit || it.baseCrit) ? `<span class="gacha-stat-pill">🎯 CRIT +${Math.round((it.critBonus || it.crit || it.baseCrit) * 100)}%</span>` : ""}
+              ${(it.dodgeBonus || it.dodge || it.baseDodge) ? `<span class="gacha-stat-pill">💨 DODGE +${Math.round((it.dodgeBonus || it.dodge || it.baseDodge) * 100)}%</span>` : ""}
+              ${(it.lifestealBonus || it.lifesteal || it.baseLifesteal) ? `<span class="gacha-stat-pill">🩸 LIFESTEAL +${Math.round((it.lifestealBonus || it.lifesteal || it.baseLifesteal) * 100)}%</span>` : ""}
             </div>
           </div>
         `;
@@ -2922,8 +2924,8 @@ class UIManager {
           card.className = `gacha-item-card rarity-${it.rarity}`;
           card.style.animationDelay = `${idx * 0.08}s`;
           card.innerHTML = `
-            <div class="gacha-item-img-wrap">
-              <img src="${it.icon}" class="gacha-item-img" alt="${it.name}">
+            <div class="gacha-item-img-wrap ${it.cardImg ? 'is-gear-card' : ''}">
+              <img src="${it.cardImg || it.icon}" class="gacha-item-img ${it.cardImg ? 'is-gear-card' : ''}" alt="${it.name}">
             </div>
             <div class="gacha-item-name rarity-text-${it.rarity}">${it.name}</div>
             <div class="gacha-item-rarity">${it.rarity.toUpperCase()}</div>

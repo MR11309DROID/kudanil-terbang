@@ -3555,9 +3555,11 @@ body {
 }
 
 .slot-item-img {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
 }
 
@@ -3737,9 +3739,11 @@ body {
 }
 
 .inv-item-img {
-  width: 75%;
-  height: 75%;
-  object-fit: contain;
+  width: 86%;
+  height: 86%;
+  object-fit: cover;
+  border-radius: 7px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .inv-item-lvl {
@@ -5142,12 +5146,13 @@ body {
 
 .item-detail-icon {
   width: 58px;
-  height: 58px;
-  object-fit: contain;
+  height: 60px;
+  object-fit: cover;
   background: #0f172a;
-  border-radius: 12px;
-  padding: 6px;
+  border-radius: 10px;
+  padding: 2px;
   border: 2px solid #475569;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .item-modal-title {
@@ -5568,6 +5573,26 @@ body {
 @keyframes heroIconFloat {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
+}
+
+.gacha-hero-icon-wrap.is-gear-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+.gacha-hero-icon.is-gear-card {
+  width: 76px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+.gacha-item-img.is-gear-card {
+  width: 38px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
 }
 
 .gacha-hero-name {

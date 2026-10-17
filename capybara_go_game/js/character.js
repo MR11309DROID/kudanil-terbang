@@ -115,28 +115,38 @@ class CharacterManager {
   }
 
   ensureStarterGear() {
-    if (this.inventory.length === 0 && !this.equipped.weapon) {
-      // Starter gifts
-      const club = this.createItemFromTemplate("w1", 1);
-      const tunic = this.createItemFromTemplate("a1", 1);
-      const cap = this.createItemFromTemplate("h1", 1);
-      const sandals = this.createItemFromTemplate("b1", 1);
-      const ring = this.createItemFromTemplate("r1", 1);
-      const talisman = this.createItemFromTemplate("m1", 1);
+    if (!this.equipped.weapon && this.inventory.length === 0) {
+      // Starter gifts from authentic collection
+      const weapon = this.createItemFromTemplate("gear_21", 1); // Carved Wooden Sword
+      const armor = this.createItemFromTemplate("gear_02", 1);  // Straw Leaf Armor
+      const helmet = this.createItemFromTemplate("gear_00", 1); // Vine Crown
+      const boots = this.createItemFromTemplate("gear_01", 1);  // Clover Boots
+      const ring = this.createItemFromTemplate("gear_11", 1);   // Sprout Wood Ring
+      const amulet = this.createItemFromTemplate("gear_20", 1); // Seashell Pendant
 
-      this.equip(club);
-      this.equip(tunic);
-      this.equip(cap);
-      this.equip(sandals);
+      this.equip(weapon);
+      this.equip(armor);
+      this.equip(helmet);
+      this.equip(boots);
       this.equip(ring);
-      this.equip(talisman);
+      this.equip(amulet);
+
+      // Starter inventory stash so backpack immediately showcases items
+      this.inventory.push(
+        this.createItemFromTemplate("gear_04", 1), // Sprout Twig Wand
+        this.createItemFromTemplate("gear_05", 1), // Wooden Slingshot
+        this.createItemFromTemplate("gear_07", 1), // Vine Wooden Shield
+        this.createItemFromTemplate("gear_09", 1), // Explorer Feather Hat
+        this.createItemFromTemplate("gear_10", 1), // Beast Tooth Necklace
+        this.createItemFromTemplate("gear_24", 1)  // Red Mushroom Cap
+      );
       this.save();
     }
   }
 
   createItemFromTemplate(templateId, level = 1) {
     const tmpl = GameData.equipmentTemplates.find(t => t.id === templateId) || GameData.equipmentTemplates[0];
-    const uid = "item_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+    const uid = "item_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
     const item = {
       uid,
       templateId: tmpl.id,
@@ -144,6 +154,7 @@ class CharacterManager {
       slot: tmpl.slot,
       rarity: tmpl.rarity,
       icon: tmpl.icon,
+      cardImg: tmpl.cardImg || tmpl.icon,
       level: level,
       atk: (tmpl.baseAtk || 0) + (level - 1) * 8,
       hp: (tmpl.baseHp || 0) + (level - 1) * 35,
@@ -635,6 +646,29 @@ class CharacterManager {
             if (sk.id === 103 && (!sk.icon || !sk.icon.includes('.'))) sk.icon = "assets/skills/skill_011.png";
           });
         }
+      }
+      // Auto-upgrade equipment assets to authentic artwork
+      const updateItemAssets = (it) => {
+        if (!it) return;
+        const tmpl = GameData.equipmentTemplates && GameData.equipmentTemplates.find(t => t.id === it.templateId || t.name === it.name);
+        if (tmpl) {
+          it.icon = tmpl.icon;
+          it.cardImg = tmpl.cardImg || tmpl.icon;
+          if (!it.templateId) it.templateId = tmpl.id;
+        } else if (it.icon && it.icon.includes('capybara_cartoon_kit')) {
+          if (it.slot === 'weapon') { it.icon = 'assets/items/gear/icon_21.png'; it.cardImg = 'assets/items/gear/card_21.png'; }
+          else if (it.slot === 'armor') { it.icon = 'assets/items/gear/icon_02.png'; it.cardImg = 'assets/items/gear/card_02.png'; }
+          else if (it.slot === 'helmet') { it.icon = 'assets/items/gear/icon_00.png'; it.cardImg = 'assets/items/gear/card_00.png'; }
+          else if (it.slot === 'boots') { it.icon = 'assets/items/gear/icon_01.png'; it.cardImg = 'assets/items/gear/card_01.png'; }
+          else if (it.slot === 'ring') { it.icon = 'assets/items/gear/icon_11.png'; it.cardImg = 'assets/items/gear/card_11.png'; }
+          else if (it.slot === 'amulet') { it.icon = 'assets/items/gear/icon_20.png'; it.cardImg = 'assets/items/gear/card_20.png'; }
+        }
+      };
+      if (this.equipped) {
+        Object.values(this.equipped).forEach(updateItemAssets);
+      }
+      if (this.inventory && Array.isArray(this.inventory)) {
+        this.inventory.forEach(updateItemAssets);
       }
     } catch (e) {}
   }

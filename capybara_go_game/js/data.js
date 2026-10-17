@@ -210,47 +210,84 @@ const GameData = {
   },
 
   equipmentTemplates: [
-    // Weapons
-    { id: "w1", slot: "weapon", name: "Wooden Club", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_sword.png", rarity: "common", baseAtk: 15 },
-    { id: "w2", slot: "weapon", name: "Iron Broadsword", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_sword.png", rarity: "uncommon", baseAtk: 30 },
-    { id: "w3", slot: "weapon", name: "Ranger's Recurve Bow", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_bow.png", rarity: "rare", baseAtk: 50, critBonus: 0.08 },
-    { id: "w4", slot: "weapon", name: "Mystic Oak Staff", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_staff.png", rarity: "epic", baseAtk: 75, skillBoost: 0.15 },
-    { id: "w5", slot: "weapon", name: "Capybara Excalibur", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_sword.png", rarity: "legendary", baseAtk: 120, critBonus: 0.15, lifestealBonus: 0.10 },
+    // --- 32 AUTHENTIC CAPYBARA GO GEARS (CRAFTED DIRECTLY FROM INVENTORY ARTWORK) ---
+    // Row 0
+    { id: "gear_00", slot: "helmet", name: "Vine Crown", icon: "assets/items/gear/icon_00.png", cardImg: "assets/items/gear/card_00.png", rarity: "common", baseDef: 8, baseHp: 40 },
+    { id: "gear_01", slot: "boots", name: "Clover Boots", icon: "assets/items/gear/icon_01.png", cardImg: "assets/items/gear/card_01.png", rarity: "common", baseDodge: 0.05, baseHp: 35 },
+    { id: "gear_02", slot: "armor", name: "Straw Leaf Armor", icon: "assets/items/gear/icon_02.png", cardImg: "assets/items/gear/card_02.png", rarity: "common", baseHp: 95, baseDef: 5 },
+    { id: "gear_03", slot: "helmet", name: "Flower Acorn Cap", icon: "assets/items/gear/icon_03.png", cardImg: "assets/items/gear/card_03.png", rarity: "uncommon", baseDef: 15, baseHp: 65 },
+    { id: "gear_04", slot: "weapon", name: "Sprout Twig Wand", icon: "assets/items/gear/icon_04.png", cardImg: "assets/items/gear/card_04.png", rarity: "uncommon", baseAtk: 28, critBonus: 0.05 },
+    { id: "gear_05", slot: "weapon", name: "Wooden Slingshot", icon: "assets/items/gear/icon_05.png", cardImg: "assets/items/gear/card_05.png", rarity: "common", baseAtk: 18, critBonus: 0.04 },
+    { id: "gear_06", slot: "weapon", name: "Flint Dagger", icon: "assets/items/gear/icon_06.png", cardImg: "assets/items/gear/card_06.png", rarity: "uncommon", baseAtk: 32, lifestealBonus: 0.05 },
+    { id: "gear_07", slot: "amulet", name: "Vine Wooden Shield", icon: "assets/items/gear/icon_07.png", cardImg: "assets/items/gear/card_07.png", rarity: "uncommon", baseDef: 14, baseHp: 80 },
 
-    // Armors
-    { id: "a1", slot: "armor", name: "Leaf Tunic", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_armor.png", rarity: "common", baseHp: 80 },
-    { id: "a2", slot: "armor", name: "Sturdy Leather Vest", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_armor.png", rarity: "uncommon", baseHp: 160 },
-    { id: "a3", slot: "armor", name: "Knight's Steel Cuirass", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_armor.png", rarity: "rare", baseHp: 280, defBonus: 10 },
-    { id: "a4", slot: "armor", name: "Dragonhide Plate", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_armor.png", rarity: "epic", baseHp: 450, defBonus: 20 },
-    { id: "a5", slot: "armor", name: "Royal Aegis Cloak", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_armor.png", rarity: "legendary", baseHp: 750, defBonus: 35, regen: 0.05 },
+    // Row 1
+    { id: "gear_08", slot: "armor", name: "Verdant Leaf Cloak", icon: "assets/items/gear/icon_08.png", cardImg: "assets/items/gear/card_08.png", rarity: "uncommon", baseHp: 180, baseDef: 10 },
+    { id: "gear_09", slot: "helmet", name: "Explorer Feather Hat", icon: "assets/items/gear/icon_09.png", cardImg: "assets/items/gear/card_09.png", rarity: "rare", baseDef: 24, baseHp: 120, dodgeBonus: 0.05 },
+    { id: "gear_10", slot: "amulet", name: "Beast Tooth Necklace", icon: "assets/items/gear/icon_10.png", cardImg: "assets/items/gear/card_10.png", rarity: "rare", baseAtk: 25, critBonus: 0.08 },
+    { id: "gear_11", slot: "ring", name: "Sprout Wood Ring", icon: "assets/items/gear/icon_11.png", cardImg: "assets/items/gear/card_11.png", rarity: "common", baseCrit: 0.06, baseHp: 30 },
+    { id: "gear_12", slot: "ring", name: "Tribal Rope Belt", icon: "assets/items/gear/icon_12.png", cardImg: "assets/items/gear/card_12.png", rarity: "uncommon", baseCrit: 0.10, baseHp: 60 },
+    { id: "gear_13", slot: "ring", name: "Adventurer Pouch Belt", icon: "assets/items/gear/icon_13.png", cardImg: "assets/items/gear/card_13.png", rarity: "rare", baseCrit: 0.16, baseAtk: 22 },
+    { id: "gear_14", slot: "boots", name: "Burlap Cloth Glove", icon: "assets/items/gear/icon_14.png", cardImg: "assets/items/gear/card_14.png", rarity: "common", baseDodge: 0.04, baseAtk: 10 },
+    { id: "gear_15", slot: "boots", name: "Stitched Leather Gauntlet", icon: "assets/items/gear/icon_15.png", cardImg: "assets/items/gear/card_15.png", rarity: "uncommon", baseDodge: 0.08, baseAtk: 18 },
 
-    // Helmets
-    { id: "h1", slot: "helmet", name: "Acorn Cap", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_helmet.png", rarity: "common", baseDef: 6 },
-    { id: "h2", slot: "helmet", name: "Copper Helm", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_helmet.png", rarity: "uncommon", baseDef: 14 },
-    { id: "h3", slot: "helmet", name: "Gladiator Visor", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_helmet.png", rarity: "rare", baseDef: 25, hpBonus: 60 },
-    { id: "h4", slot: "helmet", name: "Crown of Thorns", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_helmet.png", rarity: "epic", baseDef: 40, reflect: 0.15 },
-    { id: "h5", slot: "helmet", name: "Monarch's Golden Tiara", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_helmet.png", rarity: "legendary", baseDef: 65, hpBonus: 200, critBonus: 0.10 },
+    // Row 2
+    { id: "gear_16", slot: "weapon", name: "Flint Spear", icon: "assets/items/gear/icon_16.png", cardImg: "assets/items/gear/card_16.png", rarity: "rare", baseAtk: 50, critBonus: 0.08 },
+    { id: "gear_17", slot: "weapon", name: "Stone Hatchet", icon: "assets/items/gear/icon_17.png", cardImg: "assets/items/gear/card_17.png", rarity: "rare", baseAtk: 56, critBonus: 0.06 },
+    { id: "gear_18", slot: "amulet", name: "Log Wood Bundle", icon: "assets/items/gear/icon_18.png", cardImg: "assets/items/gear/card_18.png", rarity: "common", baseHp: 65, baseDef: 6 },
+    { id: "gear_19", slot: "armor", name: "Canvas Travel Pack", icon: "assets/items/gear/icon_19.png", cardImg: "assets/items/gear/card_19.png", rarity: "rare", baseHp: 320, baseDef: 16 },
+    { id: "gear_20", slot: "amulet", name: "Seashell Pendant", icon: "assets/items/gear/icon_20.png", cardImg: "assets/items/gear/card_20.png", rarity: "uncommon", baseLifesteal: 0.08, baseHp: 70 },
+    { id: "gear_21", slot: "weapon", name: "Carved Wooden Sword", icon: "assets/items/gear/icon_21.png", cardImg: "assets/items/gear/card_21.png", rarity: "common", baseAtk: 20 },
+    { id: "gear_22", slot: "weapon", name: "Birch Hunting Bow", icon: "assets/items/gear/icon_22.png", cardImg: "assets/items/gear/card_22.png", rarity: "epic", baseAtk: 84, critBonus: 0.14 },
+    { id: "gear_23", slot: "amulet", name: "Round Wood Buckler", icon: "assets/items/gear/icon_23.png", cardImg: "assets/items/gear/card_23.png", rarity: "rare", baseDef: 26, baseHp: 150 },
 
-    // Boots
-    { id: "b1", slot: "boots", name: "Straw Sandals", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_boots.png", rarity: "common", baseDodge: 0.04, baseHp: 30 },
-    { id: "b2", slot: "boots", name: "Traveler's Moccasins", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_boots.png", rarity: "uncommon", baseDodge: 0.08, baseHp: 70 },
-    { id: "b3", slot: "boots", name: "Windrunner Greaves", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_boots.png", rarity: "rare", baseDodge: 0.14, baseHp: 130 },
-    { id: "b4", slot: "boots", name: "Shadowfang Treads", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_boots.png", rarity: "epic", baseDodge: 0.20, baseHp: 220 },
-    { id: "b5", slot: "boots", name: "Pegasus Hoofwear", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_boots.png", rarity: "legendary", baseDodge: 0.28, baseHp: 380, speedBonus: 0.25 },
+    // Row 3
+    { id: "gear_24", slot: "helmet", name: "Red Mushroom Cap", icon: "assets/items/gear/icon_24.png", cardImg: "assets/items/gear/card_24.png", rarity: "rare", baseDef: 30, baseHp: 140 },
+    { id: "gear_25", slot: "boots", name: "Fighter Hand Wraps", icon: "assets/items/gear/icon_25.png", cardImg: "assets/items/gear/card_25.png", rarity: "rare", baseDodge: 0.14, baseAtk: 26 },
+    { id: "gear_26", slot: "amulet", name: "Gourd Water Canteen", icon: "assets/items/gear/icon_26.png", cardImg: "assets/items/gear/card_26.png", rarity: "rare", baseLifesteal: 0.12, baseHp: 160 },
+    { id: "gear_27", slot: "armor", name: "Wild Beast Fur Pelt", icon: "assets/items/gear/icon_27.png", cardImg: "assets/items/gear/card_27.png", rarity: "epic", baseHp: 500, baseDef: 26, lifestealBonus: 0.06 },
+    { id: "gear_28", slot: "amulet", name: "Feather Dream Talisman", icon: "assets/items/gear/icon_28.png", cardImg: "assets/items/gear/card_28.png", rarity: "epic", baseLifesteal: 0.22, baseAtk: 36 },
+    { id: "gear_29", slot: "weapon", name: "Primal Bone Dagger", icon: "assets/items/gear/icon_29.png", cardImg: "assets/items/gear/card_29.png", rarity: "epic", baseAtk: 92, critBonus: 0.16 },
+    { id: "gear_30", slot: "armor", name: "Patchwork Satchel", icon: "assets/items/gear/icon_30.png", cardImg: "assets/items/gear/card_30.png", rarity: "legendary", baseHp: 800, baseDef: 40, dodgeBonus: 0.10 },
+    { id: "gear_31", slot: "ring", name: "Bound Wood Ring", icon: "assets/items/gear/icon_31.png", cardImg: "assets/items/gear/card_31.png", rarity: "legendary", baseCrit: 0.32, baseAtk: 58, lifestealBonus: 0.08 },
 
-    // Rings
-    { id: "r1", slot: "ring", name: "Copper Band", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_ring.png", rarity: "common", baseCrit: 0.05 },
-    { id: "r2", slot: "ring", name: "Emerald Ring", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_ring.png", rarity: "uncommon", baseCrit: 0.10, baseAtk: 10 },
-    { id: "r3", slot: "ring", name: "Ruby Signet", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_ring.png", rarity: "rare", baseCrit: 0.16, baseAtk: 25 },
-    { id: "r4", slot: "ring", name: "Ring of Oblivion", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_ring.png", rarity: "epic", baseCrit: 0.24, critDmg: 0.40 },
-    { id: "r5", slot: "ring", name: "Celestial Band", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_ring.png", rarity: "legendary", baseCrit: 0.32, critDmg: 0.65, baseAtk: 50 },
+    // Backward compatibility mappings
+    { id: "w1", slot: "weapon", name: "Carved Wooden Sword", icon: "assets/items/gear/icon_21.png", cardImg: "assets/items/gear/card_21.png", rarity: "common", baseAtk: 20 },
+    { id: "w2", slot: "weapon", name: "Flint Dagger", icon: "assets/items/gear/icon_06.png", cardImg: "assets/items/gear/card_06.png", rarity: "uncommon", baseAtk: 32 },
+    { id: "w3", slot: "weapon", name: "Flint Spear", icon: "assets/items/gear/icon_16.png", cardImg: "assets/items/gear/card_16.png", rarity: "rare", baseAtk: 50, critBonus: 0.08 },
+    { id: "w4", slot: "weapon", name: "Birch Hunting Bow", icon: "assets/items/gear/icon_22.png", cardImg: "assets/items/gear/card_22.png", rarity: "epic", baseAtk: 84, skillBoost: 0.15 },
+    { id: "w5", slot: "weapon", name: "Primal Bone Dagger", icon: "assets/items/gear/icon_29.png", cardImg: "assets/items/gear/card_29.png", rarity: "legendary", baseAtk: 125, critBonus: 0.15, lifestealBonus: 0.10 },
 
-    // Amulets
-    { id: "m1", slot: "amulet", name: "Wooden Talisman", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_amulet.png", rarity: "common", baseLifesteal: 0.04 },
-    { id: "m2", slot: "amulet", name: "Silver Pendant", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_amulet.png", rarity: "uncommon", baseLifesteal: 0.08, baseHp: 50 },
-    { id: "m3", slot: "amulet", name: "Heart of the Grove", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_amulet.png", rarity: "rare", baseLifesteal: 0.14, baseHp: 120 },
-    { id: "m4", slot: "amulet", name: "Bloodstone Choker", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_amulet.png", rarity: "epic", baseLifesteal: 0.22, baseAtk: 30 },
-    { id: "m5", slot: "amulet", name: "Amulet of Immortality", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_amulet.png", rarity: "legendary", baseLifesteal: 0.30, baseHp: 300, baseAtk: 45 }
+    { id: "a1", slot: "armor", name: "Straw Leaf Armor", icon: "assets/items/gear/icon_02.png", cardImg: "assets/items/gear/card_02.png", rarity: "common", baseHp: 95 },
+    { id: "a2", slot: "armor", name: "Verdant Leaf Cloak", icon: "assets/items/gear/icon_08.png", cardImg: "assets/items/gear/card_08.png", rarity: "uncommon", baseHp: 180 },
+    { id: "a3", slot: "armor", name: "Canvas Travel Pack", icon: "assets/items/gear/icon_19.png", cardImg: "assets/items/gear/card_19.png", rarity: "rare", baseHp: 320, defBonus: 16 },
+    { id: "a4", slot: "armor", name: "Wild Beast Fur Pelt", icon: "assets/items/gear/icon_27.png", cardImg: "assets/items/gear/card_27.png", rarity: "epic", baseHp: 500, defBonus: 26 },
+    { id: "a5", slot: "armor", name: "Patchwork Satchel", icon: "assets/items/gear/icon_30.png", cardImg: "assets/items/gear/card_30.png", rarity: "legendary", baseHp: 800, defBonus: 40, regen: 0.05 },
+
+    { id: "h1", slot: "helmet", name: "Vine Crown", icon: "assets/items/gear/icon_00.png", cardImg: "assets/items/gear/card_00.png", rarity: "common", baseDef: 8 },
+    { id: "h2", slot: "helmet", name: "Flower Acorn Cap", icon: "assets/items/gear/icon_03.png", cardImg: "assets/items/gear/card_03.png", rarity: "uncommon", baseDef: 15 },
+    { id: "h3", slot: "helmet", name: "Explorer Feather Hat", icon: "assets/items/gear/icon_09.png", cardImg: "assets/items/gear/card_09.png", rarity: "rare", baseDef: 24, hpBonus: 80 },
+    { id: "h4", slot: "helmet", name: "Red Mushroom Cap", icon: "assets/items/gear/icon_24.png", cardImg: "assets/items/gear/card_24.png", rarity: "epic", baseDef: 42, reflect: 0.15 },
+    { id: "h5", slot: "helmet", name: "Flower Acorn Cap ★", icon: "assets/items/gear/icon_03.png", cardImg: "assets/items/gear/card_03.png", rarity: "legendary", baseDef: 70, hpBonus: 220, critBonus: 0.10 },
+
+    { id: "b1", slot: "boots", name: "Clover Boots", icon: "assets/items/gear/icon_01.png", cardImg: "assets/items/gear/card_01.png", rarity: "common", baseDodge: 0.05, baseHp: 35 },
+    { id: "b2", slot: "boots", name: "Burlap Cloth Glove", icon: "assets/items/gear/icon_14.png", cardImg: "assets/items/gear/card_14.png", rarity: "uncommon", baseDodge: 0.08, baseHp: 75 },
+    { id: "b3", slot: "boots", name: "Stitched Leather Gauntlet", icon: "assets/items/gear/icon_15.png", cardImg: "assets/items/gear/card_15.png", rarity: "rare", baseDodge: 0.14, baseHp: 140 },
+    { id: "b4", slot: "boots", name: "Fighter Hand Wraps", icon: "assets/items/gear/icon_25.png", cardImg: "assets/items/gear/card_25.png", rarity: "epic", baseDodge: 0.22, baseHp: 240 },
+    { id: "b5", slot: "boots", name: "Clover Boots ★", icon: "assets/items/gear/icon_01.png", cardImg: "assets/items/gear/card_01.png", rarity: "legendary", baseDodge: 0.30, baseHp: 400, speedBonus: 0.25 },
+
+    { id: "r1", slot: "ring", name: "Sprout Wood Ring", icon: "assets/items/gear/icon_11.png", cardImg: "assets/items/gear/card_11.png", rarity: "common", baseCrit: 0.06 },
+    { id: "r2", slot: "ring", name: "Tribal Rope Belt", icon: "assets/items/gear/icon_12.png", cardImg: "assets/items/gear/card_12.png", rarity: "uncommon", baseCrit: 0.11, baseAtk: 12 },
+    { id: "r3", slot: "ring", name: "Adventurer Pouch Belt", icon: "assets/items/gear/icon_13.png", cardImg: "assets/items/gear/card_13.png", rarity: "rare", baseCrit: 0.17, baseAtk: 26 },
+    { id: "r4", slot: "ring", name: "Adventurer Pouch Belt ★", icon: "assets/items/gear/icon_13.png", cardImg: "assets/items/gear/card_13.png", rarity: "epic", baseCrit: 0.25, critDmg: 0.45 },
+    { id: "r5", slot: "ring", name: "Bound Wood Ring", icon: "assets/items/gear/icon_31.png", cardImg: "assets/items/gear/card_31.png", rarity: "legendary", baseCrit: 0.34, critDmg: 0.70, baseAtk: 55 },
+
+    { id: "m1", slot: "amulet", name: "Log Wood Bundle", icon: "assets/items/gear/icon_18.png", cardImg: "assets/items/gear/card_18.png", rarity: "common", baseLifesteal: 0.04 },
+    { id: "m2", slot: "amulet", name: "Vine Wooden Shield", icon: "assets/items/gear/icon_07.png", cardImg: "assets/items/gear/card_07.png", rarity: "uncommon", baseLifesteal: 0.08, baseHp: 60 },
+    { id: "m3", slot: "amulet", name: "Seashell Pendant", icon: "assets/items/gear/icon_20.png", cardImg: "assets/items/gear/card_20.png", rarity: "rare", baseLifesteal: 0.14, baseHp: 130 },
+    { id: "m4", slot: "amulet", name: "Beast Tooth Necklace", icon: "assets/items/gear/icon_10.png", cardImg: "assets/items/gear/card_10.png", rarity: "rare", baseLifesteal: 0.18, baseAtk: 25 },
+    { id: "m5", slot: "amulet", name: "Feather Dream Talisman", icon: "assets/items/gear/icon_28.png", cardImg: "assets/items/gear/card_28.png", rarity: "epic", baseLifesteal: 0.24, baseAtk: 38 },
+    { id: "m6", slot: "amulet", name: "Round Wood Buckler", icon: "assets/items/gear/icon_23.png", cardImg: "assets/items/gear/card_23.png", rarity: "legendary", baseLifesteal: 0.32, baseHp: 320, baseAtk: 50 }
   ],
 
   // Permanent Talents System (Persistent account perks)
