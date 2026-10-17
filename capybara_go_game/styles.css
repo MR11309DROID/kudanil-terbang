@@ -7151,3 +7151,449 @@ body {
 .btn-comp-upgrade:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(59, 130, 246, 0.5); }
 .btn-comp-upgrade:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
+/* ============================================================
+   AUTHENTIC CAPYBARA GO! DEFEAT SCREEN ANIMATION
+   ============================================================ */
+.defeat-screen-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(8, 8, 14, 0.78);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.defeat-screen-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Central Stage Container */
+.defeat-stage-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 340px;
+  width: 90%;
+  transform: translateY(-80px);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.28), opacity 0.3s ease;
+}
+
+.defeat-screen-overlay.active .defeat-stage-wrap {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* 4 Stuck Arrows Group */
+.defeat-arrows-group {
+  position: absolute;
+  top: -70px;
+  left: 0;
+  right: 0;
+  height: 120px;
+  pointer-events: none;
+  z-index: 25;
+}
+
+.defeat-arrow-item {
+  position: absolute;
+  top: 0;
+  width: 24px;
+  height: 100px;
+  opacity: 0;
+  transform-origin: 50% 100%;
+}
+
+.defeat-screen-overlay.active .defeat-arrow-item.arrow-1 {
+  left: 14%;
+  --arrow-rot: -26deg;
+  animation: arrowSlamIn 0.38s cubic-bezier(0.15, 0.9, 0.3, 1.35) 0.28s forwards;
+}
+
+.defeat-screen-overlay.active .defeat-arrow-item.arrow-2 {
+  left: 36%;
+  --arrow-rot: -9deg;
+  animation: arrowSlamIn 0.38s cubic-bezier(0.15, 0.9, 0.3, 1.35) 0.36s forwards;
+}
+
+.defeat-screen-overlay.active .defeat-arrow-item.arrow-3 {
+  left: 64%;
+  --arrow-rot: 8deg;
+  animation: arrowSlamIn 0.38s cubic-bezier(0.15, 0.9, 0.3, 1.35) 0.44s forwards;
+}
+
+.defeat-screen-overlay.active .defeat-arrow-item.arrow-4 {
+  left: 84%;
+  --arrow-rot: 26deg;
+  animation: arrowSlamIn 0.38s cubic-bezier(0.15, 0.9, 0.3, 1.35) 0.52s forwards;
+}
+
+@keyframes arrowSlamIn {
+  0% {
+    transform: translateY(-260px) rotate(var(--arrow-rot)) scale(1.3);
+    opacity: 0;
+  }
+  65% {
+    transform: translateY(12px) rotate(var(--arrow-rot)) scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(12px) rotate(calc(var(--arrow-rot) + 5deg));
+  }
+  92% {
+    transform: translateY(12px) rotate(calc(var(--arrow-rot) - 3deg));
+  }
+  100% {
+    transform: translateY(12px) rotate(var(--arrow-rot));
+    opacity: 1;
+  }
+}
+
+.defeat-arrow-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 3px 4px rgba(0,0,0,0.5));
+}
+
+/* Defeat Title Banner Header */
+.defeat-header-block {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: -18px;
+}
+
+/* Comic "Defeat" Text */
+.defeat-comic-title {
+  font-family: 'Lilita One', 'Fredoka', cursive;
+  font-size: 38px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1px;
+  line-height: 1;
+  margin: 0 0 -10px;
+  text-shadow:
+    -3px -3px 0 #000000,
+     3px -3px 0 #000000,
+    -3px  3px 0 #000000,
+     3px  3px 0 #000000,
+    -3px  0   0 #000000,
+     3px  0   0 #000000,
+     0   -3px 0 #000000,
+     0    3px 0 #000000,
+     0    5px 8px rgba(0, 0, 0, 0.9);
+  z-index: 22;
+}
+
+/* Top Ornate Silver Scroll Roller */
+.defeat-scroll-roller {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 38px;
+  position: relative;
+}
+
+.roller-knob {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roller-knob-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,0.6));
+}
+
+.roller-cylinder {
+  flex: 1;
+  height: 22px;
+  background: linear-gradient(180deg, #94a3b8 0%, #ffffff 35%, #cbd5e1 65%, #64748b 100%);
+  border-top: 2px solid #0f172a;
+  border-bottom: 3px solid #0f172a;
+  box-shadow: inset 0 2px 2px rgba(255,255,255,0.8), 0 4px 8px rgba(0,0,0,0.5);
+  margin: 0 -4px;
+  z-index: 10;
+}
+
+/* Beveled Chapter Plaque Tag */
+.defeat-chapter-pill {
+  position: relative;
+  z-index: 21;
+  background: #141324;
+  border: 2px solid #332d4b;
+  border-radius: 6px;
+  padding: 2px 18px;
+  font-family: 'Lilita One', 'Fredoka', cursive;
+  font-size: 13.5px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.2);
+  margin-top: -6px;
+}
+
+/* Purple Heraldic Banner Body */
+.defeat-banner-body {
+  position: relative;
+  z-index: 15;
+  width: 88%;
+  background: linear-gradient(180deg, #5b3491 0%, #4c267e 60%, #3a1866 100%);
+  border: 6px solid #cbd5e1;
+  border-top: none;
+  border-radius: 0 0 18px 18px;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.75), 
+    inset 0 0 20px rgba(0, 0, 0, 0.5),
+    0 0 0 2.5px #111422;
+  padding: 24px 16px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  overflow: hidden;
+}
+
+/* Diamond Harlequin Pattern Overlay */
+.defeat-banner-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%);
+  background-position: 14px 0, 14px 0, 0 0, 0 0;
+  background-size: 28px 28px;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+/* Battle Damage Notches on Banner Border */
+.defeat-notch {
+  position: absolute;
+  background: #111422;
+  pointer-events: none;
+  z-index: 18;
+}
+.defeat-notch.notch-r1 {
+  right: -6px;
+  top: 38%;
+  width: 5px;
+  height: 9px;
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+.defeat-notch.notch-l1 {
+  left: -6px;
+  bottom: 25%;
+  width: 5px;
+  height: 8px;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* Swallowtail / Heraldic Chevron Tail Point at Bottom */
+.defeat-banner-chevron {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: #cbd5e1;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  margin: 0 auto;
+  width: 32px;
+}
+
+/* Days Survived Subtitle */
+.defeat-survived-label {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #e9d5ff;
+  letter-spacing: 0.4px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  position: relative;
+  z-index: 16;
+}
+
+/* 39 Days Giant Text */
+.defeat-days-headline {
+  font-family: 'Lilita One', 'Fredoka', cursive;
+  font-size: 40px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  margin: 2px 0 6px;
+  text-shadow:
+    -2.5px -2.5px 0 #000000,
+     2.5px -2.5px 0 #000000,
+    -2.5px  2.5px 0 #000000,
+     2.5px  2.5px 0 #000000,
+     0      4px 8px rgba(0, 0, 0, 0.8);
+  position: relative;
+  z-index: 16;
+}
+
+/* Longest Journey Section */
+.defeat-longest-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  position: relative;
+  z-index: 16;
+}
+
+.defeat-longest-title {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #fde047;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.defeat-longest-val {
+  font-family: 'Lilita One', 'Fredoka', cursive;
+  font-size: 17px;
+  font-weight: 900;
+  color: #fef08a;
+  text-shadow:
+    -1.5px -1.5px 0 #000000,
+     1.5px -1.5px 0 #000000,
+    -1.5px  1.5px 0 #000000,
+     1.5px  1.5px 0 #000000,
+     0      2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Bottom Reward Loot Cards Row */
+.defeat-loot-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 22px;
+  z-index: 20;
+}
+
+.defeat-loot-card {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 2px 2px rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  opacity: 0;
+}
+
+.defeat-screen-overlay.active .defeat-loot-card.card-gold {
+  background: linear-gradient(135deg, #84cc16 0%, #4d7c0f 100%);
+  border: 2.5px solid #a3e635;
+  box-shadow: 0 4px 12px rgba(101, 163, 13, 0.45), inset 0 2px 2px rgba(255,255,255,0.4);
+  animation: cardPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.35) 0.85s forwards;
+}
+
+.defeat-screen-overlay.active .defeat-loot-card.card-energy {
+  background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 100%);
+  border: 2.5px solid #c7d2fe;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.45), inset 0 2px 2px rgba(255,255,255,0.4);
+  animation: cardPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.35) 0.98s forwards;
+}
+
+@keyframes cardPopIn {
+  0% { transform: scale(0); opacity: 0; }
+  75% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.defeat-card-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -6px;
+}
+
+.defeat-card-icon svg {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+.defeat-card-badge {
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Lilita One', 'Fredoka', cursive;
+  font-size: 11px;
+  font-weight: 900;
+  color: #ffffff;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.card-gold .defeat-card-badge {
+  background: #4d7c0f;
+  border: 1.5px solid #a3e635;
+}
+
+.card-energy .defeat-card-badge {
+  background: #4338ca;
+  border: 1.5px solid #a5b4fc;
+}
+
+/* Tap Anywhere to Continue Prompt */
+.defeat-continue-prompt {
+  margin-top: 26px;
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: promptFadeIn 0.5s ease 1.25s forwards, promptPulse 2s ease-in-out 1.75s infinite;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+@keyframes promptFadeIn {
+  to { opacity: 0.85; }
+}
+
+@keyframes promptPulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.05); opacity: 1; color: #fef08a; }
+}
+
+

@@ -413,6 +413,31 @@ class AudioManager {
       });
     }
   }
+
+  // Authentic Arrow Impact Thwack for Defeat Screen
+  playArrowThwack() {
+    if (this.muted || this.sfxMuted) return;
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    try {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(340, now);
+      osc.frequency.exponentialRampToValueAtTime(55, now + 0.08);
+      g.gain.setValueAtTime(0.45 * this.sfxVolume, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.095);
+    } catch(e) {}
+  }
+
+  playDefeatScreenFanfare() {
+    this.playSfx("misfortune");
+  }
 }
 
 const Sound = new AudioManager();

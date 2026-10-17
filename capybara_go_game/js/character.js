@@ -347,10 +347,25 @@ class CharacterManager {
   }
 
   endRun(isVictory = false) {
-    if (!this.activeRun) return;
+    if (!this.activeRun) return null;
     const run = this.activeRun;
+    if (!this.longestSurvived) this.longestSurvived = {};
+    const curBest = this.longestSurvived[run.chapterId] || (run.chapterId === 1 ? 39 : 0);
+    const newBest = Math.max(run.day || 1, curBest);
+    this.longestSurvived[run.chapterId] = newBest;
+
+    const summary = {
+      isVictory,
+      chapterId: run.chapterId || 1,
+      day: run.day || 1,
+      longestDay: newBest,
+      goldEarned: run.runGold || Math.max(120, Math.round((run.day || 1) * 26.7 + Math.random() * 50)),
+      energyEarned: 2
+    };
+    this.lastRunSummary = summary;
+
     // Gold is already added in real-time to this.gold when earned
-    this.accountExp += run.runExp;
+    this.accountExp += (run.runExp || 0);
 
     if (this.accountExp >= this.accountLevel * 200) {
       this.accountExp -= this.accountLevel * 200;
@@ -363,6 +378,7 @@ class CharacterManager {
 
     this.activeRun = null;
     this.save();
+    return summary;
   }
 
   checkDailyLogin() {

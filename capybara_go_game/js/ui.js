@@ -2198,37 +2198,132 @@ class UIManager {
     modal.classList.add("open");
   }
 
-  showRunSummaryModal(victory, chapter) {
+  // ===== AUTHENTIC CAPYBARA GO! DEFEAT SCREEN ANIMATION =====
+  showDefeatScreen(summary = {}) {
+    const modal = document.getElementById("modal-defeat-screen");
+    if (!modal) return;
+
+    // 1. Extract values
+    const s = summary || Character.lastRunSummary || {};
+    const chapterId = s.chapterId || Character.selectedChapter || 1;
+    const targetDay = Math.max(1, s.day || (Character.activeRun ? Character.activeRun.day : 39));
+    const longestDay = Math.max(targetDay, s.longestDay || (Character.longestSurvived && Character.longestSurvived[chapterId]) || 39);
+    const goldEarned = s.goldEarned || 1043;
+    const energyEarned = s.energyEarned || 2;
+
+    // 2. Set static and dynamic labels
+    const chTag = document.getElementById("defeat-chapter-pill");
+    const daysHeadline = document.getElementById("defeat-days-headline");
+    const longestVal = document.getElementById("defeat-longest-val");
+    const goldCount = document.getElementById("defeat-gold-count");
+    const energyCount = document.getElementById("defeat-energy-count");
+
+    if (chTag) chTag.textContent = `Chapter ${chapterId}`;
+    if (longestVal) longestVal.textContent = `${longestDay}d`;
+    if (goldCount) goldCount.textContent = `x${goldEarned.toLocaleString()}`;
+    if (energyCount) energyCount.textContent = `x${energyEarned}`;
+
+    // 3. Clear previous animations and display modal
+    modal.style.display = "flex";
+    modal.classList.remove("active");
+    void modal.offsetWidth; // force reflow
+    modal.classList.add("active");
+
+    // 4. Play defeat sound fanfare
+    Sound.playDefeatScreenFanfare && Sound.playDefeatScreenFanfare();
+
+    // 5. Arrow thwack sound sequence
+    const arrowDelays = [280, 360, 440, 520];
+    arrowDelays.forEach(d => {
+      setTimeout(() => {
+        Sound.playArrowThwack && Sound.playArrowThwack();
+      }, d);
+    });
+
+    // 6. Rolling numbers animation for "X days"
+    if (daysHeadline) {
+      daysHeadline.textContent = "1 day";
+      const startCount = 1;
+      const endCount = targetDay;
+      const countDuration = 650;
+      const countStartTime = performance.now() + 550; // starts right after arrows stick
+
+      const countStep = (now) => {
+        if (now < countStartTime) {
+          requestAnimationFrame(countStep);
+          return;
+        }
+        const elapsed = now - countStartTime;
+        const progress = Math.min(1, elapsed / countDuration);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(startCount + (endCount - startCount) * easeOut);
+        daysHeadline.textContent = `${current} day${current > 1 ? "s" : ""}`;
+
+        if (progress < 1) {
+          requestAnimationFrame(countStep);
+        } else {
+          daysHeadline.textContent = `${endCount} day${endCount > 1 ? "s" : ""}`;
+        }
+      };
+      requestAnimationFrame(countStep);
+    }
+
+    // 7. Coin chime when gold card bounces in
+    setTimeout(() => {
+      Sound.playSfx && Sound.playSfx("coin");
+    }, 850);
+
+    // 8. One-click dismiss anywhere on overlay
+    const dismissHandler = () => {
+      modal.removeEventListener("click", dismissHandler);
+      Sound.playSfx && Sound.playSfx("confirm");
+      modal.classList.remove("active");
+      setTimeout(() => {
+        modal.style.display = "none";
+        this.renderAdventureScreen();
+        this.renderHeader();
+        this.renderActiveTab();
+      }, 250);
+    };
+
+    // Prevent immediate accidental tap during initial animation
+    setTimeout(() => {
+      modal.addEventListener("click", dismissHandler);
+    }, 600);
+  }
+
+  showRunSummaryModal(victory, chapterOrSummary) {
+    if (!victory) {
+      this.showDefeatScreen(chapterOrSummary);
+      return;
+    }
+
     const modal = document.getElementById("modal-run-summary");
     if (!modal) return;
 
+    const chapter = chapterOrSummary || (GameData.chapters && GameData.chapters[0]) || { name: "Gale Town", rewardGold: 1000, rewardGems: 100 };
     const title = document.getElementById("summary-title");
     const text = document.getElementById("summary-text");
     const btn = document.getElementById("summary-claim-btn");
 
-    if (victory) {
-      if (title) title.textContent = "🏆 CHAPTER VICTORY!";
-      if (text) text.innerHTML = `
-        <p>Congratulations, Capybara Champion! You successfully completed all 60 days of <strong>${chapter.name}</strong>!</p>
-        <p>Earned: 🪙 +${chapter.rewardGold} Gold | 💎 +${chapter.rewardGems} Gems</p>
-      `;
-    } else {
-      if (title) title.textContent = "💀 RUN DEFEATED";
-      if (text) text.innerHTML = `
-        <p>Your Capybara collapsed from exhaustion in the dangerous wilderness...</p>
-        <p>Temporary skills were lost, but you kept all gathered account Gold & EXP! Upgrade your equipment and talents to try again!</p>
-      `;
-    }
+    if (title) title.textContent = "🏆 CHAPTER VICTORY!";
+    if (text) text.innerHTML = `
+      <p>Congratulations, Capybara Champion! You successfully completed all 60 days of <strong>${chapter.name}</strong>!</p>
+      <p>Earned: 🪙 +${chapter.rewardGold || 1000} Gold | 💎 +${chapter.rewardGems || 100} Gems</p>
+    `;
 
     if (btn) {
       btn.onclick = () => {
         Sound.playSfx("confirm");
+        modal.style.display = "none";
         modal.classList.remove("open");
         this.renderAdventureScreen();
         this.renderHeader();
+        this.renderActiveTab();
       };
     }
 
+    modal.style.display = "flex";
     modal.classList.add("open");
   }
 
@@ -4079,6 +4174,19 @@ window.testDragonRoar = () => {
           if (!r.inBattle) r.enemyState = null;
         }, 1200);
       }
+    });
+  }
+};
+
+// Global diagnostic & test trigger for Authentic Defeat Screen
+window.testDefeatScreen = (days = 39, longest = 39, gold = 1043, energy = 2) => {
+  if (window.Game && window.Game.ui) {
+    window.Game.ui.showDefeatScreen({
+      chapterId: 1,
+      day: days,
+      longestDay: longest,
+      goldEarned: gold,
+      energyEarned: energy
     });
   }
 };

@@ -982,7 +982,156 @@
     <canvas id="gacha-confetti-canvas" class="gacha-confetti-canvas" width="420" height="720"></canvas>
   </div>
 
-  <!-- Run Summary (Victory / Defeat) Modal -->
+  <!-- ================= AUTHENTIC CAPYBARA GO! RUN SUMMARY (DEFEAT & VICTORY) ================= -->
+  <!-- Authentic Defeat Screen Modal (Matches Screenshot & YouTube Reference) -->
+  <div id="modal-defeat-screen" class="defeat-screen-overlay" style="display: none;">
+    <div class="defeat-stage-wrap">
+      
+      <!-- 4 Piercing Purple Arrows -->
+      <div class="defeat-arrows-group">
+        <!-- Arrow 1 (Left slant -26deg) -->
+        <div class="defeat-arrow-item arrow-1">
+          <svg class="defeat-arrow-svg" viewBox="0 0 24 120">
+            <rect x="10.5" y="24" width="3" height="92" fill="#d1d5db" stroke="#111827" stroke-width="1.8" />
+            <!-- Purple Feathers / Vanes -->
+            <polygon points="10.5,24 2,42 10.5,52" fill="#a855f7" stroke="#111827" stroke-width="1.8" />
+            <polygon points="13.5,24 22,42 13.5,52" fill="#7e22ce" stroke="#111827" stroke-width="1.8" />
+            <polygon points="10.5,42 0,64 10.5,72" fill="#9333ea" stroke="#111827" stroke-width="1.8" />
+            <polygon points="13.5,42 24,64 13.5,72" fill="#6b21a8" stroke="#111827" stroke-width="1.8" />
+            <!-- Buried Arrow Tip -->
+            <polygon points="12,120 7,106 17,106" fill="#64748b" stroke="#111827" stroke-width="1.8" />
+          </svg>
+        </div>
+
+        <!-- Arrow 2 (Slight left -9deg) -->
+        <div class="defeat-arrow-item arrow-2">
+          <svg class="defeat-arrow-svg" viewBox="0 0 24 120">
+            <rect x="10.5" y="24" width="3" height="92" fill="#d1d5db" stroke="#111827" stroke-width="1.8" />
+            <polygon points="10.5,24 2,42 10.5,52" fill="#a855f7" stroke="#111827" stroke-width="1.8" />
+            <polygon points="13.5,24 22,42 13.5,52" fill="#7e22ce" stroke="#111827" stroke-width="1.8" />
+            <polygon points="10.5,42 0,64 10.5,72" fill="#9333ea" stroke="#111827" stroke-width="1.8" />
+            <polygon points="13.5,42 24,64 13.5,72" fill="#6b21a8" stroke="#111827" stroke-width="1.8" />
+            <polygon points="12,120 7,106 17,106" fill="#64748b" stroke="#111827" stroke-width="1.8" />
+          </svg>
+        </div>
+
+        <!-- Arrow 3 (Slight right +8deg) -->
+        <div class="defeat-arrow-item arrow-3">
+          <svg class="defeat-arrow-svg" viewBox="0 0 24 120">
+            <rect x="10.5" y="24" width="3" height="92" fill="#d1d5db" stroke="#111827" stroke-width="1.8" />
+            <polygon points="10.5,24 2,42 10.5,52" fill="#a855f7" stroke="#111827" stroke-width="1.8" />
+            <polygon points="13.5,24 22,42 13.5,52" fill="#7e22ce" stroke="#111827" stroke-width="1.8" />
+            <polygon points="10.5,42 0,64 10.5,72" fill="#9333ea" stroke="#111827" stroke-width="1.8" />
+            <polygon points="13.5,42 24,64 13.5,72" fill="#6b21a8" stroke="#111827" stroke-width="1.8" />
+            <polygon points="12,120 7,106 17,106" fill="#64748b" stroke="#111827" stroke-width="1.8" />
+          </svg>
+        </div>
+
+        <!-- Arrow 4 (Right slant +26deg) -->
+        <div class="defeat-arrow-item arrow-4">
+          <svg class="defeat-arrow-svg" viewBox="0 0 24 120">
+            <rect x="10.5" y="24" width="3" height="92" fill="#d1d5db" stroke="#111827" stroke-width="1.8" />
+            <polygon points="10.5,24 2,42 10.5,52" fill="#a855f7" stroke="#111827" stroke-width="1.8" />
+            <polygon points="13.5,24 22,42 13.5,52" fill="#7e22ce" stroke="#111827" stroke-width="1.8" />
+            <polygon points="10.5,42 0,64 10.5,72" fill="#9333ea" stroke="#111827" stroke-width="1.8" />
+            <polygon points="13.5,42 24,64 13.5,72" fill="#6b21a8" stroke="#111827" stroke-width="1.8" />
+            <polygon points="12,120 7,106 17,106" fill="#64748b" stroke="#111827" stroke-width="1.8" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Top Defeat Header & Scroll Roller Block -->
+      <div class="defeat-header-block">
+        <h1 class="defeat-comic-title">Defeat</h1>
+
+        <div class="defeat-scroll-roller">
+          <!-- Left Sculpted Finial Knob -->
+          <div class="roller-knob knob-left">
+            <svg class="roller-knob-svg" viewBox="0 0 32 32">
+              <polygon points="2,16 10,7 10,25" fill="#cbd5e1" stroke="#111827" stroke-width="2" />
+              <rect x="10" y="5" width="6" height="22" rx="2" fill="#94a3b8" stroke="#111827" stroke-width="2" />
+              <rect x="16" y="7" width="14" height="18" fill="#e2e8f0" stroke="#111827" stroke-width="2" />
+              <circle cx="2" cy="16" r="2.5" fill="#f8fafc" stroke="#111827" stroke-width="1.5" />
+            </svg>
+          </div>
+
+          <!-- Silver Cylinder Roller Bar -->
+          <div class="roller-cylinder"></div>
+
+          <!-- Right Sculpted Finial Knob -->
+          <div class="roller-knob knob-right">
+            <svg class="roller-knob-svg" viewBox="0 0 32 32">
+              <rect x="2" y="7" width="14" height="18" fill="#e2e8f0" stroke="#111827" stroke-width="2" />
+              <rect x="16" y="5" width="6" height="22" rx="2" fill="#94a3b8" stroke="#111827" stroke-width="2" />
+              <polygon points="30,16 22,7 22,25" fill="#cbd5e1" stroke="#111827" stroke-width="2" />
+              <circle cx="30" cy="16" r="2.5" fill="#f8fafc" stroke="#111827" stroke-width="1.5" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Chapter Octagonal Plaque Tag -->
+        <div class="defeat-chapter-pill" id="defeat-chapter-pill">Chapter 1</div>
+      </div>
+
+      <!-- Main Purple Velvet Heraldic Tapestry Scroll Body -->
+      <div class="defeat-banner-body">
+        <div class="defeat-banner-pattern"></div>
+        
+        <!-- Border battle notches -->
+        <div class="defeat-notch notch-r1"></div>
+        <div class="defeat-notch notch-l1"></div>
+
+        <!-- Subtitle: Days survived -->
+        <div class="defeat-survived-label">Days survived</div>
+
+        <!-- Huge Main Stat: 39 days -->
+        <div class="defeat-days-headline" id="defeat-days-headline">39 days</div>
+
+        <!-- Longest Journey Box -->
+        <div class="defeat-longest-block">
+          <span class="defeat-longest-title">Longest Journey:</span>
+          <span class="defeat-longest-val" id="defeat-longest-val">39d</span>
+        </div>
+
+        <div class="defeat-banner-chevron"></div>
+      </div>
+
+      <!-- Loot Reward Cards Row -->
+      <div class="defeat-loot-row">
+        <!-- Gold Loot Card -->
+        <div class="defeat-loot-card card-gold" title="Koin Emas Diperoleh">
+          <div class="defeat-card-icon">
+            <svg viewBox="0 0 36 36">
+              <circle cx="18" cy="18" r="16" fill="#facc15" stroke="#713f12" stroke-width="2.5" />
+              <circle cx="18" cy="18" r="11" fill="#eab308" stroke="#ca8a04" stroke-width="1.8" />
+              <circle cx="18" cy="18" r="6" fill="#fde047" stroke="#713f12" stroke-width="1.8" />
+            </svg>
+          </div>
+          <div class="defeat-card-badge" id="defeat-gold-count">x1043</div>
+        </div>
+
+        <!-- Energy / EXP Loot Card -->
+        <div class="defeat-loot-card card-energy" title="Energi / Stamina">
+          <div class="defeat-card-icon">
+            <svg viewBox="0 0 36 36">
+              <polygon points="19,2 7,19 17,19 15,34 29,15 19,15" fill="#38bdf8" stroke="#0f172a" stroke-width="2.5" stroke-linejoin="round" />
+              <polygon points="18,6 10,18 17,18 16,28 25,16 19,16" fill="#bae6fd" />
+            </svg>
+          </div>
+          <div class="defeat-card-badge" id="defeat-energy-count">x2</div>
+        </div>
+      </div>
+
+      <!-- Tap Anywhere to Continue Prompt -->
+      <div class="defeat-continue-prompt">
+        <span>Sentuh layar untuk melanjutkan</span>
+        <span>🐾</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Standard Victory Run Summary Modal -->
   <div id="modal-run-summary" class="modal-overlay">
     <div class="modal-card panel-navy">
       <h2 id="summary-title" class="modal-title">Chapter Clear</h2>

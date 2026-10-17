@@ -260,9 +260,9 @@ class AdventureEngine {
       }
     } else {
       // Run Defeat
-      Character.endRun(false);
+      const summary = Character.endRun(false);
       if (this.onRunComplete) {
-        this.onRunComplete(false);
+        this.onRunComplete(false, summary);
       }
     }
   }
