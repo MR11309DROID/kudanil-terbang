@@ -2635,53 +2635,6 @@ class UIManager {
       toast.classList.remove("visible");
     }, 2400);
   }
-}
-
-// Global diagnostic & gameplay trigger for Falling Treasure Chest
-window.triggerFallingChest = (opts = {}) => {
-  if (window.Game && window.Game.ui) {
-    window.Game.ui.triggerFallingChest(opts);
-  }
-};
-
-// Global diagnostic & test trigger for Dragon Roar cinematic skill animation
-window.testDragonRoar = () => {
-  if (window.Game && window.Game.renderer) {
-    const r = window.Game.renderer;
-    const px = r.playerState ? r.playerState.x : 90;
-    const py = r.groundY - 50;
-    
-    // If not currently in battle, spawn a dummy target so the breath and explosion have an impact location
-    let hadEnemy = !!r.enemyState;
-    if (!r.enemyState) {
-      r.enemyState = {
-        x: px + 195,
-        currentHp: 20000,
-        maxHp: 20000,
-        shake: 0,
-        knockback: 0,
-        flashWhite: 0
-      };
-    }
-
-    const ex = r.enemyState.x;
-    const ey = r.groundY - 50;
-
-    r.launchDragonBreath(px, py, ex, ey, () => {
-      console.log("🔥 Dragon Roar Hit Triggered!");
-      if (r.addFloatingText) {
-        r.addFloatingText("🔥 CRIT 14,820", ex, r.groundY - 60, "crit");
-      }
-    }, () => {
-      console.log("🐉 Dragon Roar Animation Completed!");
-      // If was dummy created for test in menu, clean up after animation ends
-      if (!hadEnemy && !r.inBattle) {
-        setTimeout(() => {
-          if (!r.inBattle) r.enemyState = null;
-        }, 1200);
-      }
-    });
-  }
 
   // ===== DAILY LOGIN BONUS CONTROLLER =====
   openDailyLogin() {
@@ -3097,5 +3050,53 @@ window.testDragonRoar = () => {
       `<div class="stat-card"><div class="stat-card-icon">${c.icon}</div><div class="stat-card-value">${c.value}</div><div class="stat-card-label">${c.label}</div></div>`
     ).join("");
   }
+}
+
+// Global diagnostic & gameplay trigger for Falling Treasure Chest
+window.triggerFallingChest = (opts = {}) => {
+  if (window.Game && window.Game.ui) {
+    window.Game.ui.triggerFallingChest(opts);
+  }
 };
+
+// Global diagnostic & test trigger for Dragon Roar cinematic skill animation
+window.testDragonRoar = () => {
+  if (window.Game && window.Game.renderer) {
+    const r = window.Game.renderer;
+    const px = r.playerState ? r.playerState.x : 90;
+    const py = r.groundY - 50;
+    
+    // If not currently in battle, spawn a dummy target so the breath and explosion have an impact location
+    let hadEnemy = !!r.enemyState;
+    if (!r.enemyState) {
+      r.enemyState = {
+        x: px + 195,
+        currentHp: 20000,
+        maxHp: 20000,
+        shake: 0,
+        knockback: 0,
+        flashWhite: 0
+      };
+    }
+
+    const ex = r.enemyState.x;
+    const ey = r.groundY - 50;
+
+    r.launchDragonBreath(px, py, ex, ey, () => {
+      console.log("🔥 Dragon Roar Hit Triggered!");
+      if (r.addFloatingText) {
+        r.addFloatingText("🔥 CRIT 14,820", ex, r.groundY - 60, "crit");
+      }
+    }, () => {
+      console.log("🐉 Dragon Roar Animation Completed!");
+      // If was dummy created for test in menu, clean up after animation ends
+      if (!hadEnemy && !r.inBattle) {
+        setTimeout(() => {
+          if (!r.inBattle) r.enemyState = null;
+        }, 1200);
+      }
+    });
+  }
+};
+
 
