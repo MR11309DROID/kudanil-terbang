@@ -2556,37 +2556,349 @@ class UIManager {
     });
   }
 
+  // ===== CINEMATIC GACHA CHEST OPENING SYSTEM =====
   showGachaResultsModal(items, chestName) {
-    Sound.playSfx("chestOpen");
-    setTimeout(() => Sound.playSfx("lootRare"), 400);
+    this.playGachaCinematic(items, chestName);
+  }
+
+  playGachaCinematic(items, chestName) {
+    this._gachaItems = items || [];
+    this._gachaChestName = chestName || "Treasure Chest";
+    this._gachaSkipped = false;
+    this._gachaOpeningBurst = false;
+    if (this._gachaTimers) {
+      this._gachaTimers.forEach(t => clearTimeout(t));
+    }
+    this._gachaTimers = [];
 
     const modal = document.getElementById("modal-gacha-result");
-    const container = document.getElementById("gacha-loot-container");
-    if (!modal || !container) return;
+    if (!modal) return;
 
-    document.getElementById("gacha-chest-title").textContent = chestName;
-    container.innerHTML = "";
+    // Detect highest rarity
+    const rarityRank = { common: 1, uncommon: 2, rare: 3, epic: 4, legendary: 5 };
+    let bestRank = 1;
+    let bestRarity = "common";
+    for (const it of this._gachaItems) {
+      const r = it.rarity || "common";
+      if ((rarityRank[r] || 1) > bestRank) {
+        bestRank = rarityRank[r] || 1;
+        bestRarity = r;
+      }
+    }
+    this._gachaBestRarity = bestRarity;
 
-    items.forEach((it, idx) => {
-      const card = document.createElement("div");
-      card.className = `gacha-item-card rarity-${it.rarity}`;
-      card.style.animationDelay = `${idx * 0.15}s`;
-      card.innerHTML = `
-        <div class="gacha-item-img-wrap">
-          <img src="${it.icon}" class="gacha-item-img" alt="${it.name}">
-        </div>
-        <div class="gacha-item-name rarity-text-${it.rarity}">${it.name}</div>
-        <div class="gacha-item-rarity">${it.rarity.toUpperCase()}</div>
-      `;
-      container.appendChild(card);
-    });
+    // Pick SVG art matching chest type
+    let closedSvg = "assets/ui/gacha/chest_legendary.svg";
+    if (chestName.includes("Hero")) {
+      closedSvg = "assets/ui/gacha/crate_hero.svg";
+    } else if (chestName.includes("Adventurer")) {
+      closedSvg = "assets/ui/gacha/crate_adventurer.svg";
+    }
 
-    document.getElementById("btn-gacha-claim").onclick = () => {
-      Sound.playSfx("confirm");
-      modal.classList.remove("open");
+    const titleEl = document.getElementById("gacha-chest-title");
+    if (titleEl) titleEl.textContent = chestName;
+
+    const stageChest = document.getElementById("gacha-stage-chest");
+    const stageLoot = document.getElementById("gacha-stage-loot");
+    const closedImg = document.getElementById("gacha-chest-closed-img");
+    const openedImg = document.getElementById("gacha-chest-opened-img");
+    const actor = document.getElementById("gacha-chest-actor");
+    const aura = document.getElementById("gacha-chest-aura");
+    const beam = document.getElementById("gacha-conical-pillar");
+    const crackGlow = document.getElementById("gacha-lid-crack-glow");
+    const tapHint = document.getElementById("gacha-open-hint");
+    const shockwave = document.getElementById("gacha-ground-shockwave");
+    const claimBtn = document.getElementById("btn-gacha-claim");
+
+    if (stageChest) stageChest.style.display = "flex";
+    if (stageLoot) stageLoot.style.display = "none";
+    if (closedImg) {
+      closedImg.src = closedSvg;
+      closedImg.style.display = "block";
+    }
+    if (openedImg) openedImg.style.display = "none";
+    if (beam) beam.style.display = "none";
+    if (crackGlow) crackGlow.classList.remove("active");
+    if (tapHint) {
+      tapHint.style.display = "block";
+      tapHint.textContent = "✨ Tap Chest to Open ✨";
+    }
+    if (claimBtn) claimBtn.style.display = "none";
+
+    // Set aura color
+    if (aura) {
+      aura.className = `gacha-chest-aura aura-${bestRarity}`;
+    }
+
+    // Play entrance drop
+    if (actor) {
+      actor.className = "gacha-chest-actor entrance";
+    }
+    if (shockwave) {
+      shockwave.classList.remove("trigger");
+      void shockwave.offsetWidth;
+      shockwave.classList.add("trigger");
+    }
+
+    modal.style.display = "flex";
+    Sound.playSfx("attackHeavy");
+
+    // After drop finishes, transition to idle hover
+    const t1 = setTimeout(() => {
+      if (actor && !this._gachaOpeningBurst && !this._gachaSkipped) {
+        actor.className = "gacha-chest-actor idle";
+      }
+    }, 650);
+    this._gachaTimers.push(t1);
+
+    // Auto-trigger open after suspenseful pause
+    const t2 = setTimeout(() => {
+      if (!this._gachaOpeningBurst && !this._gachaSkipped) {
+        this.triggerChestOpenBurst();
+      }
+    }, 850);
+    this._gachaTimers.push(t2);
+  }
+
+  triggerChestOpenBurst() {
+    if (this._gachaOpeningBurst || this._gachaSkipped) return;
+    this._gachaOpeningBurst = true;
+
+    const actor = document.getElementById("gacha-chest-actor");
+    const crackGlow = document.getElementById("gacha-lid-crack-glow");
+    const tapHint = document.getElementById("gacha-open-hint");
+    const flash = document.getElementById("gacha-screen-flash");
+    const closedImg = document.getElementById("gacha-chest-closed-img");
+    const openedImg = document.getElementById("gacha-chest-opened-img");
+    const beam = document.getElementById("gacha-conical-pillar");
+    const shockwave = document.getElementById("gacha-ground-shockwave");
+
+    if (tapHint) tapHint.style.display = "none";
+
+    // Suspense rattle shake
+    if (actor) actor.className = "gacha-chest-actor rattling";
+    if (crackGlow) crackGlow.classList.add("active");
+    Sound.playSfx("dodge");
+
+    // Sudden explosion at 650ms
+    const t1 = setTimeout(() => {
+      if (this._gachaSkipped) return;
+
+      // Screen flash
+      if (flash) {
+        flash.classList.add("flash-active");
+        setTimeout(() => flash.classList.remove("flash-active"), 280);
+      }
+      if (shockwave) {
+        shockwave.classList.remove("trigger");
+        void shockwave.offsetWidth;
+        shockwave.classList.add("trigger");
+      }
+
+      // Pop open chest
+      if (closedImg) closedImg.style.display = "none";
+      if (openedImg) openedImg.style.display = "block";
+      if (beam) beam.style.display = "block";
+      if (crackGlow) crackGlow.classList.remove("active");
+
+      Sound.playSfx("chestOpen");
+      this.spawnGachaConfetti(this._gachaBestRarity);
+    }, 650);
+    this._gachaTimers.push(t1);
+
+    // Reveal loot cards at 1050ms
+    const t2 = setTimeout(() => {
+      if (this._gachaSkipped) return;
+      this.revealGachaLoot(this._gachaItems);
+    }, 1050);
+    this._gachaTimers.push(t2);
+  }
+
+  revealGachaLoot(items) {
+    if (this._gachaTimers) {
+      this._gachaTimers.forEach(t => clearTimeout(t));
+    }
+
+    const stageChest = document.getElementById("gacha-stage-chest");
+    const stageLoot = document.getElementById("gacha-stage-loot");
+    const singleWrap = document.getElementById("gacha-single-loot");
+    const gridWrap = document.getElementById("gacha-loot-container");
+    const claimBtn = document.getElementById("btn-gacha-claim");
+    const claimLabel = document.getElementById("btn-gacha-claim-label");
+
+    if (stageChest) stageChest.style.display = "none";
+    if (stageLoot) stageLoot.style.display = "flex";
+
+    if (!items || items.length === 0) return;
+
+    if (items.length === 1) {
+      // Single Pull (1x Hero Showcase)
+      const it = items[0];
+      if (singleWrap) {
+        singleWrap.style.display = "flex";
+        singleWrap.innerHTML = `
+          <div class="gacha-hero-card rarity-${it.rarity}">
+            <div class="gacha-hero-badge badge-${it.rarity}">★ ${it.rarity.toUpperCase()} ★</div>
+            <div class="gacha-hero-icon-wrap">
+              <img src="${it.icon}" class="gacha-hero-icon" alt="${it.name}">
+            </div>
+            <div class="gacha-hero-name rarity-text-${it.rarity}">${it.name}</div>
+            <div class="gacha-hero-stats">
+              ${it.baseAtk ? `<span class="gacha-stat-pill">⚔️ ATK +${it.baseAtk}</span>` : ""}
+              ${it.baseHp ? `<span class="gacha-stat-pill">❤️ HP +${it.baseHp}</span>` : ""}
+              ${it.defBonus ? `<span class="gacha-stat-pill">🛡️ DEF +${it.defBonus}</span>` : ""}
+              ${it.critBonus ? `<span class="gacha-stat-pill">⚡ CRIT +${Math.round(it.critBonus * 100)}%</span>` : ""}
+            </div>
+          </div>
+        `;
+      }
+      if (gridWrap) gridWrap.style.display = "none";
+      if (claimLabel) claimLabel.textContent = "Claim Equipment ✨";
+
+      if (it.rarity === "legendary") {
+        Sound.playSfx("bigWin");
+      } else if (it.rarity === "epic") {
+        Sound.playSfx("lootRare");
+      } else {
+        Sound.playSfx("fortune");
+      }
+
+    } else {
+      // Multi Pull (10x Grid Showcase)
+      if (singleWrap) singleWrap.style.display = "none";
+      if (gridWrap) {
+        gridWrap.style.display = "grid";
+        gridWrap.innerHTML = "";
+        items.forEach((it, idx) => {
+          const card = document.createElement("div");
+          card.className = `gacha-item-card rarity-${it.rarity}`;
+          card.style.animationDelay = `${idx * 0.08}s`;
+          card.innerHTML = `
+            <div class="gacha-item-img-wrap">
+              <img src="${it.icon}" class="gacha-item-img" alt="${it.name}">
+            </div>
+            <div class="gacha-item-name rarity-text-${it.rarity}">${it.name}</div>
+            <div class="gacha-item-rarity">${it.rarity.toUpperCase()}</div>
+          `;
+          gridWrap.appendChild(card);
+
+          const t = setTimeout(() => {
+            if (!this._gachaSkipped) {
+              Sound.playSfx("click");
+              if (it.rarity === "epic" || it.rarity === "legendary") {
+                Sound.playSfx("lootRare");
+              }
+            }
+          }, idx * 80);
+          this._gachaTimers.push(t);
+        });
+      }
+      if (claimLabel) claimLabel.textContent = `Claim All (${items.length}) Treasures ✨`;
+    }
+
+    if (claimBtn) {
+      claimBtn.style.display = "inline-flex";
+      claimBtn.onclick = () => {
+        Sound.playSfx("confirm");
+        const modal = document.getElementById("modal-gacha-result");
+        if (modal) modal.style.display = "none";
+        this.renderHeader();
+        this.renderChestsScreen();
+      };
+    }
+  }
+
+  skipGachaAnimation() {
+    this._gachaSkipped = true;
+    if (this._gachaTimers) {
+      this._gachaTimers.forEach(t => clearTimeout(t));
+    }
+    const canvas = document.getElementById("gacha-confetti-canvas");
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    this.revealGachaLoot(this._gachaItems);
+  }
+
+  spawnGachaConfetti(bestRarity = "rare") {
+    const canvas = document.getElementById("gacha-confetti-canvas");
+    if (!canvas) return;
+    const colors = bestRarity === "legendary" 
+      ? ["#f59e0b", "#fde047", "#ef4444", "#ffffff", "#ec4899"]
+      : ["#a855f7", "#38bdf8", "#4ade80", "#fde047", "#ffffff"];
+
+    this._gachaParticles = [];
+    const cx = canvas.width / 2;
+    const cy = canvas.height * 0.48;
+
+    for (let i = 0; i < 55; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 3 + Math.random() * 6.5;
+      this._gachaParticles.push({
+        x: cx,
+        y: cy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 3.5,
+        size: 4 + Math.random() * 6,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * Math.PI * 2,
+        vrot: (Math.random() - 0.5) * 0.25,
+        alpha: 1.0,
+        isStar: Math.random() < 0.35
+      });
+    }
+
+    const animateConfetti = () => {
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let pIdx = this._gachaParticles.length - 1; pIdx >= 0; pIdx--) {
+        const p = this._gachaParticles[pIdx];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.25;
+        p.rot += p.vrot;
+        p.alpha -= 0.016;
+
+        if (p.alpha <= 0) {
+          this._gachaParticles.splice(pIdx, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+
+        if (p.isStar) {
+          ctx.beginPath();
+          for (let s = 0; s < 5; s++) {
+            const a1 = (Math.PI * 2 / 5) * s;
+            const a2 = a1 + Math.PI / 5;
+            const rx1 = Math.cos(a1) * p.size;
+            const ry1 = Math.sin(a1) * p.size;
+            const rx2 = Math.cos(a2) * (p.size * 0.45);
+            const ry2 = Math.sin(a2) * (p.size * 0.45);
+            if (s === 0) ctx.moveTo(rx1, ry1);
+            else ctx.lineTo(rx1, ry1);
+            ctx.lineTo(rx2, ry2);
+          }
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.7);
+        }
+        ctx.restore();
+      }
+
+      if (this._gachaParticles.length > 0) {
+        requestAnimationFrame(animateConfetti);
+      }
     };
 
-    modal.classList.add("open");
+    requestAnimationFrame(animateConfetti);
   }
 
   // Bestiary Screen

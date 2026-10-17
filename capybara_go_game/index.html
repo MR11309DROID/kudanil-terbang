@@ -902,13 +902,63 @@
     </div>
   </div>
 
-  <!-- Gacha Loot Reveal Modal -->
-  <div id="modal-gacha-result" class="modal-overlay">
-    <div class="modal-card panel-reward gacha-reveal-card">
-      <h2 id="gacha-chest-title" class="modal-title">Chest Opened!</h2>
-      <div id="gacha-loot-container" class="gacha-loot-grid"></div>
-      <button id="btn-gacha-claim" class="btn-game btn-gold btn-claim-large">Claim Treasures ✨</button>
+  <!-- ================= CINEMATIC GACHA CHEST OPENING MODAL ================= -->
+  <div id="modal-gacha-result" class="modal-overlay gacha-cinematic-overlay" style="display:none;">
+    <!-- Top Bar: Chest Title & Skip Button -->
+    <div class="gacha-cinematic-top">
+      <span id="gacha-chest-title" class="gacha-cinematic-header-title">Legendary Treasure Chest</span>
+      <button id="btn-gacha-skip" class="btn-gacha-skip" type="button" onclick="window.Game && window.Game.ui && window.Game.ui.skipGachaAnimation()">Skip ⏭</button>
     </div>
+
+    <!-- Rotating Sunburst Rays Background -->
+    <div class="gacha-sunburst-backdrop">
+      <div class="gacha-sunburst-spinning-rays"></div>
+      <div class="gacha-ambient-twinkles">
+        <span class="g-twinkle tw-1">✦</span>
+        <span class="g-twinkle tw-2">✨</span>
+        <span class="g-twinkle tw-3">★</span>
+        <span class="g-twinkle tw-4">✦</span>
+        <span class="g-twinkle tw-5">✨</span>
+      </div>
+    </div>
+
+    <!-- Fullscreen White Flash Shockwave Layer -->
+    <div id="gacha-screen-flash" class="gacha-screen-flash"></div>
+
+    <!-- Phase 1: Interactive 3D Chest Stage -->
+    <div id="gacha-stage-chest" class="gacha-stage-chest" onclick="window.Game && window.Game.ui && window.Game.ui.triggerChestOpenBurst()">
+      <div id="gacha-chest-aura" class="gacha-chest-aura aura-legendary"></div>
+      <div id="gacha-conical-pillar" class="gacha-conical-pillar" style="display:none;"></div>
+      
+      <div id="gacha-chest-actor" class="gacha-chest-actor">
+        <img id="gacha-chest-closed-img" src="assets/ui/gacha/chest_legendary.svg" class="gacha-chest-svg closed" alt="Chest Closed">
+        <img id="gacha-chest-opened-img" src="assets/ui/chest_golden_open.svg" class="gacha-chest-svg opened" alt="Chest Opened" style="display:none;">
+        <div id="gacha-lid-crack-glow" class="gacha-lid-crack-glow"></div>
+        <div class="gacha-pedestal-shadow"></div>
+      </div>
+
+      <div id="gacha-ground-shockwave" class="gacha-ground-shockwave"></div>
+      <div id="gacha-open-hint" class="gacha-open-hint">✨ Tap Chest to Open ✨</div>
+    </div>
+
+    <!-- Phase 2: Loot Reveal Stage -->
+    <div id="gacha-stage-loot" class="gacha-stage-loot" style="display:none;">
+      <!-- Single 1x Card Hero Display -->
+      <div id="gacha-single-loot" class="gacha-single-loot" style="display:none;"></div>
+
+      <!-- Multi 10x Grid Display -->
+      <div id="gacha-loot-container" class="gacha-loot-grid" style="display:none;"></div>
+
+      <!-- Bottom Claim Button -->
+      <div class="gacha-claim-row">
+        <button id="btn-gacha-claim" class="btn-game btn-gold btn-gacha-claim-juicy">
+          <span id="btn-gacha-claim-label">Claim Treasures ✨</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Celebration Confetti & Sparkles Canvas -->
+    <canvas id="gacha-confetti-canvas" class="gacha-confetti-canvas" width="420" height="720"></canvas>
   </div>
 
   <!-- Run Summary (Victory / Defeat) Modal -->
