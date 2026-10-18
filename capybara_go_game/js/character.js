@@ -50,7 +50,9 @@ class CharacterManager {
       hp: 0,
       atk: 1,
       def: 0,
-      tierIndex: 0,
+      majorTierIndex: 0,
+      subRank: 1,
+      stageProgress: 1,
       claimedMilestones: []
     };
 
@@ -386,47 +388,77 @@ class CharacterManager {
   }
 
   // ===== CAPYBARA GO AUTHENTIC TALENT STATS & ROAD =====
-  getTalentTiers() {
+  getMajorTiers() {
     return [
-      { name: "Apprentice", title: "Apprentice", nextTitle: "Adventurer", req: 20 },
-      { name: "Adventurer", title: "Adventurer", nextTitle: "Warrior", req: 20 },
-      { name: "Warrior", title: "Warrior", nextTitle: "Knight", req: 20 },
-      { name: "Knight", title: "Knight", nextTitle: "Champion", req: 20 },
-      { name: "Champion", title: "Champion", nextTitle: "Master", req: 20 },
-      { name: "Master", title: "Master", nextTitle: "Grandmaster", req: 20 },
-      { name: "Grandmaster", title: "Grandmaster", nextTitle: "Legend", req: 20 },
-      { name: "Legend", title: "Legend", nextTitle: "Immortal", req: 20 }
+      { id: "apprentice", name: "Apprentice", maxSub: 5 },
+      { id: "adventurer", name: "Adventurer", maxSub: 5 },
+      { id: "warrior", name: "Warrior", maxSub: 5 },
+      { id: "knight", name: "Knight", maxSub: 5 },
+      { id: "champion", name: "Champion", maxSub: 5 },
+      { id: "master", name: "Master", maxSub: 5 },
+      { id: "grandmaster", name: "Grandmaster", maxSub: 5 },
+      { id: "legend", name: "Legend", maxSub: 5 }
     ];
   }
 
+  getTalentTiers() {
+    return this.getMajorTiers();
+  }
+
   getTalentProgress() {
-    const tiers = this.getTalentTiers();
-    const hp = (this.statUpgrades && this.statUpgrades.hp) || 0;
-    const atk = (this.statUpgrades && this.statUpgrades.atk) || 0;
-    const def = (this.statUpgrades && this.statUpgrades.def) || 0;
-    
-    // Explicit tier index stored in statUpgrades, starts at 0 (Apprentice)
-    const tierIndex = Math.min(tiers.length - 1, Math.max(0, (this.statUpgrades && this.statUpgrades.tierIndex) || 0));
-    const currentTier = tiers[tierIndex];
+    const majorTiers = this.getMajorTiers();
+    if (!this.statUpgrades) {
+      this.statUpgrades = {
+        hp: 0,
+        atk: 1,
+        def: 0,
+        majorTierIndex: 0,
+        subRank: 1,
+        stageProgress: 1,
+        claimedMilestones: []
+      };
+    }
 
+    const majorTierIndex = Math.min(majorTiers.length - 1, Math.max(0, this.statUpgrades.majorTierIndex || 0));
+    const subRank = Math.max(1, this.statUpgrades.subRank || 1);
+    const curMajor = majorTiers[majorTierIndex];
+
+    const currentRankTitle = `${curMajor.name} - ${subRank}`;
+
+    // Determine next target rank (e.g. Apprentice - 2, Apprentice - 3... then Adventurer - 1)
+    let nextRankTitle = "";
+    if (subRank < curMajor.maxSub) {
+      nextRankTitle = `${curMajor.name} - ${subRank + 1}`;
+    } else {
+      const nextMajor = majorTiers[Math.min(majorTiers.length - 1, majorTierIndex + 1)];
+      nextRankTitle = `${nextMajor.name} - 1`;
+    }
+
+    const hp = this.statUpgrades.hp || 0;
+    const atk = this.statUpgrades.atk || 0;
+    const def = this.statUpgrades.def || 0;
     const total = hp + atk + def;
-    // Calculate progress within current tier (0 to 20)
-    const tierProgress = Math.min(20, Math.max(0, total - (tierIndex * 20)));
-    const displayLevel = Math.max(1, Math.min(20, tierProgress));
 
-    const m10Key = `${tierIndex}_10`;
-    const m20Key = `${tierIndex}_20`;
-    const isClaimedM10 = !!(this.statUpgrades && this.statUpgrades.claimedMilestones && this.statUpgrades.claimedMilestones.includes(m10Key));
-    const canClaimM10 = tierProgress >= 10 && !isClaimedM10;
-    const isRankedUp = !!(this.statUpgrades && this.statUpgrades.claimedMilestones && this.statUpgrades.claimedMilestones.includes(m20Key));
-    const canRankUp = tierProgress >= 20 && !isRankedUp;
+    // Progress in current stage: 1 to 20
+    const stageProgress = Math.min(20, Math.max(1, this.statUpgrades.stageProgress || 1));
+    const displayLevel = stageProgress;
+
+    const m10Key = `${curMajor.name}_${subRank}_10`;
+    const m20Key = `${curMajor.name}_${subRank}_20`;
+    const claimedList = this.statUpgrades.claimedMilestones || [];
+    const isClaimedM10 = claimedList.includes(m10Key);
+    const canClaimM10 = stageProgress >= 10 && !isClaimedM10;
+    const isRankedUp = claimedList.includes(m20Key);
+    const canRankUp = stageProgress >= 20 && !isRankedUp;
 
     return {
-      tierIndex,
-      tierName: currentTier.name,
-      nextTierName: currentTier.nextTitle,
+      majorTierIndex,
+      subRank,
+      majorName: curMajor.name,
+      tierName: currentRankTitle, // e.g. "Apprentice - 1", "Apprentice - 2"
+      nextTierName: nextRankTitle, // e.g. "Apprentice - 2", "Apprentice - 3"
       displayLevel,
-      tierProgress,
+      tierProgress: stageProgress,
       totalUpgrades: total,
       hpLevel: hp,
       atkLevel: atk,
@@ -445,13 +477,18 @@ class CharacterManager {
 
   upgradeCoreStat(statKey) {
     if (!this.statUpgrades) {
-      this.statUpgrades = { hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] };
+      this.statUpgrades = { hp: 0, atk: 1, def: 0, majorTierIndex: 0, subRank: 1, stageProgress: 1, claimedMilestones: [] };
     }
     const cost = this.getCoreStatUpgradeCost(statKey);
     if ((this.gold || 0) < cost) return false;
 
     this.addGold(-cost);
     this.statUpgrades[statKey] = (this.statUpgrades[statKey] || 0) + 1;
+    
+    // Increment stage progress up to 20
+    if ((this.statUpgrades.stageProgress || 1) < 20) {
+      this.statUpgrades.stageProgress = (this.statUpgrades.stageProgress || 1) + 1;
+    }
     this.save();
     return true;
   }
@@ -459,25 +496,40 @@ class CharacterManager {
   claimTalentMilestone(milestone) {
     if (!this.statUpgrades) return false;
     const info = this.getTalentProgress();
+    if (!this.statUpgrades.claimedMilestones) this.statUpgrades.claimedMilestones = [];
+
     if (milestone === 10) {
       if (!info.canClaimM10) return false;
-      if (!this.statUpgrades.claimedMilestones) this.statUpgrades.claimedMilestones = [];
-      this.statUpgrades.claimedMilestones.push(`${info.tierIndex}_10`);
+      this.statUpgrades.claimedMilestones.push(`${info.majorName}_${info.subRank}_10`);
       this.addGold(720);
       this.save();
       return { success: true, reward: "720 Gold" };
     }
     if (milestone === 20) {
       if (!info.canRankUp) return false;
-      if (!this.statUpgrades.claimedMilestones) this.statUpgrades.claimedMilestones = [];
-      this.statUpgrades.claimedMilestones.push(`${info.tierIndex}_20`);
-      this.statUpgrades.tierIndex = Math.min(this.getTalentTiers().length - 1, (this.statUpgrades.tierIndex || 0) + 1);
-      const nextTier = this.getTalentTiers()[this.statUpgrades.tierIndex];
-      this.playerTitle = `${nextTier.name} - 1`;
+      this.statUpgrades.claimedMilestones.push(`${info.majorName}_${info.subRank}_20`);
+      
+      const majorTiers = this.getMajorTiers();
+      let curMajorIdx = this.statUpgrades.majorTierIndex || 0;
+      let curSub = this.statUpgrades.subRank || 1;
+      const curMajor = majorTiers[curMajorIdx];
+
+      if (curSub < curMajor.maxSub) {
+        this.statUpgrades.subRank = curSub + 1;
+      } else {
+        this.statUpgrades.majorTierIndex = Math.min(majorTiers.length - 1, curMajorIdx + 1);
+        this.statUpgrades.subRank = 1;
+      }
+
+      // Reset stage progress to 1 for the new rank stage
+      this.statUpgrades.stageProgress = 1;
+
+      const newInfo = this.getTalentProgress();
+      this.playerTitle = newInfo.tierName;
       this.addGold(1500);
       this.gems += 50;
       this.save();
-      return { success: true, reward: `Ranked up to ${nextTier.name}!` };
+      return { success: true, reward: `Promoted to ${newInfo.tierName}!` };
     }
     return false;
   }
@@ -816,14 +868,32 @@ class CharacterManager {
       if (s.unlockedCompanions && Array.isArray(s.unlockedCompanions)) this.unlockedCompanions = s.unlockedCompanions;
       if (s.companionLevels) this.companionLevels = Object.assign({ duck: 1, turtle: 1, croc: 1, dragon: 1 }, s.companionLevels);
       if (s.statUpgrades) {
-        this.statUpgrades = Object.assign({ hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] }, s.statUpgrades);
+        this.statUpgrades = Object.assign({
+          hp: 0,
+          atk: 1,
+          def: 0,
+          majorTierIndex: 0,
+          subRank: 1,
+          stageProgress: 1,
+          claimedMilestones: []
+        }, s.statUpgrades);
       } else {
-        this.statUpgrades = { hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] };
+        this.statUpgrades = {
+          hp: 0,
+          atk: 1,
+          def: 0,
+          majorTierIndex: 0,
+          subRank: 1,
+          stageProgress: 1,
+          claimedMilestones: []
+        };
       }
 
-      // Reset any saved tier to Apprentice - 1 matching authentic Capybara Go progression
-      if (!this.playerTitle || this.playerTitle.includes("Adventurer") || (this.statUpgrades && this.statUpgrades.tierIndex !== 0)) {
-        this.statUpgrades = { hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] };
+      // If missing subRank or if previous save was stuck at Adventurer, ensure clean Apprentice - 1
+      if (!this.playerTitle || this.playerTitle.includes("Adventurer") || this.statUpgrades.subRank === undefined) {
+        this.statUpgrades.majorTierIndex = 0;
+        this.statUpgrades.subRank = 1;
+        this.statUpgrades.stageProgress = 1;
         this.playerTitle = "Apprentice - 1";
       }
       if (s.activeRun) {

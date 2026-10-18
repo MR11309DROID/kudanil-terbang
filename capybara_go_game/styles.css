@@ -4943,6 +4943,52 @@ body {
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
 }
 
+/* Dynamic Golden Milestone 20 Rank Badge */
+.gold-rank-badge-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+}
+
+.gold-rank-medal-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  z-index: 2;
+  margin-bottom: -15px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+
+.gold-rank-banner {
+  background: linear-gradient(180deg, #FFE57F 0%, #FFC938 55%, #EAA218 100%);
+  border: 2px solid #5A2E05;
+  border-radius: 9px;
+  padding: 13px 8px 3px 8px;
+  min-width: 82px;
+  max-width: 110px;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 2px 4px rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+.gold-rank-text {
+  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-size: 11px;
+  color: #ffffff;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  text-shadow: 
+    -1px -1px 0 #3E1E02,
+     1px -1px 0 #3E1E02,
+    -1px  1px 0 #3E1E02,
+     1px  1px 0 #3E1E02,
+     0px  2px 3px rgba(0, 0, 0, 0.6);
+  display: block;
+  line-height: 1.15;
+}
+
 .milestone-claim-tag {
   display: none;
   position: absolute;

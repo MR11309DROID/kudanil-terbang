@@ -2715,10 +2715,10 @@ class UIManager {
     if (gemsEl) gemsEl.textContent = (Character.gems || 0).toLocaleString();
     if (goldEl) goldEl.textContent = (Character.gold || 0).toLocaleString();
 
-    // 2. Rank Title (e.g. Apprentice - 1)
+    // 2. Rank Title (e.g. Apprentice - 1, Apprentice - 2...)
     const titleEl = document.getElementById("talents-rank-title");
     if (titleEl) {
-      titleEl.textContent = `${info.tierName} - ${info.displayLevel}`;
+      titleEl.textContent = info.tierName;
     }
 
     // 3. Milestone Progress Bar & Indicator
@@ -2750,8 +2750,12 @@ class UIManager {
       }
     }
 
-    // 5. Milestone 20 Promotion Badge
+    // 5. Milestone 20 Dynamic Gold Promotion Badge
     const box20 = document.getElementById("badge-milestone-20");
+    const title20El = document.getElementById("badge-milestone-20-title");
+    if (title20El) {
+      title20El.textContent = info.nextTierName;
+    }
     if (box20) {
       if (info.canRankUp) {
         box20.classList.add("can-claim");
@@ -2838,26 +2842,30 @@ class UIManager {
     const ladder = document.getElementById("talents-preview-ladder");
     if (ladder) {
       ladder.innerHTML = "";
-      const tiers = Character.getTalentTiers();
+      const majorTiers = Character.getMajorTiers ? Character.getMajorTiers() : Character.getTalentTiers();
       const info = Character.getTalentProgress();
 
-      tiers.forEach((t, idx) => {
-        const isCurrent = idx === info.tierIndex;
-        const isUnlocked = idx <= info.tierIndex;
-        const el = document.createElement("div");
-        el.className = `preview-ladder-tier ${isCurrent ? 'tier-current' : ''}`;
-        el.innerHTML = `
-          <div>
-            <div class="preview-tier-title">${t.name} (Milestones 1 - 20)</div>
-            <div style="font-size: 11px; color: ${isUnlocked ? '#4ade80' : '#94a3b8'};">
-              ${isCurrent ? '★ Current Rank' : (isUnlocked ? '✓ Completed' : '🔒 Locked')}
+      majorTiers.forEach((m, mIdx) => {
+        for (let sub = 1; sub <= (m.maxSub || 5); sub++) {
+          const rankStr = `${m.name} - ${sub}`;
+          const isCurrent = rankStr === info.tierName;
+          const isPassed = (mIdx < info.majorTierIndex) || (mIdx === info.majorTierIndex && sub < info.subRank);
+          
+          const el = document.createElement("div");
+          el.className = `preview-ladder-tier ${isCurrent ? 'tier-current' : ''}`;
+          el.innerHTML = `
+            <div>
+              <div class="preview-tier-title">${rankStr} (20 Milestones)</div>
+              <div style="font-size: 11px; color: ${isCurrent ? '#f59e0b' : (isPassed ? '#4ade80' : '#94a3b8')};">
+                ${isCurrent ? '★ Current Rank' : (isPassed ? '✓ Completed' : '🔒 Locked')}
+              </div>
             </div>
-          </div>
-          <div class="preview-tier-badge">
-            ${isCurrent ? 'Active' : (isUnlocked ? 'Mastered' : `Tier ${idx + 1}`)}
-          </div>
-        `;
-        ladder.appendChild(el);
+            <div class="preview-tier-badge">
+              ${isCurrent ? 'Active' : (isPassed ? 'Mastered' : `Tier ${mIdx + 1}.${sub}`)}
+            </div>
+          `;
+          ladder.appendChild(el);
+        }
       });
     }
 
