@@ -2450,7 +2450,7 @@ class UIManager {
 
         slotEl.className = `paperdoll-slot occupied rarity-${item.rarity} ${isWeapon ? 'slot-is-weapon' : ''}`;
         slotEl.innerHTML = `
-          <img src="${displayImg}" class="slot-item-img" alt="${item.name}">
+          <img src="${displayImg}" class="slot-item-img" alt="${item.name}" onerror="this.onerror=null; this.src='assets/items/gear/card_00.png';">
           ${gleamHtml}
           ${shimmerHtml}
           <span class="item-slot-mini-badge">${slotEmojis[slot] || "⚔️"}</span>
@@ -2521,7 +2521,7 @@ class UIManager {
 
             itemEl.className = `inv-item-card rarity-${it.rarity} ${isWeapon ? 'slot-is-weapon' : ''}`;
             itemEl.innerHTML = `
-              <img src="${displayImg}" class="inv-item-img" alt="${it.name}">
+              <img src="${displayImg}" class="inv-item-img" alt="${it.name}" onerror="this.onerror=null; this.src='assets/items/gear/card_00.png';">
               ${gleamHtml}
               ${shimmerHtml}
               <span class="item-slot-mini-badge">${slotIcon}</span>

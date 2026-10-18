@@ -5566,8 +5566,7 @@ body {
 }
 
 /* ================= RARITY SYSTEM ================= */
-.rarity-common { border-color: #22c55e !important; }
-.rarity-uncommon { border-color: #10b981 !important; }
+.rarity-common { border-color: #475569 !important; }
 .rarity-rare { border-color: #3b82f6 !important; }
 .rarity-epic { border-color: #a855f7 !important; }
 .rarity-legendary { 

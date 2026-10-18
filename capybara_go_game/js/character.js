@@ -730,18 +730,37 @@ class CharacterManager {
       // Auto-upgrade equipment assets to authentic artwork
       const updateItemAssets = (it) => {
         if (!it) return;
-        const tmpl = GameData.equipmentTemplates && GameData.equipmentTemplates.find(t => t.id === it.templateId || t.name === it.name);
-        if (tmpl) {
+        if (it.rarity === 'uncommon') it.rarity = 'common';
+
+        let tmpl = GameData.equipmentTemplates && GameData.equipmentTemplates.find(t => t.id === it.templateId || t.name === it.name);
+        if (!tmpl) {
+          const targetRarity = (it.rarity === 'uncommon' || !it.rarity) ? 'common' : it.rarity;
+          tmpl = GameData.equipmentTemplates.find(t => t.slot === it.slot && t.rarity === targetRarity)
+              || GameData.equipmentTemplates.find(t => t.slot === it.slot)
+              || GameData.equipmentTemplates[0];
+          if (tmpl) {
+            it.templateId = tmpl.id;
+            it.name = tmpl.name;
+            it.rarity = tmpl.rarity;
+            it.icon = tmpl.icon;
+            it.cardImg = tmpl.cardImg || tmpl.icon;
+          }
+        } else {
           it.icon = tmpl.icon;
           it.cardImg = tmpl.cardImg || tmpl.icon;
-          if (!it.templateId) it.templateId = tmpl.id;
-        } else if (it.rarity === 'common' && it.icon && it.icon.includes('capybara_cartoon_kit')) {
-          if (it.slot === 'weapon') { it.icon = 'assets/items/gear/icon_00.png'; it.cardImg = 'assets/items/gear/card_00.png'; }
-          else if (it.slot === 'armor') { it.icon = 'assets/items/gear/icon_04.png'; it.cardImg = 'assets/items/gear/card_04.png'; }
-          else if (it.slot === 'helmet') { it.icon = 'assets/items/gear/icon_07.png'; it.cardImg = 'assets/items/gear/card_07.png'; }
-          else if (it.slot === 'boots') { it.icon = 'assets/items/gear/icon_16.png'; it.cardImg = 'assets/items/gear/card_16.png'; }
-          else if (it.slot === 'ring') { it.icon = 'assets/items/gear/icon_10.png'; it.cardImg = 'assets/items/gear/card_10.png'; }
-          else if (it.slot === 'amulet') { it.icon = 'assets/items/gear/icon_14.png'; it.cardImg = 'assets/items/gear/card_14.png'; }
+          it.name = tmpl.name;
+          it.rarity = tmpl.rarity;
+          it.templateId = tmpl.id;
+        }
+
+        if (!it.icon || it.icon.includes('capybara_cartoon_kit') || it.icon.includes('undefined')) {
+          const fallback = GameData.equipmentTemplates.find(t => t.slot === it.slot && t.rarity === it.rarity)
+                        || GameData.equipmentTemplates.find(t => t.slot === it.slot)
+                        || GameData.equipmentTemplates[0];
+          it.icon = fallback.icon;
+          it.cardImg = fallback.cardImg || fallback.icon;
+          it.templateId = fallback.id;
+          it.name = fallback.name;
         }
       };
       if (this.equipped) {
@@ -754,8 +773,7 @@ class CharacterManager {
         Object.values(this.equipped).forEach(updateItemAssets);
       }
       if (this.inventory && Array.isArray(this.inventory)) {
-        // 1. Purge all green uncommon tier items
-        // 2. Purge any corrupt items where non-common gear mistakenly used grey common assets
+        // 1. Purge all green uncommon tier items and corrupt items
         this.inventory = this.inventory.filter(it => {
           if (!it) return false;
           if (it.rarity === 'uncommon') return false;
@@ -777,6 +795,7 @@ class CharacterManager {
             }
           }
         }
+        this.save();
       }
       this.ensureStarterGear();
     } catch (e) {}
