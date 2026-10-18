@@ -795,6 +795,19 @@ class CharacterManager {
             }
           }
         }
+        // Ensure inventory contains the authentic 21 mythic items from the reference sheet
+        const hasAllMythic = this.inventory.some(it => it.templateId === 'myth_20');
+        if (!hasAllMythic) {
+          for (let i = 20; i >= 0; i--) {
+            const mythId = `myth_${i < 10 ? '0' + i : i}`;
+            if (!this.inventory.some(it => it.templateId === mythId)) {
+              const mythItem = this.createItemFromTemplate(mythId, 1);
+              if (mythItem) {
+                this.inventory.unshift(mythItem);
+              }
+            }
+          }
+        }
         this.save();
       }
       this.ensureStarterGear();

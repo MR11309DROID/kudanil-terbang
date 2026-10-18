@@ -3883,24 +3883,25 @@ body {
   pointer-events: none;
 }
 
-/* MYTHIC WEAPONS: Fiery crimson, ruby & incandescent gold radiance */
+/* MYTHIC GEAR: Fiery crimson, ruby & incandescent gold radiance wave effect */
 .shimmer-wave-mythic .shimmer-sweep-light {
   background: linear-gradient(115deg,
-    transparent 20%,
-    rgba(239, 68, 68, 0.15) 32%,
-    rgba(255, 180, 200, 0.75) 44%,
+    transparent 15%,
+    rgba(239, 68, 68, 0.25) 30%,
+    rgba(255, 180, 200, 0.8) 42%,
     rgba(255, 255, 255, 0.98) 50%,
-    rgba(254, 240, 138, 0.9) 55%,
-    rgba(249, 115, 22, 0.4) 65%,
-    transparent 80%
+    rgba(254, 240, 138, 0.9) 56%,
+    rgba(249, 115, 22, 0.5) 66%,
+    transparent 82%
   );
-  animation: mythicShimmerSweep 2.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  animation: mythicShimmerSweep 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: screen;
 }
 
-.paperdoll-slot.rarity-mythic.slot-is-weapon,
-.inv-item-card.rarity-mythic.slot-is-weapon {
+.paperdoll-slot.rarity-mythic,
+.inv-item-card.rarity-mythic {
   box-shadow: 0 0 16px rgba(239, 68, 68, 0.9), inset 0 0 8px rgba(255, 180, 200, 0.6) !important;
-  animation: mythicWeaponBorderPulse 2s infinite alternate ease-in-out !important;
+  animation: mythicGearBorderPulse 2s infinite alternate ease-in-out !important;
 }
 
 @keyframes mythicShimmerSweep {
@@ -3908,12 +3909,14 @@ body {
   50%, 100% { transform: translateY(135%) rotate(32deg); }
 }
 
-@keyframes mythicWeaponBorderPulse {
+@keyframes mythicGearBorderPulse {
   0% {
     box-shadow: 0 0 10px rgba(239, 68, 68, 0.7), inset 0 0 6px rgba(255, 100, 100, 0.4);
+    border-color: #f87171 !important;
   }
   100% {
-    box-shadow: 0 0 22px rgba(239, 68, 68, 1), 0 0 35px rgba(251, 146, 60, 0.6), inset 0 0 12px rgba(255, 220, 150, 0.8);
+    box-shadow: 0 0 24px rgba(239, 68, 68, 1), 0 0 35px rgba(251, 146, 60, 0.65), inset 0 0 12px rgba(255, 220, 150, 0.85);
+    border-color: #fca5a5 !important;
   }
 }
 
@@ -4509,13 +4512,30 @@ body {
   box-shadow: 0 2.5px 0 #2e1065, inset 0 1px 2px rgba(255, 255, 255, 0.35);
 }
 
-/* LEGENDARY & MYTHIC = WARM ORANGE / AMBER */
-.inv-item-card.rarity-legendary,
-.inv-item-card.rarity-mythic {
+/* LEGENDARY = WARM ORANGE / AMBER */
+.inv-item-card.rarity-legendary {
   background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 7px), linear-gradient(180deg, #f97316 0%, #ea580c 55%, #c2410c 100%);
   border: 2px solid #fde047;
   border-bottom: 3.5px solid #d97706;
   box-shadow: 0 2.5px 0 #451a03, inset 0 1px 2px rgba(255, 255, 255, 0.45);
+}
+
+/* MYTHIC = CRIMSON FLAME / RUBY AURA */
+.inv-item-card.rarity-mythic {
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 7px), linear-gradient(180deg, #dc2626 0%, #991b1b 55%, #450a0a 100%);
+  border: 2.5px solid #f87171 !important;
+  border-bottom: 4px solid #7f1d1d !important;
+  box-shadow: 0 3px 0 #450a0a, 0 0 16px rgba(239, 68, 68, 0.85);
+}
+
+/* Mythic gear tile fitted cleanly to the gear frame */
+.inv-item-card.rarity-mythic .inv-item-img,
+.paperdoll-slot.rarity-mythic .slot-item-img {
+  width: 90% !important;
+  height: 90% !important;
+  border-radius: 8px;
+  object-fit: cover;
+  filter: none;
 }
 
 .inv-item-card {
