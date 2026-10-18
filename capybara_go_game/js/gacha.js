@@ -36,8 +36,8 @@ class GachaSystem {
       if (!chosenRarity) chosenRarity = "common";
     }
 
-    // Map "great" or "uncommon" to "rare"
-    const tmplRarity = (chosenRarity === "great" || chosenRarity === "uncommon") ? "rare" : chosenRarity;
+    // Map "great" or "uncommon" or "epic" to "rare"
+    const tmplRarity = (chosenRarity === "great" || chosenRarity === "uncommon" || chosenRarity === "epic") ? "rare" : chosenRarity;
 
     // Filter templates matching rarity
     let candidates = GameData.equipmentTemplates.filter(t => t.rarity === tmplRarity);
@@ -65,13 +65,12 @@ class GachaSystem {
     Character.gems -= costGems;
     const droppedItems = [];
 
-    // Weights: Supreme 1%, Mythic 4%, S-Epic (legendary) 8%, Epic 25%, Rare 62%
+    // Weights: Supreme 2%, Mythic 6%, Legendary 22%, Rare 70%
     const weights = {
-      supreme: 0.01,
-      mythic: 0.04,
-      legendary: 0.08,
-      epic: 0.25,
-      rare: 0.62
+      supreme: 0.02,
+      mythic: 0.06,
+      legendary: 0.22,
+      rare: 0.70
     };
 
     for (let i = 0; i < pullCount; i++) {
@@ -87,19 +86,17 @@ class GachaSystem {
         Character.gachaPity.legendarySEpic = 60;
         Character.gachaPity.legendaryEpic = 10;
       } else if (Character.gachaPity.legendaryEpic <= 0) {
-        forceRarity = "epic";
+        forceRarity = "legendary";
         Character.gachaPity.legendaryEpic = 10;
-      } else if (pullCount === 10 && i === 9 && !droppedItems.some(it => ["epic", "legendary", "mythic", "supreme"].includes(it.rarity))) {
-        // Guarantee at least 1 Epic/Legendary/Mythic/Supreme in 10-pull
-        forceRarity = "epic";
+      } else if (pullCount === 10 && i === 9 && !droppedItems.some(it => ["legendary", "mythic", "supreme"].includes(it.rarity))) {
+        // Guarantee at least 1 Legendary/Mythic/Supreme in 10-pull
+        forceRarity = "legendary";
         Character.gachaPity.legendaryEpic = 10;
       }
 
       const item = this.rollItemByWeights(weights, forceRarity);
       if (item.rarity === "supreme" || item.rarity === "mythic" || item.rarity === "legendary") {
         Character.gachaPity.legendarySEpic = 60;
-        Character.gachaPity.legendaryEpic = 10;
-      } else if (item.rarity === "epic") {
         Character.gachaPity.legendaryEpic = 10;
       }
 
@@ -148,7 +145,7 @@ class GachaSystem {
     };
 
     const item = this.rollItemByWeights(weights, forceRarity);
-    if (item.rarity === "rare" || item.rarity === "epic") {
+    if (item.rarity === "rare") {
       Character.gachaPity.adventurer = 9;
     }
 
@@ -185,18 +182,18 @@ class GachaSystem {
     Character.gachaPity.hero--;
     let forceRarity = null;
     if (Character.gachaPity.hero <= 0) {
-      forceRarity = "epic";
+      forceRarity = "legendary";
       Character.gachaPity.hero = 10;
     }
 
-    // Weights: Epic 25%, Rare 75%
+    // Weights: Legendary 20%, Rare 80%
     const weights = {
-      epic: 0.25,
-      rare: 0.75
+      legendary: 0.20,
+      rare: 0.80
     };
 
     const item = this.rollItemByWeights(weights, forceRarity);
-    if (item.rarity === "epic" || item.rarity === "legendary") {
+    if (item.rarity === "legendary") {
       Character.gachaPity.hero = 10;
     }
 

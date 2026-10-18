@@ -275,16 +275,6 @@ const GameData = {
     { id: "rare_22", slot: "boots", name: "Tas Ransel Langkah Pengelana (Adventurer Traveler Pack)", icon: "assets/items/rare/icon_rare_22.png", cardImg: "assets/items/rare/card_rare_22.png", rarity: "rare", baseDodge: 0.16, baseHp: 180 },
     { id: "rare_23", slot: "boots", name: "Syal Angin Langkah Kilat (Swift Stride Silk Scarf)", icon: "assets/items/rare/icon_rare_23.png", cardImg: "assets/items/rare/card_rare_23.png", rarity: "rare", baseDodge: 0.18, baseHp: 170 },
 
-    // =========================================================================
-    // --- EPIC GEAR SET (PURPLE) ---
-    // =========================================================================
-    { id: "epic_01", slot: "weapon", name: "Pedang Bayangan Naga (Shadow Dragon Greatsword)", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_sword.png", rarity: "epic", baseAtk: 115, critBonus: 0.15, lifestealBonus: 0.08 },
-    { id: "epic_02", slot: "weapon", name: "Tongkat Kristal Mistis (Mystic Crystal Scepter)", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_staff.png", rarity: "epic", baseAtk: 120, skillBoost: 0.20 },
-    { id: "epic_03", slot: "armor", name: "Kuras Sisik Naga Ungu (Dragonscale Cuirass)", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_armor.png", rarity: "epic", baseHp: 750, baseDef: 42, regen: 0.04 },
-    { id: "epic_04", slot: "helmet", name: "Mahkota Penyihir Malam (Night Mage Crown)", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_helmet.png", rarity: "epic", baseDef: 52, baseHp: 380, critBonus: 0.08 },
-    { id: "epic_05", slot: "boots", name: "Sepatu Bayangan Hantu (Phantom Shadow Treads)", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_boots.png", rarity: "epic", baseDodge: 0.24, baseHp: 320, speedBonus: 0.15 },
-    { id: "epic_06", slot: "ring", name: "Cincin Permata Jiwa (Soul Gem Signet)", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_ring.png", rarity: "epic", baseCrit: 0.26, baseAtk: 55, critDmg: 0.40 },
-    { id: "epic_07", slot: "amulet", name: "Kalung Jantung Bayangan (Shadowheart Choker)", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_amulet.png", rarity: "epic", baseLifesteal: 0.22, baseHp: 440, baseAtk: 45 },
 
     // =========================================================================
     // --- 20 AUTHENTIC LEGENDARY GEARS (GOLDEN SOLAR - EXTRACTED DIRECTLY FROM REFERENCE) ---

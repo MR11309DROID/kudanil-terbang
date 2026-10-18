@@ -169,26 +169,26 @@ class CharacterManager {
         { id: "leg_17", level: 2, rarity: "legendary" },                // Golden Crown
         { id: "leg_14", level: 2, rarity: "legendary" },                // Flame Drake Ring
 
-        // Row 2: 5 Epic (Purple) items
-        { id: "leg_00", level: 2, rarity: "epic" }, // Cyan Crystal Sword
-        { id: "leg_08", level: 2, rarity: "epic" }, // Dark Demonic Sword
-        { id: "leg_03", level: 2, rarity: "epic" }, // Purple Spear
-        { id: "leg_06", level: 2, rarity: "epic" }, // Spotted Mushroom
-        { id: "leg_05", level: 2, rarity: "epic" }, // Spiky Mace 1
+        // Row 2: 5 Legendary (Orange) items
+        { id: "leg_00", level: 2, rarity: "legendary" }, // Cyan Crystal Sword
+        { id: "leg_08", level: 2, rarity: "legendary" }, // Dark Demonic Sword
+        { id: "leg_03", level: 2, rarity: "legendary" }, // Purple Spear
+        { id: "leg_06", level: 2, rarity: "legendary" }, // Spotted Mushroom
+        { id: "leg_05", level: 2, rarity: "legendary" }, // Spiky Mace 1
 
-        // Row 3: 5 Epic (Purple) items
-        { id: "leg_05", level: 2, rarity: "epic" }, // Spiky Mace 2
-        { id: "leg_07", level: 2, rarity: "epic" }, // Green Hunter Bow
-        { id: "leg_02", level: 2, rarity: "epic" }, // Golden Winged Bow
-        { id: "leg_04", level: 2, rarity: "epic" }, // Star Wand 1
-        { id: "leg_04", level: 2, rarity: "epic" }, // Star Wand 2
+        // Row 3: 5 Legendary (Orange) items
+        { id: "leg_05", level: 2, rarity: "legendary" }, // Spiky Mace 2
+        { id: "leg_07", level: 2, rarity: "legendary" }, // Green Hunter Bow
+        { id: "leg_02", level: 2, rarity: "legendary" }, // Golden Winged Bow
+        { id: "leg_04", level: 2, rarity: "legendary" }, // Star Wand 1
+        { id: "leg_04", level: 2, rarity: "legendary" }, // Star Wand 2
 
-        // Row 4: 5 Epic (Purple) items
-        { id: "leg_04", level: 2, rarity: "epic" }, // Golden Scepter 1
-        { id: "leg_04", level: 2, rarity: "epic" }, // Golden Scepter 2
-        { id: "leg_09", level: 2, rarity: "epic" }, // Crimson Dragon Armor
-        { id: "leg_10", level: 2, rarity: "epic" }, // Royal Cloak
-        { id: "leg_17", level: 2, rarity: "epic" }  // Golden Crown
+        // Row 4: 5 Legendary (Orange) items
+        { id: "leg_04", level: 2, rarity: "legendary" }, // Golden Scepter 1
+        { id: "leg_04", level: 2, rarity: "legendary" }, // Golden Scepter 2
+        { id: "leg_09", level: 2, rarity: "legendary" }, // Crimson Dragon Armor
+        { id: "leg_10", level: 2, rarity: "legendary" }, // Royal Cloak
+        { id: "leg_17", level: 2, rarity: "legendary" }  // Golden Crown
       ];
 
       showcaseItems.forEach(cfg => {
@@ -766,18 +766,18 @@ class CharacterManager {
       if (this.equipped) {
         Object.keys(this.equipped).forEach(slot => {
           const it = this.equipped[slot];
-          if (it && (it.rarity === 'uncommon' || (it.templateId && it.templateId.startsWith('unc_')))) {
+          if (it && (it.rarity === 'uncommon' || it.rarity === 'epic' || (it.templateId && (it.templateId.startsWith('unc_') || it.templateId.startsWith('epic_'))))) {
             delete this.equipped[slot];
           }
         });
         Object.values(this.equipped).forEach(updateItemAssets);
       }
       if (this.inventory && Array.isArray(this.inventory)) {
-        // 1. Purge all green uncommon tier items and corrupt items
+        // 1. Purge all green uncommon and purple epic tier items and corrupt items
         this.inventory = this.inventory.filter(it => {
           if (!it) return false;
-          if (it.rarity === 'uncommon') return false;
-          if (it.templateId && (it.templateId.startsWith('unc_') || it.templateId === 'w2' || it.templateId === 'w3' || it.templateId.match(/^[wahbrm][1-6]$/))) return false;
+          if (it.rarity === 'uncommon' || it.rarity === 'epic') return false;
+          if (it.templateId && (it.templateId.startsWith('unc_') || it.templateId.startsWith('epic_') || it.templateId === 'w2' || it.templateId === 'w3' || it.templateId.match(/^[wahbrm][1-6]$/))) return false;
           if (it.rarity !== 'common' && it.icon && it.icon.includes('/gear/')) return false;
           return true;
         });

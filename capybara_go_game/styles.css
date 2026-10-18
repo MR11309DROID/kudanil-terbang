@@ -4503,8 +4503,7 @@ body {
   filter: none;
 }
 
-/* EPIC & SUPREME = ROYAL AMETHYST PURPLE */
-.inv-item-card.rarity-epic,
+/* SUPREME = ROYAL AMETHYST PURPLE */
 .inv-item-card.rarity-supreme {
   background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 7px), linear-gradient(180deg, #a855f7 0%, #7c3aed 55%, #581c87 100%);
   border: 2px solid #c084fc;
