@@ -124,12 +124,12 @@ class CharacterManager {
     const baseDef = this.baseStats ? this.baseStats.def : 12;
 
     const starterTemplates = {
-      weapon: { id: "myth_00", level: 80, refineRank: 3, atk: 8110000 - baseAtk },
-      armor: { id: "myth_07", level: 80, refineRank: 2, hp: 30560000 - baseHp },
-      helmet: { id: "myth_10", level: 80, refineRank: 2, def: 450000 },
-      boots: { id: "myth_19", level: 80, refineRank: 2, def: 427000 - baseDef },
-      ring: { id: "myth_12", level: 80, refineRank: 3 },
-      amulet: { id: "myth_16", level: 80, refineRank: 2 }
+      weapon: { id: "myth_00", level: 80, atk: 8110000 - baseAtk },
+      armor: { id: "myth_07", level: 80, hp: 30560000 - baseHp },
+      helmet: { id: "myth_10", level: 80, def: 450000 },
+      boots: { id: "myth_19", level: 80, def: 427000 - baseDef },
+      ring: { id: "myth_12", level: 80 },
+      amulet: { id: "myth_16", level: 80 }
     };
 
     let needsSave = false;
@@ -139,6 +139,7 @@ class CharacterManager {
       const cfg = starterTemplates[slot];
       const cur = this.equipped ? this.equipped[slot] : null;
       const isOutdated = !cur || cur.rarity === 'legendary' || cur.templateId.startsWith('leg_') || cur.templateId !== cfg.id ||
+        cur.refineRank ||
         (cfg.atk && (!cur.atk || cur.atk < 5000000)) ||
         (cfg.hp && (!cur.hp || cur.hp < 20000000)) ||
         (cfg.def && (!cur.def || cur.def < 300000));
@@ -146,7 +147,7 @@ class CharacterManager {
       if (force || isOutdated) {
         const item = this.createItemFromTemplate(cfg.id, cfg.level);
         if (item) {
-          item.refineRank = cfg.refineRank;
+          delete item.refineRank;
           if (cfg.atk !== undefined) item.atk = cfg.atk;
           if (cfg.hp !== undefined) item.hp = cfg.hp;
           if (cfg.def !== undefined) item.def = cfg.def;
@@ -755,13 +756,20 @@ class CharacterManager {
       if (this.equipped) {
         Object.keys(this.equipped).forEach(slot => {
           const it = this.equipped[slot];
-          if (it && (it.rarity === 'uncommon' || it.rarity === 'epic' || it.rarity === 'legendary' || (it.templateId && (it.templateId.startsWith('unc_') || it.templateId.startsWith('epic_') || it.templateId.startsWith('leg_'))))) {
-            delete this.equipped[slot];
+          if (it) {
+            delete it.refineRank;
+            if (it.rarity === 'uncommon' || it.rarity === 'epic' || it.rarity === 'legendary' || (it.templateId && (it.templateId.startsWith('unc_') || it.templateId.startsWith('epic_') || it.templateId.startsWith('leg_')))) {
+              delete this.equipped[slot];
+            }
           }
         });
         Object.values(this.equipped).forEach(updateItemAssets);
       }
       if (this.inventory && Array.isArray(this.inventory)) {
+        // Reset refineRank on all items
+        this.inventory.forEach(it => {
+          if (it) delete it.refineRank;
+        });
         // 1. Purge all green uncommon, purple epic, and orange legendary tier items and corrupt items
         this.inventory = this.inventory.filter(it => {
           if (!it) return false;

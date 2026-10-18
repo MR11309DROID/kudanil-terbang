@@ -2459,7 +2459,7 @@ class UIManager {
         }
         const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(item.rarity);
         const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
-        const rankBadge = item.refineRank ? `<span class="item-rank-badge">+${item.refineRank}</span>` : "";
+        const rankBadge = (item.refineRank && item.refineRank > 0) ? `<span class="item-rank-badge">+${item.refineRank}</span>` : "";
         const gleamHtml = `<div class="item-card-gleam"></div>`;
 
         slotEl.className = `paperdoll-slot occupied rarity-${item.rarity} ${isWeapon ? 'slot-is-weapon' : ''}`;
@@ -2543,7 +2543,7 @@ class UIManager {
             }
             const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(it.rarity);
             const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
-            const rankBadge = it.refineRank ? `<span class="item-rank-badge">+${it.refineRank}</span>` : "";
+            const rankBadge = (it.refineRank && it.refineRank > 0) ? `<span class="item-rank-badge">+${it.refineRank}</span>` : "";
             const slotIcon = slotEmojis[it.slot] || "⚔️";
             const gleamHtml = `<div class="item-card-gleam"></div>`;
 
