@@ -3737,11 +3737,10 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 78%;
-  height: 78%;
+  width: 58%;
+  height: 58%;
   object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: auto;
   filter: drop-shadow(0 2.5px 3.5px rgba(0, 0, 0, 0.45));
   z-index: 2;
   display: block;
@@ -4058,8 +4057,7 @@ body {
   width: 90px;
   height: 90px;
   object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: auto;
   filter: drop-shadow(0 3px 5px rgba(45, 25, 10, 0.4));
   z-index: 3;
   margin-bottom: 7px; /* Planted precisely onto the dais surface */
@@ -4534,11 +4532,10 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 78%;
-  height: 78%;
+  width: 58%;
+  height: 58%;
   object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: auto;
   filter: drop-shadow(0 2.5px 3.5px rgba(0, 0, 0, 0.45));
   z-index: 2;
   display: block;

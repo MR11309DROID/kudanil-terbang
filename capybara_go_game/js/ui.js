@@ -2361,41 +2361,41 @@ class UIManager {
     if (goldEl) goldEl.textContent = Character.gold >= 1000000 ? (Character.gold / 1000000).toFixed(2) + "M" : (Character.gold >= 1000 ? (Character.gold / 1000).toFixed(1) + "K" : Character.gold);
 
     // 2. Calculate and Display Combat Power (CP)
-    const isFullLegendaryBuild = Character.equipped && Object.keys(Character.equipped).length >= 6 && Object.values(Character.equipped).every(it => it && ["legendary", "mythic", "supreme"].includes(it.rarity));
-    const totalCp = Math.floor(
-      (stats.atk || 0) * 4.2 +
-      (stats.hp || 0) * 0.65 +
-      (stats.def || 0) * 3.5 +
-      ((stats.critRate || 0) * 1200) +
-      ((stats.dodgeRate || 0) * 1200) +
-      ((stats.lifesteal || 0) * 1000)
+    const totalCp = Character.getCombatPower ? Character.getCombatPower() : Math.round(
+      (stats.atk || 0) * 12 +
+      (stats.hp || 0) * 3.2 +
+      (stats.def || 0) * 14 +
+      ((stats.critRate || 0) * 4000) +
+      4200
     );
     const cpEl = document.getElementById("hero-total-cp");
     if (cpEl) {
-      if (isFullLegendaryBuild) {
-        cpEl.textContent = "166.45M";
+      if (totalCp >= 1000000000) {
+        cpEl.textContent = (totalCp / 1000000000).toFixed(2) + "B";
       } else if (totalCp >= 1000000) {
         cpEl.textContent = (totalCp / 1000000).toFixed(2) + "M";
-      } else if (totalCp >= 1000) {
-        cpEl.textContent = (totalCp / 1000).toFixed(2) + "K";
+      } else if (totalCp >= 10000) {
+        cpEl.textContent = (totalCp / 1000).toFixed(1) + "K";
       } else {
         cpEl.textContent = totalCp.toLocaleString();
       }
     }
 
     // 3. Fill Core 3 Hero Stats Labels
+    const formatStat = (val) => {
+      val = Math.round(val || 0);
+      if (val >= 1000000000) return (val / 1000000000).toFixed(2) + "B";
+      if (val >= 1000000) return (val / 1000000).toFixed(2) + "M";
+      if (val >= 10000) return (val / 1000).toFixed(1) + "K";
+      return val.toLocaleString();
+    };
+
     const hpEl = document.getElementById("stat-hp");
     const atkEl = document.getElementById("stat-atk");
     const defEl = document.getElementById("stat-def");
-    if (isFullLegendaryBuild) {
-      if (hpEl) hpEl.textContent = "30.56M";
-      if (atkEl) atkEl.textContent = "8.11M";
-      if (defEl) defEl.textContent = "877K";
-    } else {
-      if (hpEl) hpEl.textContent = stats.hp >= 1000000 ? (stats.hp / 1000000).toFixed(2) + "M" : (stats.hp >= 1000 ? (stats.hp / 1000).toFixed(1) + "K" : stats.hp);
-      if (atkEl) atkEl.textContent = stats.atk >= 1000000 ? (stats.atk / 1000000).toFixed(2) + "M" : (stats.atk >= 1000 ? (stats.atk / 1000).toFixed(1) + "K" : stats.atk);
-      if (defEl) defEl.textContent = stats.def >= 1000000 ? (stats.def / 1000000).toFixed(2) + "M" : (stats.def >= 1000 ? (stats.def / 1000).toFixed(1) + "K" : stats.def);
-    }
+    if (hpEl) hpEl.textContent = formatStat(stats.hp);
+    if (atkEl) atkEl.textContent = formatStat(stats.atk);
+    if (defEl) defEl.textContent = formatStat(stats.def);
 
     // Slot type emoji map
     const slotEmojis = {
