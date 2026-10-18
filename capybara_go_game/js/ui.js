@@ -1275,7 +1275,11 @@ class UIManager {
         const currentVal = Math.round(animStartHp + (animEndHp - animStartHp) * progress);
         const currentPct = Math.max(0, Math.min(100, Math.round((currentVal / maxHp) * 100)));
 
-        if (hpNumEl) hpNumEl.textContent = `${currentVal}/${maxHp}`;
+        const hpDisplay = maxHp >= 10000
+          ? `${this.formatCompactStat(currentVal)}/${this.formatCompactStat(maxHp)}`
+          : `${currentVal}/${maxHp}`;
+
+        if (hpNumEl) hpNumEl.textContent = hpDisplay;
         if (hpPctEl) hpPctEl.textContent = `${currentPct}%`;
 
         if (progress < 1) {
@@ -1283,7 +1287,9 @@ class UIManager {
         } else {
           this._currentDisplayHp = animEndHp;
           if (hpNumEl) {
-            hpNumEl.textContent = `${animEndHp}/${maxHp}`;
+            hpNumEl.textContent = maxHp >= 10000
+              ? `${this.formatCompactStat(animEndHp)}/${this.formatCompactStat(maxHp)}`
+              : `${animEndHp}/${maxHp}`;
             setTimeout(() => {
               hpNumEl.classList.remove("hp-number-damaged", "hp-number-healed");
             }, 300);
@@ -1299,16 +1305,20 @@ class UIManager {
       if (hpFillEl) hpFillEl.style.width = `${hpPct}%`;
       if (hpGhostEl) hpGhostEl.style.width = `${hpPct}%`;
       if (hpPctEl) hpPctEl.textContent = `${hpPct}%`;
-      if (hpNumEl) hpNumEl.textContent = `${targetHp}/${maxHp}`;
+      if (hpNumEl) {
+        hpNumEl.textContent = maxHp >= 10000
+          ? `${this.formatCompactStat(targetHp)}/${this.formatCompactStat(maxHp)}`
+          : `${targetHp}/${maxHp}`;
+      }
     }
 
     // ATK pill
     const atkNumEl = document.getElementById("stat-atk-num");
-    if (atkNumEl) atkNumEl.textContent = stats.atk;
+    if (atkNumEl) atkNumEl.textContent = this.formatCompactStat(stats.atk);
 
     // DEF pill
     const defNumEl = document.getElementById("stat-def-num");
-    if (defNumEl) defNumEl.textContent = stats.def;
+    if (defNumEl) defNumEl.textContent = this.formatCompactStat(stats.def);
   }
 
   renderChapterSelection() {
@@ -2136,6 +2146,25 @@ class UIManager {
 
     this.setTravelButtonState("moving");
     this.engine.travelNextDay();
+  }
+
+  formatCompactStat(val) {
+    if (val === undefined || val === null || isNaN(val)) return "0";
+    val = Math.round(Number(val));
+    const abs = Math.abs(val);
+    if (abs >= 1000000000) {
+      const b = val / 1000000000;
+      return (b % 1 === 0 ? b.toFixed(0) : b.toFixed(2)).replace(/\.00$/, "") + "B";
+    }
+    if (abs >= 1000000) {
+      const m = val / 1000000;
+      return (m % 1 === 0 ? m.toFixed(0) : m.toFixed(2)).replace(/\.00$/, "") + "M";
+    }
+    if (abs >= 1000) {
+      const k = val / 1000;
+      return (k % 1 === 0 || k >= 100 ? Math.round(k) : k.toFixed(1)).toString().replace(/\.0$/, "") + "K";
+    }
+    return val.toLocaleString();
   }
 
   formatSkillDescription(desc) {

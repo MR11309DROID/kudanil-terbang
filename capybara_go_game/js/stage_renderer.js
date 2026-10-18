@@ -1071,6 +1071,17 @@ class StageRenderer {
     let fontSize = 16;
     let weight = "bold";
 
+    if (typeof text === "number") {
+      const num = Math.round(text);
+      if (num >= 1000000) {
+        text = (num / 1000000).toFixed(2).replace(/\.00$/, "") + "M";
+      } else if (num >= 10000) {
+        text = Math.round(num / 1000) + "K";
+      } else {
+        text = num.toLocaleString();
+      }
+    }
+
     if (type === "crit") {
       color = "#ffdd33";
       fontSize = 22;
@@ -5859,8 +5870,16 @@ class StageRenderer {
     // Numeric HP readout under the bar
     ctx.font = `bold ${e.isBoss ? 10 : 9}px 'Fredoka', 'Nunito', sans-serif`;
     ctx.strokeStyle = "rgba(0,0,0,0.9)";
-    ctx.lineWidth = 2.5;
-    const hpText = `${Math.max(0, Math.round(e.currentHp))} / ${e.maxHp}`;
+    const formatCompactHp = (val) => {
+      val = Math.round(Number(val) || 0);
+      if (val >= 1000000) return (val / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+      if (val >= 10000) return Math.round(val / 1000) + "K";
+      if (val >= 1000) return (val / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+      return val.toString();
+    };
+    const hpText = e.maxHp >= 10000
+      ? `${formatCompactHp(Math.max(0, e.currentHp))} / ${formatCompactHp(e.maxHp)}`
+      : `${Math.max(0, Math.round(e.currentHp))} / ${e.maxHp}`;
     ctx.strokeText(hpText, x, y + barH + 9);
     ctx.fillStyle = e.isBoss ? "#fef08a" : "#f1f5f9";
     ctx.fillText(hpText, x, y + barH + 9);

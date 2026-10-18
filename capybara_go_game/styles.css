@@ -1895,7 +1895,8 @@ body {
 .unit-hp .stat-track-text {
   margin: 0 auto;
   padding-left: 14px;
-  font-size: 11.5px;
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 .stat-num-val {
