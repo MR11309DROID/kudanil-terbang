@@ -404,18 +404,22 @@ class CharacterManager {
     const hp = (this.statUpgrades && this.statUpgrades.hp) || 0;
     const atk = (this.statUpgrades && this.statUpgrades.atk) || 0;
     const def = (this.statUpgrades && this.statUpgrades.def) || 0;
-    const total = hp + atk + def;
-    const tierIndex = Math.min(tiers.length - 1, Math.floor(total / 20));
+    
+    // Explicit tier index stored in statUpgrades, starts at 0 (Apprentice)
+    const tierIndex = Math.min(tiers.length - 1, Math.max(0, (this.statUpgrades && this.statUpgrades.tierIndex) || 0));
     const currentTier = tiers[tierIndex];
-    const tierProgress = total % 20;
-    const displayLevel = Math.max(1, tierProgress);
+
+    const total = hp + atk + def;
+    // Calculate progress within current tier (0 to 20)
+    const tierProgress = Math.min(20, Math.max(0, total - (tierIndex * 20)));
+    const displayLevel = Math.max(1, Math.min(20, tierProgress));
 
     const m10Key = `${tierIndex}_10`;
     const m20Key = `${tierIndex}_20`;
-    const isClaimedM10 = !!(this.statUpgrades.claimedMilestones && this.statUpgrades.claimedMilestones.includes(m10Key));
+    const isClaimedM10 = !!(this.statUpgrades && this.statUpgrades.claimedMilestones && this.statUpgrades.claimedMilestones.includes(m10Key));
     const canClaimM10 = tierProgress >= 10 && !isClaimedM10;
-    const isRankedUp = !!(this.statUpgrades.claimedMilestones && this.statUpgrades.claimedMilestones.includes(m20Key));
-    const canRankUp = tierProgress >= 20;
+    const isRankedUp = !!(this.statUpgrades && this.statUpgrades.claimedMilestones && this.statUpgrades.claimedMilestones.includes(m20Key));
+    const canRankUp = tierProgress >= 20 && !isRankedUp;
 
     return {
       tierIndex,
@@ -467,10 +471,13 @@ class CharacterManager {
       if (!info.canRankUp) return false;
       if (!this.statUpgrades.claimedMilestones) this.statUpgrades.claimedMilestones = [];
       this.statUpgrades.claimedMilestones.push(`${info.tierIndex}_20`);
+      this.statUpgrades.tierIndex = Math.min(this.getTalentTiers().length - 1, (this.statUpgrades.tierIndex || 0) + 1);
+      const nextTier = this.getTalentTiers()[this.statUpgrades.tierIndex];
+      this.playerTitle = `${nextTier.name} - 1`;
       this.addGold(1500);
       this.gems += 50;
       this.save();
-      return { success: true, reward: `Ranked up to ${info.nextTierName}!` };
+      return { success: true, reward: `Ranked up to ${nextTier.name}!` };
     }
     return false;
   }
@@ -812,6 +819,12 @@ class CharacterManager {
         this.statUpgrades = Object.assign({ hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] }, s.statUpgrades);
       } else {
         this.statUpgrades = { hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] };
+      }
+
+      // Reset any saved tier to Apprentice - 1 matching authentic Capybara Go progression
+      if (!this.playerTitle || this.playerTitle.includes("Adventurer") || (this.statUpgrades && this.statUpgrades.tierIndex !== 0)) {
+        this.statUpgrades = { hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] };
+        this.playerTitle = "Apprentice - 1";
       }
       if (s.activeRun) {
         this.activeRun = s.activeRun;
