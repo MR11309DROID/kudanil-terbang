@@ -3637,16 +3637,16 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 5px;
+  gap: 6px;
   z-index: 5;
 }
 
 .paperdoll-slot {
-  width: 64px;
-  height: 64px;
+  width: 78px;
+  height: 78px;
   aspect-ratio: 1;
   flex-shrink: 0;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 2px solid #1a1518;
   border-bottom: 3.5px solid #0d0a0c;
   background: #ede3cc;
@@ -3681,7 +3681,31 @@ body {
   border: 2.8px solid #f59e0b !important;
   border-bottom: 4px solid #b45309 !important;
   box-shadow: 0 3px 0 #78350f, inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
-  border-radius: 14px;
+  border-radius: 16px;
+}
+
+/* Scaled badges & icons for larger 78px equipped gear frames */
+.paperdoll-slot .item-slot-mini-badge {
+  top: 3px;
+  left: 3px;
+  font-size: 11px;
+}
+
+.paperdoll-slot .item-lvl-badge {
+  top: 3px;
+  right: 4px;
+  font-size: 12px;
+}
+
+.paperdoll-slot .item-s-badge {
+  bottom: 2px;
+  left: 3px;
+  font-size: 16px;
+}
+
+.paperdoll-slot .slot-ghost-icon {
+  width: 36px;
+  height: 36px;
 }
 
 /* Paperdoll Slot Rarity Backgrounds matching Capybara Go authentic palette */
