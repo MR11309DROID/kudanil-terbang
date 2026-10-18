@@ -3523,7 +3523,7 @@ body {
   display: none;
   flex-direction: column;
   height: 100%;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 #tab-equipment.active {
@@ -3592,14 +3592,21 @@ body {
 
 /* 2. Hero Arena & Stats Panel (Warm Cartoon Brown & Parchment Framing) */
 .hero-stats-panel {
-  padding: 6px 10px 6px;
+  flex: 0 0 50%;
+  height: 50%;
+  max-height: 50%;
+  min-height: 50%;
+  box-sizing: border-box;
+  padding: 4px 8px 4px;
   background: linear-gradient(180deg, #f4e8cf 0%, #e9d3a9 40%, #d9bc86 80%, #caa46e 100%);
   border-bottom: 3px solid #5a3212;
   box-shadow: inset 0 -3px 8px rgba(90, 50, 15, 0.25), 0 4px 12px rgba(0, 0, 0, 0.22);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   position: relative;
+  overflow: hidden;
 }
 
 /* 6-Slot Paperdoll surrounding the Hero (Framed in 3D Warm RPG Wooden-Parchment Board) */
@@ -3608,15 +3615,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 4px;
-  padding: 5px 8px;
+  margin: 0;
+  padding: 3px 8px;
   position: relative;
   background: radial-gradient(circle at 50% 45%, #fffdf8 0%, #f7ecd7 60%, #ebd4b0 100%);
-  border: 2.5px solid #855325;
-  border-bottom: 4.5px solid #4a280d;
-  border-radius: 16px;
-  box-shadow: 0 4px 0 #301704, 0 6px 14px rgba(50, 25, 5, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.95);
+  border: 2px solid #855325;
+  border-bottom: 3.5px solid #4a280d;
+  border-radius: 14px;
+  box-shadow: 0 3px 0 #301704, 0 5px 12px rgba(50, 25, 5, 0.22), inset 0 2px 0 rgba(255, 255, 255, 0.95);
   box-sizing: border-box;
+  flex: 1 1 auto;
+  max-height: calc(100% - 105px);
 }
 
 /* Brass / Golden Corner Studs */
@@ -3638,18 +3647,18 @@ body {
 .paperdoll-col {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   z-index: 5;
 }
 
 .paperdoll-slot {
-  width: 54px;
-  height: 54px;
-  border-radius: 11px;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
   border: 2px solid #1a1518;
-  border-bottom: 3.5px solid #0d0a0c;
+  border-bottom: 3px solid #0d0a0c;
   background: #ede3cc;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 2.5px 5px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4005,14 +4014,14 @@ body {
   justify-content: flex-end;
   position: relative;
   flex: 1;
-  min-height: 165px;
+  min-height: 150px;
 }
 
 /* Warm magical rotating sunburst behind the Hero */
 .hero-stage-sunburst {
   position: absolute;
-  width: 135px;
-  height: 135px;
+  width: 120px;
+  height: 120px;
   top: 48%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -4030,8 +4039,8 @@ body {
 
 .hero-mount-stage {
   position: relative;
-  width: 130px;
-  height: 130px;
+  width: 110px;
+  height: 110px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -4043,24 +4052,24 @@ body {
 /* 3D Carved Pedestal Dais under Capybara's feet */
 .hero-pedestal-dais {
   position: absolute;
-  bottom: 4px;
-  width: 92px;
-  height: 16px;
+  bottom: 3px;
+  width: 82px;
+  height: 14px;
   border-radius: 50%;
   background: radial-gradient(ellipse at 50% 25%, #fdf4e3 0%, #ecd4ad 50%, #c9a573 85%, #8f6434 100%);
-  border: 1.8px solid #633b17;
-  box-shadow: 0 3px 0 #3a1e08, 0 5px 10px rgba(50, 25, 5, 0.35), inset 0 1.5px 0 rgba(255, 255, 255, 0.7);
+  border: 1.6px solid #633b17;
+  box-shadow: 0 2.5px 0 #3a1e08, 0 4px 8px rgba(50, 25, 5, 0.35), inset 0 1.5px 0 rgba(255, 255, 255, 0.7);
   z-index: 1;
 }
 
 .hero-capy-character-img {
-  width: 90px;
-  height: 90px;
+  width: 78px;
+  height: 78px;
   object-fit: contain;
   image-rendering: auto;
   filter: drop-shadow(0 3px 5px rgba(45, 25, 10, 0.4));
   z-index: 3;
-  margin-bottom: 7px; /* Planted precisely onto the dais surface */
+  margin-bottom: 6px; /* Planted precisely onto the dais surface */
   transform-origin: bottom center;
   animation: heroCapyBreath 2.6s ease-in-out infinite alternate;
 }
@@ -4072,9 +4081,9 @@ body {
 
 .hero-shadow-oval {
   position: absolute;
-  bottom: 11px;
-  width: 64px;
-  height: 10px;
+  bottom: 9px;
+  width: 56px;
+  height: 8px;
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(60, 35, 15, 0.65) 0%, rgba(60, 35, 15, 0) 75%);
   filter: blur(1px);
@@ -4085,10 +4094,10 @@ body {
 /* Authentic Pet Hexagon Badge in top-right of arena */
 .hero-pet-badge {
   position: absolute;
-  top: 8px;
-  right: 18px;
-  width: 44px;
-  height: 48px;
+  top: 4px;
+  right: 12px;
+  width: 36px;
+  height: 40px;
   z-index: 8;
   cursor: pointer;
   filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.45));
@@ -4124,15 +4133,16 @@ body {
   gap: 6px;
   background: linear-gradient(180deg, #821c25 0%, #5a1219 50%, #360a0f 100%);
   border: 2px solid #eab308;
-  border-bottom: 3.5px solid #a16207;
-  border-radius: 7px;
-  padding: 3px 20px 4px;
-  box-shadow: 0 3px 0 #1c0507, 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  margin-top: 3px;
-  margin-bottom: 7px;
+  border-bottom: 3px solid #a16207;
+  border-radius: 6px;
+  padding: 2px 16px 2.5px;
+  box-shadow: 0 2.5px 0 #1c0507, 0 5px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  margin-top: 2px;
+  margin-bottom: 4px;
   position: relative;
   cursor: pointer;
   transition: transform 0.12s ease;
+  flex-shrink: 0;
 }
 
 .hero-power-ribbon:hover {
@@ -4156,7 +4166,7 @@ body {
 
 .power-ribbon-num {
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 16px;
+  font-size: 14.5px;
   font-weight: 900;
   color: #fffbeb;
   letter-spacing: 0.5px;
@@ -4169,14 +4179,15 @@ body {
   align-items: center;
   justify-content: space-between;
   width: 88%;
-  max-width: 320px;
+  max-width: 310px;
   background: #fdfbf7;
-  padding: 5px 14px;
+  padding: 3px 12px;
   border-radius: 9999px;
   border: 1.5px solid #d6c7b2;
   border-bottom: 2.5px solid #bba993;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  flex-shrink: 0;
 }
 
 .core-stat-item {
@@ -4249,9 +4260,10 @@ body {
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  gap: 4px;
-  margin-top: 4px;
+  gap: 2px;
+  margin-top: 2px;
   margin-bottom: 2px;
+  flex-shrink: 0;
 }
 
 .gear-sub-btn {
@@ -4263,7 +4275,7 @@ body {
   border: none;
   cursor: pointer;
   position: relative;
-  padding: 2px 2px;
+  padding: 1px 2px;
   transition: transform 0.12s;
 }
 
@@ -4272,8 +4284,8 @@ body {
 }
 
 .gear-sub-circle {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: transparent;
   border: none;
@@ -4284,19 +4296,25 @@ body {
   position: relative;
 }
 
+.gear-sub-circle svg,
+.gear-sub-svg {
+  width: 26px;
+  height: 26px;
+}
+
 .gear-sub-icon {
-  font-size: 26px;
+  font-size: 22px;
   line-height: 1;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
 }
 
 .gear-sub-label {
   font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 800;
   color: #3b2314;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-  margin-top: 2px;
+  margin-top: 1px;
   letter-spacing: 0.1px;
 }
 
@@ -4304,13 +4322,13 @@ body {
   position: absolute;
   top: -2px;
   right: -2px;
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   background: #ef4444;
   border: 1.5px solid #fff;
   border-radius: 50%;
   color: #fff;
-  font-size: 8.5px;
+  font-size: 8px;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -4321,13 +4339,19 @@ body {
 
 /* 6. Inventory Backpack Section (Clean Authentic Layout starting right under sub-tabs) */
 .backpack-panel {
-  padding: 0 8px 24px;
-  flex: 1;
+  padding: 0 8px 16px;
+  flex: 0 0 50%;
+  height: 50%;
+  max-height: 50%;
+  min-height: 50%;
+  box-sizing: border-box;
   background: #1b1720;
   border-top: 2px solid #322b3b;
   overflow-y: auto;
   contain: content;
   transform: translateZ(0);
+  display: flex;
+  flex-direction: column;
 }
 
 .backpack-header-row {
@@ -4335,10 +4359,14 @@ body {
   align-items: center;
   justify-content: space-between;
   background: linear-gradient(180deg, #744830 0%, #583522 100%);
-  margin: 0 -8px 8px -8px;
-  padding: 7px 12px 6px;
+  margin: 0 -8px 6px -8px;
+  padding: 6px 12px 5px;
   border-bottom: 2px solid #382115;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-shrink: 0;
 }
 
 .my-equipment-title {
