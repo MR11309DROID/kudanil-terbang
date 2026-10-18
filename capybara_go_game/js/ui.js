@@ -927,7 +927,7 @@ class UIManager {
 
     if (pName) pName.textContent = Character.playerName || "Capy13126397";
     if (pTitle) pTitle.textContent = Character.playerTitle || "Apprentice - 1";
-    if (pPower) pPower.textContent = Character.getCombatPower().toLocaleString();
+    if (pPower) pPower.textContent = this.formatCompactStat(Character.getCombatPower());
 
     // Header Day indicator if in run
     const headerDay = document.getElementById("header-day-badge");
@@ -2399,15 +2399,7 @@ class UIManager {
     );
     const cpEl = document.getElementById("hero-total-cp");
     if (cpEl) {
-      if (totalCp >= 1000000000) {
-        cpEl.textContent = (totalCp / 1000000000).toFixed(2) + "B";
-      } else if (totalCp >= 1000000) {
-        cpEl.textContent = (totalCp / 1000000).toFixed(2) + "M";
-      } else if (totalCp >= 10000) {
-        cpEl.textContent = (totalCp / 1000).toFixed(1) + "K";
-      } else {
-        cpEl.textContent = totalCp.toLocaleString();
-      }
+      cpEl.textContent = this.formatCompactStat(totalCp);
     }
 
     // 3. Fill Core 3 Hero Stats Labels
