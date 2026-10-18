@@ -214,66 +214,66 @@ const GameData = {
     // --- 18 AUTHENTIC COMMON GEARS (EXTRACTED DIRECTLY FROM REFERENCE SHEET) ---
     // =========================================================================
     // 4 Weapons
-    { id: "gear_00", slot: "weapon", name: "Pedang Besi Pemula (Novice Iron Sword)", icon: "assets/items/gear/icon_00.png", cardImg: "assets/items/gear/card_00.png", rarity: "common", baseAtk: 25, critBonus: 0.05 },
-    { id: "gear_01", slot: "weapon", name: "Busur Kayu Berpanah (Hunting Bow & Arrow)", icon: "assets/items/gear/icon_01.png", cardImg: "assets/items/gear/card_01.png", rarity: "common", baseAtk: 24, critBonus: 0.06 },
-    { id: "gear_02", slot: "weapon", name: "Tongkat Kayu Delima (Ruby Magic Staff)", icon: "assets/items/gear/icon_02.png", cardImg: "assets/items/gear/card_02.png", rarity: "common", baseAtk: 26, skillBoost: 0.08 },
-    { id: "gear_03", slot: "weapon", name: "Kapak Perang Baja (Double Battleaxe)", icon: "assets/items/gear/icon_03.png", cardImg: "assets/items/gear/card_03.png", rarity: "common", baseAtk: 28, critBonus: 0.04 },
+    { id: "gear_00", slot: "weapon", name: "Novice Iron Sword", icon: "assets/items/gear/icon_00.png", cardImg: "assets/items/gear/card_00.png", rarity: "common", baseAtk: 25, critBonus: 0.05 },
+    { id: "gear_01", slot: "weapon", name: "Hunting Bow", icon: "assets/items/gear/icon_01.png", cardImg: "assets/items/gear/card_01.png", rarity: "common", baseAtk: 24, critBonus: 0.06 },
+    { id: "gear_02", slot: "weapon", name: "Ruby Wooden Staff", icon: "assets/items/gear/icon_02.png", cardImg: "assets/items/gear/card_02.png", rarity: "common", baseAtk: 26, skillBoost: 0.08 },
+    { id: "gear_03", slot: "weapon", name: "Double Battleaxe", icon: "assets/items/gear/icon_03.png", cardImg: "assets/items/gear/card_03.png", rarity: "common", baseAtk: 28, critBonus: 0.04 },
 
     // 6 Armors & Cloaks
-    { id: "gear_04", slot: "armor", name: "Tunik Kain Hijau (Green Adventurer Tunic)", icon: "assets/items/gear/icon_04.png", cardImg: "assets/items/gear/card_04.png", rarity: "common", baseHp: 120, baseDef: 10 },
-    { id: "gear_05", slot: "armor", name: "Baju Zirah Plat Perak (Silver Knight Plate)", icon: "assets/items/gear/icon_05.png", cardImg: "assets/items/gear/card_05.png", rarity: "common", baseHp: 150, baseDef: 14 },
-    { id: "gear_06", slot: "armor", name: "Zirah Besi Hitam (Dark Steel Armor)", icon: "assets/items/gear/icon_06.png", cardImg: "assets/items/gear/card_06.png", rarity: "common", baseHp: 160, baseDef: 16 },
-    { id: "gear_07", slot: "helmet", name: "Mantel Jubah Malam (Navy Midnight Cowl)", icon: "assets/items/gear/icon_07.png", cardImg: "assets/items/gear/card_07.png", rarity: "common", baseDef: 12, baseHp: 80, dodgeBonus: 0.04 },
-    { id: "gear_08", slot: "armor", name: "Zirah Jubah Merah (Cuirass with Crimson Cape)", icon: "assets/items/gear/icon_08.png", cardImg: "assets/items/gear/card_08.png", rarity: "common", baseHp: 140, baseDef: 12, dodgeBonus: 0.03 },
-    { id: "gear_09", slot: "helmet", name: "Mantel Daun Rimba (Verdant Forest Hood)", icon: "assets/items/gear/icon_09.png", cardImg: "assets/items/gear/card_09.png", rarity: "common", baseDef: 14, baseHp: 90, dodgeBonus: 0.05 },
+    { id: "gear_04", slot: "armor", name: "Adventurer Tunic", icon: "assets/items/gear/icon_04.png", cardImg: "assets/items/gear/card_04.png", rarity: "common", baseHp: 120, baseDef: 10 },
+    { id: "gear_05", slot: "armor", name: "Silver Knight Plate", icon: "assets/items/gear/icon_05.png", cardImg: "assets/items/gear/card_05.png", rarity: "common", baseHp: 150, baseDef: 14 },
+    { id: "gear_06", slot: "armor", name: "Dark Steel Cuirass", icon: "assets/items/gear/icon_06.png", cardImg: "assets/items/gear/card_06.png", rarity: "common", baseHp: 160, baseDef: 16 },
+    { id: "gear_07", slot: "helmet", name: "Midnight Navy Cloak", icon: "assets/items/gear/icon_07.png", cardImg: "assets/items/gear/card_07.png", rarity: "common", baseDef: 12, baseHp: 80, dodgeBonus: 0.04 },
+    { id: "gear_08", slot: "armor", name: "Crimson Cape Cuirass", icon: "assets/items/gear/icon_08.png", cardImg: "assets/items/gear/card_08.png", rarity: "common", baseHp: 140, baseDef: 12, dodgeBonus: 0.03 },
+    { id: "gear_09", slot: "helmet", name: "Verdant Forest Cloak", icon: "assets/items/gear/icon_09.png", cardImg: "assets/items/gear/card_09.png", rarity: "common", baseDef: 14, baseHp: 90, dodgeBonus: 0.05 },
 
     // 4 Rings
-    { id: "gear_10", slot: "ring", name: "Cincin Perak Safir (Silver Sapphire Ring)", icon: "assets/items/gear/icon_10.png", cardImg: "assets/items/gear/card_10.png", rarity: "common", baseCrit: 0.08, baseAtk: 12 },
-    { id: "gear_11", slot: "ring", name: "Cincin Emas Zamrud (Golden Emerald Ring)", icon: "assets/items/gear/icon_11.png", cardImg: "assets/items/gear/card_11.png", rarity: "common", baseCrit: 0.07, baseHp: 50 },
-    { id: "gear_12", slot: "ring", name: "Cincin Perak Ametis (Silver Amethyst Ring)", icon: "assets/items/gear/icon_12.png", cardImg: "assets/items/gear/card_12.png", rarity: "common", baseCrit: 0.09, baseAtk: 14 },
-    { id: "gear_13", slot: "ring", name: "Cincin Emas Delima (Golden Ruby Ring)", icon: "assets/items/gear/icon_13.png", cardImg: "assets/items/gear/card_13.png", rarity: "common", baseCrit: 0.10, baseAtk: 16 },
+    { id: "gear_10", slot: "ring", name: "Silver Sapphire Ring", icon: "assets/items/gear/icon_10.png", cardImg: "assets/items/gear/card_10.png", rarity: "common", baseCrit: 0.08, baseAtk: 12 },
+    { id: "gear_11", slot: "ring", name: "Golden Emerald Ring", icon: "assets/items/gear/icon_11.png", cardImg: "assets/items/gear/card_11.png", rarity: "common", baseCrit: 0.07, baseHp: 50 },
+    { id: "gear_12", slot: "ring", name: "Silver Amethyst Ring", icon: "assets/items/gear/icon_12.png", cardImg: "assets/items/gear/card_12.png", rarity: "common", baseCrit: 0.09, baseAtk: 14 },
+    { id: "gear_13", slot: "ring", name: "Golden Ruby Ring", icon: "assets/items/gear/icon_13.png", cardImg: "assets/items/gear/card_13.png", rarity: "common", baseCrit: 0.10, baseAtk: 16 },
 
     // 4 Accessories (Amulets / Boots)
-    { id: "gear_14", slot: "amulet", name: "Bola Kristal Samudra (Mystic Ocean Orb)", icon: "assets/items/gear/icon_14.png", cardImg: "assets/items/gear/card_14.png", rarity: "common", baseHp: 80, baseLifesteal: 0.05 },
-    { id: "gear_15", slot: "amulet", name: "Tanduk Perang Kuno (Ancient Battle Horn)", icon: "assets/items/gear/icon_15.png", cardImg: "assets/items/gear/card_15.png", rarity: "common", baseAtk: 15, baseDef: 8 },
-    { id: "gear_16", slot: "boots", name: "Kristal Zamrud Langkah Kilat (Prismatic Emerald Stride Shard)", icon: "assets/items/gear/icon_16.png", cardImg: "assets/items/gear/card_16.png", rarity: "common", baseDodge: 0.06, baseHp: 60 },
-    { id: "gear_17", slot: "boots", name: "Kantung Koin Pengelana (Adventurer Stride Pouch)", icon: "assets/items/gear/icon_17.png", cardImg: "assets/items/gear/card_17.png", rarity: "common", baseDodge: 0.08, baseAtk: 10 },
+    { id: "gear_14", slot: "amulet", name: "Mystic Water Orb", icon: "assets/items/gear/icon_14.png", cardImg: "assets/items/gear/card_14.png", rarity: "common", baseHp: 80, baseLifesteal: 0.05 },
+    { id: "gear_15", slot: "amulet", name: "Ancient War Horn", icon: "assets/items/gear/icon_15.png", cardImg: "assets/items/gear/card_15.png", rarity: "common", baseAtk: 15, baseDef: 8 },
+    { id: "gear_16", slot: "boots", name: "Emerald Crystal Shard", icon: "assets/items/gear/icon_16.png", cardImg: "assets/items/gear/card_16.png", rarity: "common", baseDodge: 0.06, baseHp: 60 },
+    { id: "gear_17", slot: "boots", name: "Traveler Coin Pouch", icon: "assets/items/gear/icon_17.png", cardImg: "assets/items/gear/card_17.png", rarity: "common", baseDodge: 0.08, baseAtk: 10 },
 
 
     // =========================================================================
     // --- 24 AUTHENTIC RARE GEARS (BLUE - EXTRACTED DIRECTLY FROM USER REFERENCE SHEET) ---
     // =========================================================================
     // Row 0: Weapons
-    { id: "rare_00", slot: "weapon", name: "Pedang Pendek Safir (Sapphire Short Sword)", icon: "assets/items/rare/icon_rare_00.png", cardImg: "assets/items/rare/card_rare_00.png", rarity: "rare", baseAtk: 65, critBonus: 0.08 },
-    { id: "rare_01", slot: "weapon", name: "Tombak Es Glasial (Glacial Ice Spear)", icon: "assets/items/rare/icon_rare_01.png", cardImg: "assets/items/rare/card_rare_01.png", rarity: "rare", baseAtk: 66, critBonus: 0.09 },
-    { id: "rare_02", slot: "weapon", name: "Busur Pemburu Badai (Storm Hunter Recurve Bow)", icon: "assets/items/rare/icon_rare_02.png", cardImg: "assets/items/rare/card_rare_02.png", rarity: "rare", baseAtk: 63, critBonus: 0.10 },
-    { id: "rare_03", slot: "weapon", name: "Tongkat Bola Magis Safir (Sapphire Orb Magic Staff)", icon: "assets/items/rare/icon_rare_03.png", cardImg: "assets/items/rare/card_rare_03.png", rarity: "rare", baseAtk: 68, skillBoost: 0.12 },
-    { id: "rare_04", slot: "weapon", name: "Palu Tempur Kristal (Crystal Gem Warhammer)", icon: "assets/items/rare/icon_rare_04.png", cardImg: "assets/items/rare/card_rare_04.png", rarity: "rare", baseAtk: 72, critBonus: 0.07 },
-    { id: "rare_05", slot: "weapon", name: "Pedang Lengkung Gurun (Azure Curved Scimitar)", icon: "assets/items/rare/icon_rare_05.png", cardImg: "assets/items/rare/card_rare_05.png", rarity: "rare", baseAtk: 67, critBonus: 0.08 },
+    { id: "rare_00", slot: "weapon", name: "Sapphire Shortsword", icon: "assets/items/rare/icon_rare_00.png", cardImg: "assets/items/rare/card_rare_00.png", rarity: "rare", baseAtk: 65, critBonus: 0.08 },
+    { id: "rare_01", slot: "weapon", name: "Glacial Ice Spear", icon: "assets/items/rare/icon_rare_01.png", cardImg: "assets/items/rare/card_rare_01.png", rarity: "rare", baseAtk: 66, critBonus: 0.09 },
+    { id: "rare_02", slot: "weapon", name: "Storm Hunter Bow", icon: "assets/items/rare/icon_rare_02.png", cardImg: "assets/items/rare/card_rare_02.png", rarity: "rare", baseAtk: 63, critBonus: 0.10 },
+    { id: "rare_03", slot: "weapon", name: "Sapphire Orb Staff", icon: "assets/items/rare/icon_rare_03.png", cardImg: "assets/items/rare/card_rare_03.png", rarity: "rare", baseAtk: 68, skillBoost: 0.12 },
+    { id: "rare_04", slot: "weapon", name: "Crystal Gem Warhammer", icon: "assets/items/rare/icon_rare_04.png", cardImg: "assets/items/rare/card_rare_04.png", rarity: "rare", baseAtk: 72, critBonus: 0.07 },
+    { id: "rare_05", slot: "weapon", name: "Azure Curved Scimitar", icon: "assets/items/rare/icon_rare_05.png", cardImg: "assets/items/rare/card_rare_05.png", rarity: "rare", baseAtk: 67, critBonus: 0.08 },
 
     // Row 1: Wand, Shield, Armor, Helmets
-    { id: "rare_06", slot: "weapon", name: "Tongkat Ranting Kehidupan (Verdant Sprout Wand)", icon: "assets/items/rare/icon_rare_06.png", cardImg: "assets/items/rare/card_rare_06.png", rarity: "rare", baseAtk: 64, skillBoost: 0.10 },
-    { id: "rare_07", slot: "armor", name: "Perisai Bundar Ksatria Biru (Azure Knight Buckler)", icon: "assets/items/rare/icon_rare_07.png", cardImg: "assets/items/rare/card_rare_07.png", rarity: "rare", baseHp: 360, baseDef: 26 },
-    { id: "rare_08", slot: "armor", name: "Jubah Sutra Magis Salju (Glacial Mage Robe)", icon: "assets/items/rare/icon_rare_08.png", cardImg: "assets/items/rare/card_rare_08.png", rarity: "rare", baseHp: 370, baseDef: 22, dodgeBonus: 0.05 },
-    { id: "rare_09", slot: "armor", name: "Zirah Plat Baja Penjaga (Guardian Steel Cuirass)", icon: "assets/items/rare/icon_rare_09.png", cardImg: "assets/items/rare/card_rare_09.png", rarity: "rare", baseHp: 410, baseDef: 28 },
-    { id: "rare_10", slot: "helmet", name: "Tudung Bayangan Malam (Midnight Shadow Cowl)", icon: "assets/items/rare/icon_rare_10.png", cardImg: "assets/items/rare/card_rare_10.png", rarity: "rare", baseDef: 28, baseHp: 190, dodgeBonus: 0.06 },
-    { id: "rare_11", slot: "helmet", name: "Helm Bersayap Valkyrie (Winged Valkyrie Helm)", icon: "assets/items/rare/icon_rare_11.png", cardImg: "assets/items/rare/card_rare_11.png", rarity: "rare", baseDef: 32, baseHp: 200, critBonus: 0.06 },
+    { id: "rare_06", slot: "weapon", name: "Verdant Sprout Wand", icon: "assets/items/rare/icon_rare_06.png", cardImg: "assets/items/rare/card_rare_06.png", rarity: "rare", baseAtk: 64, skillBoost: 0.10 },
+    { id: "rare_07", slot: "armor", name: "Azure Knight Buckler", icon: "assets/items/rare/icon_rare_07.png", cardImg: "assets/items/rare/card_rare_07.png", rarity: "rare", baseHp: 360, baseDef: 26 },
+    { id: "rare_08", slot: "armor", name: "Glacial Mage Robe", icon: "assets/items/rare/icon_rare_08.png", cardImg: "assets/items/rare/card_rare_08.png", rarity: "rare", baseHp: 370, baseDef: 22, dodgeBonus: 0.05 },
+    { id: "rare_09", slot: "armor", name: "Guardian Steel Cuirass", icon: "assets/items/rare/icon_rare_09.png", cardImg: "assets/items/rare/card_rare_09.png", rarity: "rare", baseHp: 410, baseDef: 28 },
+    { id: "rare_10", slot: "helmet", name: "Midnight Shadow Cowl", icon: "assets/items/rare/icon_rare_10.png", cardImg: "assets/items/rare/card_rare_10.png", rarity: "rare", baseDef: 28, baseHp: 190, dodgeBonus: 0.06 },
+    { id: "rare_11", slot: "helmet", name: "Winged Valkyrie Helm", icon: "assets/items/rare/icon_rare_11.png", cardImg: "assets/items/rare/card_rare_11.png", rarity: "rare", baseDef: 32, baseHp: 200, critBonus: 0.06 },
 
     // Row 2: Rings
-    { id: "rare_12", slot: "ring", name: "Cincin Segiempat Safir (Square Sapphire Signet Ring)", icon: "assets/items/rare/icon_rare_12.png", cardImg: "assets/items/rare/card_rare_12.png", rarity: "rare", baseCrit: 0.16, baseAtk: 26 },
-    { id: "rare_13", slot: "ring", name: "Cincin Mutiara Biru (Azure Pearl Ring)", icon: "assets/items/rare/icon_rare_13.png", cardImg: "assets/items/rare/card_rare_13.png", rarity: "rare", baseCrit: 0.15, baseHp: 160 },
-    { id: "rare_14", slot: "ring", name: "Cincin Gugusan Kristal (Crystal Cluster Ring)", icon: "assets/items/rare/icon_rare_14.png", cardImg: "assets/items/rare/card_rare_14.png", rarity: "rare", baseCrit: 0.17, baseAtk: 28 },
-    { id: "rare_15", slot: "ring", name: "Cincin Bintang Safir Gelap (Dark Star Sapphire Ring)", icon: "assets/items/rare/icon_rare_15.png", cardImg: "assets/items/rare/card_rare_15.png", rarity: "rare", baseCrit: 0.18, baseAtk: 30 },
-    { id: "rare_16", slot: "ring", name: "Cincin Bulan Sabit (Crescent Moon Ring)", icon: "assets/items/rare/icon_rare_16.png", cardImg: "assets/items/rare/card_rare_16.png", rarity: "rare", baseCrit: 0.16, baseHp: 180 },
-    { id: "rare_17", slot: "ring", name: "Cincin Jejak Kaki Capybara (Capybara Paw Ring)", icon: "assets/items/rare/icon_rare_17.png", cardImg: "assets/items/rare/card_rare_17.png", rarity: "rare", baseCrit: 0.19, baseAtk: 32 },
+    { id: "rare_12", slot: "ring", name: "Square Sapphire Ring", icon: "assets/items/rare/icon_rare_12.png", cardImg: "assets/items/rare/card_rare_12.png", rarity: "rare", baseCrit: 0.16, baseAtk: 26 },
+    { id: "rare_13", slot: "ring", name: "Azure Pearl Ring", icon: "assets/items/rare/icon_rare_13.png", cardImg: "assets/items/rare/card_rare_13.png", rarity: "rare", baseCrit: 0.15, baseHp: 160 },
+    { id: "rare_14", slot: "ring", name: "Crystal Cluster Ring", icon: "assets/items/rare/icon_rare_14.png", cardImg: "assets/items/rare/card_rare_14.png", rarity: "rare", baseCrit: 0.17, baseAtk: 28 },
+    { id: "rare_15", slot: "ring", name: "Dark Star Sapphire Ring", icon: "assets/items/rare/icon_rare_15.png", cardImg: "assets/items/rare/card_rare_15.png", rarity: "rare", baseCrit: 0.18, baseAtk: 30 },
+    { id: "rare_16", slot: "ring", name: "Crescent Moon Ring", icon: "assets/items/rare/icon_rare_16.png", cardImg: "assets/items/rare/card_rare_16.png", rarity: "rare", baseCrit: 0.16, baseHp: 180 },
+    { id: "rare_17", slot: "ring", name: "Capybara Paw Ring", icon: "assets/items/rare/icon_rare_17.png", cardImg: "assets/items/rare/card_rare_17.png", rarity: "rare", baseCrit: 0.19, baseAtk: 32 },
 
     // Row 3: Amulets & Boots
-    { id: "rare_18", slot: "amulet", name: "Liontin Kristal Samudra (Ocean Crystal Pendant)", icon: "assets/items/rare/icon_rare_18.png", cardImg: "assets/items/rare/card_rare_18.png", rarity: "rare", baseLifesteal: 0.12, baseAtk: 24 },
-    { id: "rare_19", slot: "amulet", name: "Kitab Sihir Es Abadi (Tome of Eternal Frost)", icon: "assets/items/rare/icon_rare_19.png", cardImg: "assets/items/rare/card_rare_19.png", rarity: "rare", baseLifesteal: 0.14, baseAtk: 28 },
-    { id: "rare_20", slot: "amulet", name: "Kalung Manik Safir (Azure Beaded Necklace)", icon: "assets/items/rare/icon_rare_20.png", cardImg: "assets/items/rare/card_rare_20.png", rarity: "rare", baseLifesteal: 0.12, baseHp: 220 },
-    { id: "rare_21", slot: "amulet", name: "Anting Sayap Malaikat (Seraph Wing Feather Charm)", icon: "assets/items/rare/icon_rare_21.png", cardImg: "assets/items/rare/card_rare_21.png", rarity: "rare", baseLifesteal: 0.15, baseAtk: 26 },
-    { id: "rare_22", slot: "boots", name: "Tas Ransel Langkah Pengelana (Adventurer Traveler Pack)", icon: "assets/items/rare/icon_rare_22.png", cardImg: "assets/items/rare/card_rare_22.png", rarity: "rare", baseDodge: 0.16, baseHp: 180 },
-    { id: "rare_23", slot: "boots", name: "Syal Angin Langkah Kilat (Swift Stride Silk Scarf)", icon: "assets/items/rare/icon_rare_23.png", cardImg: "assets/items/rare/card_rare_23.png", rarity: "rare", baseDodge: 0.18, baseHp: 170 },
+    { id: "rare_18", slot: "amulet", name: "Ocean Crystal Pendant", icon: "assets/items/rare/icon_rare_18.png", cardImg: "assets/items/rare/card_rare_18.png", rarity: "rare", baseLifesteal: 0.12, baseAtk: 24 },
+    { id: "rare_19", slot: "amulet", name: "Tome of Eternal Frost", icon: "assets/items/rare/icon_rare_19.png", cardImg: "assets/items/rare/card_rare_19.png", rarity: "rare", baseLifesteal: 0.14, baseAtk: 28 },
+    { id: "rare_20", slot: "amulet", name: "Azure Pearl Necklace", icon: "assets/items/rare/icon_rare_20.png", cardImg: "assets/items/rare/card_rare_20.png", rarity: "rare", baseLifesteal: 0.12, baseHp: 220 },
+    { id: "rare_21", slot: "amulet", name: "Seraph Wing Charm", icon: "assets/items/rare/icon_rare_21.png", cardImg: "assets/items/rare/card_rare_21.png", rarity: "rare", baseLifesteal: 0.15, baseAtk: 26 },
+    { id: "rare_22", slot: "boots", name: "Adventurer Traveler Pack", icon: "assets/items/rare/icon_rare_22.png", cardImg: "assets/items/rare/card_rare_22.png", rarity: "rare", baseDodge: 0.16, baseHp: 180 },
+    { id: "rare_23", slot: "boots", name: "Swift Stride Scarf", icon: "assets/items/rare/icon_rare_23.png", cardImg: "assets/items/rare/card_rare_23.png", rarity: "rare", baseDodge: 0.18, baseHp: 170 },
 
 
 
@@ -281,60 +281,67 @@ const GameData = {
     // =========================================================================
     // --- 21 AUTHENTIC MYTHIC GEARS (CRIMSON FLAME AURA - EXTRACTED DIRECTLY) ---
     // =========================================================================
-    { id: "myth_00", slot: "weapon", name: "Pedang Bara Api Mythic (Flame Greatsword)", icon: "assets/items/mythic/icon_mythic_00.png", cardImg: "assets/items/mythic/card_mythic_00.png", rarity: "mythic", baseAtk: 245, critBonus: 0.28, dotBurn: 0.15 },
-    { id: "myth_01", slot: "weapon", name: "Belati Neraka Pembelah Api (Hellfire Serrated Dagger)", icon: "assets/items/mythic/icon_mythic_01.png", cardImg: "assets/items/mythic/card_mythic_01.png", rarity: "mythic", baseAtk: 240, critBonus: 0.32, lifestealBonus: 0.18 },
-    { id: "myth_02", slot: "weapon", name: "Busur Bulu Phoenix Surya (Phoenix Feather Sun Bow)", icon: "assets/items/mythic/icon_mythic_02.png", cardImg: "assets/items/mythic/card_mythic_02.png", rarity: "mythic", baseAtk: 250, critBonus: 0.30, skillBoost: 0.20 },
-    { id: "myth_03", slot: "weapon", name: "Tongkat Permata Darah Abadi (Sanguine Orb Mystic Staff)", icon: "assets/items/mythic/icon_mythic_03.png", cardImg: "assets/items/mythic/card_mythic_03.png", rarity: "mythic", baseAtk: 255, critBonus: 0.25, lifestealBonus: 0.22 },
-    { id: "myth_04", slot: "weapon", name: "Palu Inti Lahar Purba (Molten Core War Hammer)", icon: "assets/items/mythic/icon_mythic_04.png", cardImg: "assets/items/mythic/card_mythic_04.png", rarity: "mythic", baseAtk: 265, critBonus: 0.22, stunChance: 0.25 },
-    { id: "myth_05", slot: "weapon", name: "Tombak Kristal Api Delima (Blazing Ruby Crystal Spear)", icon: "assets/items/mythic/icon_mythic_05.png", cardImg: "assets/items/mythic/card_mythic_05.png", rarity: "mythic", baseAtk: 258, critBonus: 0.26, dotBurn: 0.18 },
-    { id: "myth_06", slot: "armor", name: "Perisai Singa Emas Aegis (Golden Lion Aegis Shield)", icon: "assets/items/mythic/icon_mythic_06.png", cardImg: "assets/items/mythic/card_mythic_06.png", rarity: "mythic", baseHp: 1850, baseDef: 85, reflectRatio: 0.20 },
-    { id: "myth_07", slot: "armor", name: "Zirah Paladin Phoenix Suci (Holy Phoenix Paladin Armor)", icon: "assets/items/mythic/icon_mythic_07.png", cardImg: "assets/items/mythic/card_mythic_07.png", rarity: "mythic", baseHp: 1950, baseDef: 88, regen: 0.10 },
-    { id: "myth_08", slot: "armor", name: "Zirah Sisik Iblis Abyssal (Abyssal Demonscale Plate)", icon: "assets/items/mythic/icon_mythic_08.png", cardImg: "assets/items/mythic/card_mythic_08.png", rarity: "mythic", baseHp: 1880, baseDef: 92, dmgReduction: 0.12 },
-    { id: "myth_09", slot: "helmet", name: "Tudung Bayangan Merah Berkobar (Crimson Shadow Hood)", icon: "assets/items/mythic/icon_mythic_09.png", cardImg: "assets/items/mythic/card_mythic_09.png", rarity: "mythic", baseDef: 88, baseHp: 800, dodgeBonus: 0.18 },
-    { id: "myth_10", slot: "helmet", name: "Helm Sayap Valkyrie Berkobar (Blazing Valkyrie Winged Helm)", icon: "assets/items/mythic/icon_mythic_10.png", cardImg: "assets/items/mythic/card_mythic_10.png", rarity: "mythic", baseDef: 92, baseHp: 840, critBonus: 0.15 },
-    { id: "myth_11", slot: "helmet", name: "Helm Tanduk Iblis Neraka (Hellfire Demon Horns Helm)", icon: "assets/items/mythic/icon_mythic_11.png", cardImg: "assets/items/mythic/card_mythic_11.png", rarity: "mythic", baseDef: 96, baseHp: 880, baseAtk: 65 },
-    { id: "myth_12", slot: "ring", name: "Cincin Emas Permata Surya (Solar Ruby Signet Ring)", icon: "assets/items/mythic/icon_mythic_12.png", cardImg: "assets/items/mythic/card_mythic_12.png", rarity: "mythic", baseCrit: 0.36, critDmg: 0.82, baseAtk: 100 },
-    { id: "myth_13", slot: "ring", name: "Cincin Obsidian Api Gelap (Dark Obsidian Starfire Ring)", icon: "assets/items/mythic/icon_mythic_13.png", cardImg: "assets/items/mythic/card_mythic_13.png", rarity: "mythic", baseCrit: 0.38, critDmg: 0.86, baseAtk: 105 },
-    { id: "myth_14", slot: "ring", name: "Cincin Sabit Bulan Merah (Crimson Crescent Moon Ring)", icon: "assets/items/mythic/icon_mythic_14.png", cardImg: "assets/items/mythic/card_mythic_14.png", rarity: "mythic", baseCrit: 0.37, critDmg: 0.84, lifestealBonus: 0.15 },
-    { id: "myth_15", slot: "ring", name: "Cincin Kepala Naga Lahar Purba (Primal Magma Dragonhead Ring)", icon: "assets/items/mythic/icon_mythic_15.png", cardImg: "assets/items/mythic/card_mythic_15.png", rarity: "mythic", baseCrit: 0.40, critDmg: 0.90, baseAtk: 115 },
-    { id: "myth_16", slot: "amulet", name: "Liontin Kristal Darah Phoenix (Phoenix Blood Crystal Pendant)", icon: "assets/items/mythic/icon_mythic_16.png", cardImg: "assets/items/mythic/card_mythic_16.png", rarity: "mythic", baseLifesteal: 0.30, baseHp: 860, baseAtk: 95 },
-    { id: "myth_17", slot: "amulet", name: "Kalung Permata Surya Berkobar (Solar Flare Ruby Choker)", icon: "assets/items/mythic/icon_mythic_17.png", cardImg: "assets/items/mythic/card_mythic_17.png", rarity: "mythic", baseHp: 920, baseAtk: 105, skillBoost: 0.20 },
-    { id: "myth_18", slot: "amulet", name: "Kitab Api Abadi Kuno (Grimoire of Eternal Flames)", icon: "assets/items/mythic/icon_mythic_18.png", cardImg: "assets/items/mythic/card_mythic_18.png", rarity: "mythic", baseAtk: 125, skillBoost: 0.28, dotBurn: 0.20 },
-    { id: "myth_19", slot: "boots", name: "Sepatu Bulu Sayap Malaikat Api (Seraph Flame Feather Boots)", icon: "assets/items/mythic/icon_mythic_19.png", cardImg: "assets/items/mythic/card_mythic_19.png", rarity: "mythic", baseDodge: 0.36, baseHp: 760, speedBonus: 0.26 },
-    { id: "myth_20", slot: "boots", name: "Gelang Cakar Capybara Berapi (Crimson Capy Paw Talisman Boots)", icon: "assets/items/mythic/icon_mythic_20.png", cardImg: "assets/items/mythic/card_mythic_20.png", rarity: "mythic", baseDodge: 0.38, baseHp: 800, critBonus: 0.16 },
+    // Row 0: Weapons
+    { id: "myth_00", slot: "weapon", name: "Flame Greatsword", icon: "assets/items/mythic/icon_mythic_00.png", cardImg: "assets/items/mythic/card_mythic_00.png", rarity: "mythic", baseAtk: 245, critBonus: 0.28, dotBurn: 0.15 },
+    { id: "myth_01", slot: "weapon", name: "Hellfire Serrated Dagger", icon: "assets/items/mythic/icon_mythic_01.png", cardImg: "assets/items/mythic/card_mythic_01.png", rarity: "mythic", baseAtk: 240, critBonus: 0.32, lifestealBonus: 0.18 },
+    { id: "myth_02", slot: "weapon", name: "Phoenix Sun Bow", icon: "assets/items/mythic/icon_mythic_02.png", cardImg: "assets/items/mythic/card_mythic_02.png", rarity: "mythic", baseAtk: 250, critBonus: 0.30, skillBoost: 0.20 },
+    { id: "myth_03", slot: "weapon", name: "Sanguine Orb Staff", icon: "assets/items/mythic/icon_mythic_03.png", cardImg: "assets/items/mythic/card_mythic_03.png", rarity: "mythic", baseAtk: 255, critBonus: 0.25, lifestealBonus: 0.22 },
+    { id: "myth_04", slot: "weapon", name: "Molten War Hammer", icon: "assets/items/mythic/icon_mythic_04.png", cardImg: "assets/items/mythic/card_mythic_04.png", rarity: "mythic", baseAtk: 265, critBonus: 0.22, stunChance: 0.25 },
+
+    // Row 1: Spear, Shield, Armors, Helmets
+    { id: "myth_05", slot: "weapon", name: "Blazing Ruby Spear", icon: "assets/items/mythic/icon_mythic_05.png", cardImg: "assets/items/mythic/card_mythic_05.png", rarity: "mythic", baseAtk: 258, critBonus: 0.26, dotBurn: 0.18 },
+    { id: "myth_06", slot: "armor", name: "Golden Lion Aegis", icon: "assets/items/mythic/icon_mythic_06.png", cardImg: "assets/items/mythic/card_mythic_06.png", rarity: "mythic", baseHp: 1850, baseDef: 85, reflectRatio: 0.20 },
+    { id: "myth_07", slot: "armor", name: "Holy Paladin Cuirass", icon: "assets/items/mythic/icon_mythic_07.png", cardImg: "assets/items/mythic/card_mythic_07.png", rarity: "mythic", baseHp: 1950, baseDef: 88, regen: 0.10 },
+    { id: "myth_08", slot: "armor", name: "Abyssal Demon Plate", icon: "assets/items/mythic/icon_mythic_08.png", cardImg: "assets/items/mythic/card_mythic_08.png", rarity: "mythic", baseHp: 1880, baseDef: 92, dmgReduction: 0.12 },
+    { id: "myth_09", slot: "helmet", name: "Crimson Shadow Cowl", icon: "assets/items/mythic/icon_mythic_09.png", cardImg: "assets/items/mythic/card_mythic_09.png", rarity: "mythic", baseDef: 88, baseHp: 800, dodgeBonus: 0.18 },
+
+    // Row 2: Helmets & Rings
+    { id: "myth_10", slot: "helmet", name: "Blazing Valkyrie Helm", icon: "assets/items/mythic/icon_mythic_10.png", cardImg: "assets/items/mythic/card_mythic_10.png", rarity: "mythic", baseDef: 92, baseHp: 840, critBonus: 0.15 },
+    { id: "myth_11", slot: "helmet", name: "Hellfire Horned Helm", icon: "assets/items/mythic/icon_mythic_11.png", cardImg: "assets/items/mythic/card_mythic_11.png", rarity: "mythic", baseDef: 96, baseHp: 880, baseAtk: 65 },
+    { id: "myth_12", slot: "ring", name: "Solar Ruby Ring", icon: "assets/items/mythic/icon_mythic_12.png", cardImg: "assets/items/mythic/card_mythic_12.png", rarity: "mythic", baseCrit: 0.36, critDmg: 0.82, baseAtk: 100 },
+    { id: "myth_13", slot: "ring", name: "Dark Starfire Ring", icon: "assets/items/mythic/icon_mythic_13.png", cardImg: "assets/items/mythic/card_mythic_13.png", rarity: "mythic", baseCrit: 0.38, critDmg: 0.86, baseAtk: 105 },
+    { id: "myth_14", slot: "ring", name: "Crimson Crescent Ring", icon: "assets/items/mythic/icon_mythic_14.png", cardImg: "assets/items/mythic/card_mythic_14.png", rarity: "mythic", baseCrit: 0.37, critDmg: 0.84, lifestealBonus: 0.15 },
+
+    // Row 3: Ring, Amulets, Boots
+    { id: "myth_15", slot: "ring", name: "Magma Dragonhead Ring", icon: "assets/items/mythic/icon_mythic_15.png", cardImg: "assets/items/mythic/card_mythic_15.png", rarity: "mythic", baseCrit: 0.40, critDmg: 0.90, baseAtk: 115 },
+    { id: "myth_16", slot: "amulet", name: "Phoenix Blood Pendant", icon: "assets/items/mythic/icon_mythic_16.png", cardImg: "assets/items/mythic/card_mythic_16.png", rarity: "mythic", baseLifesteal: 0.30, baseHp: 860, baseAtk: 95 },
+    { id: "myth_17", slot: "amulet", name: "Solar Flare Medallion", icon: "assets/items/mythic/icon_mythic_17.png", cardImg: "assets/items/mythic/card_mythic_17.png", rarity: "mythic", baseHp: 920, baseAtk: 105, skillBoost: 0.20 },
+    { id: "myth_18", slot: "amulet", name: "Grimoire of Eternal Flames", icon: "assets/items/mythic/icon_mythic_18.png", cardImg: "assets/items/mythic/card_mythic_18.png", rarity: "mythic", baseAtk: 125, skillBoost: 0.28, dotBurn: 0.20 },
+    { id: "myth_19", slot: "boots", name: "Seraph Flame Boots", icon: "assets/items/mythic/icon_mythic_19.png", cardImg: "assets/items/mythic/card_mythic_19.png", rarity: "mythic", baseDodge: 0.36, baseHp: 760, speedBonus: 0.26 },
+    { id: "myth_20", slot: "boots", name: "Crimson Paw Bracelet", icon: "assets/items/mythic/icon_mythic_20.png", cardImg: "assets/items/mythic/card_mythic_20.png", rarity: "mythic", baseDodge: 0.38, baseHp: 800, critBonus: 0.16 },
 
     // =========================================================================
     // --- 21 AUTHENTIC SUPREME GEARS (COSMIC VIOLET - TIER TERTINGGI DI ATAS MYTHIC!) ---
     // Primordial god-tier cosmos equipment directly extracted from supreme sheet
     // =========================================================================
     // Row 0: Cosmic Weapons
-    { id: "sup_00", slot: "weapon", name: "Pedang Kosmik Galaksi Abadi (Cosmic Galaxy Greatsword)", icon: "assets/items/supreme/icon_supreme_00.png", cardImg: "assets/items/supreme/card_supreme_00.png", rarity: "supreme", baseAtk: 440, critBonus: 0.42, lifestealBonus: 0.30 },
-    { id: "sup_01", slot: "weapon", name: "Sabit Kehampaan Dimensi Sabit (Void Dimensional Crescent Scythe)", icon: "assets/items/supreme/icon_supreme_01.png", cardImg: "assets/items/supreme/card_supreme_01.png", rarity: "supreme", baseAtk: 435, critBonus: 0.45, lifestealBonus: 0.28 },
-    { id: "sup_02", slot: "weapon", name: "Busur Rasi Bintang Kehampaan (Stellar Constellation Void Bow)", icon: "assets/items/supreme/icon_supreme_02.png", cardImg: "assets/items/supreme/card_supreme_02.png", rarity: "supreme", baseAtk: 450, critBonus: 0.44, skillBoost: 0.35 },
-    { id: "sup_03", slot: "weapon", name: "Tongkat Bola Kosmik Singularitas (Cosmic Singularity Orb Staff)", icon: "assets/items/supreme/icon_supreme_03.png", cardImg: "assets/items/supreme/card_supreme_03.png", rarity: "supreme", baseAtk: 460, critBonus: 0.40, skillBoost: 0.40 },
-    { id: "sup_04", slot: "weapon", name: "Palu Penghancur Bintang Kosmik (Cosmic Starbreaker War Hammer)", icon: "assets/items/supreme/icon_supreme_04.png", cardImg: "assets/items/supreme/card_supreme_04.png", rarity: "supreme", baseAtk: 480, critBonus: 0.38, stunChance: 0.40 },
-    { id: "sup_05", slot: "weapon", name: "Tombak Kristal Nebula Bintang (Star Nebula Crystal Spear)", icon: "assets/items/supreme/icon_supreme_05.png", cardImg: "assets/items/supreme/card_supreme_05.png", rarity: "supreme", baseAtk: 455, critBonus: 0.42, dotBurn: 0.25 },
+    { id: "sup_00", slot: "weapon", name: "Cosmic Void Greatsword", icon: "assets/items/supreme/icon_supreme_00.png", cardImg: "assets/items/supreme/card_supreme_00.png", rarity: "supreme", baseAtk: 440, critBonus: 0.42, lifestealBonus: 0.30 },
+    { id: "sup_01", slot: "weapon", name: "Void Crescent Scythe", icon: "assets/items/supreme/icon_supreme_01.png", cardImg: "assets/items/supreme/card_supreme_01.png", rarity: "supreme", baseAtk: 435, critBonus: 0.45, lifestealBonus: 0.28 },
+    { id: "sup_02", slot: "weapon", name: "Stellar Constellation Bow", icon: "assets/items/supreme/icon_supreme_02.png", cardImg: "assets/items/supreme/card_supreme_02.png", rarity: "supreme", baseAtk: 450, critBonus: 0.44, skillBoost: 0.35 },
+    { id: "sup_03", slot: "weapon", name: "Singularity Orb Staff", icon: "assets/items/supreme/icon_supreme_03.png", cardImg: "assets/items/supreme/card_supreme_03.png", rarity: "supreme", baseAtk: 460, critBonus: 0.40, skillBoost: 0.40 },
+    { id: "sup_04", slot: "weapon", name: "Cosmic Starbreaker Hammer", icon: "assets/items/supreme/icon_supreme_04.png", cardImg: "assets/items/supreme/card_supreme_04.png", rarity: "supreme", baseAtk: 480, critBonus: 0.38, stunChance: 0.40 },
+    { id: "sup_05", slot: "weapon", name: "Nebula Crystal Spear", icon: "assets/items/supreme/icon_supreme_05.png", cardImg: "assets/items/supreme/card_supreme_05.png", rarity: "supreme", baseAtk: 455, critBonus: 0.42, dotBurn: 0.25 },
 
     // Row 1: Cosmic Armor & Helmets
-    { id: "sup_06", slot: "armor", name: "Perisai Singa Kosmik Aegis (Cosmic Lion Starlight Aegis)", icon: "assets/items/supreme/icon_supreme_06.png", cardImg: "assets/items/supreme/card_supreme_06.png", rarity: "supreme", baseHp: 3400, baseDef: 155, reflectRatio: 0.30 },
-    { id: "sup_07", slot: "armor", name: "Zirah Paladin Bintang Agung (Grand Star Paladin Armor)", icon: "assets/items/supreme/icon_supreme_07.png", cardImg: "assets/items/supreme/card_supreme_07.png", rarity: "supreme", baseHp: 3600, baseDef: 160, regen: 0.15 },
-    { id: "sup_08", slot: "armor", name: "Zirah Sisik Iblis Kosmik Abyssal (Abyssal Cosmic Demon Plate)", icon: "assets/items/supreme/icon_supreme_08.png", cardImg: "assets/items/supreme/card_supreme_08.png", rarity: "supreme", baseHp: 3500, baseDef: 168, dmgReduction: 0.20 },
-    { id: "sup_09", slot: "helmet", name: "Jubah Kerudung Nebula Kehampaan (Void Nebula Shadow Cowl)", icon: "assets/items/supreme/icon_supreme_09.png", cardImg: "assets/items/supreme/card_supreme_09.png", rarity: "supreme", baseDef: 150, baseHp: 1550, dodgeBonus: 0.25 },
-    { id: "sup_10", slot: "helmet", name: "Helm Sayap Valkyrie Kosmik (Cosmic Valkyrie Winged Helm)", icon: "assets/items/supreme/icon_supreme_10.png", cardImg: "assets/items/supreme/card_supreme_10.png", rarity: "supreme", baseDef: 158, baseHp: 1620, critBonus: 0.22 },
-    { id: "sup_11", slot: "helmet", name: "Helm Tanduk Iblis Kosmik Galaksi (Galaxy Demon Horns Helm)", icon: "assets/items/supreme/icon_supreme_11.png", cardImg: "assets/items/supreme/card_supreme_11.png", rarity: "supreme", baseDef: 165, baseHp: 1700, baseAtk: 110 },
+    { id: "sup_06", slot: "armor", name: "Cosmic Lion Aegis", icon: "assets/items/supreme/icon_supreme_06.png", cardImg: "assets/items/supreme/card_supreme_06.png", rarity: "supreme", baseHp: 3400, baseDef: 155, reflectRatio: 0.30 },
+    { id: "sup_07", slot: "armor", name: "Grand Celestial Cuirass", icon: "assets/items/supreme/icon_supreme_07.png", cardImg: "assets/items/supreme/card_supreme_07.png", rarity: "supreme", baseHp: 3600, baseDef: 160, regen: 0.15 },
+    { id: "sup_08", slot: "armor", name: "Cosmic Demon Plate", icon: "assets/items/supreme/icon_supreme_08.png", cardImg: "assets/items/supreme/card_supreme_08.png", rarity: "supreme", baseHp: 3500, baseDef: 168, dmgReduction: 0.20 },
+    { id: "sup_09", slot: "helmet", name: "Void Archmage Cowl", icon: "assets/items/supreme/icon_supreme_09.png", cardImg: "assets/items/supreme/card_supreme_09.png", rarity: "supreme", baseDef: 150, baseHp: 1550, dodgeBonus: 0.25 },
+    { id: "sup_10", slot: "helmet", name: "Cosmic Valkyrie Helm", icon: "assets/items/supreme/icon_supreme_10.png", cardImg: "assets/items/supreme/card_supreme_10.png", rarity: "supreme", baseDef: 158, baseHp: 1620, critBonus: 0.22 },
+    { id: "sup_11", slot: "helmet", name: "Galaxy Demon Horns Helm", icon: "assets/items/supreme/icon_supreme_11.png", cardImg: "assets/items/supreme/card_supreme_11.png", rarity: "supreme", baseDef: 165, baseHp: 1700, baseAtk: 110 },
 
     // Row 2: Cosmic Rings & Amulets
-    { id: "sup_12", slot: "ring", name: "Cincin Orbit Planet Singularitas (Singularity Planetary Orbit Ring)", icon: "assets/items/supreme/icon_supreme_12.png", cardImg: "assets/items/supreme/card_supreme_12.png", rarity: "supreme", baseCrit: 0.50, critDmg: 1.30, baseAtk: 185 },
-    { id: "sup_13", slot: "ring", name: "Cincin Kristal Intan Nebula (Nebula Diamond Starfire Ring)", icon: "assets/items/supreme/icon_supreme_13.png", cardImg: "assets/items/supreme/card_supreme_13.png", rarity: "supreme", baseCrit: 0.52, critDmg: 1.35, baseAtk: 195 },
-    { id: "sup_14", slot: "ring", name: "Cincin Sabit Bulan Kosmik (Cosmic Crescent Moon Ring)", icon: "assets/items/supreme/icon_supreme_14.png", cardImg: "assets/items/supreme/card_supreme_14.png", rarity: "supreme", baseCrit: 0.51, critDmg: 1.32, lifestealBonus: 0.22 },
-    { id: "sup_15", slot: "ring", name: "Cincin Kepala Naga Kosmik Purba (Primal Cosmic Dragonhead Ring)", icon: "assets/items/supreme/icon_supreme_15.png", cardImg: "assets/items/supreme/card_supreme_15.png", rarity: "supreme", baseCrit: 0.55, critDmg: 1.45, baseAtk: 215 },
-    { id: "sup_16", slot: "amulet", name: "Liontin Kristal Prisma Dimensi (Dimensional Prism Crystal Pendant)", icon: "assets/items/supreme/icon_supreme_16.png", cardImg: "assets/items/supreme/card_supreme_16.png", rarity: "supreme", baseLifesteal: 0.42, baseHp: 1650, baseAtk: 180 },
-    { id: "sup_17", slot: "amulet", name: "Surya Gelap Kalung Nebula (Dark Sun Nebula Choker)", icon: "assets/items/supreme/icon_supreme_17.png", cardImg: "assets/items/supreme/card_supreme_17.png", rarity: "supreme", baseHp: 1750, baseAtk: 195, skillBoost: 0.32 },
+    { id: "sup_12", slot: "ring", name: "Singularity Orbit Ring", icon: "assets/items/supreme/icon_supreme_12.png", cardImg: "assets/items/supreme/card_supreme_12.png", rarity: "supreme", baseCrit: 0.50, critDmg: 1.30, baseAtk: 185 },
+    { id: "sup_13", slot: "ring", name: "Nebula Diamond Ring", icon: "assets/items/supreme/icon_supreme_13.png", cardImg: "assets/items/supreme/card_supreme_13.png", rarity: "supreme", baseCrit: 0.52, critDmg: 1.35, baseAtk: 195 },
+    { id: "sup_14", slot: "ring", name: "Cosmic Crescent Ring", icon: "assets/items/supreme/icon_supreme_14.png", cardImg: "assets/items/supreme/card_supreme_14.png", rarity: "supreme", baseCrit: 0.51, critDmg: 1.32, lifestealBonus: 0.22 },
+    { id: "sup_15", slot: "ring", name: "Cosmic Dragonhead Ring", icon: "assets/items/supreme/icon_supreme_15.png", cardImg: "assets/items/supreme/card_supreme_15.png", rarity: "supreme", baseCrit: 0.55, critDmg: 1.45, baseAtk: 215 },
+    { id: "sup_16", slot: "amulet", name: "Dimensional Prism Pendant", icon: "assets/items/supreme/icon_supreme_16.png", cardImg: "assets/items/supreme/card_supreme_16.png", rarity: "supreme", baseLifesteal: 0.42, baseHp: 1650, baseAtk: 180 },
+    { id: "sup_17", slot: "amulet", name: "Solar Eclipse Medallion", icon: "assets/items/supreme/icon_supreme_17.png", cardImg: "assets/items/supreme/card_supreme_17.png", rarity: "supreme", baseHp: 1750, baseAtk: 195, skillBoost: 0.32 },
 
     // Row 3: Cosmic Amulet & Boots
-    { id: "sup_18", slot: "amulet", name: "Kitab Rahasia Galaksi Abadi (Grimoire of Eternal Cosmos)", icon: "assets/items/supreme/icon_supreme_18.png", cardImg: "assets/items/supreme/card_supreme_18.png", rarity: "supreme", baseAtk: 235, skillBoost: 0.45, dotBurn: 0.30 },
-    { id: "sup_19", slot: "boots", name: "Sepatu Sayap Malaikat Kosmik (Cosmic Seraph Wing Boots)", icon: "assets/items/supreme/icon_supreme_19.png", cardImg: "assets/items/supreme/card_supreme_19.png", rarity: "supreme", baseDodge: 0.48, baseHp: 1500, speedBonus: 0.35 },
-    { id: "sup_20", slot: "boots", name: "Gelang Cakar Capybara Kosmik (Cosmic Capy Paw Starlight Boots)", icon: "assets/items/supreme/icon_supreme_20.png", cardImg: "assets/items/supreme/card_supreme_20.png", rarity: "supreme", baseDodge: 0.52, baseHp: 1600, critBonus: 0.24 },
+    { id: "sup_18", slot: "amulet", name: "Grimoire of the Void", icon: "assets/items/supreme/icon_supreme_18.png", cardImg: "assets/items/supreme/card_supreme_18.png", rarity: "supreme", baseAtk: 235, skillBoost: 0.45, dotBurn: 0.30 },
+    { id: "sup_19", slot: "boots", name: "Cosmic Seraph Wing Boots", icon: "assets/items/supreme/icon_supreme_19.png", cardImg: "assets/items/supreme/card_supreme_19.png", rarity: "supreme", baseDodge: 0.48, baseHp: 1500, speedBonus: 0.35 },
+    { id: "sup_20", slot: "boots", name: "Cosmic Paw Bracelet", icon: "assets/items/supreme/icon_supreme_20.png", cardImg: "assets/items/supreme/card_supreme_20.png", rarity: "supreme", baseDodge: 0.52, baseHp: 1600, critBonus: 0.24 },
 
   ],
 

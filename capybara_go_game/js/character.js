@@ -718,7 +718,11 @@ class CharacterManager {
         delete it.refineRank;
         if (it.rarity === 'uncommon') it.rarity = 'common';
 
-        let tmpl = GameData.equipmentTemplates && GameData.equipmentTemplates.find(t => t.id === it.templateId || t.name === it.name);
+        let tmpl = GameData.equipmentTemplates && (
+          GameData.equipmentTemplates.find(t => t.id === it.templateId) ||
+          GameData.equipmentTemplates.find(t => t.name === it.name) ||
+          (it.name ? GameData.equipmentTemplates.find(t => it.name.includes(t.name)) : null)
+        );
         if (!tmpl) {
           const targetRarity = (it.rarity === 'uncommon' || !it.rarity) ? 'common' : it.rarity;
           tmpl = GameData.equipmentTemplates.find(t => t.slot === it.slot && t.rarity === targetRarity)
