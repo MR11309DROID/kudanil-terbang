@@ -3914,21 +3914,16 @@ body {
 /* SUPREME WEAPONS: Primordial cosmic violet, starlight cyan & prismatic aurora */
 .shimmer-wave-supreme .shimmer-sweep-light {
   background: linear-gradient(115deg,
-    transparent 20%,
-    rgba(168, 85, 247, 0.2) 32%,
-    rgba(216, 180, 254, 0.8) 43%,
+    transparent 10%,
+    rgba(168, 85, 247, 0.25) 25%,
+    rgba(232, 121, 249, 0.75) 38%,
     rgba(255, 255, 255, 1) 50%,
-    rgba(56, 189, 248, 0.95) 56%,
-    rgba(168, 85, 247, 0.4) 66%,
-    transparent 80%
+    rgba(56, 189, 248, 0.95) 58%,
+    rgba(147, 51, 234, 0.5) 70%,
+    transparent 88%
   );
-  animation: supremeCosmicSweep 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.paperdoll-slot.rarity-supreme.slot-is-weapon,
-.inv-item-card.rarity-supreme.slot-is-weapon {
-  box-shadow: 0 0 20px rgba(192, 132, 252, 0.95), 0 0 30px rgba(56, 189, 248, 0.6), inset 0 0 10px rgba(224, 200, 255, 0.7) !important;
-  animation: supremeWeaponCosmicPulse 2.2s infinite alternate ease-in-out !important;
+  animation: supremeCosmicSweep 1.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: screen;
 }
 
 @keyframes supremeCosmicSweep {
@@ -3936,13 +3931,92 @@ body {
   50%, 100% { transform: translateY(135%) rotate(32deg); }
 }
 
-@keyframes supremeWeaponCosmicPulse {
-  0% {
-    box-shadow: 0 0 12px rgba(192, 132, 252, 0.7), inset 0 0 6px rgba(192, 132, 252, 0.4);
-  }
-  100% {
-    box-shadow: 0 0 26px rgba(216, 180, 254, 1), 0 0 40px rgba(56, 189, 248, 0.75), inset 0 0 14px rgba(255, 255, 255, 0.85);
-  }
+/* ============================================================
+   SUPREME COSMIC STARS (BINTANG COSMIC DI DEKAT BINGKAI GEAR)
+   Multi-hued starlight particles hovering near frame corners
+   ============================================================ */
+.supreme-cosmic-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.cosmic-star {
+  position: absolute;
+  display: inline-block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.cosmic-star.cs-top-left {
+  top: -5px;
+  left: -5px;
+  font-size: 13px;
+  color: #e0f2fe;
+  text-shadow: 0 0 6px #ffffff, 0 0 14px #38bdf8, 0 0 20px #0284c7;
+  animation: cosmicStarTwinkle1 1.6s infinite alternate ease-in-out;
+}
+
+.cosmic-star.cs-top-right {
+  top: -5px;
+  right: -5px;
+  font-size: 14px;
+  color: #f5d0fe;
+  text-shadow: 0 0 8px #ffffff, 0 0 16px #c084fc, 0 0 24px #e879f9;
+  animation: cosmicStarTwinkle2 1.9s infinite alternate ease-in-out;
+}
+
+.cosmic-star.cs-bottom-left {
+  bottom: -5px;
+  left: -5px;
+  font-size: 13px;
+  color: #c084fc;
+  text-shadow: 0 0 6px #ffffff, 0 0 14px #a855f7, 0 0 22px #7c3aed;
+  animation: cosmicStarTwinkle3 2.1s infinite alternate ease-in-out;
+}
+
+.cosmic-star.cs-bottom-right {
+  bottom: -5px;
+  right: -5px;
+  font-size: 13px;
+  color: #38bdf8;
+  text-shadow: 0 0 6px #ffffff, 0 0 14px #0ea5e9, 0 0 20px #0369a1;
+  animation: cosmicStarTwinkle1 1.7s infinite alternate ease-in-out;
+}
+
+.cosmic-star.cs-mid-top {
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #ffffff;
+  text-shadow: 0 0 6px #ffffff, 0 0 12px #f0abfc, 0 0 20px #c084fc;
+  animation: cosmicStarPulse 1.4s infinite alternate ease-in-out;
+}
+
+@keyframes cosmicStarTwinkle1 {
+  0% { transform: scale(0.65) rotate(0deg); opacity: 0.45; }
+  50% { transform: scale(1.15) rotate(45deg); opacity: 0.95; }
+  100% { transform: scale(1.4) rotate(90deg); opacity: 1; }
+}
+
+@keyframes cosmicStarTwinkle2 {
+  0% { transform: scale(1.35) rotate(60deg); opacity: 1; }
+  50% { transform: scale(0.75) rotate(15deg); opacity: 0.55; }
+  100% { transform: scale(1.45) rotate(-30deg); opacity: 1; }
+}
+
+@keyframes cosmicStarTwinkle3 {
+  0% { transform: scale(0.65) rotate(-45deg); opacity: 0.4; }
+  50% { transform: scale(1.2) rotate(15deg); opacity: 0.9; }
+  100% { transform: scale(1.35) rotate(60deg); opacity: 1; }
+}
+
+@keyframes cosmicStarPulse {
+  0% { transform: translateX(-50%) scale(0.7); opacity: 0.5; }
+  100% { transform: translateX(-50%) scale(1.35); opacity: 1; }
 }
 
 /* Pulsing starlight sparkle cross on mythic & supreme weapons */
@@ -4494,12 +4568,40 @@ body {
   filter: none;
 }
 
-/* SUPREME = ROYAL AMETHYST PURPLE */
-.inv-item-card.rarity-supreme {
-  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 7px), linear-gradient(180deg, #a855f7 0%, #7c3aed 55%, #581c87 100%);
-  border: 2px solid #c084fc;
-  border-bottom: 3.5px solid #581c87;
-  box-shadow: 0 2.5px 0 #2e1065, inset 0 1px 2px rgba(255, 255, 255, 0.35);
+/* SUPREME = PRIMORDIAL CELESTIAL COSMOS (TIER TERTINGGI - LEBIH WOW DARI MYTHIC) */
+.inv-item-card.rarity-supreme,
+.paperdoll-slot.rarity-supreme {
+  background: radial-gradient(circle at 50% 30%, rgba(192, 132, 252, 0.3) 0%, transparent 70%), linear-gradient(180deg, #581c87 0%, #2e1065 55%, #0f172a 100%) !important;
+  border: 2.5px solid #d8b4fe !important;
+  border-bottom: 4px solid #3b0764 !important;
+  box-shadow: 0 3px 0 #1e1b4b, 0 0 20px rgba(192, 132, 252, 0.95), 0 0 35px rgba(56, 189, 248, 0.7), inset 0 0 10px rgba(240, 171, 252, 0.75) !important;
+  animation: supremeUltraCosmicAuraPulse 2.2s infinite alternate ease-in-out !important;
+  overflow: visible !important;
+}
+
+/* Supreme gear tile fitted cleanly to the gear frame */
+.inv-item-card.rarity-supreme .inv-item-img,
+.paperdoll-slot.rarity-supreme .slot-item-img {
+  width: 90% !important;
+  height: 90% !important;
+  border-radius: 8px;
+  object-fit: cover;
+  filter: none;
+}
+
+@keyframes supremeUltraCosmicAuraPulse {
+  0% {
+    box-shadow: 0 3px 0 #1e1b4b, 0 0 14px rgba(192, 132, 252, 0.85), 0 0 24px rgba(56, 189, 248, 0.5), inset 0 0 8px rgba(224, 200, 255, 0.6);
+    border-color: #c084fc !important;
+  }
+  50% {
+    box-shadow: 0 3px 0 #1e1b4b, 0 0 30px rgba(216, 180, 254, 1), 0 0 48px rgba(56, 189, 248, 0.9), 0 0 65px rgba(168, 85, 247, 0.7), inset 0 0 14px rgba(255, 255, 255, 0.95);
+    border-color: #f0abfc !important;
+  }
+  100% {
+    box-shadow: 0 3px 0 #1e1b4b, 0 0 22px rgba(192, 132, 252, 0.95), 0 0 36px rgba(129, 140, 248, 0.75), inset 0 0 12px rgba(240, 171, 252, 0.8);
+    border-color: #e0f2fe !important;
+  }
 }
 
 

@@ -2439,10 +2439,24 @@ class UIManager {
       if (item) {
         const displayImg = item.icon || item.cardImg;
         const isWeapon = (slot === "weapon");
-        const isMythicWeapon = isWeapon && (item.rarity === "mythic");
-        const isSupremeWeapon = isWeapon && (item.rarity === "supreme");
-        const shimmerClass = isSupremeWeapon ? "shimmer-wave-supreme" : (isMythicWeapon ? "shimmer-wave-mythic" : (item.rarity === "supreme" ? "shimmer-wave-supreme" : (item.rarity === "mythic" ? "shimmer-wave-mythic" : "")));
-        const shimmerHtml = shimmerClass ? `<div class="item-shimmer-wave ${shimmerClass}"><div class="shimmer-sweep-light"></div><div class="shimmer-sparkle-stars">✦</div></div>` : "";
+        const isSupreme = (item.rarity === "supreme");
+        const isMythic = (item.rarity === "mythic");
+        let shimmerHtml = "";
+        if (isSupreme) {
+          shimmerHtml = `
+            <div class="item-shimmer-wave shimmer-wave-supreme">
+              <div class="shimmer-sweep-light"></div>
+            </div>
+            <div class="supreme-cosmic-stars">
+              <span class="cosmic-star cs-top-left">✧</span>
+              <span class="cosmic-star cs-top-right">✦</span>
+              <span class="cosmic-star cs-bottom-left">✦</span>
+              <span class="cosmic-star cs-bottom-right">⋆</span>
+              <span class="cosmic-star cs-mid-top">⋆</span>
+            </div>`;
+        } else if (isMythic) {
+          shimmerHtml = `<div class="item-shimmer-wave shimmer-wave-mythic"><div class="shimmer-sweep-light"></div><div class="shimmer-sparkle-stars">✦</div></div>`;
+        }
         const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(item.rarity);
         const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
         const rankBadge = item.refineRank ? `<span class="item-rank-badge">+${item.refineRank}</span>` : "";
@@ -2509,10 +2523,24 @@ class UIManager {
             const itemEl = document.createElement("div");
             const displayImg = it.icon || it.cardImg;
             const isWeapon = (it.slot === "weapon");
-            const isMythicWeapon = isWeapon && (it.rarity === "mythic");
-            const isSupremeWeapon = isWeapon && (it.rarity === "supreme");
-            const shimmerClass = isSupremeWeapon ? "shimmer-wave-supreme" : (isMythicWeapon ? "shimmer-wave-mythic" : (it.rarity === "supreme" ? "shimmer-wave-supreme" : (it.rarity === "mythic" ? "shimmer-wave-mythic" : "")));
-            const shimmerHtml = shimmerClass ? `<div class="item-shimmer-wave ${shimmerClass}"><div class="shimmer-sweep-light"></div><div class="shimmer-sparkle-stars">✦</div></div>` : "";
+            const isSupreme = (it.rarity === "supreme");
+            const isMythic = (it.rarity === "mythic");
+            let shimmerHtml = "";
+            if (isSupreme) {
+              shimmerHtml = `
+                <div class="item-shimmer-wave shimmer-wave-supreme">
+                  <div class="shimmer-sweep-light"></div>
+                </div>
+                <div class="supreme-cosmic-stars">
+                  <span class="cosmic-star cs-top-left">✧</span>
+                  <span class="cosmic-star cs-top-right">✦</span>
+                  <span class="cosmic-star cs-bottom-left">✦</span>
+                  <span class="cosmic-star cs-bottom-right">⋆</span>
+                  <span class="cosmic-star cs-mid-top">⋆</span>
+                </div>`;
+            } else if (isMythic) {
+              shimmerHtml = `<div class="item-shimmer-wave shimmer-wave-mythic"><div class="shimmer-sweep-light"></div><div class="shimmer-sparkle-stars">✦</div></div>`;
+            }
             const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(it.rarity);
             const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
             const rankBadge = it.refineRank ? `<span class="item-rank-badge">+${it.refineRank}</span>` : "";

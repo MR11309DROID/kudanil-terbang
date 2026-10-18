@@ -159,6 +159,16 @@ class CharacterManager {
     if (!this.inventory || this.inventory.length < 20) {
       this.inventory = [];
 
+      // Add all 21 authentic supreme items
+      for (let i = 0; i < 21; i++) {
+        const id = "sup_" + (i < 10 ? "0" + i : i);
+        const it = this.createItemFromTemplate(id, 80);
+        if (it) {
+          this.inventory.push(it);
+          needsSave = true;
+        }
+      }
+
       // Add all 21 authentic mythic items
       for (let i = 0; i < 21; i++) {
         const id = "myth_" + (i < 10 ? "0" + i : i);
@@ -783,6 +793,19 @@ class CharacterManager {
               const mythItem = this.createItemFromTemplate(mythId, 1);
               if (mythItem) {
                 this.inventory.unshift(mythItem);
+              }
+            }
+          }
+        }
+        // Ensure inventory contains the authentic 21 supreme items from the reference sheet
+        const hasAllSupreme = this.inventory.some(it => it.templateId === 'sup_20');
+        if (!hasAllSupreme) {
+          for (let i = 20; i >= 0; i--) {
+            const supId = `sup_${i < 10 ? '0' + i : i}`;
+            if (!this.inventory.some(it => it.templateId === supId)) {
+              const supItem = this.createItemFromTemplate(supId, 1);
+              if (supItem) {
+                this.inventory.unshift(supItem);
               }
             }
           }
