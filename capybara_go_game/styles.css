@@ -4006,67 +4006,66 @@ body {
   min-height: 120px;
 }
 
+.hero-mount-stage {
+  position: relative;
+  width: 120px;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 2px;
+  z-index: 2;
+}
+
+.hero-capy-character-img {
+  width: 82px;
+  height: 82px;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: drop-shadow(0 3px 5px rgba(45, 25, 10, 0.45));
+  z-index: 3;
+  margin-bottom: 3px;
+  transform-origin: bottom center;
+  animation: heroCapyBreath 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes heroCapyBreath {
+  0% { transform: scale(1, 1); }
+  100% { transform: scale(1.025, 0.985); }
+}
+
 .hero-shadow-oval {
   position: absolute;
-  bottom: 8px;
+  bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
-  width: 116px;
-  height: 18px;
+  width: 86px;
+  height: 14px;
   border-radius: 50%;
-  background: #9a9488;
-  opacity: 0.65;
-  filter: blur(0.5px);
+  background: radial-gradient(ellipse at center, rgba(65, 45, 30, 0.72) 0%, rgba(95, 70, 50, 0.42) 55%, transparent 75%);
+  filter: blur(0.6px);
   z-index: 2;
   pointer-events: none;
 }
 
-/* Authentic Pet Hexagon Badge in top-right of arena */
+/* Hide legacy pet hexagon badge */
 .hero-pet-badge {
-  position: absolute;
-  top: 4px;
-  right: 12px;
-  width: 36px;
-  height: 40px;
-  z-index: 8;
-  cursor: pointer;
-  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.45));
-  transition: transform 0.12s;
+  display: none !important;
 }
 
-.hero-pet-badge:hover {
-  transform: scale(1.08);
-}
-
-.hero-pet-hex {
-  width: 100%;
-  height: 100%;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  background: linear-gradient(180deg, #6d28d9 0%, #4c1d95 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 0 0 2px #fbbf24;
-}
-
-.hero-pet-hex-img {
-  width: 90%;
-  height: 90%;
-  object-fit: contain;
-}
-
-/* 3. Combat Power Badge (Authentic Capybara Go - Compact Beveled Maroon Plaque with Golden Border) */
+/* 3. Combat Power Badge (Authentic Capybara Go - Compact Beveled Maroon Plaque with Golden Border & Shadow) */
 .hero-power-ribbon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: linear-gradient(180deg, #821c25 0%, #5a1219 50%, #360a0f 100%);
+  background: linear-gradient(180deg, #78181e 0%, #520f13 55%, #33080a 100%);
   border: 2px solid #eab308;
-  border-bottom: 3px solid #a16207;
+  border-bottom: 3.5px solid #a16207;
   border-radius: 6px;
-  padding: 2px 16px 2.5px;
-  box-shadow: 0 2.5px 0 #1c0507, 0 5px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  padding: 2.5px 18px 3px;
+  box-shadow: 0 3.5px 0 #1c0507, 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   margin-top: 2px;
   margin-bottom: 4px;
   position: relative;
@@ -4103,7 +4102,7 @@ body {
   text-shadow: 0 1.5px 2px #000, 0 0 5px rgba(234, 179, 8, 0.4);
 }
 
-/* 4. Core 3 Stats Bar (HP, ATK, DEF + Details - Authentic 3 Dark Brown Capsules matching reference) */
+/* 4. Core 3 Stats Bar (HP, ATK, DEF + Details - Authentic 3 Dark Brown Capsules matching reference with 3D drop shadow) */
 .hero-core-stats-bar {
   display: flex;
   align-items: center;
@@ -4114,7 +4113,7 @@ body {
   padding: 2px 4px;
   border: none;
   box-shadow: none;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   flex-shrink: 0;
 }
 
@@ -4123,16 +4122,17 @@ body {
   align-items: center;
   gap: 5px;
   font-family: 'Lilita One', 'Fredoka', cursive;
-  background: #47372b;
+  background: #3e2c20;
   border-radius: 9999px;
-  padding: 3px 12px 3px 7px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 3.5px 12px 3.5px 8px;
+  border: 1.5px solid #23160e;
+  border-bottom: 3.5px solid #1c1008;
+  box-shadow: 0 3.5px 6px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.15);
 }
 
 .core-stat-icon {
-  font-size: 14px;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+  font-size: 14.5px;
+  filter: drop-shadow(0 1.5px 2px rgba(0, 0, 0, 0.45));
 }
 
 .core-stat-text {
@@ -4146,11 +4146,11 @@ body {
 }
 
 .core-stat-item strong {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 900;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.25px;
   color: #ffffff !important;
-  text-shadow: 0 1px 2px #000 !important;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 2px 0 #000, 0 2.5px 2px rgba(0, 0, 0, 0.8) !important;
 }
 
 .core-stat-divider {
@@ -4159,17 +4159,18 @@ body {
 
 .btn-stat-details-icon {
   background: #faecd7;
-  border: 1.5px solid #b59f82;
+  border: 1.5px solid #bba589;
+  border-bottom: 3px solid #947e62;
   border-radius: 8px;
-  width: 24px;
-  height: 24px;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.1s ease;
-  box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 .btn-stat-details-icon:hover {
