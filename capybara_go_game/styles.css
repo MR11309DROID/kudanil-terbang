@@ -3688,7 +3688,10 @@ body {
   background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
 }
 .paperdoll-slot.rarity-rare {
-  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 50%, #172554 100%);
+  border-color: #3b82f6 !important;
+  border-bottom-color: #0f172a !important;
+  box-shadow: 0 3px 0 #020617, inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
 }
 .paperdoll-slot.rarity-epic {
   background: linear-gradient(180deg, #8b5cf6 0%, #6d28d9 100%);
@@ -4483,10 +4486,20 @@ body {
 
 /* RARE = OCEAN AZURE BLUE */
 .inv-item-card.rarity-rare {
-  background: #38bdf8;
-  border-color: #1e3a8a;
+  background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 50%, #172554 100%);
+  border-color: #3b82f6;
   border-bottom-color: #0f172a;
   box-shadow: 0 3px 0 #020617;
+}
+
+/* Rare gear tile fitted to the gear frame */
+.inv-item-card.rarity-rare .inv-item-img,
+.paperdoll-slot.rarity-rare .slot-item-img {
+  width: 90% !important;
+  height: 90% !important;
+  border-radius: 8px;
+  object-fit: cover;
+  filter: none;
 }
 
 /* EPIC & SUPREME = ROYAL AMETHYST PURPLE */

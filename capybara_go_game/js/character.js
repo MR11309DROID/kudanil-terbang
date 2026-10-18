@@ -749,16 +749,18 @@ class CharacterManager {
       }
       if (this.inventory && Array.isArray(this.inventory)) {
         this.inventory.forEach(updateItemAssets);
-        // If inventory doesn't have new tiers yet, grant a starter showcase of Supreme, Mythic, and Rare gears
-        if (!this.inventory.some(it => it.rarity === 'supreme')) {
-          this.inventory.unshift(
-            this.createItemFromTemplate("sup_00", 1), // Cosmic Galaxy Greatsword (Supreme)
-            this.createItemFromTemplate("sup_02", 1), // Stellar Constellation Longbow (Supreme)
-            this.createItemFromTemplate("myth_00", 1), // Primal Magma Dragon Ring (Mythic)
-            this.createItemFromTemplate("myth_05", 1), // Divine Solar Angel Blade (Mythic)
-            this.createItemFromTemplate("rare_00", 1), // Blazing Flame Sword (Rare)
-            this.createItemFromTemplate("rare_04", 1)  // Knight Steel Cuirass (Rare)
-          );
+        // Ensure inventory contains the authentic 24 rare items from the reference sheet
+        const hasAllRare = this.inventory.some(it => it.templateId === 'rare_23');
+        if (!hasAllRare) {
+          for (let i = 23; i >= 0; i--) {
+            const rareId = `rare_${i < 10 ? '0' + i : i}`;
+            if (!this.inventory.some(it => it.templateId === rareId)) {
+              const rareItem = this.createItemFromTemplate(rareId, 1);
+              if (rareItem) {
+                this.inventory.unshift(rareItem);
+              }
+            }
+          }
         }
       }
       this.ensureStarterGear();

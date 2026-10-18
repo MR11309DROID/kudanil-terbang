@@ -251,29 +251,39 @@ const GameData = {
     { id: "unc_07", slot: "amulet", name: "Liontin Daun Semanggi (Four-Leaf Clover Charm)", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_amulet.png", rarity: "uncommon", baseLifesteal: 0.08, baseHp: 120 },
 
     // =========================================================================
-    // --- 21 AUTHENTIC RARE GEARS (BLUE - EXTRACTED DIRECTLY FROM RARE SHEET) ---
+    // --- 24 AUTHENTIC RARE GEARS (BLUE - EXTRACTED DIRECTLY FROM USER REFERENCE SHEET) ---
     // =========================================================================
-    { id: "rare_00", slot: "weapon", name: "Pedang Api Berkobar (Blazing Flame Sword)", icon: "assets/items/rare/icon_rare_00.png", cardImg: "assets/items/rare/card_rare_00.png", rarity: "rare", baseAtk: 65, critBonus: 0.08 },
-    { id: "rare_01", slot: "weapon", name: "Busur Daun Semerbak (Verdant Flora Bow)", icon: "assets/items/rare/icon_rare_01.png", cardImg: "assets/items/rare/card_rare_01.png", rarity: "rare", baseAtk: 62, critBonus: 0.10 },
-    { id: "rare_02", slot: "weapon", name: "Tongkat Es Kristal (Glacial Crystal Staff)", icon: "assets/items/rare/icon_rare_02.png", cardImg: "assets/items/rare/card_rare_02.png", rarity: "rare", baseAtk: 68, skillBoost: 0.12 },
-    { id: "rare_03", slot: "weapon", name: "Palu Guntur Petir (Thunder Storm War Hammer)", icon: "assets/items/rare/icon_rare_03.png", cardImg: "assets/items/rare/card_rare_03.png", rarity: "rare", baseAtk: 74, critBonus: 0.06 },
-    { id: "rare_04", slot: "armor", name: "Baju Zirah Ksatria Besi (Knight Steel Cuirass)", icon: "assets/items/rare/icon_rare_04.png", cardImg: "assets/items/rare/card_rare_04.png", rarity: "rare", baseHp: 380, baseDef: 24 },
-    { id: "rare_05", slot: "armor", name: "Tunik Daun Rimba (Verdant Woodland Tunic)", icon: "assets/items/rare/icon_rare_05.png", cardImg: "assets/items/rare/card_rare_05.png", rarity: "rare", baseHp: 350, baseDef: 20, dodgeBonus: 0.05 },
-    { id: "rare_06", slot: "boots", name: "Sarung Tangan Baja Safir (Sapphire Plated Gauntlet)", icon: "assets/items/rare/icon_rare_06.png", cardImg: "assets/items/rare/card_rare_06.png", rarity: "rare", baseDodge: 0.12, baseAtk: 22 },
-    { id: "rare_07", slot: "helmet", name: "Helm Tanduk Api Merah (Crimson Horned Drake Helm)", icon: "assets/items/rare/icon_rare_07.png", cardImg: "assets/items/rare/card_rare_07.png", rarity: "rare", baseDef: 28, baseHp: 180 },
-    { id: "rare_08", slot: "helmet", name: "Helm Bersayap Perak (Winged Silver Knight Visor)", icon: "assets/items/rare/icon_rare_08.png", cardImg: "assets/items/rare/card_rare_08.png", rarity: "rare", baseDef: 30, baseHp: 160 },
-    { id: "rare_09", slot: "helmet", name: "Tudung Pemburu Hutan (Forest Ranger Leaf Hood)", icon: "assets/items/rare/icon_rare_09.png", cardImg: "assets/items/rare/card_rare_09.png", rarity: "rare", baseDef: 22, baseHp: 190, dodgeBonus: 0.06 },
-    { id: "rare_10", slot: "helmet", name: "Mahkota Emas Safir (Royal Golden Crown)", icon: "assets/items/rare/icon_rare_10.png", cardImg: "assets/items/rare/card_rare_10.png", rarity: "rare", baseDef: 26, baseHp: 210 },
-    { id: "rare_11", slot: "helmet", name: "Topi Bulu Capybara (Fuzzy Capybara Fur Hat)", icon: "assets/items/rare/icon_rare_11.png", cardImg: "assets/items/rare/card_rare_11.png", rarity: "rare", baseDef: 24, baseHp: 220 },
-    { id: "rare_12", slot: "ring", name: "Sabuk Kulit Gesper Kuningan (Brass Buckle Leather Belt)", icon: "assets/items/rare/icon_rare_12.png", cardImg: "assets/items/rare/card_rare_12.png", rarity: "rare", baseCrit: 0.15, baseHp: 140 },
-    { id: "rare_13", slot: "amulet", name: "Kalung Emas Delima (Golden Ruby Choker)", icon: "assets/items/rare/icon_rare_13.png", cardImg: "assets/items/rare/card_rare_13.png", rarity: "rare", baseLifesteal: 0.12, baseAtk: 25 },
-    { id: "rare_14", slot: "armor", name: "Mantel Bulu Daun Rimba (Verdant Feather Foliage Cloak)", icon: "assets/items/rare/icon_rare_14.png", cardImg: "assets/items/rare/card_rare_14.png", rarity: "rare", baseHp: 410, baseDef: 22 },
-    { id: "rare_15", slot: "armor", name: "Jubah Malam Bayangan (Shadow Velvet Cape)", icon: "assets/items/rare/icon_rare_15.png", cardImg: "assets/items/rare/card_rare_15.png", rarity: "rare", baseHp: 390, baseDef: 26, dodgeBonus: 0.06 },
-    { id: "rare_16", slot: "boots", name: "Sepatu Salju Bersayap (Winged Winter Stride Boots)", icon: "assets/items/rare/icon_rare_16.png", cardImg: "assets/items/rare/card_rare_16.png", rarity: "rare", baseDodge: 0.18, baseHp: 160 },
-    { id: "rare_17", slot: "amulet", name: "Perisai Bintang Ksatria (Knight Silver Star Buckler)", icon: "assets/items/rare/icon_rare_17.png", cardImg: "assets/items/rare/card_rare_17.png", rarity: "rare", baseDef: 32, baseHp: 220 },
-    { id: "rare_18", slot: "ring", name: "Cincin Emas Safir Langit (Sky Sapphire Golden Ring)", icon: "assets/items/rare/icon_rare_18.png", cardImg: "assets/items/rare/card_rare_18.png", rarity: "rare", baseCrit: 0.16, baseAtk: 28 },
-    { id: "rare_19", slot: "ring", name: "Cincin Emas Delima Menyala (Blazing Ruby Golden Ring)", icon: "assets/items/rare/icon_rare_19.png", cardImg: "assets/items/rare/card_rare_19.png", rarity: "rare", baseCrit: 0.18, baseAtk: 32 },
-    { id: "rare_20", slot: "amulet", name: "Kitab Mantra Bersayap (Winged Grimoire of Spells)", icon: "assets/items/rare/icon_rare_20.png", cardImg: "assets/items/rare/card_rare_20.png", rarity: "rare", baseLifesteal: 0.14, baseAtk: 30 },
+    // Row 0: Weapons
+    { id: "rare_00", slot: "weapon", name: "Pedang Pendek Safir (Sapphire Short Sword)", icon: "assets/items/rare/icon_rare_00.png", cardImg: "assets/items/rare/card_rare_00.png", rarity: "rare", baseAtk: 65, critBonus: 0.08 },
+    { id: "rare_01", slot: "weapon", name: "Tombak Es Glasial (Glacial Ice Spear)", icon: "assets/items/rare/icon_rare_01.png", cardImg: "assets/items/rare/card_rare_01.png", rarity: "rare", baseAtk: 66, critBonus: 0.09 },
+    { id: "rare_02", slot: "weapon", name: "Busur Pemburu Badai (Storm Hunter Recurve Bow)", icon: "assets/items/rare/icon_rare_02.png", cardImg: "assets/items/rare/card_rare_02.png", rarity: "rare", baseAtk: 63, critBonus: 0.10 },
+    { id: "rare_03", slot: "weapon", name: "Tongkat Bola Magis Safir (Sapphire Orb Magic Staff)", icon: "assets/items/rare/icon_rare_03.png", cardImg: "assets/items/rare/card_rare_03.png", rarity: "rare", baseAtk: 68, skillBoost: 0.12 },
+    { id: "rare_04", slot: "weapon", name: "Palu Tempur Kristal (Crystal Gem Warhammer)", icon: "assets/items/rare/icon_rare_04.png", cardImg: "assets/items/rare/card_rare_04.png", rarity: "rare", baseAtk: 72, critBonus: 0.07 },
+    { id: "rare_05", slot: "weapon", name: "Pedang Lengkung Gurun (Azure Curved Scimitar)", icon: "assets/items/rare/icon_rare_05.png", cardImg: "assets/items/rare/card_rare_05.png", rarity: "rare", baseAtk: 67, critBonus: 0.08 },
+
+    // Row 1: Wand, Shield, Armor, Helmets
+    { id: "rare_06", slot: "weapon", name: "Tongkat Ranting Kehidupan (Verdant Sprout Wand)", icon: "assets/items/rare/icon_rare_06.png", cardImg: "assets/items/rare/card_rare_06.png", rarity: "rare", baseAtk: 64, skillBoost: 0.10 },
+    { id: "rare_07", slot: "armor", name: "Perisai Bundar Ksatria Biru (Azure Knight Buckler)", icon: "assets/items/rare/icon_rare_07.png", cardImg: "assets/items/rare/card_rare_07.png", rarity: "rare", baseHp: 360, baseDef: 26 },
+    { id: "rare_08", slot: "armor", name: "Jubah Sutra Magis Salju (Glacial Mage Robe)", icon: "assets/items/rare/icon_rare_08.png", cardImg: "assets/items/rare/card_rare_08.png", rarity: "rare", baseHp: 370, baseDef: 22, dodgeBonus: 0.05 },
+    { id: "rare_09", slot: "armor", name: "Zirah Plat Baja Penjaga (Guardian Steel Cuirass)", icon: "assets/items/rare/icon_rare_09.png", cardImg: "assets/items/rare/card_rare_09.png", rarity: "rare", baseHp: 410, baseDef: 28 },
+    { id: "rare_10", slot: "helmet", name: "Tudung Bayangan Malam (Midnight Shadow Cowl)", icon: "assets/items/rare/icon_rare_10.png", cardImg: "assets/items/rare/card_rare_10.png", rarity: "rare", baseDef: 28, baseHp: 190, dodgeBonus: 0.06 },
+    { id: "rare_11", slot: "helmet", name: "Helm Bersayap Valkyrie (Winged Valkyrie Helm)", icon: "assets/items/rare/icon_rare_11.png", cardImg: "assets/items/rare/card_rare_11.png", rarity: "rare", baseDef: 32, baseHp: 200, critBonus: 0.06 },
+
+    // Row 2: Rings
+    { id: "rare_12", slot: "ring", name: "Cincin Segiempat Safir (Square Sapphire Signet Ring)", icon: "assets/items/rare/icon_rare_12.png", cardImg: "assets/items/rare/card_rare_12.png", rarity: "rare", baseCrit: 0.16, baseAtk: 26 },
+    { id: "rare_13", slot: "ring", name: "Cincin Mutiara Biru (Azure Pearl Ring)", icon: "assets/items/rare/icon_rare_13.png", cardImg: "assets/items/rare/card_rare_13.png", rarity: "rare", baseCrit: 0.15, baseHp: 160 },
+    { id: "rare_14", slot: "ring", name: "Cincin Gugusan Kristal (Crystal Cluster Ring)", icon: "assets/items/rare/icon_rare_14.png", cardImg: "assets/items/rare/card_rare_14.png", rarity: "rare", baseCrit: 0.17, baseAtk: 28 },
+    { id: "rare_15", slot: "ring", name: "Cincin Bintang Safir Gelap (Dark Star Sapphire Ring)", icon: "assets/items/rare/icon_rare_15.png", cardImg: "assets/items/rare/card_rare_15.png", rarity: "rare", baseCrit: 0.18, baseAtk: 30 },
+    { id: "rare_16", slot: "ring", name: "Cincin Bulan Sabit (Crescent Moon Ring)", icon: "assets/items/rare/icon_rare_16.png", cardImg: "assets/items/rare/card_rare_16.png", rarity: "rare", baseCrit: 0.16, baseHp: 180 },
+    { id: "rare_17", slot: "ring", name: "Cincin Jejak Kaki Capybara (Capybara Paw Ring)", icon: "assets/items/rare/icon_rare_17.png", cardImg: "assets/items/rare/card_rare_17.png", rarity: "rare", baseCrit: 0.19, baseAtk: 32 },
+
+    // Row 3: Amulets & Boots
+    { id: "rare_18", slot: "amulet", name: "Liontin Kristal Samudra (Ocean Crystal Pendant)", icon: "assets/items/rare/icon_rare_18.png", cardImg: "assets/items/rare/card_rare_18.png", rarity: "rare", baseLifesteal: 0.12, baseAtk: 24 },
+    { id: "rare_19", slot: "amulet", name: "Kitab Sihir Es Abadi (Tome of Eternal Frost)", icon: "assets/items/rare/icon_rare_19.png", cardImg: "assets/items/rare/card_rare_19.png", rarity: "rare", baseLifesteal: 0.14, baseAtk: 28 },
+    { id: "rare_20", slot: "amulet", name: "Kalung Manik Safir (Azure Beaded Necklace)", icon: "assets/items/rare/icon_rare_20.png", cardImg: "assets/items/rare/card_rare_20.png", rarity: "rare", baseLifesteal: 0.12, baseHp: 220 },
+    { id: "rare_21", slot: "amulet", name: "Anting Sayap Malaikat (Seraph Wing Feather Charm)", icon: "assets/items/rare/icon_rare_21.png", cardImg: "assets/items/rare/card_rare_21.png", rarity: "rare", baseLifesteal: 0.15, baseAtk: 26 },
+    { id: "rare_22", slot: "boots", name: "Tas Ransel Langkah Pengelana (Adventurer Traveler Pack)", icon: "assets/items/rare/icon_rare_22.png", cardImg: "assets/items/rare/card_rare_22.png", rarity: "rare", baseDodge: 0.16, baseHp: 180 },
+    { id: "rare_23", slot: "boots", name: "Syal Angin Langkah Kilat (Swift Stride Silk Scarf)", icon: "assets/items/rare/icon_rare_23.png", cardImg: "assets/items/rare/card_rare_23.png", rarity: "rare", baseDodge: 0.18, baseHp: 170 },
 
     // =========================================================================
     // --- EPIC GEAR SET (PURPLE) ---
