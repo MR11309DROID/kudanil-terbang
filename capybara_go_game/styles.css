@@ -3693,7 +3693,12 @@ body {
 }
 
 /* Paperdoll Slot Rarity Backgrounds matching Capybara Go authentic palette */
-.paperdoll-slot.rarity-common,
+.paperdoll-slot.rarity-common {
+  background: linear-gradient(180deg, #475569 0%, #334155 50%, #1e293b 100%);
+  border-color: #475569 !important;
+  border-bottom-color: #0f172a !important;
+  box-shadow: 0 3px 0 #090d16, inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
+}
 .paperdoll-slot.rarity-uncommon {
   background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
 }
@@ -4514,9 +4519,25 @@ body {
   box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.35);
 }
 
-/* Cards Colored Strictly According to Tier matching authentic Capybara Go palette */
-/* COMMON = LUSH FOREST GREEN */
-.inv-item-card.rarity-common,
+/* COMMON = AUTHENTIC STEEL SLATE (MATCHES USER ASSET SHEET) */
+.inv-item-card.rarity-common {
+  background: linear-gradient(180deg, #475569 0%, #334155 50%, #1e293b 100%);
+  border-color: #475569;
+  border-bottom-color: #0f172a;
+  box-shadow: 0 3px 0 #090d16;
+}
+
+/* Common gear tile fitted to the gear frame */
+.inv-item-card.rarity-common .inv-item-img,
+.paperdoll-slot.rarity-common .slot-item-img {
+  width: 90% !important;
+  height: 90% !important;
+  border-radius: 8px;
+  object-fit: cover;
+  filter: none;
+}
+
+/* UNCOMMON = LUSH FOREST GREEN */
 .inv-item-card.rarity-uncommon {
   background: #22c55e;
   border-color: #14532d;

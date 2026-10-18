@@ -183,6 +183,16 @@ class CharacterManager {
           needsSave = true;
         }
       });
+
+      // Add all 18 authentic common gear items (Weapons, Armor, Rings, Accessories)
+      for (let i = 0; i < 18; i++) {
+        const id = "gear_" + (i < 10 ? "0" + i : i);
+        const it = this.createItemFromTemplate(id, 1);
+        if (it) {
+          this.inventory.push(it);
+          needsSave = true;
+        }
+      }
     }
 
     if (needsSave) {

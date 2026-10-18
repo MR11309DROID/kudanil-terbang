@@ -211,48 +211,33 @@ const GameData = {
 
   equipmentTemplates: [
     // =========================================================================
-    // --- 32 AUTHENTIC COMMON GEARS (CRAFTED DIRECTLY FROM INVENTORY ARTWORK) ---
-    // All 32 extracted cartoon items are strictly COMMON rarity
+    // --- 18 AUTHENTIC COMMON GEARS (EXTRACTED DIRECTLY FROM REFERENCE SHEET) ---
     // =========================================================================
-    // Row 0
-    { id: "gear_00", slot: "helmet", name: "Mahkota Sulur Berduri (Vine Circlet)", icon: "assets/items/gear/icon_00.png", cardImg: "assets/items/gear/card_00.png", rarity: "common", baseDef: 10, baseHp: 40 },
-    { id: "gear_01", slot: "boots", name: "Sepatu Bot Daun Semanggi (Clover Leather Boots)", icon: "assets/items/gear/icon_01.png", cardImg: "assets/items/gear/card_01.png", rarity: "common", baseDodge: 0.05, baseHp: 35 },
-    { id: "gear_02", slot: "armor", name: "Zirah Jerami Rumbia (Straw Thatch Armor)", icon: "assets/items/gear/icon_02.png", cardImg: "assets/items/gear/card_02.png", rarity: "common", baseHp: 100, baseDef: 6 },
-    { id: "gear_03", slot: "helmet", name: "Helm Batok Bunga Liar (Floral Acorn Helmet)", icon: "assets/items/gear/icon_03.png", cardImg: "assets/items/gear/card_03.png", rarity: "common", baseDef: 12, baseHp: 50 },
-    { id: "gear_04", slot: "weapon", name: "Tongkat Ranting Bertunas (Sprouting Twig Wand)", icon: "assets/items/gear/icon_04.png", cardImg: "assets/items/gear/card_04.png", rarity: "common", baseAtk: 22, critBonus: 0.04 },
-    { id: "gear_05", slot: "weapon", name: "Ketapel Kayu Petualang (Wooden Slingshot)", icon: "assets/items/gear/icon_05.png", cardImg: "assets/items/gear/card_05.png", rarity: "common", baseAtk: 20, critBonus: 0.04 },
-    { id: "gear_06", slot: "weapon", name: "Belati Batu Api (Flint Stone Dagger)", icon: "assets/items/gear/icon_06.png", cardImg: "assets/items/gear/card_06.png", rarity: "common", baseAtk: 24, lifestealBonus: 0.03 },
-    { id: "gear_07", slot: "amulet", name: "Perisai Kayu Bersulur (Vine-Bound Wood Shield)", icon: "assets/items/gear/icon_07.png", cardImg: "assets/items/gear/card_07.png", rarity: "common", baseDef: 10, baseHp: 60 },
+    // 4 Weapons
+    { id: "gear_00", slot: "weapon", name: "Pedang Besi Pemula (Novice Iron Sword)", icon: "assets/items/gear/icon_00.png", cardImg: "assets/items/gear/card_00.png", rarity: "common", baseAtk: 25, critBonus: 0.05 },
+    { id: "gear_01", slot: "weapon", name: "Busur Kayu Berpanah (Hunting Bow & Arrow)", icon: "assets/items/gear/icon_01.png", cardImg: "assets/items/gear/card_01.png", rarity: "common", baseAtk: 24, critBonus: 0.06 },
+    { id: "gear_02", slot: "weapon", name: "Tongkat Kayu Delima (Ruby Magic Staff)", icon: "assets/items/gear/icon_02.png", cardImg: "assets/items/gear/card_02.png", rarity: "common", baseAtk: 26, skillBoost: 0.08 },
+    { id: "gear_03", slot: "weapon", name: "Kapak Perang Baja (Double Battleaxe)", icon: "assets/items/gear/icon_03.png", cardImg: "assets/items/gear/card_03.png", rarity: "common", baseAtk: 28, critBonus: 0.04 },
 
-    // Row 1
-    { id: "gear_08", slot: "armor", name: "Jubah Daun Rimba (Verdant Leaf Cloak)", icon: "assets/items/gear/icon_08.png", cardImg: "assets/items/gear/card_08.png", rarity: "common", baseHp: 110, baseDef: 8 },
-    { id: "gear_09", slot: "helmet", name: "Topi Penjelajah Berbulu (Explorer Feather Hat)", icon: "assets/items/gear/icon_09.png", cardImg: "assets/items/gear/card_09.png", rarity: "common", baseDef: 14, baseHp: 65, dodgeBonus: 0.03 },
-    { id: "gear_10", slot: "amulet", name: "Kalung Taring Purba (Beast Fang Necklace)", icon: "assets/items/gear/icon_10.png", cardImg: "assets/items/gear/card_10.png", rarity: "common", baseAtk: 15, critBonus: 0.05 },
-    { id: "gear_11", slot: "ring", name: "Cincin Kayu Bertunas (Sprout Wooden Ring)", icon: "assets/items/gear/icon_11.png", cardImg: "assets/items/gear/card_11.png", rarity: "common", baseCrit: 0.06, baseHp: 30 },
-    { id: "gear_12", slot: "ring", name: "Sabuk Tali Berlabu (Twisted Rope Belt)", icon: "assets/items/gear/icon_12.png", cardImg: "assets/items/gear/card_12.png", rarity: "common", baseCrit: 0.07, baseHp: 40 },
-    { id: "gear_13", slot: "ring", name: "Sabuk Kantong Petualang (Adventurer Pouch Belt)", icon: "assets/items/gear/icon_13.png", cardImg: "assets/items/gear/card_13.png", rarity: "common", baseCrit: 0.08, baseAtk: 12 },
-    { id: "gear_14", slot: "boots", name: "Sarung Tangan Goni (Burlap Work Mitt)", icon: "assets/items/gear/icon_14.png", cardImg: "assets/items/gear/card_14.png", rarity: "common", baseDodge: 0.04, baseAtk: 10 },
-    { id: "gear_15", slot: "boots", name: "Sarung Tangan Kulit Kasar (Roughhide Gauntlet)", icon: "assets/items/gear/icon_15.png", cardImg: "assets/items/gear/card_15.png", rarity: "common", baseDodge: 0.06, baseAtk: 14 },
+    // 6 Armors & Cloaks
+    { id: "gear_04", slot: "armor", name: "Tunik Kain Hijau (Green Adventurer Tunic)", icon: "assets/items/gear/icon_04.png", cardImg: "assets/items/gear/card_04.png", rarity: "common", baseHp: 120, baseDef: 10 },
+    { id: "gear_05", slot: "armor", name: "Baju Zirah Plat Perak (Silver Knight Plate)", icon: "assets/items/gear/icon_05.png", cardImg: "assets/items/gear/card_05.png", rarity: "common", baseHp: 150, baseDef: 14 },
+    { id: "gear_06", slot: "armor", name: "Zirah Besi Hitam (Dark Steel Armor)", icon: "assets/items/gear/icon_06.png", cardImg: "assets/items/gear/card_06.png", rarity: "common", baseHp: 160, baseDef: 16 },
+    { id: "gear_07", slot: "helmet", name: "Mantel Jubah Malam (Navy Midnight Cowl)", icon: "assets/items/gear/icon_07.png", cardImg: "assets/items/gear/card_07.png", rarity: "common", baseDef: 12, baseHp: 80, dodgeBonus: 0.04 },
+    { id: "gear_08", slot: "armor", name: "Zirah Jubah Merah (Cuirass with Crimson Cape)", icon: "assets/items/gear/icon_08.png", cardImg: "assets/items/gear/card_08.png", rarity: "common", baseHp: 140, baseDef: 12, dodgeBonus: 0.03 },
+    { id: "gear_09", slot: "helmet", name: "Mantel Daun Rimba (Verdant Forest Hood)", icon: "assets/items/gear/icon_09.png", cardImg: "assets/items/gear/card_09.png", rarity: "common", baseDef: 14, baseHp: 90, dodgeBonus: 0.05 },
 
-    // Row 2
-    { id: "gear_16", slot: "weapon", name: "Tombak Pemburu Batu (Flint Hunting Spear)", icon: "assets/items/gear/icon_16.png", cardImg: "assets/items/gear/card_16.png", rarity: "common", baseAtk: 26, critBonus: 0.05 },
-    { id: "gear_17", slot: "weapon", name: "Kapak Batu Primitif (Primitive Stone Hatchet)", icon: "assets/items/gear/icon_17.png", cardImg: "assets/items/gear/card_17.png", rarity: "common", baseAtk: 28, critBonus: 0.04 },
-    { id: "gear_18", slot: "amulet", name: "Bundel Batang Kayu (Bound Timber Scroll)", icon: "assets/items/gear/icon_18.png", cardImg: "assets/items/gear/card_18.png", rarity: "common", baseHp: 65, baseDef: 8 },
-    { id: "gear_19", slot: "armor", name: "Tas Ransel Petualang (Traveler Rucksack)", icon: "assets/items/gear/icon_19.png", cardImg: "assets/items/gear/card_19.png", rarity: "common", baseHp: 125, baseDef: 10 },
-    { id: "gear_20", slot: "amulet", name: "Liontin Kerang Laut (Seashell Pendant)", icon: "assets/items/gear/icon_20.png", cardImg: "assets/items/gear/card_20.png", rarity: "common", baseLifesteal: 0.05, baseHp: 50 },
-    { id: "gear_21", slot: "weapon", name: "Pedang Kayu Latihan (Carved Practice Sword)", icon: "assets/items/gear/icon_21.png", cardImg: "assets/items/gear/card_21.png", rarity: "common", baseAtk: 22 },
-    { id: "gear_22", slot: "weapon", name: "Busur Kayu Birch (Birch Wood Bow)", icon: "assets/items/gear/icon_22.png", cardImg: "assets/items/gear/card_22.png", rarity: "common", baseAtk: 26, critBonus: 0.05 },
-    { id: "gear_23", slot: "amulet", name: "Perisai Bundar Berkancing Besi (Round Iron Buckler)", icon: "assets/items/gear/icon_23.png", cardImg: "assets/items/gear/card_23.png", rarity: "common", baseDef: 14, baseHp: 80 },
+    // 4 Rings
+    { id: "gear_10", slot: "ring", name: "Cincin Perak Safir (Silver Sapphire Ring)", icon: "assets/items/gear/icon_10.png", cardImg: "assets/items/gear/card_10.png", rarity: "common", baseCrit: 0.08, baseAtk: 12 },
+    { id: "gear_11", slot: "ring", name: "Cincin Emas Zamrud (Golden Emerald Ring)", icon: "assets/items/gear/icon_11.png", cardImg: "assets/items/gear/card_11.png", rarity: "common", baseCrit: 0.07, baseHp: 50 },
+    { id: "gear_12", slot: "ring", name: "Cincin Perak Ametis (Silver Amethyst Ring)", icon: "assets/items/gear/icon_12.png", cardImg: "assets/items/gear/card_12.png", rarity: "common", baseCrit: 0.09, baseAtk: 14 },
+    { id: "gear_13", slot: "ring", name: "Cincin Emas Delima (Golden Ruby Ring)", icon: "assets/items/gear/icon_13.png", cardImg: "assets/items/gear/card_13.png", rarity: "common", baseCrit: 0.10, baseAtk: 16 },
 
-    // Row 3
-    { id: "gear_24", slot: "helmet", name: "Topi Jamur Tutul Merah (Spotted Mushroom Cap)", icon: "assets/items/gear/icon_24.png", cardImg: "assets/items/gear/card_24.png", rarity: "common", baseDef: 15, baseHp: 70 },
-    { id: "gear_25", slot: "boots", name: "Lilitan Tangan Petarung (Bandaged Hand Wraps)", icon: "assets/items/gear/icon_25.png", cardImg: "assets/items/gear/card_25.png", rarity: "common", baseDodge: 0.08, baseAtk: 15 },
-    { id: "gear_26", slot: "amulet", name: "Kendi Labu Air Minum (Gourd Water Flask)", icon: "assets/items/gear/icon_26.png", cardImg: "assets/items/gear/card_26.png", rarity: "common", baseLifesteal: 0.06, baseHp: 75 },
-    { id: "gear_27", slot: "armor", name: "Mantel Bulu Binatang Liar (Wild Beast Fur Cloak)", icon: "assets/items/gear/icon_27.png", cardImg: "assets/items/gear/card_27.png", rarity: "common", baseHp: 140, baseDef: 12 },
-    { id: "gear_28", slot: "amulet", name: "Jimat Penangkap Mimpi (Feather Spirit Talisman)", icon: "assets/items/gear/icon_28.png", cardImg: "assets/items/gear/card_28.png", rarity: "common", baseLifesteal: 0.07, baseAtk: 16 },
-    { id: "gear_29", slot: "weapon", name: "Belati Tulang Purba (Carved Bone Dagger)", icon: "assets/items/gear/icon_29.png", cardImg: "assets/items/gear/card_29.png", rarity: "common", baseAtk: 30, critBonus: 0.06 },
-    { id: "gear_30", slot: "armor", name: "Tas Selempang Kain Perca (Patchwork Cloth Satchel)", icon: "assets/items/gear/icon_30.png", cardImg: "assets/items/gear/card_30.png", rarity: "common", baseHp: 150, baseDef: 14 },
-    { id: "gear_31", slot: "ring", name: "Cincin Kayu Lilit Tali (Twine-Wrapped Wood Ring)", icon: "assets/items/gear/icon_31.png", cardImg: "assets/items/gear/card_31.png", rarity: "common", baseCrit: 0.09, baseAtk: 16 },
+    // 4 Accessories (Amulets / Boots)
+    { id: "gear_14", slot: "amulet", name: "Bola Kristal Samudra (Mystic Ocean Orb)", icon: "assets/items/gear/icon_14.png", cardImg: "assets/items/gear/card_14.png", rarity: "common", baseHp: 80, baseLifesteal: 0.05 },
+    { id: "gear_15", slot: "amulet", name: "Tanduk Perang Kuno (Ancient Battle Horn)", icon: "assets/items/gear/icon_15.png", cardImg: "assets/items/gear/card_15.png", rarity: "common", baseAtk: 15, baseDef: 8 },
+    { id: "gear_16", slot: "boots", name: "Kristal Zamrud Langkah Kilat (Prismatic Emerald Stride Shard)", icon: "assets/items/gear/icon_16.png", cardImg: "assets/items/gear/card_16.png", rarity: "common", baseDodge: 0.06, baseHp: 60 },
+    { id: "gear_17", slot: "boots", name: "Kantung Koin Pengelana (Adventurer Stride Pouch)", icon: "assets/items/gear/icon_17.png", cardImg: "assets/items/gear/card_17.png", rarity: "common", baseDodge: 0.08, baseAtk: 10 },
 
     // =========================================================================
     // --- UNCOMMON GEAR SET (GREAT / GREEN) ---
