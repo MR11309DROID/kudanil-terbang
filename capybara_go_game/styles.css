@@ -3709,11 +3709,35 @@ body {
 }
 
 /* Paperdoll Slot Rarity Backgrounds matching Capybara Go authentic palette */
-.paperdoll-slot.rarity-common {
-  background: linear-gradient(180deg, #475569 0%, #334155 50%, #1e293b 100%);
-  border-color: #475569 !important;
-  border-bottom-color: #0f172a !important;
-  box-shadow: 0 3px 0 #090d16, inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
+.paperdoll-slot.rarity-common,
+.paperdoll-slot.occupied.rarity-common {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+.paperdoll-slot.rarity-common .slot-item-img {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  border-radius: 14px !important;
+  object-fit: fill !important;
+  filter: none !important;
+}
+
+.paperdoll-slot.rarity-common .item-card-gleam,
+.inv-item-card.rarity-common .item-card-gleam {
+  display: none !important;
+}
+
+.paperdoll-slot.rarity-common .item-slot-mini-badge,
+.inv-item-card.rarity-common .item-slot-mini-badge {
+  display: none !important;
 }
 .paperdoll-slot.rarity-uncommon {
   background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
@@ -4668,20 +4692,24 @@ body {
 
 /* COMMON = AUTHENTIC STEEL SLATE (MATCHES USER ASSET SHEET) */
 .inv-item-card.rarity-common {
-  background: linear-gradient(180deg, #475569 0%, #334155 50%, #1e293b 100%);
-  border-color: #475569;
-  border-bottom-color: #0f172a;
-  box-shadow: 0 3px 0 #090d16;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: 0 2.5px 5px rgba(0, 0, 0, 0.4) !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
 }
 
-/* Common gear tile fitted to the gear frame */
-.inv-item-card.rarity-common .inv-item-img,
-.paperdoll-slot.rarity-common .slot-item-img {
-  width: 90% !important;
-  height: 90% !important;
-  border-radius: 8px;
-  object-fit: cover;
-  filter: none;
+/* Common gear tile seamlessly fills the inventory card */
+.inv-item-card.rarity-common .inv-item-img {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  border-radius: 10px !important;
+  object-fit: fill !important;
+  filter: none !important;
 }
 
 /* UNCOMMON TIER REMOVED */
@@ -6665,6 +6693,15 @@ body {
   border-bottom: 4px solid #b45309;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.35);
   flex-shrink: 0;
+}
+
+.item-detail-icon.rarity-common {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+  padding: 0 !important;
+  border-radius: 14px !important;
+  object-fit: fill !important;
 }
 
 .item-detail-meta {

@@ -2767,7 +2767,11 @@ class UIManager {
     const modal = document.getElementById("modal-item-detail");
     if (!modal) return;
 
-    document.getElementById("item-modal-icon").src = item.cardImg || item.icon;
+    const modalIcon = document.getElementById("item-modal-icon");
+    if (modalIcon) {
+      modalIcon.src = item.cardImg || item.icon;
+      modalIcon.className = `item-detail-icon rarity-${item.rarity}`;
+    }
     document.getElementById("item-modal-name").textContent = item.name;
     document.getElementById("item-modal-name").className = `item-modal-title rarity-text-${item.rarity}`;
     document.getElementById("item-modal-rarity").textContent = `${item.rarity.toUpperCase()} ${item.slot.toUpperCase()}`;
