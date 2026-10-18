@@ -884,7 +884,7 @@ class UIManager {
     }
     const gameHeader = document.getElementById("game-header");
     if (gameHeader) {
-      gameHeader.style.display = tabName === "equipment" ? "none" : "";
+      gameHeader.style.display = (tabName === "equipment" || tabName === "talents") ? "none" : "";
     }
     document.querySelectorAll(".nav-tab-btn").forEach(b => {
       b.classList.toggle("active", b.dataset.tab === tabName);
@@ -2705,65 +2705,163 @@ class UIManager {
     modal.classList.add("open");
   }
 
-  // Talents Screen
+  // Authentic Capybara Go Talents & Core Stats Upgrade Screen
   renderTalentsScreen() {
-    const container = document.getElementById("talents-list-container");
-    if (!container) return;
-    container.innerHTML = "";
+    const info = Character.getTalentProgress();
+    
+    // 1. Currencies
+    const gemsEl = document.getElementById("talents-h-gems");
+    const goldEl = document.getElementById("talents-h-gold");
+    if (gemsEl) gemsEl.textContent = (Character.gems || 0).toLocaleString();
+    if (goldEl) goldEl.textContent = (Character.gold || 0).toLocaleString();
 
-    GameData.talents.forEach(t => {
-      const curRank = Character.talents[t.id] || 0;
-      const isMax = curRank >= t.maxRank;
-      const cost = isMax ? 0 : Math.round(t.costBase * Math.pow(t.costMult, curRank));
-      const canAfford = (Character.gold || 0) >= cost;
-      const pct = Math.min(100, Math.round((curRank / t.maxRank) * 100));
+    // 2. Rank Title (e.g. Apprentice - 1)
+    const titleEl = document.getElementById("talents-rank-title");
+    if (titleEl) {
+      titleEl.textContent = `${info.tierName} - ${info.displayLevel}`;
+    }
 
-      const card = document.createElement("div");
-      card.className = `talent-card ${isMax ? 'talent-card-max' : ''}`;
-      card.innerHTML = `
-        <div class="talent-icon-wrap">
-          <img src="${t.icon}" class="talent-img" alt="${t.name}">
-          ${isMax ? '<span class="talent-max-badge">★</span>' : ''}
-        </div>
-        <div class="talent-info">
-          <div class="talent-title-row">
-            <h4 class="talent-title-text">${t.name}</h4>
-            <span class="talent-rank-pill ${isMax ? 'rank-max' : ''}">${isMax ? 'MAX' : `Lv. ${curRank}/${t.maxRank}`}</span>
-          </div>
-          <p class="talent-desc-text">${t.desc}</p>
-          <div class="talent-bar-track">
-            <div class="talent-bar-fill" style="width: ${pct}%"></div>
-          </div>
-        </div>
-        <div class="talent-action">
-          ${isMax 
-            ? `<button class="btn-talent-max" disabled>Maksimal ✨</button>` 
-            : `<button class="btn-game btn-talent-upgrade ${canAfford ? 'can-afford' : 'cant-afford'}" data-id="${t.id}" ${canAfford ? '' : 'disabled'}>
-                <span class="talent-cost-tag">🪙 ${cost.toLocaleString()}</span>
-                <span class="talent-up-label">Upgrade</span>
-              </button>`}
-        </div>
-      `;
+    // 3. Milestone Progress Bar & Indicator
+    const fillEl = document.getElementById("talents-progress-fill");
+    const indicatorEl = document.getElementById("talents-star-indicator");
+    const indicatorNumEl = document.getElementById("talents-indicator-num");
 
-      if (!isMax) {
-        const btn = card.querySelector(".btn-talent-upgrade");
-        if (btn && canAfford) {
-          btn.addEventListener("click", () => {
-            Sound.playSfx("click");
-            if (Character.upgradeTalent(t.id)) {
-              Sound.playSfx("confirm");
-              this.showToast(`✨ Berhasil meningkatkan ${t.name} ke Rank ${curRank + 1}!`, "success");
-              this.renderTalentsScreen();
-              this.renderHeader();
-            } else {
-              this.showToast("Koin Gold tidak mencukupi!", "error");
-            }
-          });
+    // Progress percentage (0 to 100%)
+    const progressPct = Math.min(100, Math.max(5, (info.displayLevel / 20) * 100));
+    if (fillEl) fillEl.style.width = `${progressPct}%`;
+    if (indicatorEl) indicatorEl.style.left = `${progressPct}%`;
+    if (indicatorNumEl) indicatorNumEl.textContent = info.displayLevel;
+
+    // 4. Milestone 10 Badge
+    const box10 = document.getElementById("badge-milestone-10");
+    if (box10) {
+      if (info.canClaimM10) {
+        box10.classList.add("can-claim");
+        box10.title = "Click to Claim 720 Gold!";
+      } else {
+        box10.classList.remove("can-claim");
+        if (info.isClaimedM10) {
+          box10.title = "Milestone 10 Claimed (720 Gold)";
+          box10.style.opacity = "0.6";
+        } else {
+          box10.title = "Reach Milestone 10 to claim 720 Gold";
+          box10.style.opacity = "1";
         }
       }
+    }
 
-      container.appendChild(card);
+    // 5. Milestone 20 Promotion Badge
+    const box20 = document.getElementById("badge-milestone-20");
+    if (box20) {
+      if (info.canRankUp) {
+        box20.classList.add("can-claim");
+        box20.title = `Promote to ${info.nextTierName}!`;
+      } else {
+        box20.classList.remove("can-claim");
+        box20.title = `Reach Milestone 20 to unlock ${info.nextTierName}`;
+      }
+    }
+
+    // 6. Three Cards: HP, ATK, DEF
+    const statsData = [
+      { key: "hp", label: "HP", perLvl: 30, bonusPrefix: "+" },
+      { key: "atk", label: "ATK", perLvl: 3, bonusPrefix: "+" },
+      { key: "def", label: "DEF", perLvl: 1, bonusPrefix: "+" }
+    ];
+
+    statsData.forEach(st => {
+      const lvl = (Character.statUpgrades && Character.statUpgrades[st.key]) || 0;
+      const cost = Character.getCoreStatUpgradeCost(st.key);
+      const canAfford = (Character.gold || 0) >= cost;
+
+      const lvlEl = document.getElementById(`stat-lvl-${st.key}`);
+      const bonusEl = document.getElementById(`stat-bonus-${st.key}`);
+      const costEl = document.getElementById(`stat-cost-${st.key}`);
+      const btnEl = document.getElementById(`btn-upgrade-${st.key}`);
+
+      if (lvlEl) lvlEl.textContent = `Lv.${lvl}`;
+      if (bonusEl) bonusEl.textContent = `${st.bonusPrefix}${lvl * st.perLvl}`;
+      if (costEl) costEl.textContent = cost.toLocaleString();
+      if (btnEl) btnEl.disabled = !canAfford;
     });
+  }
+
+  // Core Stat Upgrade Action handler
+  upgradeCoreStat(statKey) {
+    Sound.playSfx("click");
+    const cost = Character.getCoreStatUpgradeCost(statKey);
+    if ((Character.gold || 0) < cost) {
+      this.showToast("Not enough Gold for upgrade!", "error");
+      return;
+    }
+
+    if (Character.upgradeCoreStat(statKey)) {
+      Sound.playSfx("confirm");
+      const statNames = { hp: "HP", atk: "ATK", def: "DEF" };
+      const card = document.getElementById(`card-upgrade-${statKey}`);
+      if (card) {
+        const floatEl = document.createElement("div");
+        floatEl.className = "stat-float-text";
+        floatEl.textContent = `+${statKey === 'atk' ? 3 : (statKey === 'hp' ? 30 : 1)} ${statNames[statKey]}!`;
+        card.appendChild(floatEl);
+        setTimeout(() => floatEl.remove(), 800);
+      }
+
+      this.renderTalentsScreen();
+      this.renderHeader();
+      if (this.renderEquipmentScreen) this.renderEquipmentScreen();
+    }
+  }
+
+  claimMilestone(milestone) {
+    Sound.playSfx("click");
+    const res = Character.claimTalentMilestone(milestone);
+    if (res && res.success) {
+      Sound.playSfx("confirm");
+      this.showToast(`🎉 ${res.reward}!`, "success");
+      this.renderTalentsScreen();
+      this.renderHeader();
+    } else {
+      if (milestone === 10) {
+        this.showToast("Milestone 10 requires reaching level 10!", "info");
+      } else {
+        this.showToast("Reach level 20 to rank up!", "info");
+      }
+    }
+  }
+
+  showTalentsPreviewModal() {
+    Sound.playSfx("click");
+    const modal = document.getElementById("modal-talents-preview");
+    if (!modal) return;
+
+    const ladder = document.getElementById("talents-preview-ladder");
+    if (ladder) {
+      ladder.innerHTML = "";
+      const tiers = Character.getTalentTiers();
+      const info = Character.getTalentProgress();
+
+      tiers.forEach((t, idx) => {
+        const isCurrent = idx === info.tierIndex;
+        const isUnlocked = idx <= info.tierIndex;
+        const el = document.createElement("div");
+        el.className = `preview-ladder-tier ${isCurrent ? 'tier-current' : ''}`;
+        el.innerHTML = `
+          <div>
+            <div class="preview-tier-title">${t.name} (Milestones 1 - 20)</div>
+            <div style="font-size: 11px; color: ${isUnlocked ? '#4ade80' : '#94a3b8'};">
+              ${isCurrent ? '★ Current Rank' : (isUnlocked ? '✓ Completed' : '🔒 Locked')}
+            </div>
+          </div>
+          <div class="preview-tier-badge">
+            ${isCurrent ? 'Active' : (isUnlocked ? 'Mastered' : `Tier ${idx + 1}`)}
+          </div>
+        `;
+        ladder.appendChild(el);
+      });
+    }
+
+    modal.style.display = "flex";
   }
 
   // Authentic Chests Gacha & Shop Screen

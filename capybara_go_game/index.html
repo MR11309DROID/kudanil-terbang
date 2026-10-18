@@ -758,12 +758,141 @@
         </div>
       </div>
 
-      <!-- ================= TAB 3: TALENTS ================= -->
+      <!-- ================= TAB 3: TALENTS (CAPYBARA GO AUTHENTIC UI) ================= -->
       <div id="tab-talents" class="tab-page">
-        <div class="talents-panel">
-          <h2 class="panel-title">Ancient Capybara Talents</h2>
-          <p class="panel-subtitle">Permanent blessings that persist across all chapter adventures.</p>
-          <div id="talents-list-container" class="talents-list"></div>
+        <div class="capy-talents-screen">
+          
+          <!-- Top Currency & Preview Header Bar -->
+          <div class="capy-talents-header">
+            <div class="capy-talents-currencies">
+              <div class="talents-cur-pill cur-gems" onclick="window.Game && window.Game.ui && window.Game.ui.switchTab('chests')">
+                <span class="cur-icon">💎</span>
+                <span id="talents-h-gems" class="cur-val">0</span>
+                <span class="cur-plus">+</span>
+              </div>
+              <div class="talents-cur-pill cur-gold" onclick="window.Game && window.Game.ui && window.Game.ui.switchTab('chests')">
+                <span class="cur-icon">🪙</span>
+                <span id="talents-h-gold" class="cur-val">0</span>
+                <span class="cur-plus plus-green">+</span>
+              </div>
+            </div>
+
+            <!-- Preview Ladder Button (Top Right) -->
+            <button class="talents-preview-btn" id="btn-talents-preview" title="Preview Rank Road" onclick="window.Game && window.Game.ui && window.Game.ui.showTalentsPreviewModal()">
+              <img src="assets/ui/talents/btn_preview.png" alt="Preview" class="talents-preview-img">
+            </button>
+          </div>
+
+          <!-- Main Stage Rank Title -->
+          <div class="talents-stage-title" id="talents-rank-title">Apprentice - 1</div>
+
+          <!-- Hero Capybara Showcase Area -->
+          <div class="talents-hero-stage">
+            <div class="talents-stage-rays"></div>
+            <div class="talents-capy-hero-wrap">
+              <img src="assets/ui/talents/hero_adventurer_capy_clean.png" alt="Capybara Adventurer" class="talents-capy-hero-img">
+              <div class="talents-capy-ground-shadow"></div>
+            </div>
+          </div>
+
+          <!-- Milestone Badges & Progress Track -->
+          <div class="talents-milestone-section">
+            <!-- Floating Milestone 10 & 20 Badges -->
+            <div class="talents-milestone-badges-row">
+              <div class="milestone-badge-box box-10" id="badge-milestone-10" title="Milestone 10 Reward" onclick="window.Game && window.Game.ui && window.Game.ui.claimMilestone(10)">
+                <div class="milestone-badge-glow"></div>
+                <img src="assets/ui/talents/badge_milestone_10.png" alt="720 Gold" class="milestone-badge-img">
+                <span class="milestone-claim-tag" id="tag-claim-10">Claim!</span>
+              </div>
+              <div class="milestone-badge-box box-20" id="badge-milestone-20" title="Milestone 20 Promotion" onclick="window.Game && window.Game.ui && window.Game.ui.claimMilestone(20)">
+                <div class="milestone-badge-glow"></div>
+                <img src="assets/ui/talents/badge_adventurer_title.png" alt="Adventurer Rank" class="milestone-badge-img">
+                <span class="milestone-claim-tag" id="tag-claim-20">Rank Up!</span>
+              </div>
+            </div>
+
+            <!-- Progress Bar Track -->
+            <div class="talents-track-container">
+              <div class="talents-track-bar">
+                <div class="talents-track-fill" id="talents-progress-fill" style="width: 5%;"></div>
+                <div class="talents-track-shimmer"></div>
+              </div>
+
+              <!-- Indicator Star Pin hanging below track -->
+              <div class="talents-star-indicator" id="talents-star-indicator" style="left: 5%;">
+                <div class="talents-pin-string"></div>
+                <div class="talents-pin-star">
+                  <span id="talents-indicator-num" class="talents-pin-num">1</span>
+                </div>
+              </div>
+
+              <!-- Milestone Numbers underneath -->
+              <div class="talents-track-numbers">
+                <span class="track-num-tag num-10">10</span>
+                <span class="track-num-tag num-20">20</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3 Stat Upgrade Cards: HP, ATK, DEF -->
+          <div class="talents-cards-container">
+            
+            <!-- Card 1: HP -->
+            <div class="stat-upgrade-card card-hp" id="card-upgrade-hp">
+              <div class="stat-card-header">
+                <span class="stat-card-lvl" id="stat-lvl-hp">Lv.0</span>
+              </div>
+              <div class="stat-card-icon-wrap">
+                <img src="assets/ui/talents/icon_stat_hp.png" alt="HP" class="stat-card-icon">
+              </div>
+              <div class="stat-card-value-wrap">
+                <div class="stat-card-bonus" id="stat-bonus-hp">+0</div>
+                <div class="stat-card-label">HP</div>
+              </div>
+              <button class="stat-card-btn" id="btn-upgrade-hp" onclick="window.Game && window.Game.ui && window.Game.ui.upgradeCoreStat('hp')">
+                <span class="stat-btn-coin">🪙</span>
+                <span class="stat-btn-cost" id="stat-cost-hp">240</span>
+              </button>
+            </div>
+
+            <!-- Card 2: ATK -->
+            <div class="stat-upgrade-card card-atk" id="card-upgrade-atk">
+              <div class="stat-card-header">
+                <span class="stat-card-lvl" id="stat-lvl-atk">Lv.1</span>
+              </div>
+              <div class="stat-card-icon-wrap">
+                <img src="assets/ui/talents/icon_stat_atk.png" alt="ATK" class="stat-card-icon">
+              </div>
+              <div class="stat-card-value-wrap">
+                <div class="stat-card-bonus" id="stat-bonus-atk">+3</div>
+                <div class="stat-card-label">ATK</div>
+              </div>
+              <button class="stat-card-btn" id="btn-upgrade-atk" onclick="window.Game && window.Game.ui && window.Game.ui.upgradeCoreStat('atk')">
+                <span class="stat-btn-coin">🪙</span>
+                <span class="stat-btn-cost" id="stat-cost-atk">240</span>
+              </button>
+            </div>
+
+            <!-- Card 3: DEF -->
+            <div class="stat-upgrade-card card-def" id="card-upgrade-def">
+              <div class="stat-card-header">
+                <span class="stat-card-lvl" id="stat-lvl-def">Lv.0</span>
+              </div>
+              <div class="stat-card-icon-wrap">
+                <img src="assets/ui/talents/icon_stat_def.png" alt="DEF" class="stat-card-icon">
+              </div>
+              <div class="stat-card-value-wrap">
+                <div class="stat-card-bonus" id="stat-bonus-def">+0</div>
+                <div class="stat-card-label">DEF</div>
+              </div>
+              <button class="stat-card-btn" id="btn-upgrade-def" onclick="window.Game && window.Game.ui && window.Game.ui.upgradeCoreStat('def')">
+                <span class="stat-btn-coin">🪙</span>
+                <span class="stat-btn-cost" id="stat-cost-def">240</span>
+              </button>
+            </div>
+
+          </div>
+
         </div>
       </div>
 
@@ -1489,6 +1618,23 @@
       </div>
       <p class="companions-subtitle">Sahabat setia yang menemanimu berpetualang, memperkuat stats, dan menyerang monster!</p>
       <div class="companions-list" id="companions-list"><!-- JS populated --></div>
+    </div>
+  </div>
+
+  <!-- ===== TALENTS RANK ROAD PREVIEW MODAL ===== -->
+  <div id="modal-talents-preview" class="modal-overlay" style="display:none;">
+    <div class="modal-panel talents-preview-modal-panel">
+      <div class="modal-header-row">
+        <h2 class="modal-title">📜 Rank Road Preview</h2>
+        <button class="modal-close-btn" onclick="document.getElementById('modal-talents-preview').style.display='none'">✕</button>
+      </div>
+      <p class="talents-preview-subtitle">Upgrade core stats to advance through rank milestones and claim exclusive rewards!</p>
+      <div class="talents-preview-ladder" id="talents-preview-ladder">
+        <!-- JS populated ladder cards -->
+      </div>
+      <div class="talents-preview-actions">
+        <button class="btn-game btn-gold" onclick="document.getElementById('modal-talents-preview').style.display='none'">Close</button>
+      </div>
     </div>
   </div>
 

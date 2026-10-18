@@ -45,6 +45,15 @@ class CharacterManager {
       t_fortune: 0
     };
 
+    // Authentic Capybara Go Core Stat Upgrades & Talents
+    this.statUpgrades = {
+      hp: 0,
+      atk: 1,
+      def: 0,
+      tierIndex: 0,
+      claimedMilestones: []
+    };
+
     this.unlockedChapters = 1;
     this.bestiary = {};
 
@@ -236,6 +245,13 @@ class CharacterManager {
       }
     }
 
+    // Apply Core Stat Upgrades (Authentic Capybara Go Talents)
+    if (this.statUpgrades) {
+      if (this.statUpgrades.hp) s.hp += this.statUpgrades.hp * 30;
+      if (this.statUpgrades.atk) s.atk += this.statUpgrades.atk * 3;
+      if (this.statUpgrades.def) s.def += this.statUpgrades.def * 1;
+    }
+
     // Apply Equipped Items
     for (const slot of Object.keys(this.equipped)) {
       const it = this.equipped[slot];
@@ -367,6 +383,96 @@ class CharacterManager {
     this.talents[talentId] = curRank + 1;
     this.save();
     return true;
+  }
+
+  // ===== CAPYBARA GO AUTHENTIC TALENT STATS & ROAD =====
+  getTalentTiers() {
+    return [
+      { name: "Apprentice", title: "Apprentice", nextTitle: "Adventurer", req: 20 },
+      { name: "Adventurer", title: "Adventurer", nextTitle: "Warrior", req: 20 },
+      { name: "Warrior", title: "Warrior", nextTitle: "Knight", req: 20 },
+      { name: "Knight", title: "Knight", nextTitle: "Champion", req: 20 },
+      { name: "Champion", title: "Champion", nextTitle: "Master", req: 20 },
+      { name: "Master", title: "Master", nextTitle: "Grandmaster", req: 20 },
+      { name: "Grandmaster", title: "Grandmaster", nextTitle: "Legend", req: 20 },
+      { name: "Legend", title: "Legend", nextTitle: "Immortal", req: 20 }
+    ];
+  }
+
+  getTalentProgress() {
+    const tiers = this.getTalentTiers();
+    const hp = (this.statUpgrades && this.statUpgrades.hp) || 0;
+    const atk = (this.statUpgrades && this.statUpgrades.atk) || 0;
+    const def = (this.statUpgrades && this.statUpgrades.def) || 0;
+    const total = hp + atk + def;
+    const tierIndex = Math.min(tiers.length - 1, Math.floor(total / 20));
+    const currentTier = tiers[tierIndex];
+    const tierProgress = total % 20;
+    const displayLevel = Math.max(1, tierProgress);
+
+    const m10Key = `${tierIndex}_10`;
+    const m20Key = `${tierIndex}_20`;
+    const isClaimedM10 = !!(this.statUpgrades.claimedMilestones && this.statUpgrades.claimedMilestones.includes(m10Key));
+    const canClaimM10 = tierProgress >= 10 && !isClaimedM10;
+    const isRankedUp = !!(this.statUpgrades.claimedMilestones && this.statUpgrades.claimedMilestones.includes(m20Key));
+    const canRankUp = tierProgress >= 20;
+
+    return {
+      tierIndex,
+      tierName: currentTier.name,
+      nextTierName: currentTier.nextTitle,
+      displayLevel,
+      tierProgress,
+      totalUpgrades: total,
+      hpLevel: hp,
+      atkLevel: atk,
+      defLevel: def,
+      canClaimM10,
+      isClaimedM10,
+      canRankUp,
+      isRankedUp
+    };
+  }
+
+  getCoreStatUpgradeCost(statKey) {
+    const curLv = (this.statUpgrades && this.statUpgrades[statKey]) || 0;
+    return 240 + curLv * 10;
+  }
+
+  upgradeCoreStat(statKey) {
+    if (!this.statUpgrades) {
+      this.statUpgrades = { hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] };
+    }
+    const cost = this.getCoreStatUpgradeCost(statKey);
+    if ((this.gold || 0) < cost) return false;
+
+    this.addGold(-cost);
+    this.statUpgrades[statKey] = (this.statUpgrades[statKey] || 0) + 1;
+    this.save();
+    return true;
+  }
+
+  claimTalentMilestone(milestone) {
+    if (!this.statUpgrades) return false;
+    const info = this.getTalentProgress();
+    if (milestone === 10) {
+      if (!info.canClaimM10) return false;
+      if (!this.statUpgrades.claimedMilestones) this.statUpgrades.claimedMilestones = [];
+      this.statUpgrades.claimedMilestones.push(`${info.tierIndex}_10`);
+      this.addGold(720);
+      this.save();
+      return { success: true, reward: "720 Gold" };
+    }
+    if (milestone === 20) {
+      if (!info.canRankUp) return false;
+      if (!this.statUpgrades.claimedMilestones) this.statUpgrades.claimedMilestones = [];
+      this.statUpgrades.claimedMilestones.push(`${info.tierIndex}_20`);
+      this.addGold(1500);
+      this.gems += 50;
+      this.save();
+      return { success: true, reward: `Ranked up to ${info.nextTierName}!` };
+    }
+    return false;
   }
 
   startRun(chapterId = 1) {
@@ -636,7 +742,8 @@ class CharacterManager {
       battlePass: this.battlePass,
       activeCompanion: this.activeCompanion,
       unlockedCompanions: this.unlockedCompanions,
-      companionLevels: this.companionLevels
+      companionLevels: this.companionLevels,
+      statUpgrades: this.statUpgrades
     };
     try {
       localStorage.setItem(this.SAVE_KEY, JSON.stringify(state));
@@ -701,6 +808,11 @@ class CharacterManager {
       if (s.activeCompanion) this.activeCompanion = s.activeCompanion;
       if (s.unlockedCompanions && Array.isArray(s.unlockedCompanions)) this.unlockedCompanions = s.unlockedCompanions;
       if (s.companionLevels) this.companionLevels = Object.assign({ duck: 1, turtle: 1, croc: 1, dragon: 1 }, s.companionLevels);
+      if (s.statUpgrades) {
+        this.statUpgrades = Object.assign({ hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] }, s.statUpgrades);
+      } else {
+        this.statUpgrades = { hp: 0, atk: 1, def: 0, tierIndex: 0, claimedMilestones: [] };
+      }
       if (s.activeRun) {
         this.activeRun = s.activeRun;
         if (this.activeRun.skills && Array.isArray(this.activeRun.skills)) {
