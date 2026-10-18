@@ -3685,52 +3685,32 @@ body {
 }
 
 .paperdoll-slot.occupied {
-  border-style: solid;
+  border: 2.8px solid #f59e0b !important;
+  border-bottom: 4px solid #b45309 !important;
+  box-shadow: 0 3px 0 #78350f, inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
+  border-radius: 14px;
 }
 
 /* Paperdoll Slot Rarity Backgrounds matching Capybara Go authentic palette */
-.paperdoll-slot.rarity-common {
-  background: radial-gradient(circle at 40% 30%, #52c41a 0%, #389e0d 50%, #237804 100%);
-  border-color: #135200 !important;
-  border-bottom-color: #092b00 !important;
-  box-shadow: 0 3px 0 #092b00, 0 4px 8px rgba(0, 0, 0, 0.35) !important;
-}
+.paperdoll-slot.rarity-common,
 .paperdoll-slot.rarity-uncommon {
-  background: radial-gradient(circle at 40% 30%, #34d399 0%, #059669 50%, #064e3b 100%);
-  border-color: #064e3b !important;
-  border-bottom-color: #022c22 !important;
-  box-shadow: 0 3px 0 #022c22, 0 4px 8px rgba(0, 0, 0, 0.35) !important;
+  background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
 }
 .paperdoll-slot.rarity-rare {
-  background: radial-gradient(circle at 40% 30%, #38bdf8 0%, #0284c7 50%, #0369a1 100%);
-  border-color: #082f49 !important;
-  border-bottom-color: #0c4a6e !important;
-  box-shadow: 0 3px 0 #082f49, 0 4px 10px rgba(2, 132, 199, 0.4) !important;
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
 }
 .paperdoll-slot.rarity-epic {
-  background: radial-gradient(circle at 40% 30%, #c084fc 0%, #9333ea 50%, #6b21a8 100%);
-  border-color: #3b0764 !important;
-  border-bottom-color: #2e0854 !important;
-  box-shadow: 0 3px 0 #2e0854, 0 4px 12px rgba(147, 51, 234, 0.45) !important;
+  background: linear-gradient(180deg, #8b5cf6 0%, #6d28d9 100%);
 }
 .paperdoll-slot.rarity-legendary {
-  background: radial-gradient(circle at 40% 30%, #fde047 0%, #f59e0b 50%, #d97706 100%);
-  border-color: #78350f !important;
-  border-bottom-color: #451a03 !important;
-  box-shadow: 0 3px 0 #451a03, 0 0 12px rgba(245, 158, 11, 0.6) !important;
+  background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%);
 }
 .paperdoll-slot.rarity-mythic {
-  background: radial-gradient(circle at 40% 30%, #fb7185 0%, #e11d48 50%, #9f1239 100%);
-  border-color: #4c0519 !important;
-  border-bottom-color: #3a0312 !important;
-  box-shadow: 0 3px 0 #3a0312, 0 0 14px rgba(225, 29, 72, 0.7) !important;
+  background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
   animation: mythicCardPulse 3s infinite alternate ease-in-out;
 }
 .paperdoll-slot.rarity-supreme {
-  background: radial-gradient(circle at 45% 30%, #c084fc 0%, #7e22ce 35%, #3b0764 75%, #1e0538 100%);
-  border-color: #581c87 !important;
-  border-bottom-color: #2e0854 !important;
-  box-shadow: 0 3.5px 0 #2e0854, 0 0 18px rgba(192, 132, 252, 0.85) !important;
+  background: linear-gradient(180deg, #8b5cf6 0%, #5b21b6 100%);
   animation: supremeCosmicGlow 2.5s infinite alternate ease-in-out;
 }
 
@@ -3759,17 +3739,18 @@ body {
 
 .slot-item-img {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 14px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
-  z-index: 1;
+  filter: drop-shadow(0 2.5px 3.5px rgba(0, 0, 0, 0.45));
+  z-index: 2;
   display: block;
+  pointer-events: none;
 }
 
 .slot-ghost-icon {
@@ -3779,66 +3760,67 @@ body {
   filter: grayscale(1);
 }
 
-/* Badges inside slots & cards matching Image 1 & YouTube Ref */
+/* Badges inside slots & cards matching authentic Capybara Go screenshot */
 .slot-badge-type,
 .item-slot-mini-badge {
   position: absolute;
-  top: 2.5px;
-  left: 2.5px;
-  width: 16px;
-  height: 16px;
-  background: rgba(18, 14, 14, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 4px;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 8.5px;
-  color: #fff;
+  font-size: 8px;
+  color: #ffffff;
   z-index: 5;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
 }
 
 .slot-item-lvl,
 .item-lvl-badge {
   position: absolute;
-  top: 2.5px;
-  left: 20px;
+  top: 2px;
+  right: 4px;
+  left: auto;
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 8.5px;
+  font-size: 11px;
   font-weight: 900;
   color: #ffffff;
-  background: rgba(18, 14, 14, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 4px;
-  padding: 0 4px;
-  line-height: 14px;
-  text-shadow: 0 1px 2px #000;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  background: transparent;
+  border: none;
+  padding: 0;
+  line-height: 1;
+  text-shadow: 0 1.5px 2px #000, 0 0 3px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  box-shadow: none;
   z-index: 5;
+  pointer-events: none;
 }
 
 /* Stars Rating Row matching authentic Capybara Go cards */
 .item-stars-row {
-  display: none; /* Authentic cards already feature native star rows */
+  display: none;
 }
 
 .item-s-badge {
   position: absolute;
-  bottom: 2px;
-  left: 2px;
+  bottom: 1.5px;
+  left: 2.5px;
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 9.5px;
+  font-size: 13px;
   font-weight: 900;
-  color: #fffbeb;
-  background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%);
-  border: 1px solid #fef08a;
-  border-radius: 3px;
-  padding: 0 2.5px;
-  line-height: 1.1;
-  text-shadow: 0 1px 1px #451a03;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  color: #ffeb3b;
+  background: transparent;
+  border: none;
+  padding: 0;
+  line-height: 1;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 2px 0 #b45309, 0 3px 0 #78350f, 0 2px 3px rgba(0,0,0,0.8);
+  box-shadow: none;
   z-index: 5;
+  pointer-events: none;
 }
 
 .slot-corner-badges {
@@ -3849,19 +3831,25 @@ body {
   align-items: center;
   gap: 2px;
   z-index: 5;
+  pointer-events: none;
 }
 
 .item-rank-badge {
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 8px;
+  font-size: 9.5px;
   font-weight: 900;
   color: #ffffff;
-  background: #ea580c;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  border: 1.5px solid #fef08a;
   border-radius: 3px;
-  padding: 0 2px;
-  line-height: 1.1;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  padding: 0 3.5px;
+  line-height: 12px;
+  text-shadow: 0 1px 1px #000;
+  box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.6);
+}
+
+.item-up-arrow {
+  display: none !important;
 }
 
 /* ============================================================
@@ -4500,60 +4488,38 @@ body {
 
 /* Cards Colored Strictly According to Tier matching authentic Capybara Go palette */
 /* COMMON = LUSH FOREST GREEN */
-.inv-item-card.rarity-common {
-  background: radial-gradient(circle at 40% 30%, #52c41a 0%, #389e0d 50%, #237804 100%);
-  border-color: #135200;
-  border-bottom-color: #092b00;
-  box-shadow: 0 3px 0 #092b00, 0 4px 8px rgba(0, 0, 0, 0.35);
-}
-
+.inv-item-card.rarity-common,
 .inv-item-card.rarity-uncommon {
-  background: radial-gradient(circle at 40% 30%, #34d399 0%, #059669 50%, #064e3b 100%);
-  border-color: #064e3b;
-  border-bottom-color: #022c22;
-  box-shadow: 0 3px 0 #022c22, 0 4px 8px rgba(0, 0, 0, 0.35);
+  background: #22c55e;
+  border-color: #14532d;
+  border-bottom-color: #052e16;
+  box-shadow: 0 3px 0 #022c22;
 }
 
 /* RARE = OCEAN AZURE BLUE */
 .inv-item-card.rarity-rare {
-  background: radial-gradient(circle at 40% 30%, #38bdf8 0%, #0284c7 50%, #0369a1 100%);
-  border-color: #082f49;
-  border-bottom-color: #0c4a6e;
-  box-shadow: 0 3px 0 #082f49, 0 4px 10px rgba(2, 132, 199, 0.4);
+  background: #38bdf8;
+  border-color: #1e3a8a;
+  border-bottom-color: #0f172a;
+  box-shadow: 0 3px 0 #020617;
 }
 
-/* EPIC = ROYAL AMETHYST PURPLE */
-.inv-item-card.rarity-epic {
-  background: radial-gradient(circle at 40% 30%, #c084fc 0%, #9333ea 50%, #6b21a8 100%);
-  border-color: #3b0764;
-  border-bottom-color: #2e0854;
-  box-shadow: 0 3px 0 #2e0854, 0 4px 12px rgba(147, 51, 234, 0.45);
-}
-
-/* LEGENDARY = GOLDEN SOLAR AMBER */
-.inv-item-card.rarity-legendary {
-  background: radial-gradient(circle at 40% 30%, #fde047 0%, #f59e0b 50%, #d97706 100%);
-  border-color: #78350f;
-  border-bottom-color: #451a03;
-  box-shadow: 0 3px 0 #451a03, 0 0 12px rgba(245, 158, 11, 0.6);
-}
-
-/* MYTHIC = FIERY CRIMSON DRAKE */
-.inv-item-card.rarity-mythic {
-  background: radial-gradient(circle at 40% 30%, #fb7185 0%, #e11d48 50%, #9f1239 100%);
-  border-color: #4c0519;
-  border-bottom-color: #3a0312;
-  box-shadow: 0 3px 0 #3a0312, 0 0 14px rgba(225, 29, 72, 0.7);
-  animation: mythicCardPulse 3s infinite alternate ease-in-out;
-}
-
-/* SUPREME = PRIMORDIAL COSMIC VIOLET */
+/* EPIC & SUPREME = ROYAL AMETHYST PURPLE */
+.inv-item-card.rarity-epic,
 .inv-item-card.rarity-supreme {
-  background: radial-gradient(circle at 45% 30%, #c084fc 0%, #7e22ce 35%, #3b0764 75%, #1e0538 100%);
-  border-color: #581c87;
-  border-bottom-color: #2e0854;
-  box-shadow: 0 3.5px 0 #2e0854, 0 0 18px rgba(192, 132, 252, 0.85);
-  animation: supremeCosmicGlow 2.5s infinite alternate ease-in-out;
+  background: #8b5cf6;
+  border-color: #3b0764;
+  border-bottom-color: #2e1065;
+  box-shadow: 0 3px 0 #1e0538;
+}
+
+/* LEGENDARY & MYTHIC = WARM ORANGE / AMBER */
+.inv-item-card.rarity-legendary,
+.inv-item-card.rarity-mythic {
+  background: #ea580c;
+  border-color: #fde047;
+  border-bottom-color: #b45309;
+  box-shadow: 0 3px 0 #451a03;
 }
 
 .inv-item-card {
@@ -4563,17 +4529,18 @@ body {
 
 .inv-item-img {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
-  z-index: 1;
+  filter: drop-shadow(0 2.5px 3.5px rgba(0, 0, 0, 0.45));
+  z-index: 2;
   display: block;
+  pointer-events: none;
 }
 
 /* Empty slot placeholder tile to pad inventory grid */

@@ -117,12 +117,12 @@ class CharacterManager {
   ensureStarterGear() {
     const slots = ["weapon", "armor", "helmet", "boots", "ring", "amulet"];
     const starterTemplates = {
-      weapon: "gear_21",
-      armor: "gear_02",
-      helmet: "gear_00",
-      boots: "gear_01",
-      ring: "gear_11",
-      amulet: "gear_20"
+      weapon: { id: "leg_04", level: 70, refineRank: 2 },
+      armor: { id: "leg_09", level: 70, refineRank: 2 },
+      helmet: { id: "rare_10", level: 50, refineRank: 2 },
+      boots: { id: "rare_17", level: 30, refineRank: 2 },
+      ring: { id: "leg_13", level: 60, refineRank: 3 },
+      amulet: { id: "leg_16", level: 30, refineRank: 2 }
     };
 
     let needsSave = false;
@@ -138,26 +138,48 @@ class CharacterManager {
       }
     });
 
-    // If any slot is still empty, equip starter item
+    // If any slot is still empty, equip authentic starter item matching reference
     slots.forEach(slot => {
       if (!this.equipped[slot]) {
-        const tmplId = starterTemplates[slot];
-        this.equipped[slot] = this.createItemFromTemplate(tmplId, 1);
-        needsSave = true;
+        const cfg = starterTemplates[slot];
+        const item = this.createItemFromTemplate(cfg.id, cfg.level);
+        if (item) {
+          item.refineRank = cfg.refineRank;
+          this.equipped[slot] = item;
+          needsSave = true;
+        }
       }
     });
 
-    // Ensure inventory has showcase gear across tiers
-    if (!this.inventory || this.inventory.length < 5) {
+    // Ensure inventory has authentic showcase gear across tiers matching reference grid
+    if (!this.inventory || this.inventory.length < 16) {
       if (!this.inventory) this.inventory = [];
-      const showcaseIds = [
-        "gear_04", "gear_05", "gear_07", "gear_09", "gear_10", "gear_24",
-        "rare_00", "rare_05", "leg_00", "leg_09", "myth_00", "sup_00"
+      const showcaseItems = [
+        { id: "leg_00", level: 2, refineRank: 1 }, // Excalibur Sword
+        { id: "leg_08", level: 2 },                // Blazing Ruby Blade
+        { id: "leg_03", level: 2 },                // Dark Void Spear/Scythe
+        { id: "leg_06", level: 2 },                // Spotted Mushroom
+        { id: "leg_05", level: 2 },                // Golden Spiked Mace
+        { id: "leg_07", level: 2 },                // Green Hunter Bow
+        { id: "leg_02", level: 2 },                // Golden Seraph Bow
+        { id: "leg_01", level: 2, refineRank: 3 }, // Crossed Daggers
+        { id: "leg_10", level: 2 },                // Royal Crimson Cloak
+        { id: "leg_14", level: 2 },                // Eternal Flame Ring
+        { id: "sup_00", level: 1 },                // Supreme Cosmic Sword
+        { id: "myth_00", level: 1 },               // Mythic Magma Dragon Ring
+        { id: "rare_00", level: 2 },               // Blazing Flame Sword
+        { id: "rare_04", level: 2 },               // Knight Steel Armor
+        { id: "rare_05", level: 2 },               // Verdant Woodland Tunic
+        { id: "gear_04", level: 1 }                // Carved Timber Branch
       ];
-      showcaseIds.forEach(id => {
-        if (!this.inventory.some(it => it && it.templateId === id)) {
-          this.inventory.push(this.createItemFromTemplate(id, 1));
-          needsSave = true;
+      showcaseItems.forEach(cfg => {
+        if (!this.inventory.some(it => it && it.templateId === cfg.id)) {
+          const it = this.createItemFromTemplate(cfg.id, cfg.level);
+          if (it) {
+            if (cfg.refineRank) it.refineRank = cfg.refineRank;
+            this.inventory.push(it);
+            needsSave = true;
+          }
         }
       });
     }

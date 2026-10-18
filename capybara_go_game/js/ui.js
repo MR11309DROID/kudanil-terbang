@@ -2404,7 +2404,7 @@ class UIManager {
       if (!slotEl) continue;
 
       if (item) {
-        const displayImg = item.cardImg || item.icon;
+        const displayImg = item.icon || item.cardImg;
         const isWeapon = (slot === "weapon");
         const isMythicWeapon = isWeapon && (item.rarity === "mythic");
         const isSupremeWeapon = isWeapon && (item.rarity === "supreme");
@@ -2412,8 +2412,7 @@ class UIManager {
         const shimmerHtml = shimmerClass ? `<div class="item-shimmer-wave ${shimmerClass}"><div class="shimmer-sweep-light"></div><div class="shimmer-sparkle-stars">✦</div></div>` : "";
         const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(item.rarity);
         const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
-        const rankBadge = item.refineRank ? `<span class="item-rank-badge">+${item.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
-        const upArrow = `<span class="item-up-arrow">▲</span>`;
+        const rankBadge = item.refineRank ? `<span class="item-rank-badge">+${item.refineRank}</span>` : "";
         const gleamHtml = `<div class="item-card-gleam"></div>`;
 
         slotEl.className = `paperdoll-slot occupied rarity-${item.rarity} ${isWeapon ? 'slot-is-weapon' : ''}`;
@@ -2424,10 +2423,7 @@ class UIManager {
           <span class="item-slot-mini-badge">${slotEmojis[slot] || "⚔️"}</span>
           <span class="item-lvl-badge">Lv.${item.level}</span>
           ${sBadge}
-          <div class="slot-corner-badges">
-            ${rankBadge}
-            ${upArrow}
-          </div>
+          ${rankBadge ? `<div class="slot-corner-badges">${rankBadge}</div>` : ""}
         `;
         slotEl.onclick = () => this.showItemDetailsModal(item, true);
       } else {
@@ -2476,7 +2472,7 @@ class UIManager {
         } else {
           filteredInv.forEach(it => {
             const itemEl = document.createElement("div");
-            const displayImg = it.cardImg || it.icon;
+            const displayImg = it.icon || it.cardImg;
             const isWeapon = (it.slot === "weapon");
             const isMythicWeapon = isWeapon && (it.rarity === "mythic");
             const isSupremeWeapon = isWeapon && (it.rarity === "supreme");
@@ -2484,9 +2480,8 @@ class UIManager {
             const shimmerHtml = shimmerClass ? `<div class="item-shimmer-wave ${shimmerClass}"><div class="shimmer-sweep-light"></div><div class="shimmer-sparkle-stars">✦</div></div>` : "";
             const isHighTier = ["rare", "epic", "legendary", "mythic", "supreme"].includes(it.rarity);
             const sBadge = isHighTier ? `<span class="item-s-badge">S</span>` : "";
-            const rankBadge = it.refineRank ? `<span class="item-rank-badge">+${it.refineRank}</span>` : `<span class="item-rank-badge">+1</span>`;
+            const rankBadge = it.refineRank ? `<span class="item-rank-badge">+${it.refineRank}</span>` : "";
             const slotIcon = slotEmojis[it.slot] || "⚔️";
-            const upArrow = `<span class="item-up-arrow">▲</span>`;
             const gleamHtml = `<div class="item-card-gleam"></div>`;
 
             itemEl.className = `inv-item-card rarity-${it.rarity} ${isWeapon ? 'slot-is-weapon' : ''}`;
@@ -2497,10 +2492,7 @@ class UIManager {
               <span class="item-slot-mini-badge">${slotIcon}</span>
               <span class="item-lvl-badge">Lv.${it.level}</span>
               ${sBadge}
-              <div class="slot-corner-badges">
-                ${rankBadge}
-                ${upArrow}
-              </div>
+              ${rankBadge ? `<div class="slot-corner-badges">${rankBadge}</div>` : ""}
             `;
             itemEl.addEventListener("click", () => {
               Sound.playSfx("click");
