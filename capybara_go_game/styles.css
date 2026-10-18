@@ -4823,11 +4823,20 @@ body {
 /* 2. Main Stage Title */
 .talents-stage-title {
   text-align: center;
-  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
-  font-size: 25px;
+  font-family: 'Titan One', 'Lilita One', 'Luckiest Guy', cursive, sans-serif;
+  font-size: 26px;
+  font-weight: 900;
   color: #ffffff;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 12px rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.6px;
+  -webkit-text-stroke: 3.5px #180928;
+  paint-order: stroke fill;
+  text-shadow: 
+    -2px -2px 0 #180928,
+     2px -2px 0 #180928,
+    -2px  2px 0 #180928,
+     2px  2px 0 #180928,
+     0px  3.5px 0 #0f051a,
+     0px  5px 10px rgba(0, 0, 0, 0.55);
   margin-top: 2px;
   margin-bottom: 2px;
   z-index: 5;
@@ -4974,17 +4983,21 @@ body {
 }
 
 .gold-rank-text {
-  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-family: 'Titan One', 'Lilita One', 'Luckiest Guy', cursive, sans-serif;
   font-size: 11px;
+  font-weight: 900;
   color: #ffffff;
   white-space: nowrap;
   letter-spacing: 0.3px;
+  -webkit-text-stroke: 2.2px #3E1E02;
+  paint-order: stroke fill;
   text-shadow: 
-    -1px -1px 0 #3E1E02,
-     1px -1px 0 #3E1E02,
-    -1px  1px 0 #3E1E02,
-     1px  1px 0 #3E1E02,
-     0px  2px 3px rgba(0, 0, 0, 0.6);
+    -1.5px -1.5px 0 #3E1E02,
+     1.5px -1.5px 0 #3E1E02,
+    -1.5px  1.5px 0 #3E1E02,
+     1.5px  1.5px 0 #3E1E02,
+     0px  2px 0 #200D00,
+     0px  3px 4px rgba(0, 0, 0, 0.5);
   display: block;
   line-height: 1.15;
 }
@@ -5081,10 +5094,13 @@ body {
 }
 
 .talents-pin-num {
-  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
-  font-size: 13px;
+  font-family: 'Titan One', 'Lilita One', 'Luckiest Guy', cursive, sans-serif;
+  font-size: 13.5px;
+  font-weight: 900;
   color: #ffffff;
-  text-shadow: 0 1px 2px #000;
+  -webkit-text-stroke: 2.5px #251240;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.7);
   margin-top: 1px;
 }
 
@@ -5098,10 +5114,13 @@ body {
 }
 
 .track-num-tag {
-  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
-  font-size: 14px;
-  color: #c4b5fd;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  font-family: 'Titan One', 'Lilita One', 'Luckiest Guy', cursive, sans-serif;
+  font-size: 14.5px;
+  font-weight: 900;
+  color: #d8b4fe;
+  -webkit-text-stroke: 2px #23123d;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .track-num-tag.num-10 {
@@ -5148,10 +5167,10 @@ body {
 }
 
 .stat-card-lvl {
-  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
+  font-family: 'Titan One', 'Lilita One', 'Luckiest Guy', cursive, sans-serif;
   font-size: 15px;
-  color: #6B4F32;
-  letter-spacing: 0.3px;
+  color: #5A3A1B;
+  letter-spacing: 0.4px;
 }
 
 .stat-card-icon-wrap {
@@ -5181,18 +5200,28 @@ body {
 }
 
 .stat-card-bonus {
-  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
-  font-size: 19px;
-  color: #2CB31B;
+  font-family: 'Titan One', 'Lilita One', 'Luckiest Guy', cursive, sans-serif;
+  font-size: 21px;
+  font-weight: 900;
+  color: #8EF317;
   line-height: 1.1;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  -webkit-text-stroke: 2.6px #241403;
+  paint-order: stroke fill;
+  text-shadow: 
+    -1.5px -1.5px 0 #241403,
+     1.5px -1.5px 0 #241403,
+    -1.5px  1.5px 0 #241403,
+     1.5px  1.5px 0 #241403,
+     0px  2.5px 0 #150900,
+     0px  3px 4px rgba(0, 0, 0, 0.25);
 }
 
 .stat-card-label {
-  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
-  font-size: 12px;
-  color: #785A3C;
-  letter-spacing: 0.4px;
+  font-family: 'Titan One', 'Lilita One', 'Luckiest Guy', cursive, sans-serif;
+  font-size: 12.5px;
+  color: #5C3E1F;
+  letter-spacing: 0.5px;
+  font-weight: 900;
 }
 
 .stat-card-btn {
@@ -5206,9 +5235,6 @@ body {
   border-bottom: 3.5px solid #AA7416;
   border-radius: 10px;
   padding: 6px 4px;
-  color: #5A3A08;
-  font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
-  font-size: 14.5px;
   cursor: pointer;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   transition: transform 0.08s ease, filter 0.12s ease;
@@ -5236,17 +5262,33 @@ body {
 }
 
 .stat-btn-cost {
+  font-family: 'Titan One', 'Lilita One', 'Luckiest Guy', cursive, sans-serif;
+  font-size: 15.5px;
+  font-weight: 900;
+  color: #FFFBD0;
   line-height: 1;
+  -webkit-text-stroke: 2.5px #3A1B02;
+  paint-order: stroke fill;
+  text-shadow: 
+    -1.5px -1.5px 0 #3A1B02,
+     1.5px -1.5px 0 #3A1B02,
+    -1.5px  1.5px 0 #3A1B02,
+     1.5px  1.5px 0 #3A1B02,
+     0px  2px 0 #220D00,
+     0px  2.5px 4px rgba(0, 0, 0, 0.4);
 }
 
 /* Floating number popup on upgrade */
 .stat-float-text {
   position: absolute;
   top: 35%;
-  font-family: 'Lilita One', sans-serif;
-  font-size: 20px;
-  color: #4ade80;
-  text-shadow: 0 2px 4px #000;
+  font-family: 'Titan One', 'Lilita One', 'Luckiest Guy', cursive, sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: #8EF317;
+  -webkit-text-stroke: 2.5px #152402;
+  paint-order: stroke fill;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
   pointer-events: none;
   animation: floatTextUp 0.8s ease-out forwards;
   z-index: 20;
