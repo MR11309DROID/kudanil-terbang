@@ -112,7 +112,7 @@ class CharacterManager {
   getCombatPower() {
     const stats = this.getEffectiveStats();
     if (stats.atk >= 5000000) {
-      return 166450000; // 166.45M matching authentic reference
+      return 166450000;
     }
     return Math.round(stats.atk * 10 + stats.hp * 2.5 + stats.def * 10 + (stats.critRate * 4000) + (this.accountLevel * 250) + 4200);
   }
@@ -124,33 +124,27 @@ class CharacterManager {
     const baseDef = this.baseStats ? this.baseStats.def : 12;
 
     const starterTemplates = {
-      weapon: { id: "myth_00", level: 80, atk: 8110000 - baseAtk },
-      armor: { id: "myth_07", level: 80, hp: 30560000 - baseHp },
-      helmet: { id: "myth_10", level: 80, def: 450000 },
-      boots: { id: "myth_19", level: 80, def: 427000 - baseDef },
-      ring: { id: "myth_12", level: 80 },
-      amulet: { id: "myth_16", level: 80 }
+      weapon: { id: "myth_00", level: 1 },
+      armor: { id: "myth_07", level: 1 },
+      helmet: { id: "myth_10", level: 1 },
+      boots: { id: "myth_19", level: 1 },
+      ring: { id: "myth_12", level: 1 },
+      amulet: { id: "myth_16", level: 1 }
     };
 
     let needsSave = false;
 
-    // Equip the authentic mythic items with stats matching reference
+    // Equip the authentic mythic items at level 1
     slots.forEach(slot => {
       const cfg = starterTemplates[slot];
       const cur = this.equipped ? this.equipped[slot] : null;
-      const isOutdated = !cur || cur.rarity === 'legendary' || cur.templateId.startsWith('leg_') || cur.templateId !== cfg.id ||
-        cur.refineRank ||
-        (cfg.atk && (!cur.atk || cur.atk < 5000000)) ||
-        (cfg.hp && (!cur.hp || cur.hp < 20000000)) ||
-        (cfg.def && (!cur.def || cur.def < 300000));
+      const isOutdated = !cur || cur.level > 1 || cur.rarity === 'legendary' || cur.templateId.startsWith('leg_') || cur.templateId !== cfg.id ||
+        cur.refineRank || (cur.atk && cur.atk > 1000000) || (cur.hp && cur.hp > 1000000);
 
       if (force || isOutdated) {
-        const item = this.createItemFromTemplate(cfg.id, cfg.level);
+        const item = this.createItemFromTemplate(cfg.id, 1);
         if (item) {
           delete item.refineRank;
-          if (cfg.atk !== undefined) item.atk = cfg.atk;
-          if (cfg.hp !== undefined) item.hp = cfg.hp;
-          if (cfg.def !== undefined) item.def = cfg.def;
           this.equipped[slot] = item;
           needsSave = true;
         }
@@ -163,7 +157,7 @@ class CharacterManager {
       // Add all 21 authentic supreme items
       for (let i = 0; i < 21; i++) {
         const id = "sup_" + (i < 10 ? "0" + i : i);
-        const it = this.createItemFromTemplate(id, 80);
+        const it = this.createItemFromTemplate(id, 1);
         if (it) {
           this.inventory.push(it);
           needsSave = true;
@@ -173,7 +167,7 @@ class CharacterManager {
       // Add all 21 authentic mythic items
       for (let i = 0; i < 21; i++) {
         const id = "myth_" + (i < 10 ? "0" + i : i);
-        const it = this.createItemFromTemplate(id, 75);
+        const it = this.createItemFromTemplate(id, 1);
         if (it) {
           this.inventory.push(it);
           needsSave = true;
@@ -717,9 +711,11 @@ class CharacterManager {
           });
         }
       }
-      // Auto-upgrade equipment assets to authentic artwork
+      // Auto-upgrade equipment assets to authentic artwork & reset level to 1
       const updateItemAssets = (it) => {
         if (!it) return;
+        it.level = 1;
+        delete it.refineRank;
         if (it.rarity === 'uncommon') it.rarity = 'common';
 
         let tmpl = GameData.equipmentTemplates && GameData.equipmentTemplates.find(t => t.id === it.templateId || t.name === it.name);
@@ -741,6 +737,12 @@ class CharacterManager {
           it.name = tmpl.name;
           it.rarity = tmpl.rarity;
           it.templateId = tmpl.id;
+        }
+
+        if (tmpl) {
+          it.atk = tmpl.baseAtk || 0;
+          it.hp = tmpl.baseHp || 0;
+          it.def = tmpl.baseDef || 0;
         }
 
         if (!it.icon || it.icon.includes('capybara_cartoon_kit') || it.icon.includes('undefined')) {
