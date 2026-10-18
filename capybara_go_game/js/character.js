@@ -327,14 +327,23 @@ class CharacterManager {
   }
 
   equip(item) {
-    if (!item || !item.slot) return;
-    const old = this.equipped[item.slot];
+    if (!item) return;
+    // Strict slot synchronization: ensure item.slot matches canonical template slot
+    const tmpl = GameData.equipmentTemplates.find(t => t.id === item.templateId || t.name === item.name);
+    if (tmpl && tmpl.slot) {
+      item.slot = tmpl.slot;
+      item.name = tmpl.name;
+    }
+    const targetSlot = item.slot;
+    if (!targetSlot || !this.equipped.hasOwnProperty(targetSlot)) return;
+
+    const old = this.equipped[targetSlot];
     if (old) {
       this.inventory.push(old);
     }
     // Remove from inventory
     this.inventory = this.inventory.filter(i => i.uid !== item.uid);
-    this.equipped[item.slot] = item;
+    this.equipped[targetSlot] = item;
     this.save();
   }
 
@@ -927,6 +936,7 @@ class CharacterManager {
             it.templateId = tmpl.id;
             it.name = tmpl.name;
             it.rarity = tmpl.rarity;
+            it.slot = tmpl.slot;
             it.icon = tmpl.icon;
             it.cardImg = tmpl.cardImg || tmpl.icon;
           }
@@ -935,6 +945,7 @@ class CharacterManager {
           it.cardImg = tmpl.cardImg || tmpl.icon;
           it.name = tmpl.name;
           it.rarity = tmpl.rarity;
+          it.slot = tmpl.slot;
           it.templateId = tmpl.id;
         }
 
@@ -952,6 +963,7 @@ class CharacterManager {
           it.cardImg = fallback.cardImg || fallback.icon;
           it.templateId = fallback.id;
           it.name = fallback.name;
+          it.slot = fallback.slot;
         }
       };
       if (this.equipped) {
@@ -965,6 +977,24 @@ class CharacterManager {
           }
         });
         Object.values(this.equipped).forEach(updateItemAssets);
+
+        // Strict slot re-synchronization: move any misplaced item to its canonical slot
+        const misaligned = [];
+        Object.keys(this.equipped).forEach(slotKey => {
+          const it = this.equipped[slotKey];
+          if (it && it.slot && it.slot !== slotKey) {
+            misaligned.push({ item: it, oldSlot: slotKey, targetSlot: it.slot });
+            delete this.equipped[slotKey];
+          }
+        });
+        misaligned.forEach(({ item, targetSlot }) => {
+          if (!this.equipped[targetSlot]) {
+            this.equipped[targetSlot] = item;
+          } else {
+            if (!this.inventory) this.inventory = [];
+            this.inventory.push(item);
+          }
+        });
       }
       if (this.inventory && Array.isArray(this.inventory)) {
         // Reset refineRank on all items

@@ -297,7 +297,7 @@ const GameData = {
     { id: "myth_06", slot: "armor", name: "Golden Lion Aegis", icon: "assets/items/mythic/icon_mythic_06.png", cardImg: "assets/items/mythic/card_mythic_06.png", rarity: "mythic", baseHp: 1850, baseDef: 85, reflectRatio: 0.20 },
     { id: "myth_07", slot: "armor", name: "Holy Paladin Cuirass", icon: "assets/items/mythic/icon_mythic_07.png", cardImg: "assets/items/mythic/card_mythic_07.png", rarity: "mythic", baseHp: 1950, baseDef: 88, regen: 0.10 },
     { id: "myth_08", slot: "armor", name: "Abyssal Demon Plate", icon: "assets/items/mythic/icon_mythic_08.png", cardImg: "assets/items/mythic/card_mythic_08.png", rarity: "mythic", baseHp: 1880, baseDef: 92, dmgReduction: 0.12 },
-    { id: "myth_09", slot: "helmet", name: "Crimson Shadow Cowl", icon: "assets/items/mythic/icon_mythic_09.png", cardImg: "assets/items/mythic/card_mythic_09.png", rarity: "mythic", baseDef: 88, baseHp: 800, dodgeBonus: 0.18 },
+    { id: "myth_09", slot: "armor", name: "Crimson Shadow Cloak", icon: "assets/items/mythic/icon_mythic_09.png", cardImg: "assets/items/mythic/card_mythic_09.png", rarity: "mythic", baseHp: 1920, baseDef: 88, dodgeBonus: 0.18 },
 
     // Row 2: Helmets & Rings
     { id: "myth_10", slot: "helmet", name: "Blazing Valkyrie Helm", icon: "assets/items/mythic/icon_mythic_10.png", cardImg: "assets/items/mythic/card_mythic_10.png", rarity: "mythic", baseDef: 92, baseHp: 840, critBonus: 0.15 },
@@ -330,7 +330,7 @@ const GameData = {
     { id: "sup_06", slot: "armor", name: "Cosmic Lion Aegis", icon: "assets/items/supreme/icon_supreme_06.png", cardImg: "assets/items/supreme/card_supreme_06.png", rarity: "supreme", baseHp: 3400, baseDef: 155, reflectRatio: 0.30 },
     { id: "sup_07", slot: "armor", name: "Grand Celestial Cuirass", icon: "assets/items/supreme/icon_supreme_07.png", cardImg: "assets/items/supreme/card_supreme_07.png", rarity: "supreme", baseHp: 3600, baseDef: 160, regen: 0.15 },
     { id: "sup_08", slot: "armor", name: "Cosmic Demon Plate", icon: "assets/items/supreme/icon_supreme_08.png", cardImg: "assets/items/supreme/card_supreme_08.png", rarity: "supreme", baseHp: 3500, baseDef: 168, dmgReduction: 0.20 },
-    { id: "sup_09", slot: "helmet", name: "Void Archmage Cowl", icon: "assets/items/supreme/icon_supreme_09.png", cardImg: "assets/items/supreme/card_supreme_09.png", rarity: "supreme", baseDef: 150, baseHp: 1550, dodgeBonus: 0.25 },
+    { id: "sup_09", slot: "armor", name: "Void Archmage Robe", icon: "assets/items/supreme/icon_supreme_09.png", cardImg: "assets/items/supreme/card_supreme_09.png", rarity: "supreme", baseHp: 3550, baseDef: 162, dodgeBonus: 0.25 },
     { id: "sup_10", slot: "helmet", name: "Cosmic Valkyrie Helm", icon: "assets/items/supreme/icon_supreme_10.png", cardImg: "assets/items/supreme/card_supreme_10.png", rarity: "supreme", baseDef: 158, baseHp: 1620, critBonus: 0.22 },
     { id: "sup_11", slot: "helmet", name: "Galaxy Demon Horns Helm", icon: "assets/items/supreme/icon_supreme_11.png", cardImg: "assets/items/supreme/card_supreme_11.png", rarity: "supreme", baseDef: 165, baseHp: 1700, baseAtk: 110 },
 

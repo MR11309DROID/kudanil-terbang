@@ -2591,43 +2591,47 @@ class UIManager {
 
   getEquippedShowcaseAvatar() {
     const eq = Character.equipped || {};
-    const hasCommonEquipped = Object.values(eq).some(it => it && (it.rarity === "common" || (it.id && it.id.startsWith("gear_")) || (it.templateId && it.templateId.startsWith("gear_"))));
-    if (!hasCommonEquipped) return null;
-
     const w = eq.weapon;
     const h = eq.helmet;
 
+    const wIsCommon = w && (w.rarity === "common" || (w.templateId && w.templateId.startsWith("gear_")));
+    const hIsCommon = h && (h.rarity === "common" || (h.templateId && h.templateId.startsWith("gear_")));
+
+    // If neither weapon nor helmet is common gear, keep default avatar
+    if (!wIsCommon && !hIsCommon) return null;
+
     const wId = w ? (w.templateId || w.id || "") : "";
     const hId = h ? (h.templateId || h.id || "") : "";
-    const wName = w ? (w.name || "").toLowerCase() : "";
-    const hName = h ? (h.name || "").toLowerCase() : "";
 
     // 1. Bow
-    if (wId === "gear_01" || wName.includes("bow")) {
+    if (wId === "gear_01") {
       return "assets/characters/player/gear_common/capy_archer_bow.png";
     }
     // 2. Staff
-    if (wId === "gear_02" || wName.includes("staff")) {
+    if (wId === "gear_02") {
       return "assets/characters/player/gear_common/capy_druid_staff.png";
     }
-    // 3. Mace / Axe
-    if (wId === "gear_03" || wName.includes("mace") || wName.includes("axe")) {
+    // 3. Mace
+    if (wId === "gear_03") {
       return "assets/characters/player/gear_common/capy_knight_mace.png";
     }
     // 4. Spear
-    if (wName.includes("spear")) {
+    if (wId === "gear_04") {
       return "assets/characters/player/gear_common/capy_knight_spear.png";
     }
-    // 5. Woodland Hood
-    if (hId === "gear_09" || hName.includes("hood") || hName.includes("verdant") || hName.includes("woodland")) {
+    // 5. Woodland Hood (gear_07)
+    if (hId === "gear_07") {
       return "assets/characters/player/gear_common/capy_ranger_hood.png";
     }
-    // 6. Wizard Hat
-    if (hName.includes("wizard") || hName.includes("mage")) {
+    // 6. Apprentice Witch Hat (gear_09)
+    if (hId === "gear_09") {
       return "assets/characters/player/gear_common/capy_wizard_hat.png";
     }
-    // 7. Knight Helm / Iron Sword / Leather Armor / Boots default showcase
-    return "assets/characters/player/gear_common/capy_warrior_sword.png";
+    // 7. Knight Helm (gear_08) or Novice Iron Sword (gear_00)
+    if (wId === "gear_00" || hId === "gear_08") {
+      return "assets/characters/player/gear_common/capy_warrior_sword.png";
+    }
+    return null;
   }
 
   updatePaperdollConnectors() {
