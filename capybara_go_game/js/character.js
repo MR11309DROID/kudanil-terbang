@@ -119,29 +119,18 @@ class CharacterManager {
     const starterTemplates = {
       weapon: { id: "leg_04", level: 70, refineRank: 2 },
       armor: { id: "leg_09", level: 70, refineRank: 2 },
-      helmet: { id: "rare_10", level: 50, refineRank: 2 },
-      boots: { id: "rare_17", level: 30, refineRank: 2 },
+      helmet: { id: "leg_17", level: 50, refineRank: 2 },
+      boots: { id: "leg_18", level: 30, refineRank: 2 },
       ring: { id: "leg_13", level: 60, refineRank: 3 },
       amulet: { id: "leg_16", level: 30, refineRank: 2 }
     };
 
     let needsSave = false;
 
-    // First try equipping from inventory if slot is empty
+    // Equip the 6 authentic legendary items
     slots.forEach(slot => {
-      if (!this.equipped[slot] && this.inventory && this.inventory.length > 0) {
-        const idx = this.inventory.findIndex(i => i && i.slot === slot);
-        if (idx !== -1) {
-          this.equipped[slot] = this.inventory.splice(idx, 1)[0];
-          needsSave = true;
-        }
-      }
-    });
-
-    // If any slot is still empty, equip authentic starter item matching reference
-    slots.forEach(slot => {
-      if (!this.equipped[slot]) {
-        const cfg = starterTemplates[slot];
+      const cfg = starterTemplates[slot];
+      if (!this.equipped[slot] || this.equipped[slot].templateId !== cfg.id) {
         const item = this.createItemFromTemplate(cfg.id, cfg.level);
         if (item) {
           item.refineRank = cfg.refineRank;
@@ -151,35 +140,47 @@ class CharacterManager {
       }
     });
 
-    // Ensure inventory has authentic showcase gear across tiers matching reference grid
-    if (!this.inventory || this.inventory.length < 16) {
-      if (!this.inventory) this.inventory = [];
+    // Ensure inventory has the exact 20 showcase items matching the reference screenshot (5 cols x 4 rows)
+    // Row 1: 5 Legendary (Orange) items
+    // Rows 2-4: 15 Epic (Purple) items
+    if (!this.inventory || this.inventory.length < 20) {
+      this.inventory = [];
       const showcaseItems = [
-        { id: "leg_00", level: 2, refineRank: 1 }, // Excalibur Sword
-        { id: "leg_08", level: 2 },                // Blazing Ruby Blade
-        { id: "leg_03", level: 2 },                // Dark Void Spear/Scythe
-        { id: "leg_06", level: 2 },                // Spotted Mushroom
-        { id: "leg_05", level: 2 },                // Golden Spiked Mace
-        { id: "leg_07", level: 2 },                // Green Hunter Bow
-        { id: "leg_02", level: 2 },                // Golden Seraph Bow
-        { id: "leg_01", level: 2, refineRank: 3 }, // Crossed Daggers
-        { id: "leg_10", level: 2 },                // Royal Crimson Cloak
-        { id: "leg_14", level: 2 },                // Eternal Flame Ring
-        { id: "sup_00", level: 1 },                // Supreme Cosmic Sword
-        { id: "myth_00", level: 1 },               // Mythic Magma Dragon Ring
-        { id: "rare_00", level: 2 },               // Blazing Flame Sword
-        { id: "rare_04", level: 2 },               // Knight Steel Armor
-        { id: "rare_05", level: 2 },               // Verdant Woodland Tunic
-        { id: "gear_04", level: 1 }                // Carved Timber Branch
+        // Row 1: 5 Legendary (Orange) items
+        { id: "leg_01", level: 2, refineRank: 3, rarity: "legendary" }, // Crossed Daggers +3
+        { id: "leg_10", level: 2, rarity: "legendary" },                // Royal Purple Cloak
+        { id: "leg_13", level: 2, rarity: "legendary" },                // Eye Ring
+        { id: "leg_17", level: 2, rarity: "legendary" },                // Golden Crown
+        { id: "leg_14", level: 2, rarity: "legendary" },                // Flame Drake Ring
+
+        // Row 2: 5 Epic (Purple) items
+        { id: "leg_00", level: 2, rarity: "epic" }, // Cyan Crystal Sword
+        { id: "leg_08", level: 2, rarity: "epic" }, // Dark Demonic Sword
+        { id: "leg_03", level: 2, rarity: "epic" }, // Purple Spear
+        { id: "leg_06", level: 2, rarity: "epic" }, // Spotted Mushroom
+        { id: "leg_05", level: 2, rarity: "epic" }, // Spiky Mace 1
+
+        // Row 3: 5 Epic (Purple) items
+        { id: "leg_05", level: 2, rarity: "epic" }, // Spiky Mace 2
+        { id: "leg_07", level: 2, rarity: "epic" }, // Green Hunter Bow
+        { id: "leg_02", level: 2, rarity: "epic" }, // Golden Winged Bow
+        { id: "leg_04", level: 2, rarity: "epic" }, // Star Wand 1
+        { id: "leg_04", level: 2, rarity: "epic" }, // Star Wand 2
+
+        // Row 4: 5 Epic (Purple) items
+        { id: "leg_04", level: 2, rarity: "epic" }, // Golden Scepter 1
+        { id: "leg_04", level: 2, rarity: "epic" }, // Golden Scepter 2
+        { id: "leg_09", level: 2, rarity: "epic" }, // Crimson Dragon Armor
+        { id: "leg_10", level: 2, rarity: "epic" }, // Royal Cloak
+        { id: "leg_17", level: 2, rarity: "epic" }  // Golden Crown
       ];
+
       showcaseItems.forEach(cfg => {
-        if (!this.inventory.some(it => it && it.templateId === cfg.id)) {
-          const it = this.createItemFromTemplate(cfg.id, cfg.level);
-          if (it) {
-            if (cfg.refineRank) it.refineRank = cfg.refineRank;
-            this.inventory.push(it);
-            needsSave = true;
-          }
+        const it = this.createItemFromTemplate(cfg.id, cfg.level, cfg.rarity);
+        if (it) {
+          if (cfg.refineRank) it.refineRank = cfg.refineRank;
+          this.inventory.push(it);
+          needsSave = true;
         }
       });
     }
@@ -189,7 +190,7 @@ class CharacterManager {
     }
   }
 
-  createItemFromTemplate(templateId, level = 1) {
+  createItemFromTemplate(templateId, level = 1, rarityOverride = null) {
     const tmpl = GameData.equipmentTemplates.find(t => t.id === templateId) || GameData.equipmentTemplates[0];
     const uid = "item_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
     const item = {
@@ -197,7 +198,7 @@ class CharacterManager {
       templateId: tmpl.id,
       name: tmpl.name,
       slot: tmpl.slot,
-      rarity: tmpl.rarity,
+      rarity: rarityOverride || tmpl.rarity,
       icon: tmpl.icon,
       cardImg: tmpl.cardImg || tmpl.icon,
       level: level,

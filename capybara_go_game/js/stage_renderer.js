@@ -1173,13 +1173,21 @@ class StageRenderer {
   }
 
   startRenderLoop() {
+    let lastResizeCheck = 0;
     const loop = (timestamp) => {
       const dt = (timestamp - this.lastTime) / 1000;
       this.lastTime = timestamp;
 
-      this.checkResize();
-      this.update(dt);
-      this.render();
+      // Performance Optimization: Skip heavy canvas drawing when browsing Equipment or other tabs
+      const isAdventureTab = !window.Game || !window.Game.ui || window.Game.ui.activeTab === "adventure";
+      if (isAdventureTab) {
+        if (timestamp - lastResizeCheck > 500) {
+          this.checkResize();
+          lastResizeCheck = timestamp;
+        }
+        this.update(dt || 0.016);
+        this.render();
+      }
 
       requestAnimationFrame(loop);
     };

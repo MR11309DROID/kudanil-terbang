@@ -639,6 +639,21 @@
             <!-- Center Hero Arena: Authentic Game Capybara Standing with Weapon & Radial Sunburst -->
             <div class="paperdoll-center">
               <div class="hero-stage-sunburst"></div>
+              <div class="hero-pet-badge" title="Active Pet" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()">
+                <svg viewBox="0 0 50 56" width="38" height="42" class="hero-pet-svg">
+                  <!-- Hexagon outer border with gold rim -->
+                  <polygon points="25,2 48,14 48,42 25,54 2,42 2,14" fill="#6d28d9" stroke="#fbbf24" stroke-width="3"/>
+                  <!-- White cute ghost head -->
+                  <path d="M 15 28 C 15 16, 35 16, 35 28 C 35 34, 33 38, 25 38 C 17 38, 15 34, 15 28 Z" fill="#ffffff" stroke="#1e1b4b" stroke-width="1.8"/>
+                  <!-- Dark ninja eyes -->
+                  <ellipse cx="20" cy="22" rx="2" ry="3" fill="#1e1b4b"/>
+                  <ellipse cx="30" cy="22" rx="2" ry="3" fill="#1e1b4b"/>
+                  <!-- Teal bandana / neckband -->
+                  <path d="M 14 30 Q 25 35 36 30 L 35 34 Q 25 39 15 34 Z" fill="#0d9488" stroke="#134e4a" stroke-width="1.2"/>
+                  <!-- Little waving hand -->
+                  <circle cx="37" cy="20" r="3.5" fill="#ffffff" stroke="#1e1b4b" stroke-width="1.5"/>
+                </svg>
+              </div>
               <div class="hero-mount-stage" id="hero-mount-stage">
                 <div class="hero-pedestal-dais"></div>
                 <img src="assets/characters/player/idle/frame_01.png" alt="Capybara Hero" class="hero-capy-character-img" id="hero-capy-avatar-img">
@@ -660,43 +675,30 @@
             </div>
           </div>
 
-          <!-- Combat Power Ribbon Banner (Exactly matching Image 1) -->
+          <!-- Combat Power Badge (Compact crimson plaque with gold border matching authentic screenshot) -->
           <div class="hero-power-ribbon" title="Combat Power">
-            <div class="power-ribbon-shine"></div>
             <span class="power-ribbon-swords">⚔️</span>
-            <span class="power-ribbon-title">POWER</span>
-            <span class="power-ribbon-num" id="hero-total-cp">166.45K</span>
+            <span class="power-ribbon-num" id="hero-total-cp">166.45M</span>
           </div>
 
           <!-- 3 Main Core Stats Bar (HP, ATK, DEF + Details) -->
           <div class="hero-core-stats-bar">
             <div class="core-stat-item stat-c-hp" title="Health Points">
-              <span class="core-stat-icon">💖</span>
-              <div class="core-stat-text">
-                <span class="core-stat-name">HP</span>
-                <strong id="stat-hp">350</strong>
-              </div>
+              <span class="core-stat-icon">❤️</span>
+              <strong id="stat-hp">30.56M</strong>
             </div>
             <div class="core-stat-divider"></div>
             <div class="core-stat-item stat-c-atk" title="Attack Power">
               <span class="core-stat-icon">🗡️</span>
-              <div class="core-stat-text">
-                <span class="core-stat-name">ATK</span>
-                <strong id="stat-atk">45</strong>
-              </div>
+              <strong id="stat-atk">8.11M</strong>
             </div>
             <div class="core-stat-divider"></div>
             <div class="core-stat-item stat-c-def" title="Defense">
               <span class="core-stat-icon">🛡️</span>
-              <div class="core-stat-text">
-                <span class="core-stat-name">DEF</span>
-                <strong id="stat-def">12</strong>
-              </div>
+              <strong id="stat-def">877K</strong>
             </div>
             <button class="btn-stat-details-icon" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()" title="View Detailed Stats">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="#78716c">
-                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
-              </svg>
+              <span class="stat-detail-doc-icon">📑</span>
             </button>
           </div>
 
@@ -704,54 +706,76 @@
           <div class="gear-sub-tabs-row">
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()">
               <div class="gear-sub-circle">
-                <span class="gear-sub-icon">🥚</span>
+                <svg viewBox="0 0 40 40" width="32" height="32" class="gear-sub-svg">
+                  <ellipse cx="20" cy="22" rx="13" ry="16" fill="#fde68a" stroke="#78350f" stroke-width="2.5"/>
+                  <path d="M 7 18 C 12 15, 16 19, 20 18 C 24 19, 28 15, 33 18 C 34 22, 32 25, 30 25 C 25 24, 23 20, 20 22 C 17 20, 15 24, 10 25 C 8 25, 6 22, 7 18 Z" fill="#7c3aed" stroke="#3b0764" stroke-width="1.5"/>
+                  <ellipse cx="14" cy="20" rx="2.5" ry="1.8" fill="#ffffff" transform="rotate(-10 14 20)"/>
+                  <ellipse cx="26" cy="20" rx="2.5" ry="1.8" fill="#ffffff" transform="rotate(10 26 20)"/>
+                </svg>
                 <span class="gear-sub-notif">1</span>
               </div>
               <span class="gear-sub-label">Pets</span>
             </button>
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openAchievements()">
               <div class="gear-sub-circle">
-                <span class="gear-sub-icon">🏆</span>
+                <svg viewBox="0 0 40 40" width="32" height="32" class="gear-sub-svg">
+                  <path d="M12 7 h16 v11 c0 5 -4 9 -8 9 c-4 0 -8 -4 -8 -9 Z" fill="#f59e0b" stroke="#78350f" stroke-width="2.5"/>
+                  <path d="M8 10 c-3.5 0 -4.5 6 0 8 c1.5 1 3.5 0 3.5 -1.5" fill="none" stroke="#78350f" stroke-width="2.5"/>
+                  <path d="M32 10 c3.5 0 4.5 6 0 8 c-1.5 1 -3.5 0 -3.5 -1.5" fill="none" stroke="#78350f" stroke-width="2.5"/>
+                  <path d="M18 27 h4 v4 h-4 Z" fill="#d97706" stroke="#78350f" stroke-width="2"/>
+                  <path d="M14 31 h12 v4 h-12 Z" fill="#b45309" stroke="#78350f" stroke-width="2"/>
+                  <polygon points="20,13 23,17 20,21 17,17" fill="#ef4444" stroke="#7f1d1d" stroke-width="1"/>
+                </svg>
               </div>
               <span class="gear-sub-label">Collectibles</span>
             </button>
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()">
               <div class="gear-sub-circle">
-                <span class="gear-sub-icon">🐲</span>
+                <svg viewBox="0 0 40 40" width="32" height="32" class="gear-sub-svg">
+                  <path d="M12 9 C 8 16, 8 28, 20 32 C 32 28, 32 16, 28 9 C 26 10, 24 14, 24 17 C 24 22, 22 24, 20 24 C 18 24, 16 22, 16 17 C 16 14, 14 10, 12 9 Z" fill="#fbbf24" stroke="#78350f" stroke-width="2.5"/>
+                  <circle cx="13" cy="18" r="1.5" fill="#78350f"/>
+                  <circle cx="15.5" cy="25" r="1.5" fill="#78350f"/>
+                  <circle cx="27" cy="18" r="1.5" fill="#78350f"/>
+                  <circle cx="24.5" cy="25" r="1.5" fill="#78350f"/>
+                </svg>
                 <span class="gear-sub-notif">1</span>
               </div>
               <span class="gear-sub-label">Mount</span>
             </button>
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.autoMergeEquipment()">
               <div class="gear-sub-circle">
-                <span class="gear-sub-icon">🔨</span>
+                <svg viewBox="0 0 40 40" width="32" height="32" class="gear-sub-svg">
+                  <path d="M12 26 h16 c2 0 3.5 2 2 4 h-20 c-1.5 -2 0 -4 2 -4 Z" fill="#64748b" stroke="#1e293b" stroke-width="2"/>
+                  <rect x="22" y="10" width="12" height="7" rx="2" fill="#94a3b8" stroke="#1e293b" stroke-width="2" transform="rotate(-35 28 13)"/>
+                  <rect x="13" y="18" width="16" height="3.5" rx="1.5" fill="#b45309" stroke="#451a03" stroke-width="1.5" transform="rotate(-35 21 20)"/>
+                </svg>
               </div>
               <span class="gear-sub-label">Artifact</span>
             </button>
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()">
               <div class="gear-sub-circle">
-                <span class="gear-sub-icon">🥋</span>
+                <svg viewBox="0 0 40 40" width="32" height="32" class="gear-sub-svg">
+                  <path d="M14 9 h12 v6 h-12 Z" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+                  <path d="M13 14 h14 v18 h-4 v-7 h-6 v7 h-4 Z" fill="#0284c7" stroke="#0c4a6e" stroke-width="2"/>
+                  <rect x="14.5" y="10" width="2.5" height="10" fill="#0369a1"/>
+                  <rect x="23" y="10" width="2.5" height="10" fill="#0369a1"/>
+                  <circle cx="15.8" cy="18" r="1.2" fill="#fde047"/>
+                  <circle cx="24.2" cy="18" r="1.2" fill="#fde047"/>
+                </svg>
               </div>
               <span class="gear-sub-label">Skin</span>
             </button>
           </div>
         </div>
 
-        <!-- Inventory Backpack Section -->
+        <!-- Inventory Backpack Section (Starts immediately under Sub-Tabs with 5 Columns) -->
         <div class="backpack-panel">
           <div class="backpack-header-row">
             <button class="btn-cyan-pill btn-sort-quality" onclick="window.Game && window.Game.ui && window.Game.ui.cycleSortQuality()">By Level</button>
             <h3 class="my-equipment-title">My Equipment</h3>
             <button class="btn-cyan-pill btn-merge-pill" onclick="window.Game && window.Game.ui && window.Game.ui.autoMergeEquipment()">
-              Merge <span class="pill-notif-dot" id="merge-notif-dot">1</span>
+              Merge
             </button>
-          </div>
-          <!-- Filter pills row -->
-          <div class="backpack-filter-row">
-            <button class="bp-filter-pill active" id="filter-pill-all" onclick="window.Game && window.Game.ui && window.Game.ui.setInventoryFilter('all')">✨ All</button>
-            <button class="bp-filter-pill" id="filter-pill-weapon" onclick="window.Game && window.Game.ui && window.Game.ui.setInventoryFilter('weapon')">⚔️ Weapon</button>
-            <button class="bp-filter-pill" id="filter-pill-armor" onclick="window.Game && window.Game.ui && window.Game.ui.setInventoryFilter('armor')">🛡️ Armor</button>
-            <button class="bp-filter-pill" id="filter-pill-acc" onclick="window.Game && window.Game.ui && window.Game.ui.setInventoryFilter('acc')">💍 Accessory</button>
           </div>
           <div id="inventory-grid" class="inventory-grid"></div>
         </div>

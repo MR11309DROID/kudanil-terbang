@@ -3530,17 +3530,9 @@ body {
   display: flex;
 }
 
-/* 1. Top Screen Currency Header (Authentic Capybara Go - Dark Top Bar) */
+/* 1. Top Screen Currency Header - Hidden in gear view to match authentic layout */
 .gear-screen-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background: #191a21;
-  border-bottom: 2px solid #2a2b36;
-  padding: 8px 14px 7px;
-  position: sticky;
-  top: 0;
-  z-index: 20;
+  display: none !important;
 }
 
 .gear-header-stat {
@@ -3600,9 +3592,9 @@ body {
 
 /* 2. Hero Arena & Stats Panel (Warm Cartoon Brown & Parchment Framing) */
 .hero-stats-panel {
-  padding: 8px 12px 10px;
+  padding: 6px 10px 6px;
   background: linear-gradient(180deg, #f4e8cf 0%, #e9d3a9 40%, #d9bc86 80%, #caa46e 100%);
-  border-bottom: 4px solid #5a3212;
+  border-bottom: 3px solid #5a3212;
   box-shadow: inset 0 -3px 8px rgba(90, 50, 15, 0.25), 0 4px 12px rgba(0, 0, 0, 0.22);
   display: flex;
   flex-direction: column;
@@ -3616,45 +3608,45 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 2px 0 6px;
-  padding: 8px 10px;
+  margin: 0 0 4px;
+  padding: 5px 8px;
   position: relative;
   background: radial-gradient(circle at 50% 45%, #fffdf8 0%, #f7ecd7 60%, #ebd4b0 100%);
-  border: 3px solid #855325;
-  border-bottom: 5px solid #4a280d;
-  border-radius: 18px;
-  box-shadow: 0 4.5px 0 #301704, 0 8px 18px rgba(50, 25, 5, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.95);
+  border: 2.5px solid #855325;
+  border-bottom: 4.5px solid #4a280d;
+  border-radius: 16px;
+  box-shadow: 0 4px 0 #301704, 0 6px 14px rgba(50, 25, 5, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.95);
   box-sizing: border-box;
 }
 
 /* Brass / Golden Corner Studs */
 .pd-corner-stud {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   background: radial-gradient(circle at 35% 35%, #fffbeb 0%, #f59e0b 60%, #78350f 100%);
-  border: 1.5px solid #451a03;
+  border: 1.2px solid #451a03;
   border-radius: 50%;
   box-shadow: 0 1.5px 2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   z-index: 6;
 }
-.pd-corner-stud.top-left { top: 6px; left: 6px; }
-.pd-corner-stud.top-right { top: 6px; right: 6px; }
-.pd-corner-stud.bottom-left { bottom: 6px; left: 6px; }
-.pd-corner-stud.bottom-right { bottom: 6px; right: 6px; }
+.pd-corner-stud.top-left { top: 5px; left: 5px; }
+.pd-corner-stud.top-right { top: 5px; right: 5px; }
+.pd-corner-stud.bottom-left { bottom: 5px; left: 5px; }
+.pd-corner-stud.bottom-right { bottom: 5px; right: 5px; }
 
 .paperdoll-col {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 6px;
   z-index: 5;
 }
 
 .paperdoll-slot {
-  width: 58px;
-  height: 58px;
-  border-radius: 12px;
-  border: 2.2px solid #1a1518;
+  width: 54px;
+  height: 54px;
+  border-radius: 11px;
+  border: 2px solid #1a1518;
   border-bottom: 3.5px solid #0d0a0c;
   background: #ede3cc;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.4);
@@ -3703,7 +3695,10 @@ body {
   background: linear-gradient(180deg, #8b5cf6 0%, #6d28d9 100%);
 }
 .paperdoll-slot.rarity-legendary {
-  background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%);
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 7px), linear-gradient(180deg, #f97316 0%, #ea580c 55%, #c2410c 100%);
+  border: 2.2px solid #fde047 !important;
+  border-bottom: 3.5px solid #d97706 !important;
+  box-shadow: 0 3px 0 #451a03, inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
 }
 .paperdoll-slot.rarity-mythic {
   background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
@@ -3766,10 +3761,10 @@ body {
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 14px;
-  height: 14px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 15px;
+  height: 15px;
+  background: rgba(40, 10, 60, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 3px;
   display: flex;
   align-items: center;
@@ -3780,21 +3775,33 @@ body {
   pointer-events: none;
 }
 
+.rarity-legendary .item-slot-mini-badge,
+.paperdoll-slot.rarity-legendary .item-slot-mini-badge {
+  background: rgba(180, 50, 10, 0.8);
+  border-color: rgba(254, 240, 138, 0.7);
+}
+
+.rarity-epic .item-slot-mini-badge,
+.paperdoll-slot.rarity-epic .item-slot-mini-badge {
+  background: rgba(88, 28, 135, 0.8);
+  border-color: rgba(216, 180, 254, 0.7);
+}
+
 .slot-item-lvl,
 .item-lvl-badge {
   position: absolute;
   top: 2px;
-  right: 4px;
+  right: 3px;
   left: auto;
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 900;
   color: #ffffff;
   background: transparent;
   border: none;
   padding: 0;
   line-height: 1;
-  text-shadow: 0 1.5px 2px #000, 0 0 3px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 1.5px 2px #000;
   box-shadow: none;
   z-index: 5;
   pointer-events: none;
@@ -3807,17 +3814,17 @@ body {
 
 .item-s-badge {
   position: absolute;
-  bottom: 1.5px;
-  left: 2.5px;
+  bottom: 1px;
+  left: 2px;
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 900;
-  color: #ffeb3b;
+  color: #fde047;
   background: transparent;
   border: none;
   padding: 0;
   line-height: 1;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 2px 0 #b45309, 0 3px 0 #78350f, 0 2px 3px rgba(0,0,0,0.8);
+  text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0 2px 0 #b45309, 0 3px 0 #78350f, 0 3px 4px rgba(0,0,0,0.85);
   box-shadow: none;
   z-index: 5;
   pointer-events: none;
@@ -4077,29 +4084,57 @@ body {
   pointer-events: none;
 }
 
-/* Pet Hexagon Badge removed as requested */
-.pet-hex-badge {
-  display: none !important;
+/* Authentic Pet Hexagon Badge in top-right of arena */
+.hero-pet-badge {
+  position: absolute;
+  top: 8px;
+  right: 18px;
+  width: 44px;
+  height: 48px;
+  z-index: 8;
+  cursor: pointer;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.45));
+  transition: transform 0.12s;
 }
 
-/* 3. Combat Power Ribbon Banner (Authentic Capybara Go - Bold 3D Maroon Capsule with Golden Shine) */
+.hero-pet-badge:hover {
+  transform: scale(1.08);
+}
+
+.hero-pet-hex {
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(180deg, #6d28d9 0%, #4c1d95 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 0 2px #fbbf24;
+}
+
+.hero-pet-hex-img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+/* 3. Combat Power Badge (Authentic Capybara Go - Compact Beveled Maroon Plaque with Golden Border) */
 .hero-power-ribbon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: linear-gradient(180deg, #991b1b 0%, #7f1d1d 50%, #450a0a 100%);
-  border: 2.5px solid #fbbf24;
-  border-bottom: 4.5px solid #b45309;
-  border-radius: 9999px;
-  padding: 5px 28px;
-  box-shadow: 0 4.5px 0 #280505, 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4);
-  margin-top: 4px;
-  margin-bottom: 8px;
+  gap: 6px;
+  background: linear-gradient(180deg, #821c25 0%, #5a1219 50%, #360a0f 100%);
+  border: 2px solid #eab308;
+  border-bottom: 3.5px solid #a16207;
+  border-radius: 7px;
+  padding: 3px 20px 4px;
+  box-shadow: 0 3px 0 #1c0507, 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  margin-top: 3px;
+  margin-bottom: 7px;
   position: relative;
-  overflow: hidden;
-  transition: transform 0.12s ease;
   cursor: pointer;
+  transition: transform 0.12s ease;
 }
 
 .hero-power-ribbon:hover {
@@ -4108,77 +4143,54 @@ body {
 
 .hero-power-ribbon:active {
   transform: translateY(2px) scale(0.98);
-  border-bottom-width: 2.5px;
-  box-shadow: 0 2px 0 #280505, 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.power-ribbon-shine {
-  position: absolute;
-  top: -20px;
-  left: -60px;
-  width: 40px;
-  height: 80px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 50%, transparent 100%);
-  transform: rotate(25deg);
-  animation: ribbonShineSweep 3.5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes ribbonShineSweep {
-  0%, 70% { left: -60px; opacity: 0; }
-  75% { opacity: 1; }
-  100% { left: 160%; opacity: 0; }
+  border-bottom-width: 2px;
+  box-shadow: 0 1px 0 #1c0507, 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 .power-ribbon-swords {
-  font-size: 16px;
+  font-size: 15px;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.7));
 }
 
 .power-ribbon-title {
-  font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 11px;
-  font-weight: 900;
-  color: #fef08a;
-  letter-spacing: 0.8px;
-  text-shadow: 0 1px 2px #000;
+  display: none;
 }
 
 .power-ribbon-num {
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 17.5px;
+  font-size: 16px;
   font-weight: 900;
-  color: #ffffff;
-  letter-spacing: 0.6px;
-  text-shadow: 0 2px 3px #000, 0 0 6px rgba(251, 191, 36, 0.6);
+  color: #fffbeb;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1.5px 2px #000, 0 0 5px rgba(234, 179, 8, 0.4);
 }
 
-/* 4. Core 3 Stats Bar (HP, ATK, DEF + Details - Warm Parchment Pill with Dividers) */
+/* 4. Core 3 Stats Bar (HP, ATK, DEF + Details - Smooth Warm Cream Bar matching reference) */
 .hero-core-stats-bar {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  width: 90%;
-  max-width: 340px;
-  background: linear-gradient(180deg, #fefce8 0%, #fef3c7 60%, #fde68a 100%);
-  padding: 6px 14px;
-  border-radius: 18px;
-  border: 2px solid #92400e;
-  border-bottom: 4px solid #632d06;
+  justify-content: space-between;
+  width: 88%;
+  max-width: 320px;
+  background: #fdfbf7;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  border: 1.5px solid #d6c7b2;
+  border-bottom: 2.5px solid #bba993;
   margin-bottom: 8px;
-  box-shadow: 0 3.5px 0 #451a03, 0 6px 12px rgba(0, 0, 0, 0.25), inset 0 1.5px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .core-stat-item {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-family: 'Lilita One', 'Fredoka', cursive;
 }
 
 .core-stat-icon {
-  font-size: 16px;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+  font-size: 15px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
 }
 
 .core-stat-text {
@@ -4188,60 +4200,60 @@ body {
 }
 
 .core-stat-name {
-  font-size: 9px;
-  color: #78350f;
-  font-weight: 800;
-  letter-spacing: 0.3px;
+  display: none;
 }
 
 .core-stat-item strong {
   font-size: 13.5px;
-  letter-spacing: 0.3px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  color: #2e1c10 !important;
+  text-shadow: none !important;
 }
 
-.stat-c-hp strong { color: #dc2626; text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
-.stat-c-atk strong { color: #d97706; text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
-.stat-c-def strong { color: #2563eb; text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
-
 .core-stat-divider {
-  width: 1.5px;
-  height: 22px;
-  background: linear-gradient(180deg, rgba(146, 64, 14, 0.15) 0%, rgba(146, 64, 14, 0.5) 50%, rgba(146, 64, 14, 0.15) 100%);
+  width: 1px;
+  height: 16px;
+  background: #d6c7b2;
 }
 
 .btn-stat-details-icon {
-  background: #fef08a;
-  border: 1.5px solid #b45309;
-  border-bottom: 2.5px solid #78350f;
-  border-radius: 8px;
+  background: #f5ede1;
+  border: 1px solid #c9b89f;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
-  padding: 4px 6px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 0 #451a03;
-  transition: transform 0.1s ease, filter 0.1s ease;
+  transition: transform 0.1s ease;
 }
 
 .btn-stat-details-icon:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.08);
   transform: translateY(-1px);
 }
 
 .btn-stat-details-icon:active {
-  transform: translateY(2px);
-  border-bottom-width: 1.5px;
-  box-shadow: 0 1px 0 #451a03;
+  transform: translateY(1px);
 }
 
-/* 5. Quick Sub-Tabs Row (Pet, Collection, Artifact, All Forge, Skin) */
+.stat-detail-doc-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* 5. Quick Sub-Tabs Row (Pets, Collectibles, Mount, Artifact, Skin - Clean Graphic Icons) */
 .gear-sub-tabs-row {
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  gap: 6px;
+  gap: 4px;
   margin-top: 4px;
+  margin-bottom: 2px;
 }
 
 .gear-sub-btn {
@@ -4253,7 +4265,7 @@ body {
   border: none;
   cursor: pointer;
   position: relative;
-  padding: 2px 4px;
+  padding: 2px 2px;
   transition: transform 0.12s;
 }
 
@@ -4262,55 +4274,42 @@ body {
 }
 
 .gear-sub-circle {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #fef9c3 40%, #fde047 80%, #d97706 100%);
-  border: 2.5px solid #78350f;
-  border-bottom: 4px solid #451a03;
-  box-shadow: 0 4px 0 #280f02, 0 6px 12px rgba(0, 0, 0, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.9);
+  background: transparent;
+  border: none;
+  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: transform 0.08s ease, box-shadow 0.08s ease, border-bottom 0.08s ease;
-}
-
-.gear-sub-btn:hover .gear-sub-circle {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 0 #280f02, 0 8px 14px rgba(0, 0, 0, 0.35);
-}
-
-.gear-sub-btn:active .gear-sub-circle {
-  transform: translateY(3px);
-  border-bottom-width: 2.5px;
-  box-shadow: 0 1.5px 0 #280f02, 0 3px 6px rgba(0, 0, 0, 0.25);
 }
 
 .gear-sub-icon {
-  font-size: 22px;
+  font-size: 26px;
   line-height: 1;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
 }
 
 .gear-sub-label {
   font-family: 'Lilita One', 'Fredoka', cursive, sans-serif;
-  font-size: 10.5px;
-  font-weight: 900;
-  color: #451a03;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-  margin-top: 5px;
-  letter-spacing: 0.2px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #3b2314;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  margin-top: 2px;
+  letter-spacing: 0.1px;
 }
 
 .gear-sub-notif {
   position: absolute;
-  top: -3px;
-  right: -3px;
+  top: -2px;
+  right: -2px;
   width: 15px;
   height: 15px;
   background: #ef4444;
-  border: 2px solid #fff;
+  border: 1.5px solid #fff;
   border-radius: 50%;
   color: #fff;
   font-size: 8.5px;
@@ -4322,32 +4321,35 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* 6. Inventory Backpack Section (Rich RPG Armory Theme) */
+/* 6. Inventory Backpack Section (Clean Authentic Layout starting right under sub-tabs) */
 .backpack-panel {
-  padding: 12px 10px 28px;
+  padding: 0 8px 24px;
   flex: 1;
-  background: linear-gradient(180deg, #1b202e 0%, #131722 50%, #0b0e17 100%);
-  border-top: 3px solid #3b4252;
-  box-shadow: inset 0 6px 14px rgba(0, 0, 0, 0.55);
+  background: #1b1720;
+  border-top: 2px solid #322b3b;
   overflow-y: auto;
+  contain: content;
+  transform: translateZ(0);
 }
 
 .backpack-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
-  padding: 0 4px;
-  gap: 8px;
+  background: linear-gradient(180deg, #744830 0%, #583522 100%);
+  margin: 0 -8px 8px -8px;
+  padding: 7px 12px 6px;
+  border-bottom: 2px solid #382115;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .my-equipment-title {
   font-family: 'Lilita One', 'Fredoka', cursive;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 900;
-  color: #fef08a;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(245, 158, 11, 0.45);
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1.5px 2px #000;
   margin: 0;
   text-align: center;
 }
@@ -4457,20 +4459,20 @@ body {
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
+  gap: 4px;
 }
 
 .inv-item-card {
   aspect-ratio: 1;
-  border-radius: 12px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
-  border: 2.2px solid #1a1518;
-  border-bottom: 3.5px solid #0d0a0c;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+  border: 1.8px solid #1a1518;
+  border-bottom: 3px solid #0d0a0c;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.35);
   transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease;
   overflow: hidden;
 }
@@ -4507,19 +4509,19 @@ body {
 /* EPIC & SUPREME = ROYAL AMETHYST PURPLE */
 .inv-item-card.rarity-epic,
 .inv-item-card.rarity-supreme {
-  background: #8b5cf6;
-  border-color: #3b0764;
-  border-bottom-color: #2e1065;
-  box-shadow: 0 3px 0 #1e0538;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 7px), linear-gradient(180deg, #a855f7 0%, #7c3aed 55%, #581c87 100%);
+  border: 2px solid #c084fc;
+  border-bottom: 3.5px solid #581c87;
+  box-shadow: 0 2.5px 0 #2e1065, inset 0 1px 2px rgba(255, 255, 255, 0.35);
 }
 
 /* LEGENDARY & MYTHIC = WARM ORANGE / AMBER */
 .inv-item-card.rarity-legendary,
 .inv-item-card.rarity-mythic {
-  background: #ea580c;
-  border-color: #fde047;
-  border-bottom-color: #b45309;
-  box-shadow: 0 3px 0 #451a03;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 7px), linear-gradient(180deg, #f97316 0%, #ea580c 55%, #c2410c 100%);
+  border: 2px solid #fde047;
+  border-bottom: 3.5px solid #d97706;
+  box-shadow: 0 2.5px 0 #451a03, inset 0 1px 2px rgba(255, 255, 255, 0.45);
 }
 
 .inv-item-card {
