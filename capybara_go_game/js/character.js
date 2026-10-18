@@ -124,21 +124,21 @@ class CharacterManager {
     const baseDef = this.baseStats ? this.baseStats.def : 12;
 
     const starterTemplates = {
-      weapon: { id: "leg_04", level: 70, refineRank: 2, atk: 8110000 - baseAtk },
-      armor: { id: "leg_09", level: 70, refineRank: 2, hp: 30560000 - baseHp },
-      helmet: { id: "leg_17", level: 50, refineRank: 2, def: 450000 },
-      boots: { id: "leg_18", level: 30, refineRank: 2, def: 427000 - baseDef },
-      ring: { id: "leg_13", level: 60, refineRank: 3 },
-      amulet: { id: "leg_16", level: 30, refineRank: 2 }
+      weapon: { id: "myth_00", level: 80, refineRank: 3, atk: 8110000 - baseAtk },
+      armor: { id: "myth_07", level: 80, refineRank: 2, hp: 30560000 - baseHp },
+      helmet: { id: "myth_10", level: 80, refineRank: 2, def: 450000 },
+      boots: { id: "myth_19", level: 80, refineRank: 2, def: 427000 - baseDef },
+      ring: { id: "myth_12", level: 80, refineRank: 3 },
+      amulet: { id: "myth_16", level: 80, refineRank: 2 }
     };
 
     let needsSave = false;
 
-    // Equip the 6 authentic legendary items
+    // Equip the authentic mythic items with stats matching reference
     slots.forEach(slot => {
       const cfg = starterTemplates[slot];
       const cur = this.equipped ? this.equipped[slot] : null;
-      const isOutdated = !cur || cur.templateId !== cfg.id ||
+      const isOutdated = !cur || cur.rarity === 'legendary' || cur.templateId.startsWith('leg_') || cur.templateId !== cfg.id ||
         (cfg.atk && (!cur.atk || cur.atk < 5000000)) ||
         (cfg.hp && (!cur.hp || cur.hp < 20000000)) ||
         (cfg.def && (!cur.def || cur.def < 300000));
@@ -156,51 +156,30 @@ class CharacterManager {
       }
     });
 
-    // Ensure inventory has the exact 20 showcase items matching the reference screenshot (5 cols x 4 rows)
-    // Row 1: 5 Legendary (Orange) items
-    // Rows 2-4: 15 Epic (Purple) items
     if (!this.inventory || this.inventory.length < 20) {
       this.inventory = [];
-      const showcaseItems = [
-        // Row 1: 5 Legendary (Orange) items
-        { id: "leg_01", level: 2, refineRank: 3, rarity: "legendary" }, // Crossed Daggers +3
-        { id: "leg_10", level: 2, rarity: "legendary" },                // Royal Purple Cloak
-        { id: "leg_13", level: 2, rarity: "legendary" },                // Eye Ring
-        { id: "leg_17", level: 2, rarity: "legendary" },                // Golden Crown
-        { id: "leg_14", level: 2, rarity: "legendary" },                // Flame Drake Ring
 
-        // Row 2: 5 Legendary (Orange) items
-        { id: "leg_00", level: 2, rarity: "legendary" }, // Cyan Crystal Sword
-        { id: "leg_08", level: 2, rarity: "legendary" }, // Dark Demonic Sword
-        { id: "leg_03", level: 2, rarity: "legendary" }, // Purple Spear
-        { id: "leg_06", level: 2, rarity: "legendary" }, // Spotted Mushroom
-        { id: "leg_05", level: 2, rarity: "legendary" }, // Spiky Mace 1
-
-        // Row 3: 5 Legendary (Orange) items
-        { id: "leg_05", level: 2, rarity: "legendary" }, // Spiky Mace 2
-        { id: "leg_07", level: 2, rarity: "legendary" }, // Green Hunter Bow
-        { id: "leg_02", level: 2, rarity: "legendary" }, // Golden Winged Bow
-        { id: "leg_04", level: 2, rarity: "legendary" }, // Star Wand 1
-        { id: "leg_04", level: 2, rarity: "legendary" }, // Star Wand 2
-
-        // Row 4: 5 Legendary (Orange) items
-        { id: "leg_04", level: 2, rarity: "legendary" }, // Golden Scepter 1
-        { id: "leg_04", level: 2, rarity: "legendary" }, // Golden Scepter 2
-        { id: "leg_09", level: 2, rarity: "legendary" }, // Crimson Dragon Armor
-        { id: "leg_10", level: 2, rarity: "legendary" }, // Royal Cloak
-        { id: "leg_17", level: 2, rarity: "legendary" }  // Golden Crown
-      ];
-
-      showcaseItems.forEach(cfg => {
-        const it = this.createItemFromTemplate(cfg.id, cfg.level, cfg.rarity);
+      // Add all 21 authentic mythic items
+      for (let i = 0; i < 21; i++) {
+        const id = "myth_" + (i < 10 ? "0" + i : i);
+        const it = this.createItemFromTemplate(id, 75);
         if (it) {
-          if (cfg.refineRank) it.refineRank = cfg.refineRank;
           this.inventory.push(it);
           needsSave = true;
         }
-      });
+      }
 
-      // Add all 18 authentic common gear items (Weapons, Armor, Rings, Accessories)
+      // Add all 24 authentic rare items
+      for (let i = 0; i < 24; i++) {
+        const id = "rare_" + (i < 10 ? "0" + i : i);
+        const it = this.createItemFromTemplate(id, 1);
+        if (it) {
+          this.inventory.push(it);
+          needsSave = true;
+        }
+      }
+
+      // Add all 18 authentic common gear items
       for (let i = 0; i < 18; i++) {
         const id = "gear_" + (i < 10 ? "0" + i : i);
         const it = this.createItemFromTemplate(id, 1);
@@ -766,18 +745,18 @@ class CharacterManager {
       if (this.equipped) {
         Object.keys(this.equipped).forEach(slot => {
           const it = this.equipped[slot];
-          if (it && (it.rarity === 'uncommon' || it.rarity === 'epic' || (it.templateId && (it.templateId.startsWith('unc_') || it.templateId.startsWith('epic_'))))) {
+          if (it && (it.rarity === 'uncommon' || it.rarity === 'epic' || it.rarity === 'legendary' || (it.templateId && (it.templateId.startsWith('unc_') || it.templateId.startsWith('epic_') || it.templateId.startsWith('leg_'))))) {
             delete this.equipped[slot];
           }
         });
         Object.values(this.equipped).forEach(updateItemAssets);
       }
       if (this.inventory && Array.isArray(this.inventory)) {
-        // 1. Purge all green uncommon and purple epic tier items and corrupt items
+        // 1. Purge all green uncommon, purple epic, and orange legendary tier items and corrupt items
         this.inventory = this.inventory.filter(it => {
           if (!it) return false;
-          if (it.rarity === 'uncommon' || it.rarity === 'epic') return false;
-          if (it.templateId && (it.templateId.startsWith('unc_') || it.templateId.startsWith('epic_') || it.templateId === 'w2' || it.templateId === 'w3' || it.templateId.match(/^[wahbrm][1-6]$/))) return false;
+          if (it.rarity === 'uncommon' || it.rarity === 'epic' || it.rarity === 'legendary') return false;
+          if (it.templateId && (it.templateId.startsWith('unc_') || it.templateId.startsWith('epic_') || it.templateId.startsWith('leg_') || it.templateId === 'w2' || it.templateId === 'w3' || it.templateId.match(/^[wahbrm][1-6]$/))) return false;
           if (it.rarity !== 'common' && it.icon && it.icon.includes('/gear/')) return false;
           return true;
         });

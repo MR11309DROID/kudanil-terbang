@@ -3693,15 +3693,6 @@ body {
   border-bottom-color: #0f172a !important;
   box-shadow: 0 3px 0 #020617, inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
 }
-.paperdoll-slot.rarity-epic {
-  background: linear-gradient(180deg, #8b5cf6 0%, #6d28d9 100%);
-}
-.paperdoll-slot.rarity-legendary {
-  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 7px), linear-gradient(180deg, #f97316 0%, #ea580c 55%, #c2410c 100%);
-  border: 2.2px solid #fde047 !important;
-  border-bottom: 3.5px solid #d97706 !important;
-  box-shadow: 0 3px 0 #451a03, inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
-}
 .paperdoll-slot.rarity-mythic {
   background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
   animation: mythicCardPulse 3s infinite alternate ease-in-out;
@@ -4511,13 +4502,7 @@ body {
   box-shadow: 0 2.5px 0 #2e1065, inset 0 1px 2px rgba(255, 255, 255, 0.35);
 }
 
-/* LEGENDARY = WARM ORANGE / AMBER */
-.inv-item-card.rarity-legendary {
-  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 7px), linear-gradient(180deg, #f97316 0%, #ea580c 55%, #c2410c 100%);
-  border: 2px solid #fde047;
-  border-bottom: 3.5px solid #d97706;
-  box-shadow: 0 2.5px 0 #451a03, inset 0 1px 2px rgba(255, 255, 255, 0.45);
-}
+
 
 /* MYTHIC = CRIMSON FLAME / RUBY AURA */
 .inv-item-card.rarity-mythic {
@@ -5587,11 +5572,7 @@ body {
 /* ================= RARITY SYSTEM ================= */
 .rarity-common { border-color: #475569 !important; }
 .rarity-rare { border-color: #3b82f6 !important; }
-.rarity-epic { border-color: #a855f7 !important; }
-.rarity-legendary { 
-  border-color: #f59e0b !important; 
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
-}
+
 .rarity-mythic { 
   border-color: #ef4444 !important; 
   box-shadow: 0 0 14px rgba(239, 68, 68, 0.75), inset 0 0 6px rgba(239, 68, 68, 0.45) !important;

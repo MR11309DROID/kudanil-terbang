@@ -276,36 +276,7 @@ const GameData = {
     { id: "rare_23", slot: "boots", name: "Syal Angin Langkah Kilat (Swift Stride Silk Scarf)", icon: "assets/items/rare/icon_rare_23.png", cardImg: "assets/items/rare/card_rare_23.png", rarity: "rare", baseDodge: 0.18, baseHp: 170 },
 
 
-    // =========================================================================
-    // --- 20 AUTHENTIC LEGENDARY GEARS (GOLDEN SOLAR - EXTRACTED DIRECTLY FROM REFERENCE) ---
-    // =========================================================================
-    // Row 0
-    { id: "leg_00", slot: "weapon", name: "Pedang Kristal Suci Excalibur (Holy Crystal Greatsword)", icon: "assets/items/legendary/icon_legendary_00.png", cardImg: "assets/items/legendary/card_legendary_00.png", rarity: "legendary", baseAtk: 185, critBonus: 0.22, lifestealBonus: 0.12 },
-    { id: "leg_01", slot: "weapon", name: "Belati Kembar Ksatria (Twin Knight Daggers)", icon: "assets/items/legendary/icon_legendary_01.png", cardImg: "assets/items/legendary/card_legendary_01.png", rarity: "legendary", baseAtk: 180, critBonus: 0.25, doubleHitChance: 0.20 },
-    { id: "leg_02", slot: "weapon", name: "Busur Sayap Malaikat Suci (Holy Seraph Wing Bow)", icon: "assets/items/legendary/icon_legendary_02.png", cardImg: "assets/items/legendary/card_legendary_02.png", rarity: "legendary", baseAtk: 182, critBonus: 0.24, skillBoost: 0.20 },
-    { id: "leg_03", slot: "weapon", name: "Sabit Kehampaan Gelap (Dark Void Scythe)", icon: "assets/items/legendary/icon_legendary_03.png", cardImg: "assets/items/legendary/card_legendary_03.png", rarity: "legendary", baseAtk: 190, critBonus: 0.26, lifestealBonus: 0.15 },
-    { id: "leg_04", slot: "weapon", name: "Tongkat Bintang Emas Bintang (Golden Star Magic Scepter)", icon: "assets/items/legendary/icon_legendary_04.png", cardImg: "assets/items/legendary/card_legendary_04.png", rarity: "legendary", baseAtk: 188, skillBoost: 0.25, critBonus: 0.18 },
 
-    // Row 1
-    { id: "leg_05", slot: "weapon", name: "Gada Berduri Emas Penghancur (Golden Spiked Morningstar)", icon: "assets/items/legendary/icon_legendary_05.png", cardImg: "assets/items/legendary/card_legendary_05.png", rarity: "legendary", baseAtk: 195, stunChance: 0.20, critBonus: 0.18 },
-    { id: "leg_06", slot: "helmet", name: "Topi Jamur Tutul Raksasa (Giant Spotted Shroom Cap)", icon: "assets/items/legendary/icon_legendary_06.png", cardImg: "assets/items/legendary/card_legendary_06.png", rarity: "legendary", baseDef: 70, baseHp: 580, regen: 0.05 },
-    { id: "leg_07", slot: "weapon", name: "Busur Pemburu Rimba Primitif (Wild Hunter Feather Bow)", icon: "assets/items/legendary/icon_legendary_07.png", cardImg: "assets/items/legendary/card_legendary_07.png", rarity: "legendary", baseAtk: 184, critBonus: 0.22, dodgeBonus: 0.10 },
-    { id: "leg_08", slot: "weapon", name: "Belati Kristal Delima Menyala (Blazing Ruby Dagger)", icon: "assets/items/legendary/icon_legendary_08.png", cardImg: "assets/items/legendary/card_legendary_08.png", rarity: "legendary", baseAtk: 186, critBonus: 0.25, dotBurn: 0.12 },
-    { id: "leg_09", slot: "armor", name: "Zirah Plat Naga Merah (Crimson Dragon Plate Armor)", icon: "assets/items/legendary/icon_legendary_09.png", cardImg: "assets/items/legendary/card_legendary_09.png", rarity: "legendary", baseHp: 1350, baseDef: 65, regen: 0.06 },
-
-    // Row 2
-    { id: "leg_10", slot: "armor", name: "Mantel Bulu Elang Emas Kerajaan (Royal Crimson Feather Cloak)", icon: "assets/items/legendary/icon_legendary_10.png", cardImg: "assets/items/legendary/card_legendary_10.png", rarity: "legendary", baseHp: 1280, baseDef: 60, dodgeBonus: 0.15 },
-    { id: "leg_11", slot: "armor", name: "Tunik Pelindung Hutan Zamrud (Emerald Forest Guardian Tunic)", icon: "assets/items/legendary/icon_legendary_11.png", cardImg: "assets/items/legendary/card_legendary_11.png", rarity: "legendary", baseHp: 1220, baseDef: 62, dodgeBonus: 0.12 },
-    { id: "leg_12", slot: "ring", name: "Cincin Kilat Badai Petir (Thunder Storm Spark Ring)", icon: "assets/items/legendary/icon_legendary_12.png", cardImg: "assets/items/legendary/card_legendary_12.png", rarity: "legendary", baseCrit: 0.32, critDmg: 0.60, stunChance: 0.15 },
-    { id: "leg_13", slot: "ring", name: "Cincin Permata Surya Amber (Amber Sunstone Signet)", icon: "assets/items/legendary/icon_legendary_13.png", cardImg: "assets/items/legendary/card_legendary_13.png", rarity: "legendary", baseCrit: 0.35, critDmg: 0.65, baseAtk: 75 },
-    { id: "leg_14", slot: "ring", name: "Cincin Kobaran Api Abadi (Eternal Flame Drake Ring)", icon: "assets/items/legendary/icon_legendary_14.png", cardImg: "assets/items/legendary/card_legendary_14.png", rarity: "legendary", baseCrit: 0.34, baseAtk: 80, dotBurn: 0.10 },
-
-    // Row 3
-    { id: "leg_15", slot: "ring", name: "Cincin Kristal Es Berduri (Glacial Spiked Frost Ring)", icon: "assets/items/legendary/icon_legendary_15.png", cardImg: "assets/items/legendary/card_legendary_15.png", rarity: "legendary", baseCrit: 0.33, chillAttacker: 0.15, baseHp: 480 },
-    { id: "leg_16", slot: "amulet", name: "Cawan Darah Suci Penyembuh (Holy Blood Healing Chalice)", icon: "assets/items/legendary/icon_legendary_16.png", cardImg: "assets/items/legendary/card_legendary_16.png", rarity: "legendary", baseLifesteal: 0.25, baseHp: 720, regen: 0.08 },
-    { id: "leg_17", slot: "helmet", name: "Mahkota Tengkorak Bersayap Valkyrie (Winged Valkyrie Skull Crest)", icon: "assets/items/legendary/icon_legendary_17.png", cardImg: "assets/items/legendary/card_legendary_17.png", rarity: "legendary", baseDef: 74, baseHp: 620, critBonus: 0.12 },
-    { id: "leg_18", slot: "boots", name: "Perisai Bintang Emas Perlindungan (Golden Star Aegis Shield)", icon: "assets/items/legendary/icon_legendary_18.png", cardImg: "assets/items/legendary/card_legendary_18.png", rarity: "legendary", baseDef: 76, baseHp: 750, reflectRatio: 0.15 },
-    { id: "leg_19", slot: "boots", name: "Jimat Langkah Gelembung Samudra (Ocean Bubble Stride Talisman)", icon: "assets/items/legendary/icon_legendary_19.png", cardImg: "assets/items/legendary/card_legendary_19.png", rarity: "legendary", baseDodge: 0.30, baseHp: 520, speedBonus: 0.25 },
 
     // =========================================================================
     // --- 21 AUTHENTIC MYTHIC GEARS (CRIMSON FLAME AURA - EXTRACTED DIRECTLY) ---

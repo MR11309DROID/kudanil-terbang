@@ -36,8 +36,8 @@ class GachaSystem {
       if (!chosenRarity) chosenRarity = "common";
     }
 
-    // Map "great" or "uncommon" or "epic" to "rare"
-    const tmplRarity = (chosenRarity === "great" || chosenRarity === "uncommon" || chosenRarity === "epic") ? "rare" : chosenRarity;
+    // Map legacy tiers to valid tiers
+    const tmplRarity = (chosenRarity === "great" || chosenRarity === "uncommon" || chosenRarity === "epic" || chosenRarity === "legendary") ? "rare" : chosenRarity;
 
     // Filter templates matching rarity
     let candidates = GameData.equipmentTemplates.filter(t => t.rarity === tmplRarity);
@@ -51,7 +51,7 @@ class GachaSystem {
     return item;
   }
 
-  // 1. LEGENDARY TREASURE CHEST (Event Chest)
+  // 1. MYTHIC & SUPREME TREASURE CHEST (Event Chest)
   // Costs 320 Gems (1x) or 2980 Gems (10x)
   openLegendary(pullCount = 1) {
     if (this.opening) return null;
@@ -65,11 +65,10 @@ class GachaSystem {
     Character.gems -= costGems;
     const droppedItems = [];
 
-    // Weights: Supreme 2%, Mythic 6%, Legendary 22%, Rare 70%
+    // Weights: Supreme 5%, Mythic 25%, Rare 70%
     const weights = {
-      supreme: 0.02,
-      mythic: 0.06,
-      legendary: 0.22,
+      supreme: 0.05,
+      mythic: 0.25,
       rare: 0.70
     };
 
@@ -82,20 +81,20 @@ class GachaSystem {
       // Pity checks
       if (Character.gachaPity.legendarySEpic <= 0) {
         const pRoll = Math.random();
-        forceRarity = pRoll < 0.15 ? "supreme" : (pRoll < 0.45 ? "mythic" : "legendary");
+        forceRarity = pRoll < 0.20 ? "supreme" : "mythic";
         Character.gachaPity.legendarySEpic = 60;
         Character.gachaPity.legendaryEpic = 10;
       } else if (Character.gachaPity.legendaryEpic <= 0) {
-        forceRarity = "legendary";
+        forceRarity = "mythic";
         Character.gachaPity.legendaryEpic = 10;
-      } else if (pullCount === 10 && i === 9 && !droppedItems.some(it => ["legendary", "mythic", "supreme"].includes(it.rarity))) {
-        // Guarantee at least 1 Legendary/Mythic/Supreme in 10-pull
-        forceRarity = "legendary";
+      } else if (pullCount === 10 && i === 9 && !droppedItems.some(it => ["mythic", "supreme"].includes(it.rarity))) {
+        // Guarantee at least 1 Mythic/Supreme in 10-pull
+        forceRarity = "mythic";
         Character.gachaPity.legendaryEpic = 10;
       }
 
       const item = this.rollItemByWeights(weights, forceRarity);
-      if (item.rarity === "supreme" || item.rarity === "mythic" || item.rarity === "legendary") {
+      if (item.rarity === "supreme" || item.rarity === "mythic") {
         Character.gachaPity.legendarySEpic = 60;
         Character.gachaPity.legendaryEpic = 10;
       }
@@ -107,7 +106,7 @@ class GachaSystem {
     return {
       success: true,
       items: droppedItems,
-      chestName: "Legendary Treasure Chest",
+      chestName: "Mythic Treasure Chest",
       pullCount: pullCount
     };
   }
@@ -182,18 +181,18 @@ class GachaSystem {
     Character.gachaPity.hero--;
     let forceRarity = null;
     if (Character.gachaPity.hero <= 0) {
-      forceRarity = "legendary";
+      forceRarity = "mythic";
       Character.gachaPity.hero = 10;
     }
 
-    // Weights: Legendary 20%, Rare 80%
+    // Weights: Mythic 15%, Rare 85%
     const weights = {
-      legendary: 0.20,
-      rare: 0.80
+      mythic: 0.15,
+      rare: 0.85
     };
 
     const item = this.rollItemByWeights(weights, forceRarity);
-    if (item.rarity === "legendary") {
+    if (item.rarity === "mythic") {
       Character.gachaPity.hero = 10;
     }
 
