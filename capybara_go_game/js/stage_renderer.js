@@ -1880,6 +1880,9 @@ class StageRenderer {
       ctx.drawImage(frameImg, -drawW / 2, -drawH, drawW, drawH);
     }
 
+    // Layer 2.5: Render Equipped Common Gear on Capybara while playing (Boots, Armor, Helmet, Weapon)
+    this.renderPlayerEquippedGear(ctx, drawW, drawH, p, now);
+
     // Dynamic Skill Facial Expressions on Capybara (Matching authentic reference frames)
     if (p.skillExpression && p.skillExpression !== "normal") {
       const eyeX = drawW * 0.12;
@@ -2023,6 +2026,387 @@ class StageRenderer {
       const hpBarY = this.groundY + (p.offsetY || 0) - drawH - 12;
       this.renderPlayerHpBar(px, hpBarY, p);
     }
+  }
+
+  // --- IN-GAME EQUIPPED COMMON GEAR RENDERING ON CAPYBARA (AUTHENTIC REFERENCE ART) ---
+  renderPlayerEquippedGear(ctx, drawW, drawH, p, now) {
+    const char = window.Character || (typeof Character !== "undefined" ? Character : null);
+    if (!char || !char.equipped) return;
+    const eq = char.equipped;
+
+    const isAttacking = (p.currentAnim === "attack" || p.swordAction === "slash");
+    const isWalking = (p.currentAnim === "walk" || p.currentAnim === "run");
+
+    // 1. Common Boots
+    const bootsItem = eq.boots;
+    if (bootsItem && (bootsItem.rarity === "common" || (bootsItem.id && bootsItem.id.startsWith("gear_")) || (bootsItem.templateId && bootsItem.templateId.startsWith("gear_")))) {
+      this.drawCommonBootsOnPlayer(ctx, drawW, drawH, p, isWalking, now);
+    }
+
+    // 2. Common Armor / Tunic
+    const armorItem = eq.armor;
+    if (armorItem && (armorItem.rarity === "common" || (armorItem.id && armorItem.id.startsWith("gear_")) || (armorItem.templateId && armorItem.templateId.startsWith("gear_")))) {
+      this.drawCommonArmorOnPlayer(ctx, drawW, drawH, p, armorItem);
+    }
+
+    // 3. Common Helmet / Hood / Wizard Hat
+    const helmItem = eq.helmet;
+    if (helmItem && (helmItem.rarity === "common" || (helmItem.id && helmItem.id.startsWith("gear_")) || (helmItem.templateId && helmItem.templateId.startsWith("gear_")))) {
+      this.drawCommonHelmetOnPlayer(ctx, drawW, drawH, p, helmItem, now);
+    }
+
+    // 4. Common Weapon (Sword, Bow, Staff, Mace)
+    const weaponItem = eq.weapon;
+    if (weaponItem && (weaponItem.rarity === "common" || (weaponItem.id && weaponItem.id.startsWith("gear_")) || (weaponItem.templateId && weaponItem.templateId.startsWith("gear_")))) {
+      this.drawCommonWeaponOnPlayer(ctx, drawW, drawH, p, weaponItem, isAttacking, now);
+    }
+  }
+
+  drawCommonBootsOnPlayer(ctx, drawW, drawH, p, isWalking, now) {
+    ctx.save();
+    const stepBob = isWalking ? Math.sin(now * 0.015) * 1.8 : 0;
+
+    // Left (Back) Boot
+    ctx.save();
+    ctx.translate(-drawW * 0.20, -drawH * 0.05 + stepBob);
+    ctx.fillStyle = "#6d3816";
+    ctx.strokeStyle = "#271206";
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(-drawW * 0.09, 0, drawW * 0.18, drawH * 0.10, [3, 3, 5, 5]);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#8c4d22";
+    ctx.beginPath();
+    ctx.roundRect(-drawW * 0.10, -drawH * 0.025, drawW * 0.20, drawH * 0.045, 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    // Right (Front) Boot
+    ctx.save();
+    ctx.translate(drawW * 0.16, -drawH * 0.05 - stepBob);
+    ctx.fillStyle = "#6d3816";
+    ctx.strokeStyle = "#271206";
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.roundRect(-drawW * 0.09, 0, drawW * 0.18, drawH * 0.10, [3, 3, 5, 5]);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#8c4d22";
+    ctx.beginPath();
+    ctx.roundRect(-drawW * 0.10, -drawH * 0.025, drawW * 0.20, drawH * 0.045, 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.restore();
+  }
+
+  drawCommonArmorOnPlayer(ctx, drawW, drawH, p, armorItem) {
+    ctx.save();
+    const tId = armorItem.templateId || armorItem.id || "";
+    const isPlate = tId === "gear_05";
+    const isDark = tId === "gear_06";
+
+    // Torso jerkin / breastplate
+    const aX = -drawW * 0.22;
+    const aY = -drawH * 0.44;
+    const aW = drawW * 0.44;
+    const aH = drawH * 0.32;
+
+    if (isPlate) {
+      const pGrad = ctx.createLinearGradient(aX, aY, aX + aW, aY + aH);
+      pGrad.addColorStop(0, "#e2e8f0");
+      pGrad.addColorStop(0.5, "#94a3b8");
+      pGrad.addColorStop(1, "#475569");
+      ctx.fillStyle = pGrad;
+      ctx.strokeStyle = "#1e293b";
+    } else if (isDark) {
+      ctx.fillStyle = "#334155";
+      ctx.strokeStyle = "#0f172a";
+    } else {
+      // Adventurer Leather Tunic (Authentic warm chestnut)
+      ctx.fillStyle = "#854d24";
+      ctx.strokeStyle = "#291003";
+    }
+
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.roundRect(aX, aY, aW, aH, [4, 4, 6, 6]);
+    ctx.fill();
+    ctx.stroke();
+
+    // Shoulder pauldrons with silver beveled rims
+    const pauldronW = drawW * 0.14;
+    const pauldronH = drawH * 0.10;
+    // Left pauldron
+    ctx.fillStyle = isPlate ? "#cbd5e1" : "#6d3816";
+    ctx.strokeStyle = isPlate ? "#1e293b" : "#cbd5e1";
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.roundRect(aX - 3, aY - 2, pauldronW, pauldronH, 3);
+    ctx.fill();
+    ctx.stroke();
+
+    // Right pauldron
+    ctx.beginPath();
+    ctx.roundRect(aX + aW - pauldronW + 3, aY - 2, pauldronW, pauldronH, 3);
+    ctx.fill();
+    ctx.stroke();
+
+    // Belt & Buckle
+    ctx.fillStyle = "#381907";
+    ctx.strokeStyle = "#1a0b03";
+    ctx.lineWidth = 1.2;
+    const beltY = aY + aH * 0.62;
+    const beltH = aH * 0.22;
+    ctx.fillRect(aX, beltY, aW, beltH);
+    ctx.strokeRect(aX, beltY, aW, beltH);
+
+    // Golden Buckle
+    ctx.fillStyle = "#fbbf24";
+    ctx.strokeStyle = "#78350f";
+    ctx.lineWidth = 1.2;
+    const bkW = drawW * 0.10;
+    const bkH = beltH * 1.35;
+    ctx.fillRect(-bkW * 0.5, beltY - 1, bkW, bkH);
+    ctx.strokeRect(-bkW * 0.5, beltY - 1, bkW, bkH);
+
+    ctx.fillStyle = "#451a03";
+    ctx.fillRect(-bkW * 0.2, beltY + 1, bkW * 0.4, bkH - 4);
+
+    ctx.restore();
+  }
+
+  drawCommonHelmetOnPlayer(ctx, drawW, drawH, p, helmItem, now) {
+    ctx.save();
+    const tId = helmItem.templateId || helmItem.id || "";
+    const name = (helmItem.name || "").toLowerCase();
+    const isHood = tId === "gear_09" || name.includes("hood") || name.includes("forest");
+    const isWizard = name.includes("wizard") || name.includes("mage");
+
+    const headX = drawW * 0.02;
+    const headY = -drawH * 0.73;
+
+    if (isHood) {
+      // Woodland Forest Hood
+      ctx.fillStyle = "#16a34a";
+      ctx.strokeStyle = "#14532d";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.ellipse(headX, headY, drawW * 0.22, drawH * 0.18, 0.08, Math.PI, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Leaf pin
+      ctx.fillStyle = "#4ade80";
+      ctx.beginPath();
+      ctx.arc(headX - drawW * 0.12, headY, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+    } else if (isWizard) {
+      // Wizard Hat
+      ctx.fillStyle = "#78350f";
+      ctx.strokeStyle = "#451a03";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(headX - drawW * 0.22, headY);
+      ctx.lineTo(headX - drawW * 0.05, headY - drawH * 0.28);
+      ctx.lineTo(headX + drawW * 0.18, headY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Green ribbon
+      ctx.fillStyle = "#22c55e";
+      ctx.fillRect(headX - drawW * 0.18, headY - 4, drawW * 0.34, 4);
+
+    } else {
+      // Authentic Plumed Knight Helm
+      // Dome
+      const hGrad = ctx.createLinearGradient(headX - drawW * 0.18, headY - drawH * 0.18, headX + drawW * 0.18, headY);
+      hGrad.addColorStop(0, "#ffffff");
+      hGrad.addColorStop(0.3, "#e2e8f0");
+      hGrad.addColorStop(0.7, "#94a3b8");
+      hGrad.addColorStop(1, "#475569");
+      ctx.fillStyle = hGrad;
+      ctx.strokeStyle = "#1e293b";
+      ctx.lineWidth = 2.0;
+      ctx.beginPath();
+      ctx.ellipse(headX, headY, drawW * 0.22, drawH * 0.19, 0.06, Math.PI, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Visor Rim Band
+      ctx.fillStyle = "#cbd5e1";
+      ctx.beginPath();
+      ctx.roundRect(headX - drawW * 0.18, headY - drawH * 0.02, drawW * 0.36, drawH * 0.065, 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Ear & Cheek Guard
+      ctx.fillStyle = "#94a3b8";
+      ctx.beginPath();
+      ctx.roundRect(headX - drawW * 0.20, headY - drawH * 0.02, drawW * 0.09, drawH * 0.14, 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Iconic Crimson Plume on top
+      const plumeSway = Math.sin(now * 0.007) * 3;
+      ctx.fillStyle = "#dc2626";
+      ctx.strokeStyle = "#7f1d1d";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(headX - 2, headY - drawH * 0.18);
+      ctx.quadraticCurveTo(headX - drawW * 0.18 + plumeSway, headY - drawH * 0.35, headX - drawW * 0.32 + plumeSway, headY - drawH * 0.15);
+      ctx.quadraticCurveTo(headX - drawW * 0.18 + plumeSway * 0.5, headY - drawH * 0.12, headX - 2, headY - drawH * 0.16);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  drawCommonWeaponOnPlayer(ctx, drawW, drawH, p, weaponItem, isAttacking, now) {
+    ctx.save();
+    const tId = weaponItem.templateId || weaponItem.id || "";
+    const name = (weaponItem.name || "").toLowerCase();
+
+    // Hand anchor
+    let wX = drawW * 0.22;
+    let wY = -drawH * 0.38;
+    let wRot = 0.24;
+
+    if (isAttacking) {
+      wX = drawW * 0.36;
+      wY = -drawH * 0.22;
+      wRot = 1.30;
+    } else {
+      wRot += Math.sin(now * 0.006) * 0.06;
+    }
+
+    ctx.translate(wX, wY);
+    ctx.rotate(wRot);
+
+    if (tId === "gear_01" || name.includes("bow")) {
+      // Hunter Recurve Bow
+      ctx.strokeStyle = "#92400e";
+      ctx.lineWidth = 3.2;
+      ctx.beginPath();
+      ctx.arc(0, 0, 16, -Math.PI * 0.42, Math.PI * 0.42);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#22c55e";
+      ctx.lineWidth = 4.2;
+      ctx.beginPath();
+      ctx.arc(0, 0, 16, -0.18, 0.18);
+      ctx.stroke();
+
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(-Math.PI * 0.42) * 16, Math.sin(-Math.PI * 0.42) * 16);
+      ctx.lineTo(Math.cos(Math.PI * 0.42) * 16, Math.sin(Math.PI * 0.42) * 16);
+      ctx.stroke();
+
+    } else if (tId === "gear_02" || name.includes("staff")) {
+      // Druid Amber/Ruby Staff
+      ctx.strokeStyle = "#78350f";
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      ctx.moveTo(0, 10);
+      ctx.lineTo(0, -26);
+      ctx.stroke();
+
+      ctx.shadowColor = "#f59e0b";
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = "#fde047";
+      ctx.strokeStyle = "#b45309";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(0, -28, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+    } else if (tId === "gear_03" || name.includes("mace") || name.includes("axe")) {
+      // Spiked Steel Mace
+      ctx.strokeStyle = "#451a03";
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      ctx.moveTo(0, 10);
+      ctx.lineTo(0, -18);
+      ctx.stroke();
+
+      ctx.fillStyle = "#64748b";
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.arc(0, -20, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#cbd5e1";
+      [[-7, -20], [7, -20], [0, -27], [0, -13]].forEach(([sx, sy]) => {
+        ctx.beginPath();
+        ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+    } else {
+      // Novice Iron Sword (Matching showcase art)
+      const bGrad = ctx.createLinearGradient(-3, -28, 3, 0);
+      bGrad.addColorStop(0, "#ffffff");
+      bGrad.addColorStop(0.4, "#e2e8f0");
+      bGrad.addColorStop(1, "#94a3b8");
+      ctx.fillStyle = bGrad;
+      ctx.strokeStyle = "#1e293b";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(0, -28); // Tip
+      ctx.lineTo(4, -22);
+      ctx.lineTo(3.5, 0);
+      ctx.lineTo(-3.5, 0);
+      ctx.lineTo(-4, -22);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Blade Fuller
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.moveTo(0, -25);
+      ctx.lineTo(0, -2);
+      ctx.stroke();
+
+      // Golden Crossguard
+      ctx.fillStyle = "#fbbf24";
+      ctx.strokeStyle = "#78350f";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.roundRect(-8, 0, 16, 4, 1.5);
+      ctx.fill();
+      ctx.stroke();
+
+      // Leather Grip
+      ctx.fillStyle = "#78350f";
+      ctx.fillRect(-2, 4, 4, 6);
+
+      // Pommel
+      ctx.fillStyle = "#f59e0b";
+      ctx.strokeStyle = "#78350f";
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      ctx.arc(0, 11, 2.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    ctx.restore();
   }
 
   renderPlayerHpBar(x, y, p) {

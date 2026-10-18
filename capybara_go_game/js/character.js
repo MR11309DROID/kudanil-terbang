@@ -149,8 +149,8 @@ class CharacterManager {
     slots.forEach(slot => {
       const cfg = starterTemplates[slot];
       const cur = this.equipped ? this.equipped[slot] : null;
-      const isOutdated = !cur || cur.level > 1 || cur.rarity === 'legendary' || cur.templateId.startsWith('leg_') || cur.templateId !== cfg.id ||
-        cur.refineRank || (cur.atk && cur.atk > 1000000) || (cur.hp && cur.hp > 1000000);
+      const isOutdated = !cur || cur.rarity === 'legendary' || (cur.templateId && cur.templateId.startsWith('leg_')) ||
+        (cur.atk && cur.atk > 1000000) || (cur.hp && cur.hp > 1000000);
 
       if (force || isOutdated) {
         const item = this.createItemFromTemplate(cfg.id, 1);
@@ -1094,3 +1094,4 @@ class CharacterManager {
 }
 
 const Character = new CharacterManager();
+window.Character = Character;
