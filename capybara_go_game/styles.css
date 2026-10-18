@@ -3623,7 +3623,7 @@ body {
   align-items: stretch;
   justify-content: space-between;
   margin: 0;
-  padding: 2px 4px 0;
+  padding: 2px 6px 0;
   position: relative;
   background: transparent;
   border: none;
@@ -3642,9 +3642,11 @@ body {
 }
 
 .paperdoll-slot {
-  width: 56px;
-  height: 56px;
-  border-radius: 10px;
+  width: 64px;
+  height: 64px;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  border-radius: 12px;
   border: 2px solid #1a1518;
   border-bottom: 3.5px solid #0d0a0c;
   background: #ede3cc;
