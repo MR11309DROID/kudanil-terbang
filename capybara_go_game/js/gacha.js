@@ -36,8 +36,8 @@ class GachaSystem {
       if (!chosenRarity) chosenRarity = "common";
     }
 
-    // Map "great" to "uncommon" template rarity
-    const tmplRarity = chosenRarity === "great" ? "uncommon" : chosenRarity;
+    // Map "great" or "uncommon" to "rare"
+    const tmplRarity = (chosenRarity === "great" || chosenRarity === "uncommon") ? "rare" : chosenRarity;
 
     // Filter templates matching rarity
     let candidates = GameData.equipmentTemplates.filter(t => t.rarity === tmplRarity);
@@ -65,14 +65,13 @@ class GachaSystem {
     Character.gems -= costGems;
     const droppedItems = [];
 
-    // Weights: Supreme 1%, Mythic 4%, S-Epic (legendary) 8%, Epic 25%, Rare 38%, Great (uncommon) 24%
+    // Weights: Supreme 1%, Mythic 4%, S-Epic (legendary) 8%, Epic 25%, Rare 62%
     const weights = {
       supreme: 0.01,
       mythic: 0.04,
       legendary: 0.08,
       epic: 0.25,
-      rare: 0.38,
-      uncommon: 0.24
+      rare: 0.62
     };
 
     for (let i = 0; i < pullCount; i++) {
@@ -138,18 +137,18 @@ class GachaSystem {
     Character.gachaPity.adventurer--;
     let forceRarity = null;
     if (Character.gachaPity.adventurer <= 0) {
-      forceRarity = "uncommon"; // Great
+      forceRarity = "rare";
       Character.gachaPity.adventurer = 9;
     }
 
-    // Weights: Great (uncommon) 45%, Common 55%
+    // Weights: Rare 35%, Common 65%
     const weights = {
-      uncommon: 0.45,
-      common: 0.55
+      rare: 0.35,
+      common: 0.65
     };
 
     const item = this.rollItemByWeights(weights, forceRarity);
-    if (item.rarity === "uncommon" || item.rarity === "rare" || item.rarity === "epic") {
+    if (item.rarity === "rare" || item.rarity === "epic") {
       Character.gachaPity.adventurer = 9;
     }
 
@@ -190,11 +189,10 @@ class GachaSystem {
       Character.gachaPity.hero = 10;
     }
 
-    // Weights: Epic 20%, Rare 40%, Great (uncommon) 40%
+    // Weights: Epic 25%, Rare 75%
     const weights = {
-      epic: 0.20,
-      rare: 0.40,
-      uncommon: 0.40
+      epic: 0.25,
+      rare: 0.75
     };
 
     const item = this.rollItemByWeights(weights, forceRarity);

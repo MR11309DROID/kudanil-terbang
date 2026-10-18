@@ -4476,12 +4476,10 @@ body {
   filter: none;
 }
 
-/* UNCOMMON = LUSH FOREST GREEN */
-.inv-item-card.rarity-uncommon {
-  background: #22c55e;
-  border-color: #14532d;
-  border-bottom-color: #052e16;
-  box-shadow: 0 3px 0 #022c22;
+/* UNCOMMON TIER REMOVED */
+.inv-item-card.rarity-uncommon,
+.paperdoll-slot.rarity-uncommon {
+  display: none !important;
 }
 
 /* RARE = OCEAN AZURE BLUE */

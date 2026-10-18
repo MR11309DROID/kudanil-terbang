@@ -735,19 +735,34 @@ class CharacterManager {
           it.icon = tmpl.icon;
           it.cardImg = tmpl.cardImg || tmpl.icon;
           if (!it.templateId) it.templateId = tmpl.id;
-        } else if (it.icon && it.icon.includes('capybara_cartoon_kit')) {
-          if (it.slot === 'weapon') { it.icon = 'assets/items/gear/icon_21.png'; it.cardImg = 'assets/items/gear/card_21.png'; }
-          else if (it.slot === 'armor') { it.icon = 'assets/items/gear/icon_02.png'; it.cardImg = 'assets/items/gear/card_02.png'; }
-          else if (it.slot === 'helmet') { it.icon = 'assets/items/gear/icon_00.png'; it.cardImg = 'assets/items/gear/card_00.png'; }
-          else if (it.slot === 'boots') { it.icon = 'assets/items/gear/icon_01.png'; it.cardImg = 'assets/items/gear/card_01.png'; }
-          else if (it.slot === 'ring') { it.icon = 'assets/items/gear/icon_11.png'; it.cardImg = 'assets/items/gear/card_11.png'; }
-          else if (it.slot === 'amulet') { it.icon = 'assets/items/gear/icon_20.png'; it.cardImg = 'assets/items/gear/card_20.png'; }
+        } else if (it.rarity === 'common' && it.icon && it.icon.includes('capybara_cartoon_kit')) {
+          if (it.slot === 'weapon') { it.icon = 'assets/items/gear/icon_00.png'; it.cardImg = 'assets/items/gear/card_00.png'; }
+          else if (it.slot === 'armor') { it.icon = 'assets/items/gear/icon_04.png'; it.cardImg = 'assets/items/gear/card_04.png'; }
+          else if (it.slot === 'helmet') { it.icon = 'assets/items/gear/icon_07.png'; it.cardImg = 'assets/items/gear/card_07.png'; }
+          else if (it.slot === 'boots') { it.icon = 'assets/items/gear/icon_16.png'; it.cardImg = 'assets/items/gear/card_16.png'; }
+          else if (it.slot === 'ring') { it.icon = 'assets/items/gear/icon_10.png'; it.cardImg = 'assets/items/gear/card_10.png'; }
+          else if (it.slot === 'amulet') { it.icon = 'assets/items/gear/icon_14.png'; it.cardImg = 'assets/items/gear/card_14.png'; }
         }
       };
       if (this.equipped) {
+        Object.keys(this.equipped).forEach(slot => {
+          const it = this.equipped[slot];
+          if (it && (it.rarity === 'uncommon' || (it.templateId && it.templateId.startsWith('unc_')))) {
+            delete this.equipped[slot];
+          }
+        });
         Object.values(this.equipped).forEach(updateItemAssets);
       }
       if (this.inventory && Array.isArray(this.inventory)) {
+        // 1. Purge all green uncommon tier items
+        // 2. Purge any corrupt items where non-common gear mistakenly used grey common assets
+        this.inventory = this.inventory.filter(it => {
+          if (!it) return false;
+          if (it.rarity === 'uncommon') return false;
+          if (it.templateId && (it.templateId.startsWith('unc_') || it.templateId === 'w2' || it.templateId === 'w3' || it.templateId.match(/^[wahbrm][1-6]$/))) return false;
+          if (it.rarity !== 'common' && it.icon && it.icon.includes('/gear/')) return false;
+          return true;
+        });
         this.inventory.forEach(updateItemAssets);
         // Ensure inventory contains the authentic 24 rare items from the reference sheet
         const hasAllRare = this.inventory.some(it => it.templateId === 'rare_23');

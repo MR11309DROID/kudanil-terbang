@@ -2482,8 +2482,8 @@ class UIManager {
       if (!Character.inventory || Character.inventory.length === 0) {
         invGrid.innerHTML = `<div class="empty-inv-msg">🎒 Tas perlengkapan kosong. Buka peti di Shop untuk mendapatkan gear!</div>`;
       } else {
-        // Sort inventory by rarity priority: supreme > mythic > legendary > epic > rare > uncommon > common
-        const rarityRanks = { supreme: 7, mythic: 6, legendary: 5, epic: 4, rare: 3, uncommon: 2, common: 1 };
+        // Sort inventory by rarity priority: supreme > mythic > legendary > epic > rare > common
+        const rarityRanks = { supreme: 7, mythic: 6, legendary: 5, epic: 4, rare: 3, common: 1 };
         const sortedInv = [...Character.inventory].sort((a, b) => {
           const rankA = rarityRanks[a.rarity] || 0;
           const rankB = rarityRanks[b.rarity] || 0;
@@ -2491,9 +2491,11 @@ class UIManager {
           return (b.level || 1) - (a.level || 1);
         });
 
-        // Apply active category filter
+        // Apply active category filter and exclude green uncommon tier and corrupt items
         const curFilter = this.inventoryFilter || 'all';
         const filteredInv = sortedInv.filter(it => {
+          if (!it || it.rarity === 'uncommon') return false;
+          if (it.rarity !== 'common' && it.icon && it.icon.includes('/gear/')) return false;
           if (curFilter === 'weapon') return it.slot === 'weapon';
           if (curFilter === 'armor') return ['armor', 'helmet', 'boots'].includes(it.slot);
           if (curFilter === 'acc') return ['ring', 'amulet'].includes(it.slot);
