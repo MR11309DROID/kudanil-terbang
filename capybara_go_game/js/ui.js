@@ -2386,7 +2386,10 @@ class UIManager {
       val = Math.round(val || 0);
       if (val >= 1000000000) return (val / 1000000000).toFixed(2) + "B";
       if (val >= 1000000) return (val / 1000000).toFixed(2) + "M";
-      if (val >= 10000) return (val / 1000).toFixed(1) + "K";
+      if (val >= 1000) {
+        const kVal = val / 1000;
+        return (kVal % 1 === 0 || kVal >= 100) ? Math.round(kVal) + "K" : kVal.toFixed(1) + "K";
+      }
       return val.toLocaleString();
     };
 

@@ -3597,10 +3597,11 @@ body {
   max-height: 50%;
   min-height: 50%;
   box-sizing: border-box;
-  padding: 4px 8px 4px;
-  background: linear-gradient(180deg, #f4e8cf 0%, #e9d3a9 40%, #d9bc86 80%, #caa46e 100%);
-  border-bottom: 3px solid #5a3212;
-  box-shadow: inset 0 -3px 8px rgba(90, 50, 15, 0.25), 0 4px 12px rgba(0, 0, 0, 0.22);
+  padding: 6px 8px 4px;
+  background: #fbf5e6;
+  background: radial-gradient(circle at 50% 35%, #fffdf8 0%, #fbf3e0 50%, #f1e0c2 100%);
+  border-bottom: 2.5px solid #4a280d;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3609,54 +3610,37 @@ body {
   overflow: hidden;
 }
 
-/* 6-Slot Paperdoll surrounding the Hero (Framed in 3D Warm RPG Wooden-Parchment Board) */
+/* 6-Slot Paperdoll surrounding the Hero (Seamless Flat Tan/Cream Arena) */
 .paperdoll-container {
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   margin: 0;
-  padding: 3px 8px;
+  padding: 2px 4px;
   position: relative;
-  background: radial-gradient(circle at 50% 45%, #fffdf8 0%, #f7ecd7 60%, #ebd4b0 100%);
-  border: 2px solid #855325;
-  border-bottom: 3.5px solid #4a280d;
-  border-radius: 14px;
-  box-shadow: 0 3px 0 #301704, 0 5px 12px rgba(50, 25, 5, 0.22), inset 0 2px 0 rgba(255, 255, 255, 0.95);
+  background: transparent;
+  border: none;
+  box-shadow: none;
   box-sizing: border-box;
   flex: 1 1 auto;
-  max-height: calc(100% - 105px);
+  max-height: calc(100% - 95px);
 }
-
-/* Brass / Golden Corner Studs */
-.pd-corner-stud {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  background: radial-gradient(circle at 35% 35%, #fffbeb 0%, #f59e0b 60%, #78350f 100%);
-  border: 1.2px solid #451a03;
-  border-radius: 50%;
-  box-shadow: 0 1.5px 2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  z-index: 6;
-}
-.pd-corner-stud.top-left { top: 5px; left: 5px; }
-.pd-corner-stud.top-right { top: 5px; right: 5px; }
-.pd-corner-stud.bottom-left { bottom: 5px; left: 5px; }
-.pd-corner-stud.bottom-right { bottom: 5px; right: 5px; }
 
 .paperdoll-col {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
+  gap: 5px;
   z-index: 5;
 }
 
 .paperdoll-slot {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 10px;
   border: 2px solid #1a1518;
-  border-bottom: 3px solid #0d0a0c;
+  border-bottom: 3.5px solid #0d0a0c;
   background: #ede3cc;
   box-shadow: 0 2.5px 5px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.4);
   display: flex;
@@ -4019,79 +4003,20 @@ body {
   justify-content: flex-end;
   position: relative;
   flex: 1;
-  min-height: 150px;
-}
-
-/* Warm magical rotating sunburst behind the Hero */
-.hero-stage-sunburst {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  top: 48%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(254, 240, 138, 0.45) 0%, rgba(251, 191, 36, 0.22) 45%, rgba(245, 158, 11, 0) 72%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  animation: sunburstPulse 4s ease-in-out infinite alternate;
-}
-
-@keyframes sunburstPulse {
-  0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.75; }
-  100% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
-}
-
-.hero-mount-stage {
-  position: relative;
-  width: 110px;
-  height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end; /* Planted on the ground */
-  padding-bottom: 0px;
-  z-index: 2;
-}
-
-/* 3D Carved Pedestal Dais under Capybara's feet */
-.hero-pedestal-dais {
-  position: absolute;
-  bottom: 3px;
-  width: 82px;
-  height: 14px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 25%, #fdf4e3 0%, #ecd4ad 50%, #c9a573 85%, #8f6434 100%);
-  border: 1.6px solid #633b17;
-  box-shadow: 0 2.5px 0 #3a1e08, 0 4px 8px rgba(50, 25, 5, 0.35), inset 0 1.5px 0 rgba(255, 255, 255, 0.7);
-  z-index: 1;
-}
-
-.hero-capy-character-img {
-  width: 78px;
-  height: 78px;
-  object-fit: contain;
-  image-rendering: auto;
-  filter: drop-shadow(0 3px 5px rgba(45, 25, 10, 0.4));
-  z-index: 3;
-  margin-bottom: 6px; /* Planted precisely onto the dais surface */
-  transform-origin: bottom center;
-  animation: heroCapyBreath 2.6s ease-in-out infinite alternate;
-}
-
-@keyframes heroCapyBreath {
-  0% { transform: scale(1, 1); }
-  100% { transform: scale(1.025, 0.985); }
+  min-height: 120px;
 }
 
 .hero-shadow-oval {
   position: absolute;
-  bottom: 9px;
-  width: 56px;
-  height: 8px;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 116px;
+  height: 18px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(60, 35, 15, 0.65) 0%, rgba(60, 35, 15, 0) 75%);
-  filter: blur(1px);
+  background: #9a9488;
+  opacity: 0.65;
+  filter: blur(0.5px);
   z-index: 2;
   pointer-events: none;
 }
@@ -4178,20 +4103,18 @@ body {
   text-shadow: 0 1.5px 2px #000, 0 0 5px rgba(234, 179, 8, 0.4);
 }
 
-/* 4. Core 3 Stats Bar (HP, ATK, DEF + Details - Smooth Warm Cream Bar matching reference) */
+/* 4. Core 3 Stats Bar (HP, ATK, DEF + Details - Authentic 3 Dark Brown Capsules matching reference) */
 .hero-core-stats-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 88%;
-  max-width: 310px;
-  background: #fdfbf7;
-  padding: 3px 12px;
-  border-radius: 9999px;
-  border: 1.5px solid #d6c7b2;
-  border-bottom: 2.5px solid #bba993;
-  margin-bottom: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: transparent;
+  padding: 2px 4px;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 3px;
   flex-shrink: 0;
 }
 
@@ -4200,11 +4123,16 @@ body {
   align-items: center;
   gap: 5px;
   font-family: 'Lilita One', 'Fredoka', cursive;
+  background: #47372b;
+  border-radius: 9999px;
+  padding: 3px 12px 3px 7px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .core-stat-icon {
-  font-size: 15px;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+  font-size: 14px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
 }
 
 .core-stat-text {
@@ -4218,31 +4146,30 @@ body {
 }
 
 .core-stat-item strong {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.2px;
-  color: #2e1c10 !important;
-  text-shadow: none !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px #000 !important;
 }
 
 .core-stat-divider {
-  width: 1px;
-  height: 16px;
-  background: #d6c7b2;
+  display: none;
 }
 
 .btn-stat-details-icon {
-  background: #f5ede1;
-  border: 1px solid #c9b89f;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
+  background: #faecd7;
+  border: 1.5px solid #b59f82;
+  border-radius: 8px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.1s ease;
+  box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.15);
 }
 
 .btn-stat-details-icon:hover {
@@ -4264,11 +4191,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 100%;
-  gap: 2px;
-  margin-top: 2px;
+  width: 96%;
+  max-width: 340px;
+  background: rgba(243, 230, 208, 0.75);
+  border-radius: 9999px;
+  padding: 3px 6px 2px;
+  margin-top: 1px;
   margin-bottom: 2px;
   flex-shrink: 0;
+  box-shadow: inset 0 1px 2px rgba(120, 80, 40, 0.08);
 }
 
 .gear-sub-btn {
