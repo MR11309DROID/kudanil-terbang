@@ -2587,9 +2587,6 @@ class UIManager {
         avatarImg.classList.remove("equipped-showcase");
       }
     }
-
-    // 8. Refresh Paperdoll Connector Lines Overlay (matching showcase reference)
-    requestAnimationFrame(() => this.updatePaperdollConnectors());
   }
 
   getEquippedShowcaseAvatar() {
@@ -2633,135 +2630,16 @@ class UIManager {
     return "assets/characters/player/gear_common/capy_warrior_sword.png";
   }
 
-  updatePaperdollConnectors(animateSlot = null, isUnequip = false) {
-    const svg = document.getElementById("paperdoll-connector-svg");
-    const container = document.querySelector(".paperdoll-container");
-    const avatar = document.getElementById("hero-capy-avatar-img");
-    if (!svg || !container || !avatar) return;
-
-    const cRect = container.getBoundingClientRect();
-    if (cRect.width === 0 || cRect.height === 0) return;
-
-    svg.setAttribute("viewBox", `0 0 ${cRect.width} ${cRect.height}`);
-    svg.innerHTML = "";
-
-    const aRect = avatar.getBoundingClientRect();
-    const aCenterX = (aRect.left + aRect.width * 0.5) - cRect.left;
-    const aCenterY = (aRect.top + aRect.height * 0.5) - cRect.top;
-    const aW = aRect.width;
-    const aH = aRect.height;
-
-    // Relative anchor offsets on Capybara character avatar
-    const anchorOffsets = {
-      weapon: { x: aW * 0.28, y: -aH * 0.08 },
-      helmet: { x: -aW * 0.04, y: -aH * 0.38 },
-      armor:  { x: -aW * 0.14, y: -aH * 0.02 },
-      boots:  { x: aW * 0.12,  y: aH * 0.38 },
-      ring:   { x: -aW * 0.25, y: aH * 0.06 },
-      amulet: { x: aW * 0.02,  y: -aH * 0.12 }
-    };
-
-    const slots = ["weapon", "ring", "amulet", "armor", "helmet", "boots"];
-    const isLeftCol = { weapon: true, ring: true, amulet: true, armor: false, helmet: false, boots: false };
-
-    slots.forEach(slotKey => {
-      const item = Character.equipped ? Character.equipped[slotKey] : null;
-      if (!item && animateSlot !== slotKey) return;
-
-      const slotEl = document.getElementById(`slot-${slotKey}`);
-      if (!slotEl) return;
-      const sRect = slotEl.getBoundingClientRect();
-
-      // Start line at inner-facing edge of slot card
-      let startX, startY;
-      if (isLeftCol[slotKey]) {
-        startX = (sRect.right - cRect.left);
-        startY = (sRect.top + sRect.height * 0.5) - cRect.top;
-      } else {
-        startX = (sRect.left - cRect.left);
-        startY = (sRect.top + sRect.height * 0.5) - cRect.top;
-      }
-
-      const off = anchorOffsets[slotKey] || { x: 0, y: 0 };
-      const targetX = aCenterX + off.x;
-      const targetY = aCenterY + off.y;
-
-      // 45-degree elbow path calculation:
-      // Horizontal stem from slot, then 45-degree angle to target
-      const dx = targetX - startX;
-      const dy = targetY - startY;
-      const signX = Math.sign(dx) || 1;
-
-      const diagLen = Math.min(Math.abs(dx) * 0.65, Math.abs(dy));
-      const midX = targetX - signX * diagLen;
-      const midY = startY;
-
-      const d = `M ${startX.toFixed(1)} ${startY.toFixed(1)} L ${midX.toFixed(1)} ${midY.toFixed(1)} L ${targetX.toFixed(1)} ${targetY.toFixed(1)}`;
-
-      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      g.setAttribute("class", `connector-group connector-slot-${slotKey}`);
-
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("d", d);
-      path.setAttribute("class", "connector-line");
-      path.setAttribute("id", `conn-line-${slotKey}`);
-
-      // Glowing outer ring at target node
-      const ring = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      ring.setAttribute("cx", targetX.toFixed(1));
-      ring.setAttribute("cy", targetY.toFixed(1));
-      ring.setAttribute("r", "7.5");
-      ring.setAttribute("class", "connector-node-ring");
-
-      // Solid inner dot at target node
-      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      dot.setAttribute("cx", targetX.toFixed(1));
-      dot.setAttribute("cy", targetY.toFixed(1));
-      dot.setAttribute("r", "4");
-      dot.setAttribute("class", "connector-node-dot");
-
-      g.appendChild(path);
-      g.appendChild(ring);
-      g.appendChild(dot);
-      svg.appendChild(g);
-
-      const pathLen = path.getTotalLength();
-      path.style.strokeDasharray = `${pathLen}`;
-
-      if (animateSlot === slotKey) {
-        if (!isUnequip) {
-          path.style.strokeDashoffset = `${pathLen}`;
-          ring.style.opacity = "0";
-          dot.style.opacity = "0";
-          requestAnimationFrame(() => {
-            path.style.strokeDashoffset = "0";
-            setTimeout(() => {
-              ring.style.opacity = "1";
-              dot.style.opacity = "1";
-              this.spawnSparkleBurst(container, targetX, targetY);
-            }, 380);
-          });
-        } else {
-          path.classList.add("retracting");
-          path.style.strokeDashoffset = "0";
-          requestAnimationFrame(() => {
-            path.style.strokeDashoffset = `${pathLen}`;
-            setTimeout(() => {
-              g.remove();
-            }, 380);
-          });
-        }
-      } else {
-        path.style.strokeDashoffset = "0";
-      }
-    });
+  updatePaperdollConnectors() {
+    // Disabled as requested: no purple lines when wearing gear
   }
 
-  spawnSparkleBurst(container, x, y) {
+  spawnSparkleBurst(targetEl) {
+    if (!targetEl) return;
     const burst = document.createElement("div");
     burst.className = "connector-sparkle-burst";
-    burst.style.left = `${x}px`;
-    burst.style.top = `${y}px`;
+    burst.style.left = "50%";
+    burst.style.top = "50%";
 
     const symbols = ["✦", "✧", "★", "✦", "⋆", "✧"];
     const count = 7;
@@ -2770,7 +2648,7 @@ class UIManager {
       sp.className = "connector-sparkle";
       sp.textContent = symbols[i % symbols.length];
       const angle = (i / count) * Math.PI * 2 + (Math.random() * 0.4 - 0.2);
-      const dist = 22 + Math.random() * 18;
+      const dist = 26 + Math.random() * 16;
       const dx = Math.cos(angle) * dist;
       const dy = Math.sin(angle) * dist;
       const rot = (Math.random() * 180 - 90) + "deg";
@@ -2779,7 +2657,7 @@ class UIManager {
       sp.style.setProperty("--rot", rot);
       burst.appendChild(sp);
     }
-    container.appendChild(burst);
+    targetEl.appendChild(burst);
     setTimeout(() => burst.remove(), 700);
   }
 
@@ -2793,6 +2671,10 @@ class UIManager {
       void slotEl.offsetWidth;
       slotEl.classList.add(cls);
       setTimeout(() => slotEl.classList.remove(cls), 600);
+
+      if (!isUnequip) {
+        this.spawnSparkleBurst(slotEl);
+      }
     }
 
     if (avatarEl) {
@@ -2802,8 +2684,6 @@ class UIManager {
       avatarEl.classList.add(aCls);
       setTimeout(() => avatarEl.classList.remove(aCls), 700);
     }
-
-    this.updatePaperdollConnectors(slotKey, isUnequip);
   }
 
   setInventoryFilter(filter = 'all') {

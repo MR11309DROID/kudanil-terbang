@@ -211,33 +211,37 @@ const GameData = {
 
   equipmentTemplates: [
     // =========================================================================
-    // --- 18 AUTHENTIC COMMON GEARS (EXTRACTED DIRECTLY FROM REFERENCE SHEET) ---
+    // --- 20 AUTHENTIC COMMON GEARS (EXTRACTED DIRECTLY FROM USER SHEET) ---
     // =========================================================================
-    // 4 Weapons
-    { id: "gear_00", slot: "weapon", name: "Novice Iron Sword", icon: "assets/items/gear/card_sword_knight.png", cardImg: "assets/items/gear/card_sword_knight.png", rarity: "common", baseAtk: 25, critBonus: 0.05 },
-    { id: "gear_01", slot: "weapon", name: "Hunter Recurve Bow", icon: "assets/items/gear/card_bow_hunter.png", cardImg: "assets/items/gear/card_bow_hunter.png", rarity: "common", baseAtk: 24, critBonus: 0.06 },
-    { id: "gear_02", slot: "weapon", name: "Druid Amber Staff", icon: "assets/items/gear/card_staff_druid.png", cardImg: "assets/items/gear/card_staff_druid.png", rarity: "common", baseAtk: 26, skillBoost: 0.08 },
-    { id: "gear_03", slot: "weapon", name: "Spiked Steel Mace", icon: "assets/items/gear/card_mace_spiked.png", cardImg: "assets/items/gear/card_mace_spiked.png", rarity: "common", baseAtk: 28, critBonus: 0.04 },
+    // 5 Weapons
+    { id: "gear_00", slot: "weapon", name: "Novice Iron Sword", icon: "assets/items/gear_common/card_sword_knight.png", cardImg: "assets/items/gear_common/card_sword_knight.png", rarity: "common", baseAtk: 25, critBonus: 0.05 },
+    { id: "gear_01", slot: "weapon", name: "Hunter Recurve Bow", icon: "assets/items/gear_common/card_bow_hunter.png", cardImg: "assets/items/gear_common/card_bow_hunter.png", rarity: "common", baseAtk: 24, critBonus: 0.06 },
+    { id: "gear_02", slot: "weapon", name: "Druid Amber Staff", icon: "assets/items/gear_common/card_staff_druid.png", cardImg: "assets/items/gear_common/card_staff_druid.png", rarity: "common", baseAtk: 26, skillBoost: 0.08 },
+    { id: "gear_03", slot: "weapon", name: "Spiked Steel Mace", icon: "assets/items/gear_common/card_mace_spiked.png", cardImg: "assets/items/gear_common/card_mace_spiked.png", rarity: "common", baseAtk: 28, critBonus: 0.04 },
+    { id: "gear_04", slot: "weapon", name: "Tribal Stone Spear", icon: "assets/items/gear_common/card_spear_iron.png", cardImg: "assets/items/gear_common/card_spear_iron.png", rarity: "common", baseAtk: 27, critBonus: 0.05 },
 
-    // 6 Armors & Cloaks
-    { id: "gear_04", slot: "armor", name: "Adventurer Leather Tunic", icon: "assets/items/gear/card_armor_leather.png", cardImg: "assets/items/gear/card_armor_leather.png", rarity: "common", baseHp: 120, baseDef: 10 },
-    { id: "gear_05", slot: "armor", name: "Silver Knight Plate", icon: "assets/items/gear/icon_05.png", cardImg: "assets/items/gear/card_05.png", rarity: "common", baseHp: 150, baseDef: 14 },
-    { id: "gear_06", slot: "armor", name: "Dark Steel Cuirass", icon: "assets/items/gear/icon_06.png", cardImg: "assets/items/gear/card_06.png", rarity: "common", baseHp: 160, baseDef: 16 },
-    { id: "gear_07", slot: "helmet", name: "Plumed Knight Helm", icon: "assets/items/gear/card_helm_knight.png", cardImg: "assets/items/gear/card_helm_knight.png", rarity: "common", baseDef: 14, baseHp: 80, dodgeBonus: 0.04 },
-    { id: "gear_08", slot: "armor", name: "Crimson Cape Cuirass", icon: "assets/items/gear/icon_08.png", cardImg: "assets/items/gear/card_08.png", rarity: "common", baseHp: 140, baseDef: 12, dodgeBonus: 0.03 },
-    { id: "gear_09", slot: "helmet", name: "Woodland Forest Hood", icon: "assets/items/gear/card_helm_hood.png", cardImg: "assets/items/gear/card_helm_hood.png", rarity: "common", baseDef: 14, baseHp: 90, dodgeBonus: 0.05 },
+    // 2 Armors
+    { id: "gear_05", slot: "armor", name: "Adventurer Round Buckler", icon: "assets/items/gear_common/card_shield_buckler.png", cardImg: "assets/items/gear_common/card_shield_buckler.png", rarity: "common", baseHp: 130, baseDef: 12 },
+    { id: "gear_06", slot: "armor", name: "Adventurer Leather Tunic", icon: "assets/items/gear_common/card_armor_leather.png", cardImg: "assets/items/gear_common/card_armor_leather.png", rarity: "common", baseHp: 140, baseDef: 10 },
 
-    // 4 Rings
-    { id: "gear_10", slot: "ring", name: "Silver Sapphire Ring", icon: "assets/items/gear/icon_10.png", cardImg: "assets/items/gear/card_10.png", rarity: "common", baseCrit: 0.08, baseAtk: 12 },
-    { id: "gear_11", slot: "ring", name: "Golden Emerald Ring", icon: "assets/items/gear/icon_11.png", cardImg: "assets/items/gear/card_11.png", rarity: "common", baseCrit: 0.07, baseHp: 50 },
-    { id: "gear_12", slot: "ring", name: "Silver Amethyst Ring", icon: "assets/items/gear/icon_12.png", cardImg: "assets/items/gear/card_12.png", rarity: "common", baseCrit: 0.09, baseAtk: 14 },
-    { id: "gear_13", slot: "ring", name: "Golden Ruby Ring", icon: "assets/items/gear/icon_13.png", cardImg: "assets/items/gear/card_13.png", rarity: "common", baseCrit: 0.10, baseAtk: 16 },
+    // 3 Helmets
+    { id: "gear_07", slot: "helmet", name: "Woodland Forest Hood", icon: "assets/items/gear_common/card_helm_hood.png", cardImg: "assets/items/gear_common/card_helm_hood.png", rarity: "common", baseDef: 12, baseHp: 85, dodgeBonus: 0.04 },
+    { id: "gear_08", slot: "helmet", name: "Plumed Knight Helm", icon: "assets/items/gear_common/card_helm_knight.png", cardImg: "assets/items/gear_common/card_helm_knight.png", rarity: "common", baseDef: 14, baseHp: 90, dodgeBonus: 0.03 },
+    { id: "gear_09", slot: "helmet", name: "Apprentice Witch Hat", icon: "assets/items/gear_common/card_helm_wizard.png", cardImg: "assets/items/gear_common/card_helm_wizard.png", rarity: "common", baseDef: 11, baseHp: 80, skillBoost: 0.05 },
 
-    // 4 Accessories (Amulets / Boots)
-    { id: "gear_14", slot: "amulet", name: "Mystic Water Orb", icon: "assets/items/gear/icon_14.png", cardImg: "assets/items/gear/card_14.png", rarity: "common", baseHp: 80, baseLifesteal: 0.05 },
-    { id: "gear_15", slot: "amulet", name: "Ancient War Horn", icon: "assets/items/gear/icon_15.png", cardImg: "assets/items/gear/card_15.png", rarity: "common", baseAtk: 15, baseDef: 8 },
-    { id: "gear_16", slot: "boots", name: "Adventurer Leather Boots", icon: "assets/items/gear/card_boots_leather.png", cardImg: "assets/items/gear/card_boots_leather.png", rarity: "common", baseDodge: 0.06, baseHp: 60 },
-    { id: "gear_17", slot: "boots", name: "Traveler Coin Pouch", icon: "assets/items/gear/icon_17.png", cardImg: "assets/items/gear/card_17.png", rarity: "common", baseDodge: 0.08, baseAtk: 10 },
+    // 5 Rings
+    { id: "gear_10", slot: "ring", name: "Silver Ruby Ring", icon: "assets/items/gear_common/card_ring_ruby.png", cardImg: "assets/items/gear_common/card_ring_ruby.png", rarity: "common", baseCrit: 0.08, baseAtk: 14 },
+    { id: "gear_11", slot: "ring", name: "Verdant Sprout Ring", icon: "assets/items/gear_common/card_ring_leaf.png", cardImg: "assets/items/gear_common/card_ring_leaf.png", rarity: "common", baseCrit: 0.07, baseHp: 60 },
+    { id: "gear_12", slot: "ring", name: "Silver Sapphire Ring", icon: "assets/items/gear_common/card_ring_sapphire.png", cardImg: "assets/items/gear_common/card_ring_sapphire.png", rarity: "common", baseCrit: 0.09, baseAtk: 12 },
+    { id: "gear_13", slot: "ring", name: "Tribal Bone Ring", icon: "assets/items/gear_common/card_ring_bone.png", cardImg: "assets/items/gear_common/card_ring_bone.png", rarity: "common", baseCrit: 0.08, baseAtk: 16 },
+    { id: "gear_14", slot: "ring", name: "Capybara Paw Ring", icon: "assets/items/gear_common/card_ring_paw.png", cardImg: "assets/items/gear_common/card_ring_paw.png", rarity: "common", baseCrit: 0.10, baseHp: 70 },
+
+    // 3 Amulets & 2 Boots
+    { id: "gear_15", slot: "amulet", name: "Beast Fang Pendant", icon: "assets/items/gear_common/card_amulet_fang.png", cardImg: "assets/items/gear_common/card_amulet_fang.png", rarity: "common", baseHp: 90, baseLifesteal: 0.05 },
+    { id: "gear_16", slot: "amulet", name: "Oak Leaf Pendant", icon: "assets/items/gear_common/card_amulet_leaf.png", cardImg: "assets/items/gear_common/card_amulet_leaf.png", rarity: "common", baseHp: 100, baseDef: 8 },
+    { id: "gear_17", slot: "boots", name: "Adventurer Traveler Pack", icon: "assets/items/gear_common/card_boots_leather.png", cardImg: "assets/items/gear_common/card_boots_leather.png", rarity: "common", baseDodge: 0.08, baseHp: 75 },
+    { id: "gear_18", slot: "amulet", name: "Ancient Magic Scroll", icon: "assets/items/gear_common/card_amulet_scroll.png", cardImg: "assets/items/gear_common/card_amulet_scroll.png", rarity: "common", baseAtk: 16, skillBoost: 0.06 },
+    { id: "gear_19", slot: "boots", name: "Flower Blossom Charm", icon: "assets/items/gear_common/card_boots_flower.png", cardImg: "assets/items/gear_common/card_boots_flower.png", rarity: "common", baseDodge: 0.07, baseHp: 80 },
 
 
     // =========================================================================

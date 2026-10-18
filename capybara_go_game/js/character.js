@@ -195,8 +195,8 @@ class CharacterManager {
         }
       }
 
-      // Add all 18 authentic common gear items
-      for (let i = 0; i < 18; i++) {
+      // Add all 20 authentic common gear items
+      for (let i = 0; i < 20; i++) {
         const id = "gear_" + (i < 10 ? "0" + i : i);
         const it = this.createItemFromTemplate(id, 1);
         if (it) {
@@ -1015,6 +1015,19 @@ class CharacterManager {
               const supItem = this.createItemFromTemplate(supId, 1);
               if (supItem) {
                 this.inventory.unshift(supItem);
+              }
+            }
+          }
+        }
+        // Ensure inventory contains all 20 authentic common gear items from reference sheet
+        const hasAllCommon = this.inventory.some(it => it.templateId === 'gear_19');
+        if (!hasAllCommon) {
+          for (let i = 19; i >= 0; i--) {
+            const gearId = `gear_${i < 10 ? '0' + i : i}`;
+            if (!this.inventory.some(it => it.templateId === gearId)) {
+              const gearItem = this.createItemFromTemplate(gearId, 1);
+              if (gearItem) {
+                this.inventory.push(gearItem);
               }
             }
           }
