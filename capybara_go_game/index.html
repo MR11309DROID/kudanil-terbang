@@ -9,11 +9,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Lilita+One&family=Luckiest+Guy&family=Paytone+One&family=Fredoka:wght@400;500;600;700;900&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
   <link rel="stylesheet" href="styles.css">
-</head>
+  <link rel="stylesheet" href="expedition.css?v=retina91">
+  <link rel="stylesheet" href="capy-camp.css?v=camp22">
+  <link rel="stylesheet" href="artisan-ui.css?v=guide54">
+<style>#modal-settings .settings-list{max-height:55vh;overflow-y:auto}#modal-settings select{flex-shrink:0;max-width:110px;padding:8px;border:1px solid #bd9d57;border-radius:8px;background:#fff4d9;color:#493822;font-weight:700}#modal-settings .setting-info{min-width:0;padding-right:8px}.erva-talk-line,.erva-guide-card p,.mira-congrats{overflow-wrap:anywhere;line-height:1.65}</style>
+
+
+
+
+<link rel="stylesheet" href="game-locale.css?v=crisp47">
+<link rel="stylesheet" href="final-boss-dialogue.css?v=acting74">
+<link rel="stylesheet" href="bold-ui-icons.css?v=painted67">
+<link rel="stylesheet" href="erva-dialogue-layout.css?v=smooth97">
+<link rel="stylesheet" href="icon-integrity.css?v=audit88">
+<style>html[data-graphics="low"] .modal-overlay,html[data-graphics="low"] .erva-guide{backdrop-filter:none!important}#modal-settings #graphics-fps{max-width:130px}#modal-settings .setting-sub{line-height:1.4}</style><link rel="stylesheet" href="quick-sidebar.css?v=camp95"><link rel="stylesheet" href="events-ui.css?v=mounts94"><link rel="stylesheet" href="sidebar-reference.css?v=art96"><link rel="stylesheet" href="ui-polish.css?v=motion98"><link rel="stylesheet" href="sidebar-crisp.css?v=center103"></head>
 <body>
   <!-- Centered Mobile Frame Device Wrapper -->
   <div id="game-container">
-    
+
     <!-- ================= CAPYBARA GO! AUTHENTIC LOADING SCREEN (HABBY STYLE) ================= -->
     <div id="loading-screen" class="loading-overlay">
       <!-- Background Splash Key Art -->
@@ -72,7 +85,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Top Header Bar (Menu Mode Profile & Currencies) -->
     <header id="game-header" class="menu-hub-header">
       <!-- Player Profile Section (Directly placed, matches reference screenshot) -->
@@ -121,20 +134,15 @@
 
     <!-- Main Screens Viewport -->
     <main id="game-body">
-      
+
       <!-- ================= TAB 1: ADVENTURE (60-DAY RUN) ================= -->
       <div id="tab-adventure" class="tab-page active">
-        
+
         <!-- Upper Stage Canvas (Visual Scene, Capybara, Enemies, Parallax) -->
         <div id="stage-viewport">
           <canvas id="stage-canvas" width="440" height="350"></canvas>
 
-          <!-- Top Right Compact Controls: Mini Hide UI Button -->
-          <div class="stage-top-controls">
-            <button id="btn-toggle-zen-ui" class="btn-toggle-zen-ui btn-zen-mini" onclick="window.Game && window.Game.ui && window.Game.ui.toggleFullUI()" title="Sembunyikan / Tampilkan UI (Mode Bersih)">
-              <span class="zen-ui-icon">👁️</span>
-            </button>
-          </div>
+
 
           <!-- ================= AUTHENTIC MENU STAGE OVERLAY ================= -->
           <div id="menu-stage-overlay" class="menu-stage-overlay">
@@ -157,39 +165,24 @@
                 <img src="assets/ui/menu/btn_hamburger.svg" alt="Menu" class="drawer-icon-img">
                 <span class="widget-notif-dot">!</span>
               </button>
-              <div class="newbie-gifts-widget" id="btn-newbie-gifts" title="Newbie Gifts">
+              <button type="button" class="newbie-gifts-widget" id="btn-newbie-gifts" title="Newbie Gifts" aria-label="Newbie Gifts">
                 <img src="assets/ui/menu/widget_newbie_gifts.svg" alt="Newbie Gifts" class="newbie-gifts-img">
-                <div class="newbie-timer-badge">6d 23h</div>
-              </div>
+                <span class="newbie-timer-badge">5:00</span>
+              </button>
 
               <!-- Toggle Hide/Show Quick Sidebar Buttons -->
-              <button id="btn-toggle-quick-stack" class="btn-toggle-quick-stack" onclick="window.Game && window.Game.ui && window.Game.ui.toggleQuickStack()" title="Sembunyikan / Tampilkan Menu Cepat">
-                <span class="toggle-stack-icon">▲</span>
+              <button id="btn-toggle-quick-stack" aria-controls="quick-btn-stack" aria-expanded="true" class="btn-toggle-quick-stack" onclick="window.Game && window.Game.ui && window.Game.ui.toggleQuickStack()" title="Sembunyikan / Tampilkan Menu Cepat">
+                <img class="sidebar-hide-art" src="assets/ui/sidebar96/hide.svg" alt="" aria-hidden="true"><span class="toggle-stack-icon">▲</span>
                 <span class="toggle-stack-label">Sembunyi</span>
               </button>
 
               <!-- Quick Event & Feature Buttons (Lurus ke bawah / Single Column) -->
-              <div class="quick-btn-stack" id="quick-btn-stack">
-                <button class="quick-sidebar-btn qbtn-daily" onclick="window.Game && window.Game.ui && window.Game.ui.openDailyLogin()" title="Daily Bonus">
-                  <span class="qbtn-icon">🎁</span>
-                  <span>Daily</span>
-                </button>
-                <button class="quick-sidebar-btn qbtn-wheel" onclick="window.Game && window.Game.ui && window.Game.ui.openFortuneWheel()" title="Fortune Wheel">
-                  <span class="qbtn-icon">🎰</span>
-                  <span>Wheel</span>
-                </button>
-                <button class="quick-sidebar-btn qbtn-achieve" onclick="window.Game && window.Game.ui && window.Game.ui.openAchievements()" title="Achievements">
-                  <span class="qbtn-icon">🏆</span>
-                  <span>Achieve</span>
-                </button>
-                <button class="quick-sidebar-btn qbtn-pass" onclick="window.Game && window.Game.ui && window.Game.ui.openBattlePass()" title="Battle Pass">
-                  <span class="qbtn-icon">🏅</span>
-                  <span>Pass</span>
-                </button>
-                <button class="quick-sidebar-btn qbtn-stats" onclick="window.Game && window.Game.ui && window.Game.ui.openStats()" title="My Stats">
-                  <span class="qbtn-icon">📊</span>
-                  <span>Stats</span>
-                </button>
+              <div class="quick-btn-stack" id="quick-btn-stack" role="region" tabindex="0" aria-label="Adventure shortcuts">
+                <button class="quick-sidebar-btn sidebar96 qbtn-daily" onclick="window.Game && window.Game.ui && window.Game.ui.openDailyLogin()" title="Daily Bonus"><img class="sidebar-ref-art" src="assets/ui/sidebar100/daily.svg" alt="" aria-hidden="true"><span class="sidebar-ref-label">Daily</span></button>
+                <button class="quick-sidebar-btn sidebar96 qbtn-wheel" onclick="window.Game && window.Game.ui && window.Game.ui.openFortuneWheel()" title="Fortune Wheel"><img class="sidebar-ref-art" src="assets/ui/sidebar100/wheel.svg?v=center103" alt="" aria-hidden="true"><img class="sidebar-wheel-disc" src="assets/ui/sidebar100/wheel-disc.svg?v=center103" alt="" aria-hidden="true"><span class="sidebar-ref-label">Wheel</span></button>
+                <button class="quick-sidebar-btn sidebar96 qbtn-achieve" onclick="window.Game && window.Game.ui && window.Game.ui.openAchievements()" title="Achievements"><img class="sidebar-ref-art" src="assets/ui/sidebar100/achieve.svg" alt="" aria-hidden="true"><span class="sidebar-ref-label">Achieve</span></button>
+                <button class="quick-sidebar-btn sidebar96 qbtn-pass" onclick="window.Game && window.Game.ui && window.Game.ui.openBattlePass()" title="Battle Pass"><img class="sidebar-ref-art" src="assets/ui/sidebar100/pass.svg" alt="" aria-hidden="true"><span class="sidebar-ref-label">Pass</span></button>
+                <button class="quick-sidebar-btn sidebar96 qbtn-gacha" onclick="window.Game && window.Game.ui && window.Game.ui.openCapyGacha()" title="Capy Gacha"><img class="sidebar-ref-art" src="assets/ui/sidebar100/gacha.svg" alt="" aria-hidden="true"><span class="sidebar-ref-label">Capy Gacha</span></button>
                 <button class="quick-sidebar-btn qbtn-pets btn-pet-quick" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Pet & Mount">
                   <span class="qbtn-icon">🐾</span>
                   <span>Pets</span>
@@ -305,10 +298,6 @@
 
             <!-- Mini Gold & Gem Counters (Only pop in during loot animations) + Quick Pet Sanctuary -->
             <div class="stage-top-right-group">
-              <button id="btn-run-pet-quick" class="stage-run-pet-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()" title="Pet & Mount Sanctuary">
-                <span id="run-pet-icon">🐾</span>
-                <span class="run-pet-tag">Pet</span>
-              </button>
               <div id="stage-gold-pill" class="stage-top-gold-pill" title="Current Run Gold">
                 <span class="gold-mini-icon">🪙</span>
                 <span id="stage-gold-num">0</span>
@@ -457,11 +446,11 @@
         <div id="adventure-start-panel" class="menu-lawn-action-panel" data-theme="chapter-1">
           <div class="menu-action-center-col">
             <!-- Milestone Reward Chest (Day 40) - Centered above Start button -->
-            <div class="menu-milestone-chest-wrap" id="btn-milestone-chest" title="Milestone Reward (Day 40)">
+            <div class="ev-home-shortcuts"><div class="menu-milestone-chest-wrap" id="btn-milestone-chest" title="Adventure Chest" role="button" tabindex="0" aria-label="Adventure Chest">
               <div class="milestone-chest-glow"></div>
               <img src="assets/ui/menu/milestone_chest.svg" alt="Milestone Chest" class="milestone-chest-img">
-              <div class="milestone-chest-tag">40 days</div>
-            </div>
+              <div class="milestone-chest-tag">15 days</div>
+            </div><button type="button" id="btn-travel" class="ev-home-shortcut"><img src="assets/ui/events93/compass.svg" alt=""><span>Travel</span></button><button type="button" id="btn-stars" class="ev-home-shortcut"><img src="assets/ui/events93/stars.svg" alt=""><span>Stars</span></button></div>
 
             <!-- Giant Chunky Cartoon Start Button (Authentic Golden Yellow) -->
             <button id="btn-start-run" class="btn-menu-start-game" title="Mulai Petualangan">
@@ -501,7 +490,7 @@
           <div id="fortune-win-banner" class="fortune-win-banner state-minor-win" style="display: none;">
             <!-- Golden Shockwave Ring on escalation -->
             <div class="win-shockwave-ring"></div>
-            
+
             <!-- Rotating Sunburst Rays (Crisp SVG) -->
             <div class="win-sunburst-wrap">
               <svg class="win-sunburst-svg" viewBox="0 0 400 400">
@@ -629,7 +618,7 @@
                 <img src="assets/ui/capybara_cartoon_kit/equipment_icons/equipment_amulet.png" class="slot-ghost-icon" alt="amulet">
               </div>
             </div>
-            
+
             <!-- Center Hero Arena: Capybara Standing with Ground Shadow -->
             <div class="paperdoll-center">
               <div class="hero-mount-stage" id="hero-mount-stage">
@@ -679,20 +668,9 @@
             </button>
           </div>
 
-          <!-- 5 Quick Sub-Tab Shortcut Buttons (Pets, Collectibles, Mount, Artifact, Skin) -->
+          <!-- Gear shortcuts. Pets are available in the scrollable Adventure sidebar. -->
           <div class="gear-sub-tabs-row">
-            <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()">
-              <div class="gear-sub-circle">
-                <svg viewBox="0 0 40 40" width="32" height="32" class="gear-sub-svg">
-                  <ellipse cx="20" cy="22" rx="13" ry="16" fill="#fde68a" stroke="#78350f" stroke-width="2.5"/>
-                  <path d="M 7 18 C 12 15, 16 19, 20 18 C 24 19, 28 15, 33 18 C 34 22, 32 25, 30 25 C 25 24, 23 20, 20 22 C 17 20, 15 24, 10 25 C 8 25, 6 22, 7 18 Z" fill="#7c3aed" stroke="#3b0764" stroke-width="1.5"/>
-                  <ellipse cx="14" cy="20" rx="2.5" ry="1.8" fill="#ffffff" transform="rotate(-10 14 20)"/>
-                  <ellipse cx="26" cy="20" rx="2.5" ry="1.8" fill="#ffffff" transform="rotate(10 26 20)"/>
-                </svg>
-                <span class="gear-sub-notif">!</span>
-              </div>
-              <span class="gear-sub-label">Pets</span>
-            </button>
+
             <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openAchievements()">
               <div class="gear-sub-circle">
                 <svg viewBox="0 0 40 40" width="32" height="32" class="gear-sub-svg">
@@ -706,7 +684,7 @@
               </div>
               <span class="gear-sub-label">Collectibles</span>
             </button>
-            <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openCompanions()">
+            <button class="gear-sub-btn" onclick="window.Game && window.Game.ui && window.Game.ui.openMountExchange()">
               <div class="gear-sub-circle">
                 <svg viewBox="0 0 40 40" width="32" height="32" class="gear-sub-svg">
                   <path d="M12 9 C 8 16, 8 28, 20 32 C 32 28, 32 16, 28 9 C 26 10, 24 14, 24 17 C 24 22, 22 24, 20 24 C 18 24, 16 22, 16 17 C 16 14, 14 10, 12 9 Z" fill="#fbbf24" stroke="#78350f" stroke-width="2.5"/>
@@ -761,7 +739,7 @@
       <!-- ================= TAB 3: TALENTS (CAPYBARA GO AUTHENTIC UI) ================= -->
       <div id="tab-talents" class="tab-page">
         <div class="capy-talents-screen">
-          
+
           <!-- Top Currency & Preview Header Bar -->
           <div class="capy-talents-header">
             <div class="capy-talents-currencies">
@@ -801,7 +779,7 @@
             <div class="talents-milestone-badges-row">
               <div class="milestone-badge-box box-10" id="badge-milestone-10" title="Milestone 10 Reward" onclick="window.Game && window.Game.ui && window.Game.ui.claimMilestone(10)">
                 <div class="milestone-badge-glow"></div>
-                <img src="assets/ui/talents/badge_milestone_10.png" alt="720 Gold" class="milestone-badge-img">
+                <img src="assets/ui/talents/badge_milestone_10_clean.svg" alt="720 Gold" class="milestone-badge-img">
                 <span class="milestone-claim-tag" id="tag-claim-10">Claim!</span>
               </div>
               <div class="milestone-badge-box box-20" id="badge-milestone-20" title="Milestone 20 Promotion" onclick="window.Game && window.Game.ui && window.Game.ui.claimMilestone(20)">
@@ -841,14 +819,14 @@
 
           <!-- 3 Stat Upgrade Cards: HP, ATK, DEF -->
           <div class="talents-cards-container">
-            
+
             <!-- Card 1: HP -->
             <div class="stat-upgrade-card card-hp" id="card-upgrade-hp">
               <div class="stat-card-header">
                 <span class="stat-card-lvl" id="stat-lvl-hp">Lv.0</span>
               </div>
               <div class="stat-card-icon-wrap">
-                <img src="assets/ui/talents/icon_stat_hp.png" alt="HP" class="stat-card-icon">
+                <img src="assets/ui/camp/heart-clear.svg" alt="HP" class="stat-card-icon">
               </div>
               <div class="stat-card-value-wrap">
                 <div class="stat-card-bonus" id="stat-bonus-hp">+0</div>
@@ -971,7 +949,7 @@
 
             <!-- Two Column Crates Grid -->
             <div class="gacha-crates-grid">
-              
+
               <!-- LEFT CRATE: Adventurer's Supply Crate -->
               <div class="gacha-crate-card crate-adventurer">
                 <div class="crate-header-row">
@@ -1092,39 +1070,43 @@
 
     <!-- Authentic Capybara Go! Bottom Navigation Bar -->
     <nav id="bottom-nav" class="bottom-nav-authentic">
-      <button class="nav-tab-btn" data-tab="chests" title="Shop">
+      <button class="nav-tab-btn" data-tab="chests" title="Shop" aria-label="Shop">
         <div class="nav-tab-icon-wrap">
-          <img src="assets/ui/menu/nav_shop.svg" alt="Shop" class="nav-tab-img">
+          <img src="assets/ui/menu/nav_shop.svg" alt="" class="nav-tab-img">
           <span class="nav-tab-badge">!</span>
         </div>
+        <span class="nav-tab-label">Shop</span>
       </button>
 
-      <button class="nav-tab-btn" data-tab="equipment" title="Hero">
+      <button class="nav-tab-btn" data-tab="equipment" title="Hero" aria-label="Hero">
         <div class="nav-tab-icon-wrap">
-          <img src="assets/ui/menu/nav_hero.svg" alt="Hero" class="nav-tab-img">
+          <img src="assets/ui/menu/nav_hero.svg" alt="" class="nav-tab-img">
         </div>
+        <span class="nav-tab-label">Hero</span>
       </button>
 
-      <button class="nav-tab-btn active tab-adventure-btn" data-tab="adventure" title="Adventure">
+      <button class="nav-tab-btn active tab-adventure-btn" data-tab="adventure" title="Adventure" aria-label="Adventure">
         <span class="nav-adv-chevron-left">◀</span>
         <div class="nav-adventure-capsule">
-          <img src="assets/ui/menu/nav_adventure.svg" alt="Adventure" class="nav-adventure-img">
+          <img src="assets/ui/menu/nav_adventure.svg" alt="" class="nav-adventure-img">
           <span class="nav-tab-label">Adventure</span>
         </div>
         <span class="nav-adv-chevron-right">▶</span>
       </button>
 
-      <button class="nav-tab-btn" data-tab="talents" title="Talents">
+      <button class="nav-tab-btn" data-tab="talents" title="Talents" aria-label="Talents">
         <div class="nav-tab-icon-wrap">
-          <img src="assets/ui/menu/nav_talents.svg" alt="Talents" class="nav-tab-img">
+          <img src="assets/ui/menu/nav_talents.svg" alt="" class="nav-tab-img">
           <span class="nav-tab-badge">!</span>
         </div>
+        <span class="nav-tab-label">Talents</span>
       </button>
 
-      <button class="nav-tab-btn" data-tab="bestiary" title="Dungeon">
+      <button class="nav-tab-btn" data-tab="bestiary" title="Dungeon" aria-label="Dungeon">
         <div class="nav-tab-icon-wrap">
-          <img src="assets/ui/menu/nav_locked.svg" alt="Dungeon" class="nav-tab-img">
+          <img src="assets/ui/menu/nav_locked.svg" alt="" class="nav-tab-img">
         </div>
+        <span class="nav-tab-label">Dungeon</span>
       </button>
     </nav>
 
@@ -1200,7 +1182,7 @@
     <div id="gacha-stage-chest" class="gacha-stage-chest" onclick="window.Game && window.Game.ui && window.Game.ui.triggerChestOpenBurst()">
       <div id="gacha-chest-aura" class="gacha-chest-aura aura-legendary"></div>
       <div id="gacha-conical-pillar" class="gacha-conical-pillar" style="display:none;"></div>
-      
+
       <div id="gacha-chest-actor" class="gacha-chest-actor">
         <img id="gacha-chest-closed-img" src="assets/ui/gacha/chest_legendary.svg" class="gacha-chest-svg closed" alt="Chest Closed">
         <img id="gacha-chest-opened-img" src="assets/ui/chest_golden_open.svg" class="gacha-chest-svg opened" alt="Chest Opened" style="display:none;">
@@ -1236,7 +1218,7 @@
   <!-- Authentic Defeat Screen Modal (Matches Screenshot & YouTube Reference) -->
   <div id="modal-defeat-screen" class="defeat-screen-overlay" style="display: none;">
     <div class="defeat-stage-wrap">
-      
+
       <!-- 4 Piercing Purple Arrows -->
       <div class="defeat-arrows-group">
         <!-- Arrow 1 (Left slant -26deg) -->
@@ -1326,7 +1308,7 @@
       <!-- Main Purple Velvet Heraldic Tapestry Scroll Body -->
       <div class="defeat-banner-body">
         <div class="defeat-banner-pattern"></div>
-        
+
         <!-- Border battle notches -->
         <div class="defeat-notch notch-r1"></div>
         <div class="defeat-notch notch-l1"></div>
@@ -1399,6 +1381,11 @@
       </div>
 
       <div class="settings-list">
+        <div class="setting-item-card" data-no-localize><div class="setting-info"><label class="setting-name" for="graphics-quality" data-graphics-text="quality">Graphics</label><span class="setting-sub" data-graphics-text="detail"></span></div><select id="graphics-quality" aria-label="Graphics"><option value="high" data-graphics-text="high">High</option><option value="balanced" data-graphics-text="balanced">Balanced</option><option value="low" data-graphics-text="low">Low</option></select></div>
+        <div class="setting-item-card" data-no-localize><div class="setting-info"><label class="setting-name" for="graphics-fps" data-graphics-text="fps">Frame rate</label><span class="setting-sub" data-graphics-text="fpsDetail"></span></div><select id="graphics-fps" aria-label="Frame rate"><option value="display" data-graphics-text="display">Display refresh rate</option><option value="60">60 FPS</option><option value="120">120 FPS</option><option value="144">144 FPS</option></select></div>
+        <div class="setting-item-card"><div class="setting-info"><label class="setting-name" for="erva-voice-language">Dub</label><span class="setting-sub">Japanese dub complete: all 33 dialogs available.</span></div><select id="erva-voice-language" aria-label="Dub"><option value="en">English</option><option value="ja">日本語</option></select></div>
+        <div class="setting-item-card"><div class="setting-info"><label class="setting-name" for="erva-subtitle-language">Subtitle</label><span class="setting-sub">Bahasa teks untuk seluruh game, terpisah dari dub.</span></div><select id="erva-subtitle-language" aria-label="Subtitle"><option value="en">English</option><option value="ja">日本語</option></select></div>
+
         <!-- Master Sound -->
         <div class="setting-item-card">
           <div class="setting-info">
@@ -1433,6 +1420,10 @@
             <span class="switch-knob"></span>
             <span class="switch-label">ON</span>
           </button>
+        </div>
+        <div class="setting-item-card">
+          <div class="setting-info"><span class="setting-name">Clean UI</span><span class="setting-sub">Hide the HUD. Tap the scene to bring it back.</span></div>
+          <button id="toggle-clean-ui" class="setting-switch-btn" role="switch" aria-label="Clean UI" aria-checked="false"><span class="switch-knob"></span><span class="switch-label">OFF</span></button>
         </div>
       </div>
 
@@ -1500,7 +1491,7 @@
       <!-- Stage 1: Closed Chest Screen ("You find treasure") -->
       <div id="treasure-phase-find" class="treasure-content-phase">
         <h2 class="treasure-main-title">You find treasure</h2>
-        
+
         <div class="treasure-chest-display-wrap">
           <img id="treasure-img-closed" src="assets/ui/chest_golden_closed.svg" alt="Golden Treasure Chest" class="treasure-chest-hero-img">
         </div>
@@ -1650,15 +1641,48 @@
   <div id="game-toast" class="toast-pill"></div>
 
   <!-- Game Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/audio.js"></script>
-  <script src="js/character.js"></script>
-  <script src="js/stage_renderer.js"></script>
-  <script src="js/battle_system.js"></script>
+  <script src="js/data.js?v=audit88"></script>
+  <script src="js/icon_integrity.js?v=perf90b"></script>
+  <script src="js/audio_bank.js?v=chapteraudio27"></script>
+  <script src="js/erva_voice_profile.js?v=fish33"></script>
+  <script src="js/erva_guide_voice_profile.js?v=guideaudio37"></script>
+  <script src="js/erva_japanese_voice_profile.js?v=ja50"></script>
+  <script src="js/erva_locale.js?v=languages44"></script>
+  <script src="js/game_locale_catalog.js?v=boss64"></script>
+  <script src="js/game_locale.js?v=global45"></script>
+  <script src="js/audio.js?v=duck52"></script>
+  <script src="js/character.js?v=mounts94"></script>
+  <script src="js/live_events.js?v=mounts94"></script>
+  <script src="js/graphics.js?v=perf90b"></script>
+  <script src="js/capy_smooth.js?v=perf90b"></script>
+  <script src="js/stage_renderer.js?v=perf90b"></script>
+  <script src="js/mythic_v2.js?v=remake35"></script>
+  <script src="js/mythic_sprite_meta.js?v=art36"></script>
+  <script src="js/mythic_illustrated.js?v=limbs41"></script>
+  <script src="js/mythic_cinematics.js?v=sharp61"></script>
+  <script src="js/battle_system.js?v=art36"></script>
   <script src="js/gacha.js"></script>
-  <script src="js/adventure_engine.js"></script>
-  <script src="js/ui.js"></script>
+  <script src="js/adventure_engine.js?v=audit89"></script>
+  <script src="js/ui.js?v=art96"></script>
+  <script src="js/talent_motion.js?v=20261022void11"></script>
   <script src="js/loading_screen.js"></script>
-  <script src="js/game.js"></script>
-</body>
+  <script src="js/game.js?v=icons4"></script>
+  <script src="js/capy_camp.js?v=risk31"></script>
+  <script src="js/player_profile.js?v=mounts94"></script>
+  <script src="js/live_events_ui.js?v=mounts94"></script>
+  <script src="js/erva_rewards.js?v=juice85"></script>
+  <script src="js/erva_rig.js?v=smooth97"></script>
+  <script src="js/erva_performance.js?v=smooth97"></script>
+  <script src="js/erva_events.js?v=auto32"></script>
+  <script src="js/artisan_ui.js?v=audit89"></script>
+  <script src="js/erva_juice.js?v=smooth97"></script>
+  <script src="js/erva_guide.js?v=smooth97"></script>
+  <script src="js/chapter_chest.js?v=chest16"></script>
+  <script src="js/mythic_review.js?v=fxreview18"></script>
+  <script src="js/mythic_fx_review.js?v=cinema39"></script>
+  <script src="js/expedition.js?v=20261022"></script>
+<script src="js/final_boss_dialogue_data.js?v=cinematic65"></script>
+<script src="js/final_boss_dialogue.js?v=cinematic65"></script>
+<script src="js/bold_ui_icons.js?v=perf90b"></script>
+<script src="js/ui_motion.js?v=motion98"></script></body>
 </html>

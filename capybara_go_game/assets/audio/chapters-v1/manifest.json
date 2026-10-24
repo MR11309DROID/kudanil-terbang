@@ -1,0 +1,240 @@
+{
+  "1": {
+    "id": 1,
+    "title": "Breezy Beginnings",
+    "bpm": 104,
+    "meter": 4,
+    "root": 62,
+    "scale": [
+      0,
+      2,
+      4,
+      6,
+      7,
+      9,
+      11
+    ],
+    "chords": [
+      0,
+      4,
+      5,
+      3
+    ],
+    "lead": "flute",
+    "arp": "pluck",
+    "motif": [
+      0,
+      2,
+      4,
+      2,
+      1,
+      3,
+      2,
+      0
+    ],
+    "drums": 0.08,
+    "bars": 16,
+    "duration": 36.9230625,
+    "path": "assets/audio/chapters-v1/chapter_1.wav",
+    "peak": 0.66,
+    "loopBoundaryStep": 0.0
+  },
+  "2": {
+    "id": 2,
+    "title": "Lanterns in the Leaves",
+    "bpm": 88,
+    "meter": 4,
+    "root": 64,
+    "scale": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      9,
+      10
+    ],
+    "chords": [
+      0,
+      3,
+      5,
+      4
+    ],
+    "lead": "flute",
+    "arp": "harp",
+    "motif": [
+      4,
+      2,
+      1,
+      0,
+      2,
+      5,
+      4,
+      1
+    ],
+    "drums": 0.045,
+    "bars": 16,
+    "duration": 43.636375,
+    "path": "assets/audio/chapters-v1/chapter_2.wav",
+    "peak": 0.6599999999999999,
+    "loopBoundaryStep": 0.0
+  },
+  "3": {
+    "id": 3,
+    "title": "Caravan of Sunlit Sand",
+    "bpm": 112,
+    "meter": 4,
+    "root": 62,
+    "scale": [
+      0,
+      1,
+      4,
+      5,
+      7,
+      8,
+      10
+    ],
+    "chords": [
+      0,
+      1,
+      3,
+      0
+    ],
+    "lead": "reed",
+    "arp": "oud",
+    "motif": [
+      0,
+      1,
+      2,
+      4,
+      3,
+      2,
+      1,
+      0
+    ],
+    "drums": 0.12,
+    "bars": 16,
+    "duration": 34.28571875,
+    "path": "assets/audio/chapters-v1/chapter_3.wav",
+    "peak": 0.66,
+    "loopBoundaryStep": 0.0
+  },
+  "4": {
+    "id": 4,
+    "title": "Snowlight Reverie",
+    "bpm": 78,
+    "meter": 4,
+    "root": 65,
+    "scale": [
+      0,
+      2,
+      4,
+      6,
+      7,
+      9,
+      11
+    ],
+    "chords": [
+      0,
+      2,
+      4,
+      3
+    ],
+    "lead": "bell",
+    "arp": "harp",
+    "motif": [
+      4,
+      6,
+      5,
+      2,
+      3,
+      4,
+      2,
+      0
+    ],
+    "drums": 0.012,
+    "bars": 16,
+    "duration": 49.23078125,
+    "path": "assets/audio/chapters-v1/chapter_4.wav",
+    "peak": 0.66,
+    "loopBoundaryStep": 0.0
+  },
+  "5": {
+    "id": 5,
+    "title": "March beneath the Embers",
+    "bpm": 124,
+    "meter": 4,
+    "root": 60,
+    "scale": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      10
+    ],
+    "chords": [
+      0,
+      5,
+      3,
+      4
+    ],
+    "lead": "reed",
+    "arp": "pizz",
+    "motif": [
+      0,
+      0,
+      4,
+      3,
+      2,
+      1,
+      4,
+      0
+    ],
+    "drums": 0.18,
+    "bars": 16,
+    "duration": 30.96775,
+    "path": "assets/audio/chapters-v1/chapter_5.wav",
+    "peak": 0.66,
+    "loopBoundaryStep": 0.0
+  },
+  "6": {
+    "id": 6,
+    "title": "The Moonlit Masquerade",
+    "bpm": 96,
+    "meter": 3,
+    "root": 69,
+    "scale": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ],
+    "chords": [
+      0,
+      3,
+      5,
+      4
+    ],
+    "lead": "keys",
+    "arp": "keys",
+    "motif": [
+      0,
+      2,
+      4,
+      6,
+      5,
+      2
+    ],
+    "drums": 0.035,
+    "bars": 16,
+    "duration": 30.0,
+    "path": "assets/audio/chapters-v1/chapter_6.wav",
+    "peak": 0.66,
+    "loopBoundaryStep": 0.0
+  }
+}

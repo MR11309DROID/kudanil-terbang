@@ -249,9 +249,9 @@ class CharacterManager {
 
     // Apply Core Stat Upgrades (Authentic Capybara Go Talents)
     if (this.statUpgrades) {
-      if (this.statUpgrades.hp) s.hp += this.statUpgrades.hp * 30;
-      if (this.statUpgrades.atk) s.atk += this.statUpgrades.atk * 3;
-      if (this.statUpgrades.def) s.def += this.statUpgrades.def * 1;
+      s.hp += this.getCoreStatBonus('hp');
+      s.atk += this.getCoreStatBonus('atk');
+      s.def += this.getCoreStatBonus('def');
     }
 
     // Apply Equipped Items
@@ -312,13 +312,7 @@ class CharacterManager {
     s.atk = Math.round(s.atk);
     s.def = Math.round(s.def);
 
-    // Exact calibration for showcase reference gear matching user screenshot (Darah 30.56M, ATK 8.11M, Shield 877K)
-    if (this.equipped && this.equipped.weapon && (this.equipped.weapon.templateId === "leg_04" || (this.equipped.weapon.atk && this.equipped.weapon.atk >= 5000000))) {
-      s.hp = 30560000;
-      s.atk = 8110000;
-      s.def = 877000;
-    }
-
+    // Combat stats derive from real equipment, talents and owned skills.
     s.critRate = Math.min(0.60, Math.max(0.05, s.critRate || 0.05));
     s.dodgeRate = Math.min(0.40, Math.max(0, s.dodgeRate || 0));
     s.lifesteal = Math.min(0.30, Math.max(0, s.lifesteal || 0));
@@ -484,15 +478,41 @@ class CharacterManager {
     return 240 + curLv * 10;
   }
 
-  upgradeCoreStat(statKey) {
+  getCoreStatBonus(statKey) {
+    const unit = {hp:30, atk:3, def:1}[statKey];
+    return unit ? ((this.statUpgrades?.[statKey] || 0) + (this.statUpgrades?.bonusUnits?.[statKey] || 0)) * unit : 0;
+  }
+
+  getCoreUpgradeOptions(statKey) {
+    const unit = {hp:30, atk:3, def:1}[statKey];
+    if (!unit) return [];
+    return [
+      {id:'steady',name:'Steady',chance:.8,multiplier:1,gain:unit},
+      {id:'bold',name:'Bold',chance:.45,multiplier:2,gain:unit*2},
+      {id:'daring',name:'Daring',chance:.2,multiplier:5,gain:unit*5}
+    ];
+  }
+
+  upgradeCoreStat(statKey, approach = 'steady') {
+    const option = this.getCoreUpgradeOptions(statKey).find(x => x.id === approach);
+    this.lastCoreUpgradeResult = {success:false,attempted:false,reason:'invalid'};
+    if (!option) return false;
     if (!this.statUpgrades) {
       this.statUpgrades = { hp: 0, atk: 1, def: 0, majorTierIndex: 0, subRank: 1, stageProgress: 1, claimedMilestones: [] };
     }
     const cost = this.getCoreStatUpgradeCost(statKey);
-    if ((this.gold || 0) < cost) return false;
+    if ((this.gold || 0) < cost) {
+      this.lastCoreUpgradeResult.reason = 'gold';
+      return false;
+    }
 
     this.addGold(-cost);
+    const success = Math.random() < option.chance;
+    this.lastCoreUpgradeResult = {success,attempted:true,cost,gain:success?option.gain:0,chance:option.chance,approach};
+    if (!success) { this.save(); return false; }
     this.statUpgrades[statKey] = (this.statUpgrades[statKey] || 0) + 1;
+    if (!this.statUpgrades.bonusUnits) this.statUpgrades.bonusUnits = {};
+    this.statUpgrades.bonusUnits[statKey] = (this.statUpgrades.bonusUnits[statKey] || 0) + option.multiplier - 1;
     
     // Increment stage progress up to 20
     if ((this.statUpgrades.stageProgress || 1) < 20) {
@@ -811,6 +831,7 @@ class CharacterManager {
       activeCompanion: this.activeCompanion,
       unlockedCompanions: this.unlockedCompanions,
       companionLevels: this.companionLevels,
+      liveEvents: this.liveEvents,
       statUpgrades: this.statUpgrades
     };
     try {
@@ -823,6 +844,7 @@ class CharacterManager {
       const raw = localStorage.getItem(this.SAVE_KEY);
       if (!raw) return;
       const s = JSON.parse(raw);
+      if (s.liveEvents && typeof s.liveEvents === "object") this.liveEvents=s.liveEvents;
       if (s.gold !== undefined) this.gold = s.gold;
       if (s.gems !== undefined) this.gems = s.gems;
       if (s.energy !== undefined) this.energy = s.energy;
@@ -907,6 +929,8 @@ class CharacterManager {
       }
       if (s.activeRun) {
         this.activeRun = s.activeRun;
+        // Keep resumed journeys on the same 60-round schedule as new chapters.
+        this.activeRun.maxDays = GameData.roundsPerChapter || 60;
         if (this.activeRun.skills && Array.isArray(this.activeRun.skills)) {
           this.activeRun.skills.forEach(sk => {
             if (sk.id === 101 && (!sk.icon || !sk.icon.includes('.'))) sk.icon = "assets/skills/skill_016.png";

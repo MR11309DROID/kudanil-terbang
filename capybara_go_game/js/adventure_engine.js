@@ -7,6 +7,7 @@ class AdventureEngine {
     this.autoTravel = false;
     this.traveling = false;
     this.currentEvent = null;
+    this.runGeneration = 0;
 
     this.onEventTriggered = null; // UI Callback
     this.onRunComplete = null;    // UI Callback
@@ -19,6 +20,9 @@ class AdventureEngine {
       return false;
     }
 
+    this.runGeneration++;
+    this.traveling = false;
+    this.autoTravel = false;
     const chapter = GameData.chapters.find(c => c.id === chapterId);
     this.renderer.setBackground(chapter.bg);
     this.renderer.setPlayerAnim("idle");
@@ -31,7 +35,7 @@ class AdventureEngine {
   }
 
   travelNextDay() {
-    if (this.traveling || this.battleSystem.inBattle) return;
+    if (this._mythicPreview || this.traveling || this.battleSystem.inBattle) return;
     if (this.hasPendingChest || (this.renderer && this.renderer.chestState)) {
       if (window.Game && window.Game.ui) {
         window.Game.ui.openTreasureChestModal();
@@ -39,6 +43,7 @@ class AdventureEngine {
       return;
     }
     if (!Character.activeRun) return;
+    if (this.currentEvent && ["combat", "elite", "boss", "narrative"].includes(this.currentEvent.type)) return;
 
     const run = Character.activeRun;
     if (run.day > run.maxDays) {
@@ -54,8 +59,10 @@ class AdventureEngine {
     this.renderer.setPlayerAnim("walk");
     this.renderer.scrollSpeed = 3.5 * this.battleSystem.speedMultiplier;
 
+    const generation = this.runGeneration;
     const travelDuration = 900 / this.battleSystem.speedMultiplier;
     setTimeout(() => {
+      if (generation !== this.runGeneration || Character.activeRun !== run) return;
       this.renderer.setPlayerAnim("idle");
       this.renderer.scrollSpeed = 0;
       this.traveling = false;
@@ -67,6 +74,27 @@ class AdventureEngine {
   processDayEvent(day) {
     const run = Character.activeRun;
     const chapter = GameData.chapters.find(c => c.id === run.chapterId);
+
+    // One guaranteed treasure stop per chapter attempt, five days before final boss.
+    const chestDay = Math.max(1, (run.maxDays || chapter.maxDays || 60) - 5);
+    if (!run.chapterChestSpawned && day >= chestDay && day < (run.maxDays || 60)) {
+      const ui = window.Game && window.Game.ui;
+      if (ui && ui.triggerFallingChest) {
+        this.currentEvent = {type: "chapter_chest", day};
+        run.day++;
+        const spawned = ui.triggerFallingChest({
+          storyText: 'The final boss is near. You discover a <span class="highlight-blue">Golden Chest</span> to prepare for the coming battle.',
+          onClaimed: () => {
+            this.currentEvent = null;
+            this.hasPendingChest = false;
+            if (this.onTravelStateChange) this.onTravelStateChange("ready");
+          }
+        });
+        if (spawned !== false) { Character.save(); return; }
+        run.day--;
+        this.currentEvent = null;
+      }
+    }
 
     // 1. Check Milestone Boss Day (Days 20, 40, 60)
     if (chapter.bossDays && chapter.bossDays[day]) {
@@ -168,7 +196,7 @@ class AdventureEngine {
 
       if (this.autoTravel && !this.battleSystem.inBattle) {
         setTimeout(() => {
-          this.travelNextDay();
+          if (this.autoTravel && Character.activeRun === run) this.travelNextDay();
         }, 1200 / this.battleSystem.speedMultiplier);
       }
     } else if (dayEventType === "combat") {
@@ -218,6 +246,7 @@ class AdventureEngine {
   }
 
   onBattleFinished(result) {
+    this.currentEvent = null;
     if (result.victory) {
       const run = Character.activeRun;
       run.day++;
@@ -238,17 +267,7 @@ class AdventureEngine {
       // Roll chance for Roguelike Skill Selection or Equipment drop (Matches Video Project 2)
       const shouldOfferSkill = (run.day % 3 === 0) || result.isBoss;
       if (shouldOfferSkill) {
-        if (window.Game && window.Game.ui && window.Game.ui.triggerFallingChest) {
-          this.hasPendingChest = true;
-          window.Game.ui.triggerFallingChest({
-            storyText: `The ${result.isBoss ? 'mighty Boss' : 'swordsman'} falls, and you obtain a <span class="highlight-blue">Golden Chest</span>, but it's clear the humans won't stop here.`,
-            onClaimed: () => {
-              this.hasPendingChest = false;
-              if (this.onTravelStateChange) this.onTravelStateChange("ready");
-              this.checkAutoAdvance();
-            }
-          });
-        } else if (this.onLevelUpSkill) {
+        if (this.onLevelUpSkill) {
           this.offerSkillCards(() => {
             if (this.onTravelStateChange) this.onTravelStateChange("ready");
             this.checkAutoAdvance();
@@ -364,11 +383,13 @@ class AdventureEngine {
     } else if (opt.action === "add_gold") {
       Character.addGold(opt.val);
       resultMsg = `Received ${opt.val} Gold!`;
+      this.advanceAfterNarrative();
       return { success: true, msg: resultMsg, goldWon: opt.val };
     } else if (opt.action === "add_gems") {
       Character.gems += opt.val;
       Sound.playSfx("gem");
       resultMsg = `Received ${opt.val} Gems!`;
+      this.advanceAfterNarrative();
       return { success: true, msg: resultMsg, gemsWon: opt.val };
     } else if (opt.action === "camp_buff") {
       const healAmt = Math.round(run.maxHp * 0.30);
@@ -398,12 +419,15 @@ class AdventureEngine {
       } else {
         resultMsg = `Found ${dropGold} 🪙 and ${dropGems} 💎!`;
       }
+      this.advanceAfterNarrative();
       return { success: true, msg: resultMsg, goldWon: dropGold, gemsWon: dropGems };
     } else if (opt.action === "gamble_dice") {
       const won = Math.random() < 0.50;
       if (won) {
         Character.addGold(120);
         resultMsg = "Lucky roll! You won 120 Gold!";
+        Character.save();
+        this.advanceAfterNarrative();
         return { success: true, msg: resultMsg, goldWon: 120 };
       } else {
         Sound.playSfx("uiCancel");
@@ -416,7 +440,7 @@ class AdventureEngine {
       this.renderer.addVisualEffect("healRing", this.renderer.playerState.x, this.renderer.playerState.y);
       resultMsg = "Ultimate Yuzu bliss! HP fully restored & 100% Rage!";
       if (window.Game && window.Game.ui) window.Game.ui.renderRunStatsBar(true);
-    } else if (opt.action === "skill_select") {
+    } else if ((opt.action === "skill_select" || opt.action === "buy_skill")) {
       this.offerSkillCards(() => {
         this.advanceAfterNarrative();
       });
@@ -433,9 +457,13 @@ class AdventureEngine {
   }
 
   advanceAfterNarrative() {
+    this.currentEvent = null;
     const run = Character.activeRun;
     if (run) {
+      this.traveling = false;
       run.day++;
+      Character.save();
+      if (this.onTravelStateChange) this.onTravelStateChange("ready");
       if (run.day > run.maxDays) {
         this.handleChapterVictory();
       } else {
@@ -490,7 +518,7 @@ class AdventureEngine {
     if (this.hasPendingChest || (this.renderer && this.renderer.chestState)) return;
     if (this.autoTravel && !this.battleSystem.inBattle && Character.activeRun) {
       setTimeout(() => {
-        if (this.hasPendingChest || (this.renderer && this.renderer.chestState)) return;
+        if (!this.autoTravel || this.hasPendingChest || (this.renderer && this.renderer.chestState)) return;
         this.travelNextDay();
       }, 700 / this.battleSystem.speedMultiplier);
     }

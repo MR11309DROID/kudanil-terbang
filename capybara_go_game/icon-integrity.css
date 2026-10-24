@@ -1,0 +1,5 @@
+/* Preserve the complete artwork, including rarity corner badges. */
+.gacha-hero-icon.is-gear-card,.gacha-item-img.is-gear-card,.inv-item-img,.slot-item-img{object-fit:contain!important;box-sizing:border-box;padding:2px}
+.gacha-hero-icon.is-gear-card{width:84px;height:84px;border-radius:4px}
+.gacha-item-img.is-gear-card{width:40px;height:40px;border-radius:3px}
+.skill-card-icon-img{object-fit:contain!important}

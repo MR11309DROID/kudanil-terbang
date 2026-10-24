@@ -1,0 +1,39 @@
+{
+  "gift": {
+    "original": "Furina-2026-10-22-19-32-[excited]-A-little-surprise,-just-for-you!-[soft.mp3",
+    "bytes": 97870
+  },
+  "sad": {
+    "original": "Furina-2026-10-22-19-31-[sad]-Oh...-that-wasn't-quite-what-we-hoped-for..mp3",
+    "bytes": 125037
+  },
+  "laugh": {
+    "original": "Furina-2026-10-22-20-49-[chuckling]Hehe...[sad]-oh-dear,-that-didn't-qui.mp3",
+    "installed": "laugh-upgrade-failed-v2.mp3",
+    "sha256": "1260451810f1e979db5d84b49d571c0c44dae42b2c7c89020291c8a72cb6203c"
+  },
+  "angry": {
+    "original": "Furina-2026-10-22-19-29-[angry]-You-went-into-battle-without-resting-[pa.mp3",
+    "bytes": 90347
+  },
+  "nervous": {
+    "original": "Furina-2026-10-22-19-26-[nervous]-Oh!-You're-standing-rather-close.-[pau.mp3",
+    "bytes": 137994
+  },
+  "shy": {
+    "original": "Furina-2026-10-22-19-25-[embarrassed]-I...-made-this-for-you.-[pause]-It.mp3",
+    "bytes": 132561
+  },
+  "welcome": {
+    "original": "Furina-2026-10-22-19-38-[happy]-Welcome-back,-my-dear-adventurer!-Come,.mp3",
+    "bytes": 87421
+  },
+  "rank": {
+    "original": "Furina-2026-10-22-19-33-[excited]-Bravo!-A-brand-new-rank!-[soft]-Look-h.mp3",
+    "bytes": 122948
+  },
+  "tip": {
+    "original": "Furina-2026-10-22-19-42-your-next-gift-arrives-automatically-at-rank-app.mp3",
+    "bytes": 84913
+  }
+}

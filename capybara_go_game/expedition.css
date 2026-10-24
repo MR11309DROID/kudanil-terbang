@@ -1,0 +1,177 @@
+/* Compact expedition UI, matching the game's parchment, emerald and gold palette. */
+.expedition-compass{flex-shrink:0;margin:9px 14px 0;padding:10px 13px 8px;border:1px solid #bba76e88;border-radius:12px;background:linear-gradient(125deg,#303c39f5,#192b2df5);box-shadow:0 3px 10px #0004,inset 0 1px #ffffff12;color:#f8edcf;font-family:'Fredoka',sans-serif}
+.expedition-heading,.journey-caption{display:flex;align-items:center;justify-content:space-between;gap:8px}.expedition-heading>span{font-size:10px;letter-spacing:2px;color:#c6d4ba}.expedition-heading strong{font-size:12px;color:#ffe3a0}
+.journey-track{height:6px;position:relative;margin:12px 8px 10px 0;background:#0c191c;border-radius:9px;box-shadow:inset 0 1px 3px #0008}.journey-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#57b78a,#e7d68a);transition:width .45s}.journey-track>span{position:absolute;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#303d35;border:1px solid #d3bb78;color:#ffe7a4;font-size:13px}
+.journey-caption{font-size:10px;color:#d5ddce}.journey-loot{color:#f0d38a;white-space:nowrap}
+.expedition-controls{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:7px 14px 0;flex-shrink:0;font-family:'Fredoka',sans-serif}.expedition-controls button{font:inherit;font-size:11px;min-height:34px;padding:6px 10px;border:1px solid #b9b58b70;border-radius:9px;background:linear-gradient(#3f5146,#283a33);color:#f7edce;box-shadow:0 2px 0 #0c1719;cursor:pointer}.expedition-controls button[aria-pressed=true]{background:#416d4a;border-color:#b8d695}.journey-status{font-size:10px;color:#d3d7c6;text-align:center}.journey-build b{display:inline-block;min-width:15px;border-radius:9px;background:#dac28a;color:#26332d}.expedition-controls button:focus-visible,.expedition-build-dialog button:focus-visible{outline:3px solid #ffe29a;outline-offset:3px}
+.expedition-build-dialog{width:min(360px,86vw);max-height:70dvh;padding:20px;border:2px solid #bfa46a;border-radius:18px;background:linear-gradient(145deg,#f9efd5,#e9d9b4);color:#344038;font-family:'Fredoka',sans-serif;box-shadow:0 20px 80px #0008}.expedition-build-dialog::backdrop{background:#081414b8;backdrop-filter:blur(4px)}.expedition-build-dialog header{display:flex;justify-content:space-between;align-items:center}.expedition-build-dialog h2{margin:4px 0 16px;font-size:24px}.expedition-build-dialog small{font-size:10px;letter-spacing:2px;color:#67745c}.expedition-build-dialog button{border:0;border-radius:50%;background:#344b3c;color:#fff;width:32px;height:32px;cursor:pointer}.journey-build-list{font-size:14px;line-height:1.5}.journey-build-list article{border-top:1px solid #bca87b;padding:12px 0}.journey-build-list article strong{color:#37614b}.journey-build-list p{margin:4px 0 0;font-size:12px}
+@media(max-height:720px){.expedition-compass{padding:7px 10px 6px;margin-top:5px}.expedition-controls{padding-top:3px}.expedition-controls button{min-height:30px}.journey-track{margin-top:9px;margin-bottom:9px}}
+@media(prefers-reduced-motion:reduce){.journey-fill{transition:none}.adventure-event-deck{scroll-behavior:auto}}
+
+/* One shared layout prevents the title jumping during the blue-to-gold upgrade. */
+.fortune-win-banner{bottom:var(--win-bottom,92px);width:100%;height:72px;isolation:isolate;z-index:20;overflow:visible;pointer-events:none;--win-tint:#55ccff;--win-hot:#167edc}
+.fortune-win-banner.state-big-win{--win-tint:#ffdb7a;--win-hot:#ef354b}
+.fortune-win-banner::before{content:"";position:absolute;z-index:-2;pointer-events:none;left:50%;bottom:-100px;width:125%;height:250px;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 75%,#c5f6ffad 0%,#238bd67a 30%,#11599c29 54%,transparent 75%);animation:win-aura-in .3s ease-out both}
+.fortune-win-banner.state-big-win::before{background:radial-gradient(ellipse at 50% 75%,#fff0b9b8 0%,#ffb64c82 22%,#ed334b8c 44%,transparent 75%);animation:win-hot-flash .5s ease-out both}
+.fortune-win-banner .win-title-wrap,.fortune-win-banner.state-big-win .win-title-wrap{position:relative;width:228px;height:77px;transform-origin:50% 80%;z-index:5;will-change:transform,opacity}
+.fortune-win-banner .svg-win-layer{font-size:48px;letter-spacing:.2px;font-weight:400;stroke-linejoin:round;paint-order:stroke fill}
+.fortune-win-banner .win-text-svg{overflow:visible}
+.fortune-win-banner .layer-shadow{stroke-width:11px!important}
+.fortune-win-banner .layer-bevel{stroke-width:8px!important}
+.fortune-win-banner .layer-stroke{stroke-width:5px!important}
+.fortune-win-banner.state-minor-win .layer-shadow{fill:#102337;stroke:#102337}
+.fortune-win-banner.state-minor-win .layer-bevel{fill:#4ba6c0;stroke:#4ba6c0}
+.fortune-win-banner.state-minor-win .layer-stroke{fill:#102337;stroke:#102337}
+.fortune-win-banner.state-minor-win .layer-front{filter:drop-shadow(0 1px 0 #e1ffff)}
+.fortune-win-banner.state-big-win .layer-shadow{fill:#36181e;stroke:#36181e}
+.fortune-win-banner.state-big-win .layer-bevel{fill:#c77137;stroke:#c77137}
+.fortune-win-banner.state-big-win .layer-stroke{fill:#36181e;stroke:#36181e}
+.fortune-win-banner.state-big-win .layer-front{filter:drop-shadow(0 1px 0 #fff9cd)}
+.fortune-win-banner.state-minor-win .win-title-wrap{animation:win-minor-pop .36s cubic-bezier(.18,.75,.25,1) both}
+.fortune-win-banner.win-upgrading .win-title-wrap{animation:win-title-dip .14s ease-in both}
+.fortune-win-banner.state-big-win .win-title-wrap{animation:win-gold-pop .38s cubic-bezier(.18,.75,.25,1) both}
+.fortune-win-banner .win-sunburst-wrap{width:390px;height:280px;bottom:-116px;opacity:.7;overflow:hidden;pointer-events:none;mask-image:radial-gradient(ellipse,#000 14%,transparent 68%)}
+.fortune-win-banner .win-sunburst-svg,.fortune-win-banner.state-big-win .win-sunburst-svg{animation:win-rays-turn 24s linear infinite}
+.fortune-win-banner.state-minor-win .sunburst-blade{fill:#b8f3ff;opacity:.3}
+.fortune-win-banner.state-big-win .sunburst-blade{fill:#fff0b1;opacity:.65}
+.fortune-win-banner .win-center-glow{width:150px;height:150px;background:radial-gradient(circle,var(--win-tint),transparent 68%);opacity:.45;filter:none!important;transition:background .18s}
+.fortune-win-banner .win-shockwave-ring{display:none}
+.fortune-win-banner .win-sparkles-wrap{inset:-18px 0 -28px}
+.fortune-win-banner .win-diamond-star{color:#d7f9ff;text-shadow:none;filter:drop-shadow(0 0 2px var(--win-tint));animation:win-clean-sparkle .8s ease-out both}
+.fortune-win-banner.state-big-win .win-diamond-star{color:#fff3c4;animation:win-gold-sparkle .7s ease-out both}
+.fortune-win-banner .win-sparkles-wrap .sp-1{left:25%;top:30px;font-size:12px;animation-delay:.05s}
+.fortune-win-banner .win-sparkles-wrap .sp-2{right:24%;top:8px;font-size:10px;animation-delay:.16s}
+.fortune-win-banner .win-sparkles-wrap .sp-3{left:22%;bottom:8px;font-size:19px;animation-delay:.12s}
+.fortune-win-banner .win-sparkles-wrap .sp-4{right:22%;bottom:12px;font-size:17px;animation-delay:.22s}
+.fortune-win-banner .win-sparkles-wrap .sp-5{display:none}
+.fortune-win-banner.win-exit{animation:win-reveal-exit .22s ease-out forwards}
+@keyframes win-minor-pop{0%{opacity:0;transform:translateY(12px) scale(.76)}65%{opacity:1;transform:translateY(-2px) scale(1.04)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes win-title-dip{to{opacity:0;transform:translateY(8px) scale(.91)}}
+@keyframes win-gold-pop{0%{opacity:0;transform:translateY(10px) scale(.82)}60%{opacity:1;transform:translateY(-3px) scale(1.07)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes win-aura-in{from{opacity:0}to{opacity:1}}
+@keyframes win-hot-flash{0%{opacity:.3}35%{opacity:1}100%{opacity:.88}}
+@keyframes win-rays-turn{to{transform:rotate(360deg)}}
+@keyframes win-clean-sparkle{0%,100%{opacity:0;transform:scale(.5)}35%,65%{opacity:.9;transform:scale(1)}}
+@keyframes win-gold-sparkle{0%,100%{opacity:0;transform:scale(.5)}35%,65%{opacity:1;transform:scale(1)}}
+@keyframes win-reveal-exit{to{opacity:0;translate:0 -4px}}
+@media(max-width:360px){.fortune-win-banner .win-title-wrap,.fortune-win-banner.state-big-win .win-title-wrap{width:205px;height:70px}.fortune-win-banner .win-sunburst-wrap{width:340px}}
+@media(prefers-reduced-motion:reduce){.fortune-win-banner,.fortune-win-banner::before,.fortune-win-banner .win-title-wrap,.fortune-win-banner .win-sunburst-svg,.fortune-win-banner .win-diamond-star{animation:none!important}.fortune-win-banner.win-exit{opacity:0}}
+
+/* Local rounded type keeps the cartoon UI consistent, including offline. */
+@font-face{font-family:CapyRound;src:url('assets/fonts/fredoka-semibold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:CapyDisplay;src:url('assets/fonts/lilita-one.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+body,button,input,select,textarea,#game-container :where(div,span,p,small,strong,b,label,li,a,td,th){font-family:CapyRound,'Fredoka',sans-serif!important}
+#game-container :where(h1,h2,h3,h4),#game-container button,.modal-overlay button,.treasure-modal-overlay button,.modal-overlay :where(h1,h2,h3,h4),.treasure-modal-overlay :where(h1,h2,h3,h4),.svg-win-layer{font-family:CapyDisplay,'Lilita One',sans-serif!important;font-weight:400!important;letter-spacing:.3px}
+.modal-overlay,.treasure-modal-overlay{font-family:CapyRound,'Fredoka',sans-serif}
+#btn-treasure-open,#btn-treasure-claim{box-sizing:border-box;flex-shrink:0;display:flex;align-items:center;justify-content:center;min-height:48px;height:auto;width:min(240px,90%);min-width:0;padding:10px 18px;border:3px solid #50331c;border-bottom-width:5px;border-radius:18px;background:linear-gradient(#fff7bc 0%,#ffdb70 12%,#ffc641 48%,#f4a522 100%);box-shadow:inset 0 2px 0 #fff9db,inset 0 0 0 2px #ffe899,0 3px 0 #261e18,0 7px 12px #0005;color:#4b2c15;text-shadow:0 1px #fff1b5;font-size:20px;line-height:1.15;letter-spacing:.5px;animation:none;white-space:normal;overflow-wrap:anywhere;cursor:pointer;touch-action:manipulation}
+#btn-treasure-open:hover,#btn-treasure-claim:not(:disabled):hover{filter:brightness(1.06);transform:translateY(-1px)}
+#btn-treasure-open:active,#btn-treasure-claim:not(:disabled):active{background:linear-gradient(#ffd56a,#efa32a);transform:translateY(2px);box-shadow:inset 0 2px 0 #fff4ba,0 1px 0 #261e18}
+#btn-treasure-open:disabled,#btn-treasure-claim:disabled{cursor:default;filter:saturate(.45);opacity:.65;transform:none}
+#btn-treasure-open:focus-visible,#btn-treasure-claim:focus-visible{outline:3px solid #fff5b7;outline-offset:4px}
+.treasure-content-phase{min-height:0;max-height:100%;padding-bottom:12px}
+#treasure-phase-open .treasure-cards-stack{min-height:0;overflow-y:auto;max-height:48dvh;padding:12px 8px}
+@media(max-height:650px){.treasure-chest-display-wrap{height:150px;margin-bottom:18px}.treasure-main-title{margin-bottom:12px}.treasure-modal-card{padding:12px}.treasure-chest-opened-wrap{height:75px}.treasure-gaining-title{font-size:21px}}
+
+.treasure-card-icon{overflow:hidden;flex-shrink:0}.treasure-card-icon img{display:block;width:100%!important;height:100%!important;object-fit:contain!important;border-radius:8px!important}.run-skill-slot img,.skill-card-icon-img{object-fit:contain}
+
+/* Small unobtrusive stage HUD, following the reference's compact day route. */
+#btn-run-pet-quick,.stage-run-pet-btn{display:none!important}
+.stage-floating-header{top:10px;left:10px;right:10px;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:8px;align-items:start;justify-content:initial}
+.stage-settings-btn{width:30px;height:30px;min-width:30px;max-width:30px;flex-basis:30px;border-radius:7px;border-width:2px;box-shadow:0 2px 0 #102a38,inset 0 1px #b6f2ff}
+.svg-gear-icon{width:21px;height:21px}
+.stage-day-capsule{justify-self:center;max-width:210px;width:100%;height:26px;padding:0 8px;gap:7px;margin-top:2px;border:0;border-radius:14px;background:#183d429c;box-shadow:none;pointer-events:none}
+.stage-day-label{font-size:10px;white-space:nowrap;letter-spacing:0;min-width:32px;line-height:1}
+.stage-milestone-track{flex:1;min-width:0;justify-content:space-between;gap:4px;height:26px}
+.stage-node{flex:0 0 19px;width:19px;height:24px;cursor:default}
+.stage-node .node-circle-body{width:18px!important;height:18px!important;min-width:18px;border-width:1.5px!important;box-shadow:0 1px 2px #15252b80!important}
+.stage-node.node-current .node-circle-body{width:21px!important;height:21px!important;min-width:21px}
+.stage-node .node-svg-icon{width:13px!important;height:13px!important}
+.stage-node .node-num{display:none}
+.node-pointer-arrow{display:none}
+.stage-rail-line,.stage-milestone-fill{height:2px;left:7px;right:7px;top:50%;max-width:calc(100% - 14px)}
+.stage-rail-line{background:#d9c7a182}.stage-milestone-fill{background:#ffd582}
+.stage-dots{font-size:8px;letter-spacing:1px;color:#f6edda;flex:0 0 12px;width:12px;line-height:1}
+.stage-top-right-group{position:static;display:flex;flex-direction:column;align-items:flex-end;gap:3px;min-width:0}
+@media(max-width:360px){.stage-floating-header{gap:5px;left:8px;right:8px}.stage-day-capsule{max-width:185px;padding:0 6px;gap:4px}.stage-milestone-track{gap:2px}.stage-node{flex-basis:17px;width:17px}.stage-dots{flex-basis:9px;width:9px;font-size:7px}}
+
+/* Upgrade feedback follows the reference's gold-lined power ribbon. */
+.talents-hero-stage{isolation:isolate}
+.talent-power-reveal{position:absolute;z-index:8;pointer-events:none;top:48%;left:3%;right:3%;min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box;padding:7px 12px;background:linear-gradient(90deg,transparent,#251934e8 18%,#251934f5 50%,#251934e8 82%,transparent);border-block:1px solid #efd17799;color:#fff8db;text-shadow:0 2px 1px #221a2e;font-family:CapyDisplay,'Lilita One',sans-serif;font-size:24px;line-height:1;font-variant-numeric:tabular-nums;contain:layout;will-change:transform,opacity}
+.talent-power-reveal::after{content:'';position:absolute;inset:-1px 0;pointer-events:none;background:linear-gradient(100deg,transparent 30%,#fff5b144 48%,transparent 65%);animation:talent-ribbon-sheen .6s ease-out both}
+.talent-power-emblem{color:#ffda72;font-size:27px;filter:drop-shadow(0 1px 0 #9f6225)}
+.talent-power-number{font-family:CapyDisplay,'Lilita One',sans-serif!important;font-weight:400;min-width:68px;text-align:right}
+.talent-power-gain{color:#c2f477;font-size:19px;white-space:nowrap;min-width:48px}
+.talent-upgrade-burst{position:absolute;inset:0;z-index:6;pointer-events:none;background:radial-gradient(ellipse at 50% 60%,#ffe7a63d,transparent 60%);animation:talent-burst-fade .7s ease-out both}
+.talent-upgrade-burst i{position:absolute;left:50%;top:60%;height:8px;width:8px;background:#fff1b0;clip-path:polygon(50% 0,63% 37%,100% 50%,63% 63%,50% 100%,37% 63%,0 50%,37% 37%);animation:talent-spark-out .6s ease-out var(--delay) both}
+.talents-track-fill{transition:width .55s cubic-bezier(.16,1,.3,1)}
+.talents-star-indicator{transition:left .55s cubic-bezier(.16,1,.3,1)}
+.stat-upgrade-card{transform-origin:center 80%}
+.stat-float-text{pointer-events:none;animation:talent-stat-rise .8s ease-out forwards!important}
+@keyframes talent-ribbon-sheen{from{opacity:0;translate:-30% 0}35%{opacity:1}to{opacity:0;translate:30% 0}}
+@keyframes talent-burst-fade{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+@keyframes talent-spark-out{from{opacity:0;transform:rotate(var(--angle)) translateY(-25px) scale(.4)}30%{opacity:1}to{opacity:0;transform:rotate(var(--angle)) translateY(-85px) scale(.7)}}
+@keyframes talent-stat-rise{0%{opacity:0;translate:0 7px}20%{opacity:1}75%{opacity:1}100%{opacity:0;translate:0 -28px}}
+@media(prefers-reduced-motion:reduce){.talents-track-fill,.talents-star-indicator{transition:none}.talent-upgrade-burst,.talent-power-reveal::after{display:none}.stat-float-text{animation:none!important}}
+
+/* Capy layers only: leave equipment, shadows and all other UI untouched. */
+.capy-ui-smooth-canvas{position:absolute;pointer-events:none;z-index:3;image-rendering:auto;object-fit:contain;filter:drop-shadow(0 3px 4px #2d190a35)}
+.capy-smooth-source{opacity:0!important;animation:none!important}
+.hero-capy-character-img.equipped-showcase{animation:capy-equipped-smooth 2.6s ease-in-out infinite!important;will-change:transform;transform-origin:50% 94%}
+@keyframes capy-equipped-smooth{0%,100%{transform:translateY(0) rotate(-.3deg) scale(1,1)}50%{transform:translateY(-1.5px) rotate(.3deg) scale(1.008,.994)}}
+@media(prefers-reduced-motion:reduce){.hero-capy-character-img.equipped-showcase{animation:none!important}}
+
+/* Event choices: distinct action colors with readable reward summaries. */
+.event-choice-list{gap:10px!important;margin-top:14px!important;padding:0 0 5px;display:flex;flex-direction:column}
+.event-choice-capsule-btn{--choice-edge:#408aab;--choice-bg:#e4f4fb;--choice-ink:#234c65;display:flex!important;align-items:center;gap:11px;position:relative;width:100%;min-height:66px;padding:10px 12px!important;border:2px solid var(--choice-edge)!important;border-bottom-width:4px!important;border-radius:14px!important;background:linear-gradient(115deg,#fffdf4,var(--choice-bg))!important;box-shadow:inset 0 1px #fff,0 3px 0 #583b2020!important;text-align:left;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,filter .16s ease;color:var(--choice-ink)!important;touch-action:manipulation;overflow:hidden}
+.event-choice-capsule-btn.choice-mint{--choice-edge:#43997a;--choice-bg:#ddf4df;--choice-ink:#275f49}
+.event-choice-capsule-btn.choice-gold{--choice-edge:#c98c32;--choice-bg:#ffedb6;--choice-ink:#78501c}
+.event-choice-capsule-btn.choice-peach{--choice-edge:#cf8053;--choice-bg:#ffe2cd;--choice-ink:#884326}
+.event-choice-capsule-btn.choice-violet{--choice-edge:#9671ba;--choice-bg:#eee1ff;--choice-ink:#654386}
+.event-choice-capsule-btn.choice-rose{--choice-edge:#c06b7f;--choice-bg:#ffe0e6;--choice-ink:#8a3e53}
+.choice-emblem{flex:0 0 36px;display:grid;place-items:center;width:36px;height:36px;background:var(--choice-bg);border:1px solid var(--choice-edge);border-radius:11px;font-size:22px;color:var(--choice-ink);box-shadow:inset 0 2px #fff9}
+.choice-copy{display:flex;flex-direction:column;min-width:0;gap:4px;flex:1}
+.event-choice-capsule-btn .choice-copy strong{display:block;color:var(--choice-ink)!important;font-size:14px!important;line-height:1.2;letter-spacing:.1px}
+.event-choice-capsule-btn .choice-copy small{display:block;color:#52605b!important;font-size:11px!important;font-weight:600;line-height:1.35}
+.choice-arrow{font-size:25px;color:var(--choice-edge);flex:0 0 12px;text-align:center}
+.event-choice-capsule-btn:hover{transform:translateY(-2px);filter:brightness(1.025);box-shadow:inset 0 1px #fff,0 5px 8px #583b2024!important}
+.event-choice-capsule-btn:active{transform:translateY(2px);box-shadow:inset 0 2px 3px #583b2018!important}
+.event-choice-capsule-btn:focus-visible{outline:3px solid #3893c5;outline-offset:3px}
+.event-choice-resolved{padding:12px;border-radius:12px;border:1px solid #73ab76;background:#e3f4d9;color:#315d3b;line-height:1.4}
+@media(prefers-reduced-motion:reduce){.event-choice-capsule-btn{transition:none}.event-choice-capsule-btn:hover,.event-choice-capsule-btn:active{transform:none}}
+
+/* Feet stay planted; the ground shadow never follows breathing motion. */
+.talents-capy-hero-wrap{animation:none!important;transform:none!important}
+.talents-capy-ground-shadow{position:relative;z-index:1;margin-top:-6px;height:12px;width:92px;opacity:.65;animation:none!important}
+.talents-capy-hero-wrap .capy-ui-smooth-canvas{filter:none}
+.milestone-badge-img{image-rendering:auto}
+.cur-gold .cur-icon,.gold-mini-icon{display:inline-block;width:22px;height:22px;flex:0 0 22px;font-size:0!important;background:url('assets/ui/coin-clean.svg') center/contain no-repeat}
+.stat-btn-coin{display:inline-block;width:18px;height:18px;font-size:0!important;background:url("assets/ui/coin-clean.svg") center/contain no-repeat}
+
+/* Smaller Upgrade capy only; Gear dimensions are intentionally unchanged. */
+.talents-capy-hero-img{width:139px;height:130px}
+.talents-capy-ground-shadow{width:82px}
+/* Compact horizontal choices; explicitly override the old column layout. */
+.event-choice-list{gap:7px!important;margin-top:9px!important}
+.event-choice-capsule-btn{flex-direction:row!important;justify-content:flex-start!important;box-sizing:border-box;min-height:50px;height:auto;gap:8px;padding:7px 9px!important;border-radius:10px!important;border-bottom-width:3px!important;text-align:left!important}
+.choice-emblem{flex:0 0 27px;width:27px;height:27px;border-radius:8px;font-size:17px}
+.choice-copy{align-items:flex-start;gap:2px;text-align:left}
+.event-choice-capsule-btn .choice-copy strong{font-size:12px!important;line-height:1.2}
+.event-choice-capsule-btn .choice-copy small{font-size:10px!important;line-height:1.25}
+.choice-arrow{font-size:20px;flex:0 0 9px;line-height:1}
+.mythic-review-tools{display:flex;justify-content:center;flex-shrink:0;padding:4px 12px 0}.mythic-review-button{min-height:30px;padding:5px 14px;border:1px solid #d7b1f2;border-bottom:3px solid #48305f;border-radius:9px;background:linear-gradient(#8863a8,#614581);color:#fff2ce;font:12px CapyDisplay,sans-serif;cursor:pointer}.mythic-review-button[aria-pressed=true]{background:linear-gradient(#5c7662,#344e3b)}.mythic-review-button:disabled{opacity:.45;cursor:default}
+/* Every rarity has its own opaque badge with sufficient contrast. */
+.treasure-card-tag{z-index:4;line-height:1.1;min-height:17px;box-sizing:border-box;display:inline-flex;align-items:center;gap:3px;border:1px solid #35243c;color:#fff!important;text-shadow:0 1px 1px #24203880;font-size:10px!important;padding:3px 8px;top:-10px}
+.treasure-card-tag.tag-rare{background:linear-gradient(#429bdf,#2466b5);border-color:#153f78}
+.treasure-card-tag.tag-uncommon{background:linear-gradient(#69b76b,#348649);border-color:#285f36}
+.treasure-card-tag.tag-common{background:linear-gradient(#939eb0,#657186);border-color:#404d62}
+.treasure-card-tag.tag-legendary{background:linear-gradient(#f3b836,#c47511);border-color:#94530c}
+.treasure-card-tag.tag-epic{background:linear-gradient(#aa66de,#7836b3);border-color:#512185}
+.treasure-card-tag.tag-mythic{background:linear-gradient(#f5597c,#cf2555);border-color:#8b1b3f}
+#treasure-phase-open .treasure-cards-stack{padding-top:18px;padding-bottom:16px;gap:16px}
+.mythic-review-tools{flex-wrap:wrap;gap:6px}.mythic-fx-play{background:linear-gradient(#bc7742,#8a4d2d);border-color:#ffdb8e}.mythic-fx-status{flex:0 0 100%;text-align:center;font:11px CapyRound,sans-serif;color:#ffe3a4;min-height:0}.mythic-fx-status:empty{display:none}
+/* Slightly larger Gear capy; arena and Camp retain their current dimensions. */
+#hero-capy-avatar-img{width:86px;height:86px}
+#hero-capy-avatar-img.equipped-showcase{width:120px;height:120px}
+
+/* Offscreen backpack cards keep their square grid geometry without painting every shimmer. */
+#inventory-grid>.inv-item-card{content-visibility:auto;contain-intrinsic-size:auto 64px}

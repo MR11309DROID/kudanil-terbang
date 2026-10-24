@@ -1,0 +1,27 @@
+/* Compact native vector plates. Captions remain live, localized HTML text. */
+.menu-left-widgets{width:56px;gap:7px}
+.menu-left-widgets .quick-btn-stack{width:66px;max-height:172px;gap:8px;padding:4px 4px 8px;margin-left:-4px}
+.menu-left-widgets .quick-sidebar-btn.sidebar96,.menu-left-widgets .qbtn-pets{width:48px;height:46px;min-height:46px}
+.menu-left-widgets .sidebar96 .sidebar-ref-art,.menu-left-widgets .sidebar96 .sidebar-wheel-disc{image-rendering:auto;backface-visibility:visible}
+.menu-left-widgets .sidebar96 .sidebar-wheel-disc{transform-origin:50% 47.131%}
+.menu-left-widgets .quick-sidebar-btn.sidebar96 .sidebar-ref-label{position:absolute;inset:auto 2px 4px;display:flex;align-items:center;justify-content:center;width:auto;height:12px;padding:0;clip-path:none;overflow:visible;white-space:nowrap;background:none;font:9px/12px CapyDisplay,'Lilita One',sans-serif;font-weight:400;letter-spacing:0;text-transform:uppercase;color:#4b2b1c;text-shadow:none;pointer-events:none}
+.menu-left-widgets .sidebar96.qbtn-gacha .sidebar-ref-label{font-size:7.2px!important;letter-spacing:-.1px}
+.menu-left-widgets .btn-toggle-quick-stack{width:48px;height:28px;min-height:28px}
+.menu-left-widgets .btn-toggle-quick-stack .toggle-stack-label{font-size:11px}
+.menu-left-widgets .qbtn-pets .qbtn-icon{height:27px;min-height:27px;line-height:27px}
+.menu-left-widgets .qbtn-pets .bold-ui-icon{width:26px;height:26px}
+.menu-left-widgets .qbtn-pets>span:last-child{font-size:11px;line-height:12px}
+html[lang=ja] .menu-left-widgets .sidebar96 .sidebar-ref-label{inset:auto 2px 5px;height:12px;width:auto;background:none;clip-path:none;font:700 8px/12px 'Yu Gothic UI',Meiryo,sans-serif;color:#4b2b1c}
+html[lang=ja] .menu-left-widgets .sidebar96.qbtn-gacha .sidebar-ref-label{font-size:8px!important}
+@media(max-height:650px){.menu-left-widgets{width:52px;gap:4px}.menu-left-widgets .quick-btn-stack{width:62px;max-height:110px;gap:6px}.menu-left-widgets .quick-sidebar-btn.sidebar96,.menu-left-widgets .qbtn-pets{width:48px;height:46px;min-height:46px}.menu-left-widgets .quick-sidebar-btn.sidebar96 .sidebar-ref-label{bottom:4px;font-size:9px;line-height:11px;height:11px}.menu-left-widgets .sidebar96.qbtn-gacha .sidebar-ref-label{font-size:7.2px!important}.menu-left-widgets .btn-toggle-quick-stack{width:46px;height:27px;min-height:27px}.menu-left-widgets .qbtn-pets .qbtn-icon{height:23px;min-height:23px;line-height:23px}.menu-left-widgets .qbtn-pets .bold-ui-icon{width:23px;height:23px}.menu-left-widgets .qbtn-pets>span:last-child{font-size:10px}html[lang=ja] .menu-left-widgets .sidebar96 .sidebar-ref-label{bottom:4px;font-size:7.5px}html[lang=ja] .menu-left-widgets .sidebar96.qbtn-gacha .sidebar-ref-label{font-size:7px!important}}
+
+/* Short expressive beats, then a quiet rest. Keep the caption stable. */
+@keyframes ui98-gift{0%,52%,100%{transform:translate3d(0,0,0) scale(1) rotate(0)}58%{transform:translate3d(0,1px,0) scale(1.06,.94)}66%{transform:translate3d(0,-4px,0) scale(.97,1.05) rotate(-5deg)}73%{transform:translate3d(0,-2px,0) rotate(4deg)}81%{transform:translate3d(0,1px,0) scale(1.03,.97)}89%{transform:translate3d(0,0,0) scale(1)}}
+@keyframes ui98-wheel{0%,38%,100%{transform:rotate(0)}64%{transform:rotate(64deg)}77%{transform:rotate(-12deg)}88%{transform:rotate(5deg)}}
+@keyframes ui98-trophy{0%,48%,100%{transform:translate3d(0,0,0) rotate(0)}60%{transform:translate3d(0,-3px,0) rotate(-5deg)}72%{transform:translate3d(0,-2px,0) rotate(4deg)}84%{transform:translate3d(0,0,0) rotate(-1deg)}}
+@keyframes ui98-medal{0%,42%,100%{transform:rotate(0)}55%{transform:rotate(-6deg)}68%{transform:rotate(5deg)}80%{transform:rotate(-2.5deg)}91%{transform:rotate(1deg)}}
+@keyframes ui98-jar{0%,48%,100%{transform:translate3d(0,0,0) rotate(0)}60%{transform:translate3d(0,-2px,0) rotate(-4deg)}72%{transform:translate3d(0,-3px,0) rotate(4deg)}84%{transform:translate3d(0,-1px,0) rotate(-1.5deg)}}
+
+/* Icon-only sidebar; button names remain available to assistive technology. */
+.menu-left-widgets .quick-sidebar-btn.sidebar96 .sidebar-ref-label,
+.menu-left-widgets .qbtn-pets>span:last-child{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}

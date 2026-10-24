@@ -51,7 +51,7 @@ class StageRenderer {
       x: this.homePlayerX,
       y: this.groundY,
       offsetY: 0,
-      scale: 1.35, // Zoomed out camera perspective
+      scale: 1.20, // Slightly smaller capy; world and enemies unchanged
       facing: 1, // 1 for right
       shake: 0,
       flashWhite: 0,
@@ -135,9 +135,10 @@ class StageRenderer {
       ctx.strokeStyle = this.weather === "storm" ? "rgba(180, 200, 255, 0.65)" : "rgba(160, 190, 255, 0.55)";
       ctx.lineWidth = this.weather === "storm" ? 1.5 : 1.0;
 
-      for (const p of this.weatherParticles) {
-        p.y += p.speed * (this.weather === "storm" ? 2.2 : 1.4);
-        p.x += windStrength + p.drift;
+      for (let wi=0,wn=Math.ceil(this.weatherParticles.length*(window.GameGraphics?.profile.particles??1));wi<wn;wi++) {
+        const p=this.weatherParticles[wi];
+        p.y += p.speed * (this.weather === "storm" ? 2.2 : 1.4) * (this.frameScale??1);
+        p.x += (windStrength + p.drift) * (this.frameScale??1);
         if (p.y > this.height + 10) { p.y = -8; p.x = Math.random() * this.width; }
         if (p.x > this.width + 10) { p.x = -5; }
 
@@ -149,7 +150,7 @@ class StageRenderer {
       }
 
       // Storm lightning flash
-      if (this.weather === "storm" && Math.random() < 0.003) {
+      if (this.weather === "storm" && Math.random() < 1-Math.pow(.997,this.frameScale??1)) {
         ctx.globalAlpha = 0.18;
         ctx.fillStyle = "#dbeafe";
         ctx.fillRect(0, 0, this.width, this.height);
@@ -161,9 +162,10 @@ class StageRenderer {
       ctx.fillRect(0, 0, this.width, this.height);
 
     } else if (this.weather === "snow") {
-      for (const p of this.weatherParticles) {
-        p.y += p.speed * 0.65;
-        p.x += Math.sin(Date.now() * 0.001 + p.y * 0.02) * 0.6 + p.drift * 0.4;
+      for (let wi=0,wn=Math.ceil(this.weatherParticles.length*(window.GameGraphics?.profile.particles??1));wi<wn;wi++) {
+        const p=this.weatherParticles[wi];
+        p.y += p.speed * 0.65 * (this.frameScale??1);
+        p.x += (Math.sin(Date.now() * 0.001 + p.y * 0.02) * 0.6 + p.drift * 0.4) * (this.frameScale??1);
         if (p.y > this.height + 10) { p.y = -5; p.x = Math.random() * this.width; }
 
         ctx.globalAlpha = p.opacity * this.weatherIntensity;
@@ -183,9 +185,9 @@ class StageRenderer {
   }
 
   loadImg(src) {
-    const img = new Image();
-    img.src = src;
-    return img;
+    this._imageCache??=new Map();
+    if(this._imageCache.has(src))return this._imageCache.get(src);
+    const img = new Image();img.src = src;this._imageCache.set(src,img);return img;
   }
 
   preloadPlayerFrames() {
@@ -381,6 +383,7 @@ class StageRenderer {
     if (!this.playerAnimations[animName]) return;
     if (this.playerState.currentAnim === animName && this.playerState.loop === loop) return;
     
+    this._capyAnimStarted = performance.now();
     this.playerState.currentAnim = animName;
     this.playerState.frameIndex = 0;
     this.playerState.frameTimer = 0;
@@ -1165,47 +1168,42 @@ class StageRenderer {
 
   checkResize() {
     if (!this.canvas) return;
-    const clientW = this.canvas.clientWidth;
-    const clientH = this.canvas.clientHeight;
-    if (clientW > 0 && clientH > 0) {
-      if (this.canvas.width !== clientW || this.canvas.height !== clientH) {
-        this.canvas.width = clientW;
-        this.canvas.height = clientH;
-        this.width = clientW;
-        this.height = clientH;
-        this.groundY = Math.round(this.height * 0.70);
-        this.horizonY = Math.round(this.height * 0.40);
-        if (this.isMenuMode) {
-          this.playerState.x = Math.round(this.width * 0.52);
-          this.playerState.y = this.groundY;
-        }
-      }
+    const clientW = this.canvas.clientWidth, clientH = this.canvas.clientHeight;
+    if (!(clientW > 0 && clientH > 0)) return;
+    const scale=window.GameGraphics?.profile.scale || 1;
+    const physicalW=Math.max(1,Math.round(clientW*scale)),physicalH=Math.max(1,Math.round(clientH*scale));
+    if (this.canvas.width !== physicalW || this.canvas.height !== physicalH || this.width !== clientW || this.height !== clientH) {
+      this.canvas.width=physicalW;this.canvas.height=physicalH;
+      this.width=clientW;this.height=clientH;
+      this.groundY=Math.round(this.height*.70);this.horizonY=Math.round(this.height*.40);
+      if(this.isMenuMode){this.playerState.x=Math.round(this.width*.52);this.playerState.y=this.groundY;}
     }
+    this.ctx.setTransform(physicalW/clientW,0,0,physicalH/clientH,0,0);
   }
 
   startRenderLoop() {
-    let lastResizeCheck = 0;
-    const loop = (timestamp) => {
-      const dt = (timestamp - this.lastTime) / 1000;
-      this.lastTime = timestamp;
-
-      // Performance Optimization: Skip heavy canvas drawing when browsing Equipment or other tabs
-      const isAdventureTab = !window.Game || !window.Game.ui || window.Game.ui.activeTab === "adventure";
-      if (isAdventureTab) {
-        if (timestamp - lastResizeCheck > 500) {
-          this.checkResize();
-          lastResizeCheck = timestamp;
-        }
-        this.update(dt || 0.016);
-        this.render();
-      }
-
-      requestAnimationFrame(loop);
+    let lastResizeCheck=-Infinity,frame=0;
+    const timing={};
+    const loop=timestamp=>{
+      frame=0;
+      if(document.hidden)return;
+      const dt=window.GameGraphics?window.GameGraphics.frame(timing,timestamp):Math.min(.05,Math.max(0,(timestamp-this.lastTime)/1000));
+      const visible=!window.Game?.ui || window.Game.ui.activeTab==='adventure';
+      if(dt!==null&&visible){
+        if(timestamp-lastResizeCheck>500){this.checkResize();lastResizeCheck=timestamp;}
+        this.lastTime=timestamp;
+        this.update(dt);this.render();
+      }else if(!visible){timing.last=null;timing.next=null;this.lastTime=timestamp;}
+      frame=requestAnimationFrame(loop);
     };
-    requestAnimationFrame(loop);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else{timing.last=null;timing.next=null;this.lastTime=performance.now();if(!frame)frame=requestAnimationFrame(loop);}});
+    window.addEventListener('graphics-change',()=>{lastResizeCheck=-Infinity;});
+    if(!document.hidden)frame=requestAnimationFrame(loop);
   }
 
   update(dt) {
+    dt=Math.max(0,Math.min(.05,dt));
+    const frames=dt*60;this.frameScale=frames;
     const now = performance.now();
 
     // Parallax background scroll
@@ -1218,9 +1216,9 @@ class StageRenderer {
     // Update Near-Camera Foreground 3D Foliage & Petals (Skipped on First Map / Gale Town)
     if (!this.isFirstMap()) {
       for (const fg of this.foregroundParticles) {
-        fg.x += fg.speedX * (this.scrollSpeed > 0 ? (1 + this.scrollSpeed * 0.4) : 1);
-        fg.y += fg.speedY;
-        fg.rotation += fg.rotSpeed;
+        fg.x += fg.speedX * (this.scrollSpeed > 0 ? (1 + this.scrollSpeed * 0.4) : 1) * frames;
+        fg.y += fg.speedY * frames;
+        fg.rotation += fg.rotSpeed * frames;
         if (fg.x < -40) {
           fg.x = this.width + 40;
           fg.y = Math.random() * this.height;
@@ -1258,7 +1256,7 @@ class StageRenderer {
     // Waddle effect during walk / Ground lock during idle
     if (p.currentAnim === "walk" || p.currentAnim === "run") {
       p.waddleAngle = Math.sin(now * 0.012) * 0.06;
-      p.offsetY = -Math.abs(Math.sin(now * 0.012)) * 4;
+      p.offsetY = window.CapySmooth ? 0 : -Math.abs(Math.sin(now * 0.012)) * 4;
     } else if (p.currentAnim === "idle") {
       p.waddleAngle = 0;
       p.offsetY = 0;
@@ -1286,7 +1284,9 @@ class StageRenderer {
       proj.x = proj.startX + (proj.targetX - proj.startX) * progress;
       proj.y = proj.startY + (proj.targetY - proj.startY) * progress;
 
-      for (let s = 0; s < (proj.isUlt ? 3 : 2); s++) {
+      proj.sparkCarry=(proj.sparkCarry||0)+(proj.isUlt?3:2)*frames*(window.GameGraphics?.profile.particles??1);
+      const emitted=Math.floor(proj.sparkCarry);proj.sparkCarry-=emitted;
+      for (let s = 0; s < emitted; s++) {
         this.projectileSparks.push({
           x: proj.x - Math.random() * 12,
           y: proj.y + (Math.random() * 16 - 8),
@@ -1329,9 +1329,9 @@ class StageRenderer {
     // Update Projectile Spark Particles
     for (let i = this.projectileSparks.length - 1; i >= 0; i--) {
       const sp = this.projectileSparks[i];
-      sp.life++;
-      sp.x += sp.vx;
-      sp.y += sp.vy;
+      sp.life += frames;
+      sp.x += sp.vx * frames;
+      sp.y += sp.vy * frames;
       sp.alpha = Math.max(0, 1 - (sp.life / sp.maxLife));
       if (sp.life >= sp.maxLife) {
         this.projectileSparks.splice(i, 1);
@@ -1341,10 +1341,10 @@ class StageRenderer {
     // Update Sprint Dust Particles
     for (let i = this.runDustParticles.length - 1; i >= 0; i--) {
       const dp = this.runDustParticles[i];
-      dp.life++;
-      dp.x += dp.vx;
-      dp.y += dp.vy;
-      dp.size += 0.25;
+      dp.life += frames;
+      dp.x += dp.vx * frames;
+      dp.y += dp.vy * frames;
+      dp.size += 0.25 * frames;
       dp.alpha = Math.max(0, 0.85 * (1 - (dp.life / dp.maxLife)));
       if (dp.life >= dp.maxLife) {
         this.runDustParticles.splice(i, 1);
@@ -1354,8 +1354,8 @@ class StageRenderer {
     // Update Impact Skid Spikes
     for (let i = this.impactDustSpikes.length - 1; i >= 0; i--) {
       const sk = this.impactDustSpikes[i];
-      sk.life++;
-      sk.scale += 0.04;
+      sk.life += frames;
+      sk.scale += 0.04 * frames;
       sk.alpha = Math.max(0, 1 - (sk.life / sk.maxLife));
       if (sk.life >= sk.maxLife) {
         this.impactDustSpikes.splice(i, 1);
@@ -1363,9 +1363,10 @@ class StageRenderer {
     }
 
     // Ambient Sky Particles
-    for (const pt of this.ambientParticles) {
-      pt.x += pt.speedX;
-      pt.y += pt.speedY;
+    for (let ai=0,an=Math.ceil(this.ambientParticles.length*(window.GameGraphics?.profile.particles??1));ai<an;ai++) {
+      const pt=this.ambientParticles[ai];
+      pt.x += pt.speedX * frames;
+      pt.y += pt.speedY * frames;
       if (pt.y > this.horizonY + 25) {
         pt.y = -5;
         pt.x = Math.random() * this.width;
@@ -1377,8 +1378,8 @@ class StageRenderer {
     // Visual Effects
     for (let i = this.visualEffects.length - 1; i >= 0; i--) {
       const fx = this.visualEffects[i];
-      fx.life++;
-      fx.scale += 0.015;
+      fx.life += frames;
+      fx.scale += 0.015 * frames;
       fx.alpha = 1 - (fx.life / fx.maxLife);
       if (fx.life >= fx.maxLife) {
         this.visualEffects.splice(i, 1);
@@ -1388,8 +1389,8 @@ class StageRenderer {
     // Floating Numbers
     for (let i = this.floatingTexts.length - 1; i >= 0; i--) {
       const ft = this.floatingTexts[i];
-      ft.life++;
-      ft.y += ft.vy;
+      ft.life += frames;
+      ft.y += ft.vy * frames;
       ft.alpha = Math.max(0, 1 - (ft.life / ft.maxLife));
       if (ft.life >= ft.maxLife) {
         this.floatingTexts.splice(i, 1);
@@ -1498,6 +1499,9 @@ class StageRenderer {
       ctx.translate(this.screenShakeOffset.x, this.screenShakeOffset.y);
     }
 
+    const mythicCamera=this.getMythicCamera?.();
+    if(mythicCamera)ctx.translate(mythicCamera.x,mythicCamera.y);
+
     // ================= 1. DEEP SKY BASE GRADIENT =================
     const skyGrad = ctx.createLinearGradient(0, 0, 0, this.height);
     skyGrad.addColorStop(0, "#4895ef");
@@ -1510,15 +1514,17 @@ class StageRenderer {
     this.renderSeamlessPanorama(ctx);
 
     // ================= 3. VOLUMETRIC GOD RAYS (SUNBEAMS) =================
-    this.renderSunbeams(ctx);
+    if(window.GameGraphics?.profile.sunbeams!==false)this.renderSunbeams(ctx);
 
     // ================= 4. AUTHENTIC ROAD DEPTH & WALKING DUST =================
     this.renderGroundAtmosphere(ctx);
+    this.renderMythicLighting?.(ctx);
 
     // ================= 6. AMBIENT SKY PARTICLES =================
     ctx.save();
     const isMap1 = this.isFirstMap();
-    for (const pt of this.ambientParticles) {
+    for (let ai=0,an=Math.ceil(this.ambientParticles.length*(window.GameGraphics?.profile.particles??1));ai<an;ai++) {
+      const pt=this.ambientParticles[ai];
       if (isMap1 && (pt.color === "#ff9bb2" || pt.color === "#fbcfe8")) continue;
       ctx.globalAlpha = pt.alpha;
       ctx.fillStyle = pt.color;
@@ -1531,8 +1537,13 @@ class StageRenderer {
     // ================= 6.5 DRAW SPRINT DUST TRAILS & CARTOON IMPACT SKID (Under Actors) =================
     this.renderDustEffects(ctx);
     this.renderGroundSlashFissures(ctx);
+    this.renderMythicGround?.(ctx);
 
     // ================= 7. DRAW ACTORS (WITH 3D SHADOWS) =================
+    // Wings and transformation auras sit behind the capy, keeping its face readable.
+    for (const fx of this.skillCombatEffects) {
+      if (fx.behindPlayer && fx.render) { this.ctx.save(); try { fx.render(this.ctx); } finally { this.ctx.restore(); } }
+    }
     this.renderPlayer();
     if (this.enemyState) {
       this.renderEnemy();
@@ -1581,9 +1592,9 @@ class StageRenderer {
       ctx.textAlign = "center";
       ctx.strokeStyle = "rgba(0, 0, 0, 0.85)";
       ctx.lineWidth = 3.5;
-      ctx.strokeText(ft.text, ft.x, ft.y);
+      ctx.strokeText(window.GameLocale?.text(ft.text) ?? (ft.text), ft.x, ft.y);
       ctx.fillStyle = ft.color;
-      ctx.fillText(ft.text, ft.x, ft.y);
+      ctx.fillText(window.GameLocale?.text(ft.text) ?? (ft.text), ft.x, ft.y);
       ctx.restore();
     }
     ctx.restore();
@@ -1772,7 +1783,7 @@ class StageRenderer {
 
   renderForeground3D(ctx) {
     // Hilangkan efek bunga sakura / daun jatuh di map pertama (Gale Town)
-    if (this.isFirstMap()) return;
+    if (this.isFirstMap() || window.GameGraphics?.profile.foreground===false) return;
 
     ctx.save();
     for (const fg of this.foregroundParticles) {
@@ -1828,7 +1839,7 @@ class StageRenderer {
 
     // Position actor anchored bottom-center
     ctx.translate(px, py + Math.round(p.offsetY || 0));
-    ctx.rotate(p.waddleAngle || 0);
+    ctx.rotate(window.CapySmooth && (p.currentAnim === "walk" || p.currentAnim === "run") ? 0 : (p.waddleAngle || 0));
 
     if (p.facing < 0) {
       ctx.scale(-1, 1);
@@ -1843,11 +1854,14 @@ class StageRenderer {
     const runSkills = (run && run.skills) ? run.skills : [];
 
     // Layer 1: Render Behind-Capy Skill Attachments (Wings, Demon Avatar, Healing Mandala, Singularity, Quiver)
-    this.renderPlayerSkillAttachmentsBack(ctx, drawW, drawH, p, runSkills, now);
+    // Passive skills affect combat stats without persistent character decorations.
 
     // Layer 2: Render Capybara Character Sprite (Clean, Crisp & Cute - Zero AI morphing/glitches)
     const isWiderFrame = frameImg.naturalWidth && frameImg.naturalWidth > 64;
-    if (isWiderFrame) {
+    const smoothDrawn = window.CapySmooth && window.CapySmooth.draw(ctx, p.currentAnim, now - (this._capyAnimStarted || 0), -drawW / 2, -drawH + drawH * 8 / 128, drawW, drawH, p.loop, this._bloodPose);
+    if (smoothDrawn) {
+      // New capy-only atlas drawn; equipment and all other layers remain independent.
+    } else if (isWiderFrame) {
       if (p.currentAnim === "heal") {
         // 176x128 frame: Capybara body is anchored at (86, 114)
         // Scale by 0.54 so the body height matches the 64x64 idle sprite exactly
@@ -1882,6 +1896,17 @@ class StageRenderer {
 
     // Layer 2.5: Render Equipped Common Gear on Capybara while playing (Boots, Armor, Helmet, Weapon)
     this.renderPlayerEquippedGear(ctx, drawW, drawH, p, now);
+
+    // A battle may clear its effects before the roar's completion callback runs.
+    // Never leave the legacy glowing-eye overlay on the normal capy afterwards.
+    const dragonFaceActive = this.skillCombatEffects.some(f =>
+      (f.kind === "dragon-roar" || f.cinematic === "dragon") &&
+      now >= f.startTime && now < f.startTime + f.duration * .72);
+    if (!dragonFaceActive && (p.skillExpression === "dragon_glow" || p.skillTheme === "dragon")) {
+      p.skillExpression = "normal";
+      p.skillTheme = null;
+      p.swordAction = null;
+    }
 
     // Dynamic Skill Facial Expressions on Capybara (Matching authentic reference frames)
     if (p.skillExpression && p.skillExpression !== "normal") {
@@ -2014,7 +2039,7 @@ class StageRenderer {
     }
 
     // Layer 3: Render In-Front Skill Attachments (Halo, Dragon Head, Shields, Grimoire, Weapons, Cyclones)
-    this.renderPlayerSkillAttachmentsFront(ctx, drawW, drawH, p, runSkills, now);
+    // Keep the capybara silhouette clear; attack and hit effects still render normally.
 
     // Layer 4: Pet & Mount Companions (Duck on head, Turtle back, Crocodile front, Baby Dragon fly)
     this.renderCompanion(ctx, drawW, drawH, p, now);
@@ -2420,7 +2445,7 @@ class StageRenderer {
     // Smooth damage lag catchup
     if (p.animHp === undefined) p.animHp = currentHp;
     if (Math.abs(p.animHp - currentHp) > 0.5) {
-      p.animHp += (currentHp - p.animHp) * 0.18;
+      p.animHp += (currentHp - p.animHp) * (1-Math.pow(.82,this.frameScale??1));
     } else {
       p.animHp = currentHp;
     }
@@ -2432,9 +2457,9 @@ class StageRenderer {
     ctx.textAlign = "center";
     ctx.strokeStyle = "rgba(0,0,0,0.9)";
     ctx.lineWidth = 3;
-    ctx.strokeText("🐾 Capy", x, y - 4);
+    ctx.strokeText(window.GameLocale?.text("🐾 Capy") ?? ("🐾 Capy"), x, y - 4);
     ctx.fillStyle = "#ffffff";
-    ctx.fillText("🐾 Capy", x, y - 4);
+    ctx.fillText(window.GameLocale?.text("🐾 Capy") ?? ("🐾 Capy"), x, y - 4);
 
     // Track Background
     ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
@@ -2488,7 +2513,7 @@ class StageRenderer {
 
   renderCompanion(ctx, drawW, drawH, p, now) {
     const comp = window.Character && window.Character.getActiveCompanionData && window.Character.getActiveCompanionData();
-    if (!comp) return;
+    if (!comp || comp.id === "duck") return;
 
     if (!this.companionParticles) this.companionParticles = [];
 
@@ -2581,7 +2606,7 @@ class StageRenderer {
       ctx.restore();
 
       // Floating Shimmering Water Droplets
-      if (Math.random() < 0.04) {
+      if (Math.random() < (1-Math.pow(.96,this.frameScale??1))*(window.GameGraphics?.profile.particles??1)) {
         this.companionParticles.push({
           x: headX + (Math.random() * 16 - 8),
           y: headY - 14,
@@ -2898,7 +2923,7 @@ class StageRenderer {
       ctx.fill();
 
       // Ambient Floating Embers
-      if (Math.random() < 0.12) {
+      if (Math.random() < (1-Math.pow(.88,this.frameScale??1))*(window.GameGraphics?.profile.particles??1)) {
         this.companionParticles.push({
           x: dragonX - 16 + (Math.random() * 4 - 2),
           y: dragonY + (Math.random() * 4 - 2),
@@ -2918,9 +2943,9 @@ class StageRenderer {
       ctx.save();
       for (let i = this.companionParticles.length - 1; i >= 0; i--) {
         const pt = this.companionParticles[i];
-        pt.x += pt.vx;
-        pt.y += pt.vy;
-        pt.alpha -= 0.025;
+        pt.x += pt.vx * (this.frameScale??1);
+        pt.y += pt.vy * (this.frameScale??1);
+        pt.alpha -= 0.025 * (this.frameScale??1);
         if (pt.alpha <= 0) {
           this.companionParticles.splice(i, 1);
           continue;
@@ -4094,7 +4119,7 @@ class StageRenderer {
     ctx.save();
     for (const fx of this.skillCombatEffects) {
       try {
-        if (fx.render) fx.render(ctx);
+        if (fx.render && !fx.behindPlayer) fx.render(ctx);
       } catch (err) {
         console.error("renderSkillCombatEffects error:", err);
       }
@@ -4300,6 +4325,29 @@ class StageRenderer {
     ctx.restore();
   }
 
+  renderDragonBreathStream(ctx, x, y, targetX, targetY, progress, now) {
+    const clamp=v=>Math.max(0,Math.min(1,v)),ease=v=>{v=clamp(v);return v*v*(3-2*v);};
+    const grow=ease(progress/.30),fade=1-ease((progress-.73)/.27),power=ease(progress/.16)*fade;
+    if(power<=0)return;
+    const dx=targetX-x,dy=targetY-y,reach=grow,tipX=x+dx*reach,tipY=y+dy*reach;
+    const length=Math.hypot(dx,dy)||1,nx=-dy/length,ny=dx/length,width=(5+23*grow)*power;
+    ctx.save();ctx.globalAlpha*=power;ctx.shadowColor='#f4782b';ctx.shadowBlur=12;
+    for(let layer=0;layer<3;layer++){
+      const w=width*(1-layer*.31),wave=Math.sin(now*.007+layer)*w*.17;
+      const g=ctx.createLinearGradient(x,y,tipX,tipY);g.addColorStop(0,layer===2?'#fff8d3':'#ffc260');g.addColorStop(.5,layer===2?'#ffd27c':'#f78128');g.addColorStop(1,layer===2?'#ffbe58':'#c93623');ctx.fillStyle=g;ctx.globalAlpha=power*(layer===0?.55:.8);
+      ctx.beginPath();ctx.moveTo(x+nx*2,y+ny*2);
+      ctx.bezierCurveTo(x+dx*reach*.35+nx*(w*.3+wave),y+dy*reach*.35+ny*(w*.3+wave),tipX-dx*.1+nx*w,tipY-dy*.1+ny*w,tipX+nx*w*.3,tipY+ny*w*.3);
+      ctx.quadraticCurveTo(tipX+dx*.07,tipY+dy*.07,tipX-nx*w*.3,tipY-ny*w*.3);
+      ctx.bezierCurveTo(tipX-dx*.1-nx*w,tipY-dy*.1-ny*w,x+dx*reach*.35-nx*(w*.3-wave),y+dy*reach*.35-ny*(w*.3-wave),x-nx*2,y-ny*2);ctx.closePath();ctx.fill();
+    }
+    ctx.shadowBlur=5;
+    for(let i=0;i<22;i++){
+      const t=(progress*2.3+i/22)%1,flow=ease(t),r=(1.1+Math.sin(t*Math.PI)*3.1)*power,offset=Math.sin(i*2.4+now*.006+t*5)*width*flow*.6;
+      ctx.globalAlpha=power*Math.sin(t*Math.PI)*.65;ctx.fillStyle=i%3?'#ffae4b':'#fff1b3';ctx.beginPath();ctx.ellipse(x+dx*reach*flow+nx*offset,y+dy*reach*flow+ny*offset,r*1.7,r,Math.atan2(dy,dx),0,Math.PI*2);ctx.fill();
+    }
+    ctx.restore();
+  }
+
   renderProceduralAncientDragon(ctx, x, y, scale, progress, now, isBreathing) {
     ctx.save();
     ctx.translate(x, y);
@@ -4311,8 +4359,8 @@ class StageRenderer {
 
     // 1. Fiery Radiant Bloom Aura behind Dragon (Zero square edges)
     const bloomGrad = ctx.createRadialGradient(0, -10, 15, 0, -10, 85);
-    bloomGrad.addColorStop(0, "rgba(254, 240, 138, 0.85)");
-    bloomGrad.addColorStop(0.25, "rgba(249, 115, 22, 0.60)");
+    bloomGrad.addColorStop(0, "rgba(255, 139, 81, 0.30)");
+    bloomGrad.addColorStop(0.25, "rgba(175, 35, 37, 0.26)");
     bloomGrad.addColorStop(0.65, "rgba(220, 38, 38, 0.25)");
     bloomGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = bloomGrad;
@@ -4323,7 +4371,8 @@ class StageRenderer {
     // 2. Far Wing (Behind Body)
     ctx.save();
     ctx.translate(-14, -24);
-    ctx.rotate(-0.35 + flap * 0.28);
+    ctx.rotate(-0.35 + flap * 0.18);
+    ctx.scale(.72,.78);
     this.drawDragonWing(ctx, -1, now);
     ctx.restore();
 
@@ -4332,16 +4381,16 @@ class StageRenderer {
     ctx.translate(-34, 4);
     const tailWave = Math.sin(now * 0.005) * 8;
     ctx.fillStyle = "#991b1b";
-    ctx.strokeStyle = "#450a0a";
+    ctx.strokeStyle = "#260f22";
     ctx.lineWidth = 2.0;
 
     ctx.beginPath();
-    ctx.moveTo(0, 0);
+    ctx.moveTo(13, -2);
     ctx.quadraticCurveTo(-24, 6 + tailWave * 0.5, -42, -6 + tailWave);
     ctx.quadraticCurveTo(-52, -12 + tailWave, -66, -3 + tailWave * 1.2);
     ctx.lineTo(-68, 4 + tailWave * 1.2);
     ctx.lineTo(-56, 8 + tailWave);
-    ctx.quadraticCurveTo(-36, 14 + tailWave * 0.5, 0, 7);
+    ctx.quadraticCurveTo(-36, 14 + tailWave * 0.5, 13, 9);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
@@ -4350,7 +4399,7 @@ class StageRenderer {
     for (let ts = 0; ts < 4; ts++) {
       const tx = -10 - ts * 12;
       const ty = 2 + (tailWave * 0.25 * ts);
-      this.drawDragonScale(ctx, tx, ty, 3.2 - ts * 0.4, -0.25, "#b91c1c", "#fca5a5");
+      this.drawDragonScale(ctx, tx, ty, 3.2 - ts * 0.4, -0.25, "#641c30", "#d47763");
     }
 
     // Bladed Spiked Tail Spade
@@ -4358,7 +4407,7 @@ class StageRenderer {
     ctx.strokeStyle = "#78350f";
     ctx.lineWidth = 1.2;
     ctx.shadowColor = "#fde047";
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = 3;
     ctx.beginPath();
     ctx.moveTo(-58, 2 + tailWave);
     ctx.lineTo(-76, -10 + tailWave * 1.2);
@@ -4374,11 +4423,11 @@ class StageRenderer {
     ctx.shadowColor = "#f97316";
     ctx.shadowBlur = 14;
     const bodyGrad = ctx.createLinearGradient(-35, -22, 18, 16);
-    bodyGrad.addColorStop(0, "#ef4444");
-    bodyGrad.addColorStop(0.45, "#dc2626");
+    bodyGrad.addColorStop(0, "#d34a46");
+    bodyGrad.addColorStop(0.45, "#942638");
     bodyGrad.addColorStop(1, "#7f1d1d");
     ctx.fillStyle = bodyGrad;
-    ctx.strokeStyle = "#450a0a";
+    ctx.strokeStyle = "#260f22";
     ctx.lineWidth = 2.2;
 
     ctx.beginPath();
@@ -4393,7 +4442,7 @@ class StageRenderer {
 
     // Sharp Armored Underbelly Ventral Scutes (Gold Serrated Plates)
     const bellyGrad = ctx.createLinearGradient(-10, -12, 18, 16);
-    bellyGrad.addColorStop(0, "#fef08a");
+    bellyGrad.addColorStop(0, "#efd3a0");
     bellyGrad.addColorStop(0.4, "#facc15");
     bellyGrad.addColorStop(1, "#ca8a04");
     ctx.fillStyle = bellyGrad;
@@ -4428,7 +4477,7 @@ class StageRenderer {
       { x: 8,   y: -16, rot: 0.35, s: 4.0 }
     ];
     backScales.forEach(sc => {
-      this.drawDragonScale(ctx, sc.x, sc.y, sc.s, sc.rot, "#dc2626", "#fecaca");
+      this.drawDragonScale(ctx, sc.x, sc.y, sc.s, sc.rot, "#942638", "#e8a480");
     });
 
     // Row 2: Mid-Flank Scales
@@ -4439,7 +4488,7 @@ class StageRenderer {
       { x: 4,   y: -7, rot: 0.25, s: 3.8 }
     ];
     midScales.forEach(sc => {
-      this.drawDragonScale(ctx, sc.x, sc.y, sc.s, sc.rot, "#b91c1c", "#fca5a5");
+      this.drawDragonScale(ctx, sc.x, sc.y, sc.s, sc.rot, "#641c30", "#d47763");
     });
 
     ctx.restore(); // End Torso
@@ -4471,8 +4520,8 @@ class StageRenderer {
     ctx.save();
     ctx.translate(6, 8);
     ctx.rotate(0.20 + flap * 0.1);
-    ctx.fillStyle = "#b91c1c";
-    ctx.strokeStyle = "#450a0a";
+    ctx.fillStyle = "#641c30";
+    ctx.strokeStyle = "#260f22";
     ctx.lineWidth = 1.8;
     ctx.beginPath();
     ctx.moveTo(-4, -6); ctx.lineTo(8, 2); ctx.lineTo(5, 15); ctx.lineTo(-2, 13);
@@ -4481,10 +4530,10 @@ class StageRenderer {
     ctx.stroke();
 
     // Arm Scales
-    this.drawDragonScale(ctx, 1, 4, 3.0, 0.4, "#991b1b", "#fca5a5");
+    this.drawDragonScale(ctx, 1, 4, 3.0, 0.4, "#991b1b", "#d47763");
 
     // 3 Razor Sharp Hooked Talons
-    ctx.fillStyle = "#fef08a";
+    ctx.fillStyle = "#efd3a0";
     ctx.strokeStyle = "#451a03";
     ctx.lineWidth = 1.2;
     for (let c = -1; c <= 1; c++) {
@@ -4506,11 +4555,11 @@ class StageRenderer {
 
     // Lean, Muscular Serpentine Neck
     const neckGrad = ctx.createLinearGradient(0, -4, 24, -26);
-    neckGrad.addColorStop(0, "#dc2626");
-    neckGrad.addColorStop(0.5, "#ef4444");
-    neckGrad.addColorStop(1, "#b91c1c");
+    neckGrad.addColorStop(0, "#942638");
+    neckGrad.addColorStop(0.5, "#d34a46");
+    neckGrad.addColorStop(1, "#641c30");
     ctx.fillStyle = neckGrad;
-    ctx.strokeStyle = "#450a0a";
+    ctx.strokeStyle = "#260f22";
     ctx.lineWidth = 2.0;
 
     ctx.beginPath();
@@ -4531,7 +4580,7 @@ class StageRenderer {
       { x: 15, y: -4, rot: 0.65, s: 3.4 }
     ];
     neckScales.forEach(sc => {
-      this.drawDragonScale(ctx, sc.x, sc.y, sc.s, sc.rot, "#b91c1c", "#fca5a5");
+      this.drawDragonScale(ctx, sc.x, sc.y, sc.s, sc.rot, "#641c30", "#d47763");
     });
 
     // Neck Dorsal Crest Spikes
@@ -4554,17 +4603,17 @@ class StageRenderer {
     ctx.translate(24, -22);
 
     // Multi-Tiered Sweeping Golden Dragon Horns (Sharp, Aggressive, Serrated)
-    ctx.fillStyle = "#fef08a";
+    ctx.fillStyle = "#efd3a0";
     ctx.strokeStyle = "#854d0e";
     ctx.lineWidth = 1.6;
     ctx.shadowColor = "#facc15";
-    ctx.shadowBlur = 9;
+    ctx.shadowBlur = 3;
 
     // 1. Primary Giant Dragon Horn
     ctx.beginPath();
     ctx.moveTo(-4, -5);
-    ctx.quadraticCurveTo(-18, -20, -34, -24);
-    ctx.quadraticCurveTo(-16, -12, 2, -2);
+    ctx.bezierCurveTo(-13, -11, -25, -18, -29, -30);
+    ctx.bezierCurveTo(-12, -23, -7, -12, 2, -2);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
@@ -4598,20 +4647,24 @@ class StageRenderer {
     ctx.stroke();
 
     // Sharp Menacing Cranium & Upper Snout
-    ctx.fillStyle = "#dc2626";
-    ctx.strokeStyle = "#450a0a";
+    ctx.fillStyle = "#942638";
+    ctx.strokeStyle = "#260f22";
     ctx.lineWidth = 2.0;
     ctx.shadowColor = "#f97316";
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = 2;
 
     ctx.beginPath();
-    ctx.moveTo(-4, -5);
-    ctx.lineTo(12, -7);
-    ctx.lineTo(20, -5); // Brow ridge
-    ctx.lineTo(28, -2); // Snout tip
-    ctx.lineTo(26, 4);  // Upper lip
-    ctx.lineTo(4, 4);   // Palate
-    ctx.lineTo(0, 8);   // Jaw hinge
+    ctx.moveTo(-9, -5);
+    ctx.lineTo(-4, -12); // Armored crown slopes into the brow.
+    ctx.lineTo(6, -11);
+    ctx.lineTo(15, -7);
+    ctx.lineTo(22, -6);
+    ctx.quadraticCurveTo(30, -5, 31, -1);
+    ctx.lineTo(28, 4); // Keep the breath exit at the original mouth anchor.
+    ctx.lineTo(13, 3);
+    ctx.lineTo(5, 6);
+    ctx.lineTo(0, 10);
+    ctx.lineTo(-8, 4)
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
@@ -4624,8 +4677,15 @@ class StageRenderer {
     ctx.fill();
     ctx.stroke();
 
-    this.drawDragonScale(ctx, 10, -3, 3.0, 0.2, "#991b1b", "#fca5a5");
-    this.drawDragonScale(ctx, 16, -2, 2.8, 0.1, "#991b1b", "#fca5a5");
+    this.drawDragonScale(ctx, 10, -3, 3.0, 0.2, "#991b1b", "#d47763");
+    this.drawDragonScale(ctx, 16, -2, 2.8, 0.1, "#991b1b", "#d47763");
+
+    ctx.save();ctx.shadowBlur=0;
+    ctx.fillStyle='#401428';ctx.strokeStyle='#260f22';ctx.lineWidth=1.1;
+    ctx.beginPath();ctx.moveTo(-6,-6);ctx.lineTo(7,-8);ctx.lineTo(16,-4);ctx.lineTo(7,-4);ctx.lineTo(-1,1);ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.moveTo(-7,3);ctx.lineTo(3,1);ctx.lineTo(10,5);ctx.lineTo(0,10);ctx.lineTo(-9,7);ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.fillStyle='#1c0b17';ctx.beginPath();ctx.ellipse(26,-1,1.7,.8,-.25,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#edb77e';ctx.lineWidth=.65;ctx.beginPath();ctx.moveTo(-3,-10);ctx.lineTo(6,-9);ctx.lineTo(13,-6);ctx.stroke();ctx.restore();
 
     // Upper Sharp Curved Fangs (Menacing & Dangerous)
     ctx.fillStyle = "#ffffff";
@@ -4646,31 +4706,33 @@ class StageRenderer {
     // Menacing Predatory Slit Eye (Glowing Crimson-Amber with Drifting Embers)
     ctx.fillStyle = "#facc15";
     ctx.shadowColor = "#fde047";
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = 2;
     ctx.beginPath();
-    ctx.ellipse(8, -2, 4.2, 2.6, -0.22, 0, Math.PI * 2);
+    ctx.ellipse(8, -2, 3.5, 1.7, -0.22, 0, Math.PI * 2);
     ctx.fill();
 
     // Razor-Sharp Vertical Slit Pupil
     ctx.fillStyle = "#0a0a0a";
     ctx.beginPath();
-    ctx.ellipse(8.5, -2, 1.0, 2.4, 0, 0, Math.PI * 2);
+    ctx.ellipse(8.5, -2, 0.65, 1.5, 0, 0, Math.PI * 2);
     ctx.fill();
 
     // Specular Gint Highlight
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.arc(9.2, -2.6, 1.0, 0, Math.PI * 2);
+    ctx.arc(9.2, -2.6, 0.55, 0, Math.PI * 2);
     ctx.fill();
 
     // Articulated Roaring Lower Jaw (Sharp Spiked Chin)
     ctx.save();
     ctx.translate(2, 6);
-    const jawOpen = isBreathing ? 0.48 : (0.16 + Math.sin(now * 0.006) * 0.09);
+    const smoothJaw=v=>{v=Math.max(0,Math.min(1,v));return v*v*(3-2*v);};
+    const jawCharge=smoothJaw((progress-.37)/.14)*(1-smoothJaw((progress-.89)/.11));
+    const jawOpen = .12 + Math.sin(now*.004)*.025 + jawCharge*.34;
     ctx.rotate(jawOpen);
 
-    ctx.fillStyle = "#b91c1c";
-    ctx.strokeStyle = "#450a0a";
+    ctx.fillStyle = "#641c30";
+    ctx.strokeStyle = "#260f22";
     ctx.lineWidth = 1.9;
     ctx.beginPath();
     ctx.moveTo(0, 0);
@@ -4710,12 +4772,12 @@ class StageRenderer {
     if (isBreathing) {
       const fireCore = ctx.createRadialGradient(2, 0, 1, 14, 0, 18);
       fireCore.addColorStop(0, "#ffffff");
-      fireCore.addColorStop(0.3, "#fef08a");
+      fireCore.addColorStop(0.3, "#efd3a0");
       fireCore.addColorStop(0.7, "#f97316");
       fireCore.addColorStop(1, "rgba(220, 38, 38, 0)");
       ctx.fillStyle = fireCore;
       ctx.beginPath();
-      ctx.arc(8, -2, 14, 0, Math.PI * 2);
+      ctx.ellipse(11, 0, 9, 3.5, 0, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -4724,8 +4786,9 @@ class StageRenderer {
 
     // 8. Near Wing (In Front of Body - Dynamic 120 FPS Flap)
     ctx.save();
-    ctx.translate(4, -22);
-    ctx.rotate(-0.15 + flap * 0.35);
+    ctx.translate(-14, -23);
+    ctx.rotate(-0.28 + flap * 0.20);
+    ctx.scale(-.66,.72);
     this.drawDragonWing(ctx, 1, now);
     ctx.restore();
 
@@ -4777,7 +4840,7 @@ class StageRenderer {
     ctx.restore();
 
     // 3. Expanding Concentric Shockwave Rings along Ground
-    ctx.strokeStyle = "#fef08a";
+    ctx.strokeStyle = "#efd3a0";
     ctx.lineWidth = 7 * (1 - p);
     ctx.shadowColor = "#f97316";
     ctx.shadowBlur = 18;
@@ -4785,7 +4848,7 @@ class StageRenderer {
     ctx.ellipse(x, this.groundY, 125 * p, 34 * p, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    ctx.strokeStyle = "#ef4444";
+    ctx.strokeStyle = "#d34a46";
     ctx.lineWidth = 4 * (1 - p);
     ctx.beginPath();
     ctx.ellipse(x, this.groundY, 155 * p, 42 * p, 0, 0, Math.PI * 2);
@@ -4823,7 +4886,7 @@ class StageRenderer {
     ctx.stroke();
 
     // Inner Yellow Molten Heat
-    ctx.strokeStyle = "#fef08a";
+    ctx.strokeStyle = "#efd3a0";
     ctx.lineWidth = 1.4 * crAlpha;
     ctx.beginPath();
     fissureOffsets.forEach(pt => {
@@ -4890,6 +4953,7 @@ class StageRenderer {
     const effectStart = performance.now();
 
     this.skillCombatEffects.push({
+      kind: "dragon-roar",
       startTime: effectStart,
       duration: totalDuration,
       update: (progress, elapsed) => {
@@ -5111,67 +5175,15 @@ class StageRenderer {
         // 5. INFERNO DRAGON BREATH STREAM (Phase 4, 0.50 - 0.70)
         if (p >= 0.50 && p < 0.70) {
           const bp = (p - 0.50) / 0.20;
-          const beamAlpha = Math.sin(bp * Math.PI);
-
           const dp = (p - 0.32) / 0.40;
           const dragonX = this.playerState.x + 50 + dp * 36;
           const dragonY = this.groundY - 110 + Math.sin(now * 0.005) * 5;
           const dScale = 1.05 + Math.sin(dp * Math.PI) * 0.10;
-
-          const dragonMawX = dragonX + 36 * dScale;
-          const dragonMawY = dragonY - 24 * dScale;
-          const reach = dragonMawX + (targetX - dragonMawX) * Math.min(1, bp * 1.8);
-          const spread = 40 * Math.sin(bp * Math.PI);
-
-          ctx.save();
-          ctx.globalAlpha = beamAlpha;
-
-          // Outer Fiery Cone
-          const coneGrad = ctx.createLinearGradient(dragonMawX, dragonMawY, reach, targetY - 20);
-          coneGrad.addColorStop(0, "rgba(255, 255, 255, 0.98)");
-          coneGrad.addColorStop(0.2, "rgba(254, 240, 138, 0.95)");
-          coneGrad.addColorStop(0.55, "rgba(249, 115, 22, 0.9)");
-          coneGrad.addColorStop(0.85, "rgba(220, 38, 38, 0.75)");
-          coneGrad.addColorStop(1, "rgba(127, 29, 29, 0.3)");
-          ctx.fillStyle = coneGrad;
-          ctx.shadowColor = "#f97316";
-          ctx.shadowBlur = 32;
-
-          ctx.beginPath();
-          ctx.moveTo(dragonMawX, dragonMawY);
-          ctx.lineTo(reach, (targetY - 20) - spread);
-          ctx.lineTo(reach, (targetY - 20) + spread);
-          ctx.closePath();
-          ctx.fill();
-
-          // Inner Searing Core Laser
-          ctx.fillStyle = "#ffffff";
-          ctx.shadowColor = "#fef08a";
-          ctx.shadowBlur = 18;
-          ctx.beginPath();
-          ctx.moveTo(dragonMawX, dragonMawY);
-          ctx.lineTo(reach, (targetY - 20) - spread * 0.35);
-          ctx.lineTo(reach, (targetY - 20) + spread * 0.35);
-          ctx.closePath();
-          ctx.fill();
-
-          // Branching Dragon Fire Lightning along beam
-          ctx.strokeStyle = "#fef08a";
-          ctx.lineWidth = 2.8;
-          ctx.shadowBlur = 10;
-          for (let bolt of plasmaBolts) {
-            ctx.beginPath();
-            ctx.moveTo(dragonMawX, dragonMawY);
-            const steps = 6;
-            for (let s = 1; s <= steps; s++) {
-              const bx = dragonMawX + (reach - dragonMawX) * (s / steps);
-              const by = dragonMawY + ((targetY - 20) - dragonMawY) * (s / steps) + Math.sin(now * 0.02 + s * 1.5 + bolt.tOffset * 10) * 12;
-              ctx.lineTo(bx, by);
-            }
-            ctx.stroke();
-          }
-
-          ctx.restore();
+          // Follow the articulated muzzle, rather than starting the fire inside the neck.
+          const neckAngle=Math.sin(now*.005)*.09;
+          const mawX=dragonX+(12+49*Math.cos(neckAngle)+17*Math.sin(neckAngle))*dScale;
+          const mawY=dragonY+(-18+49*Math.sin(neckAngle)-17*Math.cos(neckAngle))*dScale;
+          this.renderDragonBreathStream(ctx,mawX,mawY,targetX,targetY-20,bp,now);
         }
 
         // 6. CATACLYSMIC IMPACT & SUPERNOVA DRAGON BLAST (Phase 5, 0.70 - 0.86)
@@ -5260,555 +5272,71 @@ class StageRenderer {
   }
 
   launchBlackHole(targetX, targetY, onHit, onComplete = null, speedMult = 1.0) {
-    const duration = 1500 / speedMult;
-    let hitTriggered = false;
-
-    // Trigger casting animation on Capybara
-    this.setPlayerAnim("skill", false);
-
-    // Positions in arena
-    const startX = this.playerState.x + 35;
-    const startY = this.groundY - 45;
-    const finalHoleX = targetX - 25;
-    const finalHoleY = targetY - 25;
-
-    // 7 Storyboard Scenes from Video Reference & Interactive Preview
-    const scenes = [
-      { start: 0.00, end: 0.15, title: "Phase 1: Void Awaken", dialogue: "Saksikan kekuatan VOID!" },
-      { start: 0.15, end: 0.28, title: "Phase 2: Dimensional Rift Slash", dialogue: "Tebasan Dimensi!" },
-      { start: 0.28, end: 0.48, title: "Phase 3: Singularity Comet Launch", dialogue: "Rasakan lubang hitam!" },
-      { start: 0.48, end: 0.72, title: "Phase 4: Event Horizon Gravitational Vortex", dialogue: "Hancurlah!" },
-      { start: 0.72, end: 0.78, title: "Phase 5: Cosmic Implosion", dialogue: "Titik Singularitas..." },
-      { start: 0.78, end: 0.88, title: "Phase 6: SUPERNOVA EXPLOSION!", dialogue: "LEDAKAN SUPERNOVA!" },
-      { start: 0.88, end: 1.00, title: "Phase 7: Void Settle and Stardust Drift", dialogue: "Kedamaian kosmik kembali..." }
-    ];
-
-    // 8 Orbiting Asteroid Boulders with 3D elliptical orbit (Clean procedural vector)
-    const asteroids = [];
-    for (let i = 0; i < 8; i++) {
-      asteroids.push({
-        angle: (i / 8) * Math.PI * 2,
-        radius: 55 + (i % 3) * 18,
-        speed: 0.05 + (i % 3) * 0.02,
-        size: 5 + (i % 4) * 2.2,
-        color: ["#64748b", "#475569", "#78716c", "#57534e"][i % 4]
-      });
-    }
-
-    // Branching Lightning Arcs across accretion rim
-    const lightnings = [];
-    for (let i = 0; i < 6; i++) {
-      lightnings.push({
-        angle: (i / 6) * Math.PI * 2,
-        length: 42 + (i % 2) * 16
-      });
-    }
-
-    // Drifting Stardust Petals for Phase 7
-    const stardustPetals = [];
-    for (let i = 0; i < 35; i++) {
-      stardustPetals.push({
-        x: (Math.random() - 0.5) * 360,
-        y: (Math.random() - 0.5) * 180,
-        vx: (Math.random() - 0.5) * 0.8,
-        vy: Math.random() * 0.8 + 0.3,
-        size: Math.random() * 3 + 1.5,
-        color: ["#c084fc", "#e879f9", "#38bdf8", "#f5d0fe"][i % 4],
-        alpha: Math.random() * 0.6 + 0.4
-      });
-    }
-
+    const duration = 1800 / Math.max(.25, speedMult);
     const startTime = performance.now();
-
+    const originX = this.playerState.x + 25, originY = this.groundY - 40;
+    const x = targetX, y = targetY - 28;
+    let hit = false;
+    const clamp = n => Math.max(0, Math.min(1, n));
+    const ease = n => { n = clamp(n); return n * n * (3 - 2 * n); };
+    this.setPlayerAnim("skill", false);
     this.skillCombatEffects.push({
-      startTime: startTime,
-      duration: duration,
-      update: (progress) => {
-        // Player choreography matching video & preview
-        if (progress < 0.15) {
-          // Phase 1: Void Awaken
-          if (this.playerState.currentAnim !== "skill") this.setPlayerAnim("skill", true);
-          this.playerState.swordAction = "ready";
-          this.playerState.skillExpression = "void_eye";
-        } else if (progress < 0.28) {
-          // Phase 2: Dimensional Rift Slash
-          if (this.playerState.currentAnim !== "attack") this.setPlayerAnim("attack", false);
-          this.playerState.swordAction = "slash";
-          this.playerState.skillExpression = "slash_squint";
-        } else if (progress < 0.75) {
-          // Phase 3 & 4: Singularity Launch & Event Horizon
-          if (this.playerState.currentAnim !== "skill") this.setPlayerAnim("skill", false);
-          this.playerState.swordAction = "cast";
-          this.playerState.skillExpression = "void_eye";
-
-          // Gravitational suction pull on enemy monster
-          if (progress >= 0.48 && progress < 0.72 && this.enemyState) {
-            this.enemyState.knockback = -12 * ((progress - 0.48) / 0.24);
-            this.enemyState.shake = 3.5;
-          }
-        } else {
-          // Phase 7: Settle & recovery
-          if (this.playerState.currentAnim !== "idle") this.setPlayerAnim("idle", true);
-          this.playerState.swordAction = null;
-          this.playerState.skillTheme = null;
-          this.playerState.skillExpression = "peaceful_relief";
-          if (this.enemyState && progress >= 0.88) {
-            this.enemyState.knockback = 0;
-            this.enemyState.shake = 0;
-          }
-        }
-
-        // Supernova Implosion / Detonation at progress 0.78
-        if (progress >= 0.78 && !hitTriggered) {
-          hitTriggered = true;
-          Sound.playSfx("magicBurst");
-          Sound.playSfx("bossRoar");
-          Sound.playSfx("attackHeavy");
-          this.triggerScreenShake(2.5);
-          if (this.enemyState) {
-            this.enemyState.flashWhite = 1.0;
-            this.enemyState.shake = 8.0;
-            this.enemyState.knockback = 28;
-            setTimeout(() => { if (this.enemyState) this.enemyState.knockback = 0; }, 260 / speedMult);
-          }
-          this.addVisualEffect("critBurst", finalHoleX, finalHoleY, 3.2);
-          this.addMagicImpactSparks(finalHoleX, finalHoleY, ["#c084fc", "#9333ea", "#38bdf8", "#fde047", "#ffffff", "#030712"]);
-          this.addGroundSlashFissure(finalHoleX, this.groundY, "#a855f7");
-          try {
-            if (onHit) onHit();
-          } catch (err) {
-            console.error("Black Hole onHit error:", err);
-          }
-        }
+      startTime, duration,
+      update: progress => {
+        if (progress >= .76 && !hit) { hit = true; if (onHit) onHit(); }
       },
-      render: (ctx) => {
-        const now = performance.now();
-        const elapsed = now - startTime;
-        const p = Math.min(1, elapsed / duration);
-        const currScene = scenes.find(s => p >= s.start && p < s.end) || scenes[scenes.length - 1];
-
-        // 1. Cosmic Void Nebula Screen Vignette
+      render: ctx => {
+        const p = clamp((performance.now() - startTime) / duration);
+        const arrival = ease((p - .12) / .22);
+        const cx = originX + (x - originX) * arrival;
+        const cy = originY + (y - originY) * arrival - Math.sin(arrival * Math.PI) * 24;
+        const growth = ease(p / .2);
+        const collapse = p > .66 ? 1 - ease((p - .66) / .13) : 1;
+        const radius = (12 + 31 * ease((p - .27) / .22)) * growth * collapse;
+        const fade = 1 - ease((p - .88) / .12);
         ctx.save();
-        const dimAlpha = Math.sin(p * Math.PI) * 0.72;
-        const screenGrad = ctx.createRadialGradient(finalHoleX, finalHoleY, 20, finalHoleX, finalHoleY, this.width * 0.85);
-        screenGrad.addColorStop(0, `rgba(12, 4, 28, ${dimAlpha * 0.95})`);
-        screenGrad.addColorStop(0.5, `rgba(8, 2, 20, ${dimAlpha * 0.7})`);
-        screenGrad.addColorStop(1, `rgba(2, 0, 8, ${dimAlpha * 0.4})`);
-        ctx.fillStyle = screenGrad;
-        ctx.fillRect(-20, -20, this.width + 40, this.height + 40);
+        ctx.globalAlpha = fade;
+        // A local gravity well: a luminous accretion disk around an opaque core.
+        if (radius > .3) {
+          ctx.translate(cx, cy);
+          const halo = ctx.createRadialGradient(0, 0, radius*.25, 0, 0, radius*2.3);
+          halo.addColorStop(0, '#ede0ff88');halo.addColorStop(.35, '#a451ed77');halo.addColorStop(.65, '#562bc340');halo.addColorStop(1, '#542bc300');
+          ctx.fillStyle = halo;ctx.fillRect(-radius*2.3,-radius*2.3,radius*4.6,radius*4.6);
+          ctx.save();ctx.rotate(-.32);ctx.scale(1,.46);
+          for (let ring=0;ring<3;ring++) {
+            ctx.beginPath();ctx.ellipse(0,0,radius*(1.3+ring*.24),radius*(1.3+ring*.24),0,0,Math.PI*2);
+            ctx.strokeStyle=['#b978ff','#e1b3ff','#7b66e8'][ring];ctx.lineWidth=3-ring*.6;ctx.shadowColor='#aa62ff';ctx.shadowBlur=9;ctx.stroke();
+          }
+          ctx.restore();ctx.shadowBlur=0;
+          for(let i=0;i<24;i++) {
+            const age=(p*2.6+i/24)%1;
+            const angle=i*2.39996+p*9+age*3;
+            const distance=radius*(2.4-age*1.55);
+            ctx.beginPath();ctx.arc(Math.cos(angle)*distance,Math.sin(angle)*distance*.65,1+(i%3)*.45,0,Math.PI*2);
+            ctx.fillStyle=i%3===0?'#e6f3ff':'#c59aff';ctx.globalAlpha=fade*Math.sin(age*Math.PI);ctx.fill();
+          }
+          ctx.globalAlpha=fade;
+          ctx.beginPath();ctx.arc(0,0,radius*.74,0,Math.PI*2);ctx.fillStyle='#080514';ctx.fill();
+          ctx.strokeStyle='#f2d7ff';ctx.lineWidth=1.5;ctx.shadowColor='#b85cff';ctx.shadowBlur=12;ctx.stroke();
+          // Curved light arcs slide continuously, independent of display frame count.
+          ctx.shadowBlur=0;ctx.rotate(p*7);
+          for(let a=0;a<3;a++){ctx.beginPath();ctx.arc(0,0,radius*.92,a*2.094,a*2.094+1.25);ctx.strokeStyle=a===0?'#f9e9ff':'#ab7cff';ctx.lineWidth=2;ctx.stroke();}
+        }
         ctx.restore();
-
-        // 2. Void Ground Energy Flames under Capy (Phase 1, 0.00 - 0.20)
-        if (p < 0.20) {
-          const flameIntensity = p < 0.08 ? (p / 0.08) : (1 - (p - 0.08) / 0.12);
-          ctx.save();
-          ctx.translate(this.playerState.x, this.groundY - 6);
-
-          ctx.save();
-          ctx.scale(1, 0.32);
-          const auraGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 52 * flameIntensity);
-          auraGrad.addColorStop(0, "rgba(168, 85, 247, 0.85)");
-          auraGrad.addColorStop(0.5, "rgba(88, 28, 135, 0.65)");
-          auraGrad.addColorStop(1, "rgba(3, 7, 18, 0)");
-          ctx.fillStyle = auraGrad;
-          ctx.beginPath();
-          ctx.arc(0, 0, 52 * flameIntensity, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-
-          ctx.shadowColor = "#c084fc";
-          ctx.shadowBlur = 12 * flameIntensity;
-          const tendrilCount = 7;
-          for (let i = 0; i < tendrilCount; i++) {
-            const tAngle = (i / tendrilCount) * Math.PI * 2;
-            const wave = Math.sin(now * 0.008 + i * 1.3);
-            const fx = Math.cos(tAngle) * (26 * flameIntensity);
-            const fy = Math.sin(tAngle) * (8 * flameIntensity);
-            const fHeight = (18 + wave * 8) * flameIntensity;
-
-            ctx.save();
-            ctx.translate(fx, fy);
-            const fGrad = ctx.createLinearGradient(0, 0, 0, -fHeight);
-            fGrad.addColorStop(0, "rgba(88, 28, 135, 0.85)");
-            fGrad.addColorStop(0.6, "rgba(168, 85, 247, 0.75)");
-            fGrad.addColorStop(1, "rgba(245, 208, 254, 0)");
-            ctx.fillStyle = fGrad;
-
-            ctx.beginPath();
-            ctx.moveTo(-4, 0);
-            ctx.quadraticCurveTo(-2 + wave * 2, -fHeight * 0.6, wave * 3, -fHeight);
-            ctx.quadraticCurveTo(2 + wave * 2, -fHeight * 0.6, 4, 0);
-            ctx.closePath();
-            ctx.fill();
-            ctx.restore();
-          }
+        if(p>.75){
+          const burst=clamp((p-.75)/.25),r=14+ease(burst)*87;
+          ctx.save();ctx.translate(x,y);ctx.globalAlpha=Math.pow(1-burst,2);
+          ctx.beginPath();ctx.ellipse(0,0,r,r*.62,-.32,0,Math.PI*2);ctx.strokeStyle='#e5c5ff';ctx.lineWidth=3*(1-burst)+.5;ctx.stroke();
+          for(let i=0;i<14;i++){const a=i*Math.PI*2/14;ctx.beginPath();ctx.moveTo(Math.cos(a)*r*.7,Math.sin(a)*r*.6);ctx.lineTo(Math.cos(a)*(r+8),Math.sin(a)*(r+8)*.8);ctx.strokeStyle=i%2?'#a78bfa':'#dff1ff';ctx.lineWidth=1.5;ctx.stroke();}
           ctx.restore();
         }
-
-        // 3. Crescent Slash Arc (Phase 2, 0.15 - 0.28)
-        if (p >= 0.15 && p < 0.28) {
-          const sp = (p - 0.15) / 0.13;
-          const sAlpha = Math.sin(sp * Math.PI);
-          ctx.save();
-          ctx.translate(this.playerState.x + 28, this.groundY - 40);
-          ctx.rotate(-0.25 + sp * 0.5);
-          ctx.globalAlpha = sAlpha;
-          ctx.shadowColor = "#f0abfc";
-          ctx.shadowBlur = 24;
-          ctx.strokeStyle = "rgba(232, 121, 249, 0.95)";
-          ctx.lineWidth = 14 * sAlpha;
-          ctx.lineCap = "round";
-          ctx.beginPath();
-          ctx.arc(0, 0, 52, -Math.PI * 0.6, Math.PI * 0.35);
-          ctx.stroke();
-
-          ctx.strokeStyle = "#ffffff";
-          ctx.lineWidth = 4.5 * sAlpha;
-          ctx.beginPath();
-          ctx.arc(0, 0, 52, -Math.PI * 0.55, Math.PI * 0.3);
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        // 4. Diamond Dimensional Rift Portal (Phase 2 & 3, 0.20 - 0.38)
-        if (p >= 0.20 && p < 0.38) {
-          let riftScale = 1.0;
-          if (p < 0.25) riftScale = (p - 0.20) / 0.05;
-          else if (p > 0.32) riftScale = 1 - (p - 0.32) / 0.06;
-
-          ctx.save();
-          ctx.translate(this.playerState.x + 54, this.groundY - 45);
-          ctx.scale(riftScale, riftScale);
-          ctx.shadowColor = "#d946ef";
-          ctx.shadowBlur = 28;
-
-          ctx.strokeStyle = "#c084fc";
-          ctx.lineWidth = 4;
-          ctx.beginPath();
-          ctx.moveTo(0, -68); ctx.lineTo(16, 0); ctx.lineTo(0, 68); ctx.lineTo(-16, 0);
-          ctx.closePath();
-          ctx.stroke();
-
-          ctx.strokeStyle = "#ffffff";
-          ctx.lineWidth = 2.0;
-          ctx.beginPath();
-          ctx.moveTo(0, -65); ctx.lineTo(14, 0); ctx.lineTo(0, 65); ctx.lineTo(-14, 0);
-          ctx.closePath();
-          ctx.stroke();
-
-          ctx.fillStyle = "#030712";
-          ctx.fill();
-
-          ctx.strokeStyle = "#f5d0fe";
-          ctx.lineWidth = 1.2;
-          for (let i = 0; i < 4; i++) {
-            const sAngle = (i / 4) * Math.PI * 2 + now * 0.01;
-            const sx = Math.cos(sAngle) * 14;
-            const sy = Math.sin(sAngle) * 45;
-            ctx.beginPath();
-            ctx.moveTo(sx, sy);
-            ctx.lineTo(sx + Math.sin(now * 0.02 + i) * 8, sy + Math.cos(now * 0.02 + i) * 6);
-            ctx.stroke();
-          }
-          ctx.restore();
-        }
-
-        // 5. BLACK HOLE LAUNCH & VORTEX (Phase 3, 4, 5, 6)
-        if (p >= 0.28 && p < 0.88) {
-          let currHoleX = finalHoleX;
-          let currHoleY = finalHoleY;
-
-          // Phase 3 (0.28 - 0.48): Comet Flight from Rift to Enemy
-          if (p < 0.48) {
-            const flyP = (p - 0.28) / 0.20;
-            const flyEase = 1 - Math.pow(1 - flyP, 3);
-            const startHoleX = this.playerState.x + 54;
-            const startHoleY = this.groundY - 45;
-            currHoleX = startHoleX + (finalHoleX - startHoleX) * flyEase;
-            currHoleY = startHoleY + (finalHoleY - startHoleY) * flyEase - Math.sin(flyP * Math.PI) * 22;
-
-            // Streaming Plasma Comet Tail & Zigzag Lightning
-            ctx.save();
-            ctx.shadowColor = "#c084fc";
-            ctx.shadowBlur = 20;
-
-            const tailLen = 65 * flyP;
-            const pGrad = ctx.createLinearGradient(currHoleX, currHoleY, currHoleX - tailLen, currHoleY + 6);
-            pGrad.addColorStop(0, "rgba(232, 121, 249, 0.95)");
-            pGrad.addColorStop(0.5, "rgba(168, 85, 247, 0.65)");
-            pGrad.addColorStop(1, "rgba(59, 7, 100, 0)");
-            ctx.fillStyle = pGrad;
-            ctx.beginPath();
-            ctx.moveTo(currHoleX, currHoleY - 14);
-            ctx.lineTo(currHoleX - tailLen, currHoleY);
-            ctx.lineTo(currHoleX, currHoleY + 14);
-            ctx.closePath();
-            ctx.fill();
-
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2.2;
-            ctx.beginPath();
-            ctx.moveTo(currHoleX, currHoleY);
-            for (let z = 1; z <= 5; z++) {
-              const zx = currHoleX - z * (tailLen / 5);
-              const zy = currHoleY + Math.sin(now * 0.03 + z * 1.5) * 10;
-              ctx.lineTo(zx, zy);
-            }
-            ctx.stroke();
-            ctx.restore();
-          }
-
-          // Phase 4 (0.48 - 0.78): Event Horizon Gravitational Vortex (Video & Screenshot!)
-          if (p >= 0.48 && p < 0.78) {
-            const vP = p < 0.72 ? 1.0 : (1 - (p - 0.72) / 0.06); // Collapse in Phase 5
-            const vortexRadius = 68 * vP;
-
-            ctx.save();
-            ctx.translate(currHoleX, currHoleY);
-
-            // Rotating Cosmic Accretion Disk (60 FPS smooth continuous spin)
-            ctx.rotate(now * 0.0035);
-            ctx.shadowColor = "#a855f7";
-            ctx.shadowBlur = 28 * vP;
-
-            // Outer glowing spiral nebula bands
-            for (let b = 0; b < 3; b++) {
-              const bAngle = (b / 3) * Math.PI * 2;
-              const bGrad = ctx.createRadialGradient(0, 0, 16, 0, 0, vortexRadius);
-              bGrad.addColorStop(0, "rgba(245, 208, 254, 0.9)");
-              bGrad.addColorStop(0.4, "rgba(192, 132, 252, 0.7)");
-              bGrad.addColorStop(0.8, "rgba(126, 34, 206, 0.4)");
-              bGrad.addColorStop(1, "rgba(3, 7, 18, 0)");
-              ctx.fillStyle = bGrad;
-              ctx.beginPath();
-              ctx.arc(0, 0, vortexRadius, bAngle, bAngle + Math.PI * 0.7);
-              ctx.lineTo(0, 0);
-              ctx.closePath();
-              ctx.fill();
-            }
-
-            // Branching Purple Lightning Bolts across rim
-            ctx.strokeStyle = "#f5d0fe";
-            ctx.lineWidth = 1.8;
-            for (let l of lightnings) {
-              const lAng = l.angle + now * 0.004;
-              const lx1 = Math.cos(lAng) * (vortexRadius * 0.4);
-              const ly1 = Math.sin(lAng) * (vortexRadius * 0.4);
-              const lx2 = Math.cos(lAng) * vortexRadius;
-              const ly2 = Math.sin(lAng) * vortexRadius;
-              ctx.beginPath();
-              ctx.moveTo(lx1, ly1);
-              ctx.lineTo((lx1 + lx2) / 2 + Math.sin(now * 0.03) * 8, (ly1 + ly2) / 2);
-              ctx.lineTo(lx2, ly2);
-              ctx.stroke();
-            }
-
-            // 8 Orbiting Asteroid Boulders sucked in a 3D spiral (Video & Screenshot!)
-            for (let ast of asteroids) {
-              const aAng = ast.angle + now * ast.speed * 0.05;
-              const spiralDist = Math.max(18, ast.radius * vP - Math.sin(now * 0.003) * 6);
-              const ax = Math.cos(aAng) * spiralDist;
-              const ay = Math.sin(aAng) * (spiralDist * 0.45); // 3D ellipse tilt
-
-              ctx.save();
-              ctx.translate(ax, ay);
-              ctx.fillStyle = ast.color;
-              ctx.strokeStyle = "#1e293b";
-              ctx.lineWidth = 1.0;
-              ctx.beginPath();
-              ctx.arc(0, 0, ast.size, 0, Math.PI * 2);
-              ctx.fill();
-              ctx.stroke();
-
-              // Asteroid glow
-              ctx.fillStyle = "rgba(240, 171, 252, 0.6)";
-              ctx.beginPath();
-              ctx.arc(-1, -1, ast.size * 0.4, 0, Math.PI * 2);
-              ctx.fill();
-              ctx.restore();
-            }
-
-            ctx.restore();
-          }
-
-          // Pitch-black Spherical Core with Radiant Photon Rings (All active phases)
-          const coreScale = (p >= 0.72 && p < 0.78) ? (1 - (p - 0.72) / 0.06) : 1.0;
-          const coreR = Math.max(4, 20 * coreScale);
-
-          ctx.save();
-          ctx.translate(currHoleX, currHoleY);
-
-          // Radiant Photon Ring
-          ctx.shadowColor = "#c084fc";
-          ctx.shadowBlur = 24;
-          ctx.strokeStyle = "#e879f9";
-          ctx.lineWidth = 3.5;
-          ctx.beginPath();
-          ctx.arc(0, 0, coreR + 3, 0, Math.PI * 2);
-          ctx.stroke();
-
-          ctx.strokeStyle = "#38bdf8";
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          ctx.arc(0, 0, coreR + 1.5, 0, Math.PI * 2);
-          ctx.stroke();
-
-          // Pure pitch-black void singularity
-          ctx.fillStyle = "#000000";
-          ctx.beginPath();
-          ctx.arc(0, 0, coreR, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-
-          // Phase 5 (0.72 - 0.78): Blinding White-Hot Singularity Star
-          if (p >= 0.72 && p < 0.78) {
-            const starP = (p - 0.72) / 0.06;
-            ctx.save();
-            ctx.translate(currHoleX, currHoleY);
-            ctx.shadowColor = "#ffffff";
-            ctx.shadowBlur = 35;
-
-            ctx.fillStyle = "#ffffff";
-            ctx.beginPath();
-            ctx.arc(0, 0, 12 + starP * 8, 0, Math.PI * 2);
-            ctx.fill();
-
-            // 4-Point Radiant Lens Flare Beams
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.95)";
-            ctx.lineWidth = 3.0;
-            const beamLen = 90 * starP;
-            ctx.beginPath();
-            ctx.moveTo(-beamLen, 0); ctx.lineTo(beamLen, 0);
-            ctx.moveTo(0, -beamLen); ctx.lineTo(0, beamLen);
-            ctx.stroke();
-            ctx.restore();
-          }
-
-          // Phase 6 (0.78 - 0.88): SUPERNOVA EXPLOSION!
-          if (p >= 0.78 && p < 0.88) {
-            const expP = (p - 0.78) / 0.10;
-            ctx.save();
-            ctx.translate(currHoleX, currHoleY);
-
-            // 1. Blinding Shockwave Blast Wave Rings
-            const blastR = expP * 240;
-            ctx.shadowColor = "#fb923c";
-            ctx.shadowBlur = 32;
-
-            // Fiery Orange / Yellow Inner Shockwave
-            ctx.strokeStyle = `rgba(251, 146, 60, ${1 - expP})`;
-            ctx.lineWidth = 14 * (1 - expP);
-            ctx.beginPath();
-            ctx.arc(0, 0, blastR * 0.75, 0, Math.PI * 2);
-            ctx.stroke();
-
-            // Deep Neon Purple Outer Shockwave
-            ctx.strokeStyle = `rgba(192, 132, 252, ${1 - expP})`;
-            ctx.lineWidth = 8 * (1 - expP);
-            ctx.beginPath();
-            ctx.arc(0, 0, blastR, 0, Math.PI * 2);
-            ctx.stroke();
-
-            // 2. Blinding Core Light Flash
-            const coreGrad = ctx.createRadialGradient(0, 0, 5, 0, 0, 75 * (1 - expP));
-            coreGrad.addColorStop(0, `rgba(255, 255, 255, ${1 - expP * 0.8})`);
-            coreGrad.addColorStop(0.4, `rgba(254, 215, 170, ${0.8 * (1 - expP)})`);
-            coreGrad.addColorStop(1, "rgba(168, 85, 247, 0)");
-            ctx.fillStyle = coreGrad;
-            ctx.beginPath();
-            ctx.arc(0, 0, 75 * (1 - expP), 0, Math.PI * 2);
-            ctx.fill();
-
-            // 3. Shattering Crystal Shards & Rocks Blasting in 360 degrees
-            ctx.lineWidth = 1.5;
-            for (let s = 0; s < 18; s++) {
-              const sAng = (s / 18) * Math.PI * 2;
-              const dist = expP * (110 + (s % 3) * 55);
-              const sx = Math.cos(sAng) * dist;
-              const sy = Math.sin(sAng) * dist;
-              ctx.save();
-              ctx.translate(sx, sy);
-              ctx.rotate(sAng + expP * 4);
-              ctx.fillStyle = s % 2 === 0 ? "#f5d0fe" : "#a855f7";
-              ctx.shadowColor = "#d946ef";
-              ctx.shadowBlur = 10;
-              ctx.beginPath();
-              ctx.moveTo(0, -6);
-              ctx.lineTo(3.5, 0);
-              ctx.lineTo(0, 6);
-              ctx.lineTo(-3.5, 0);
-              ctx.closePath();
-              ctx.fill();
-              ctx.restore();
-            }
-
-            ctx.restore();
-          }
-        }
-
-        // Phase 7 (0.85 - 1.00): Void Settle & Drifting Crystal Stardust
-        if (p >= 0.85) {
-          const settleP = (p - 0.85) / 0.15;
-          ctx.save();
-          for (let sp of stardustPetals) {
-            const sx = finalHoleX + sp.x + sp.vx * settleP * 30;
-            const sy = finalHoleY + sp.y + sp.vy * settleP * 45;
-            ctx.globalAlpha = sp.alpha * (1 - settleP);
-            ctx.fillStyle = sp.color;
-            ctx.shadowColor = sp.color;
-            ctx.shadowBlur = 8;
-            ctx.beginPath();
-            ctx.arc(sx, sy, sp.size, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          ctx.restore();
-        }
-
-        // 6. Authentic Dialogue Subtitle Box (Matching User's Screenshot!)
-        ctx.save();
-        const boxX = this.width / 2;
-        const boxY = Math.min(this.height - 40, this.groundY + 45);
-        ctx.translate(boxX, boxY);
-        ctx.font = "bold 13px 'Fredoka', 'Nunito', sans-serif";
-        const dialogueText = `"${currScene.dialogue}"`;
-        const textWidth = ctx.measureText(dialogueText).width;
-        const padX = 16;
-        const boxW = Math.max(120, textWidth + padX * 2);
-        const boxH = 28;
-
-        ctx.fillStyle = "rgba(8, 3, 18, 0.88)";
-        ctx.strokeStyle = "rgba(192, 132, 252, 0.6)";
-        ctx.lineWidth = 1.5;
-        ctx.shadowColor = "#a855f7";
-        ctx.shadowBlur = 12;
-        ctx.beginPath();
-        ctx.roundRect(-boxW / 2, -boxH / 2, boxW, boxH, boxH / 2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#f5d0fe";
-        ctx.shadowColor = "#e879f9";
-        ctx.shadowBlur = 6;
-        ctx.fillText(dialogueText, 0, 1);
-        ctx.restore();
       },
       onComplete: () => {
+        if (!hit) { hit = true; if (onHit) onHit(); }
         this.playerState.skillExpression = null;
-        this.playerState.swordAction = null;
         this.playerState.skillTheme = null;
-        this.playerState.blackHoleSprite = null;
-        if (this.enemyState) {
-          this.enemyState.knockback = 0;
-          this.enemyState.shake = 0;
-        }
         this.setPlayerAnim("idle", true);
-        try {
-          if (onComplete) onComplete();
-        } catch (err) {
-          console.error("Black Hole onComplete error:", err);
-        }
+        if (onComplete) onComplete();
       }
     });
   }
@@ -6210,7 +5738,7 @@ class StageRenderer {
     // Smooth lag catchup
     if (e.animHp === undefined) e.animHp = e.currentHp;
     if (Math.abs(e.animHp - e.currentHp) > 0.5) {
-      e.animHp += (e.currentHp - e.animHp) * 0.18;
+      e.animHp += (e.currentHp - e.animHp) * (1-Math.pow(.82,this.frameScale??1));
     } else {
       e.animHp = e.currentHp;
     }
@@ -6221,9 +5749,9 @@ class StageRenderer {
     ctx.textAlign = "center";
     ctx.strokeStyle = "rgba(0,0,0,0.9)";
     ctx.lineWidth = 3;
-    ctx.strokeText((e.isBoss ? "👑 " : "") + e.name, x, y - 4);
+    ctx.strokeText(window.GameLocale?.text((e.isBoss ? "👑 " : "") + e.name) ?? ((e.isBoss ? "👑 " : "") + e.name), x, y - 4);
     ctx.fillStyle = e.isBoss ? "#ffd166" : "#ffffff";
-    ctx.fillText((e.isBoss ? "👑 " : "") + e.name, x, y - 4);
+    ctx.fillText(window.GameLocale?.text((e.isBoss ? "👑 " : "") + e.name) ?? ((e.isBoss ? "👑 " : "") + e.name), x, y - 4);
 
     ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
     ctx.strokeStyle = "#475569";

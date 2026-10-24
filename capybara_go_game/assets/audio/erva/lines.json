@@ -1,0 +1,14 @@
+{
+  "voice": "en-US-JennyNeural",
+  "synthetic": true,
+  "lines": {
+    "greeting_1": "Oh, there you are. It's lovely to see you.",
+    "greeting_2": "Welcome back. Come, rest a little.",
+    "encourage_1": "One little step at a time. You're doing so well.",
+    "encourage_2": "Take your time. I'll be right here.",
+    "gift_1": "Here, I saved a little something for you. I hope it helps.",
+    "gift_2": "You've been working so hard. This one's for you.",
+    "rank_1": "Look at you! A new rank. I'm so proud of you.",
+    "rank_2": "You did it! I knew you would. Shall we celebrate?"
+  }
+}

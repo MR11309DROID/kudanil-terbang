@@ -1,0 +1,15 @@
+{
+  "voice": "en-US-AriaNeural",
+  "synthetic": true,
+  "direction": "Bright, playful, theatrical, affectionate; an original Erva performance, not a voice clone.",
+  "lines": {
+    "greeting_1": "Ah, there you are! I was hoping you'd stop by.",
+    "greeting_2": "Welcome back, my dear adventurer. Shall we begin?",
+    "encourage_1": "Chin up! Every grand adventure begins with a little courage.",
+    "encourage_2": "Oh, take your time. Even heroes deserve a little rest.",
+    "gift_1": "A little surprise, just for you! Go on. You've earned it.",
+    "gift_2": "Well, look at you! Here. A little something for our rising star.",
+    "rank_1": "Bravo! A brand new rank. Oh, I'm so proud of you!",
+    "rank_2": "And there it is! Your moment to shine. Shall we celebrate?"
+  }
+}

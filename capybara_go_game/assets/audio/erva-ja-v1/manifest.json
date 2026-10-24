@@ -1,0 +1,1025 @@
+{
+  "sidebar_daily": {
+    "source": "Furina-2026-10-23-07-20-[soft]-デイリーは、毎日戻ってきてくれたあなたへの小さなご褒美。今日の報酬を確認して、受け.mp3",
+    "sha256": "9bd2bc3bb23831819e00f15f5b7f4d9ee3e07d3d37f07057fdbdf186fc20d21a",
+    "script": "デイリーは、毎日戻ってきてくれたあなたへの小さなご褒美。今日の報酬を確認して、受け取れるなら忘れずにもらってね。",
+    "duration": 10.893,
+    "peak": 0.73421,
+    "clippingPct": 0.0,
+    "rms": 0.13507,
+    "leadingSilence": 0.087,
+    "trailingSilence": 0.368,
+    "levelStep": 0.04,
+    "transcript": "デイリーは、毎日戻ってきてくれたあなたへの小さなごほうび。今日の放手を確認して、受け取れるなら忘れずにもらってね。",
+    "secondPass": null,
+    "selectedIndex": 0
+  },
+  "sidebar_wheel": {
+    "source": "Furina-2026-10-23-07-18-[soft]-これがルーレット。回す前に、何がいくつ必要なのか確認してね。あ、何が当たるかは約束.mp3",
+    "sha256": "232e8bb446cff8707dbdad18853aac788bc44d487ccb68b021480b5623cd3487",
+    "script": "これがルーレット。回す前に、何がいくつ必要なのか確認してね。あ、何が当たるかは約束できないよ！",
+    "duration": 11.024,
+    "peak": 0.81848,
+    "clippingPct": 0.0,
+    "rms": 0.12437,
+    "leadingSilence": 0.117,
+    "trailingSilence": 0.366,
+    "levelStep": 0.04,
+    "transcript": "これがルーレット回す前に何がいくつ必要なのか確認してねあ、何が当たるかは約束できないよ",
+    "secondPass": null,
+    "selectedIndex": 1
+  },
+  "sidebar_achieve": {
+    "source": "Furina-2026-10-23-07-17-[soft]-戦いに勝ったり、新しいことに挑戦したりした？-アチーブを見てみて。報酬が待っている.mp3",
+    "sha256": "3ac7432ad55c359d5ac5d5fe32289f205d196141f5d02ef5de4c438aac0bd19b",
+    "script": "戦いに勝ったり、新しいことに挑戦したりした？ アチーブを見てみて。報酬が待っているかもしれないよ。",
+    "duration": 9.404,
+    "peak": 0.86179,
+    "clippingPct": 0.0,
+    "rms": 0.12839,
+    "leadingSilence": 0.09,
+    "trailingSilence": 0.313,
+    "levelStep": 0.04,
+    "transcript": "戦いに勝ったり、新しいことに挑戦したりした。アチーブを見てみて、報酬が待っているかもしれないよ。",
+    "secondPass": null,
+    "selectedIndex": 2
+  },
+  "sidebar_pass": {
+    "source": "Furina-2026-10-23-07-17-[soft]-パスには、達成するミッションと報酬があるよ。無料でもらえるものと、解放が必要なもの.mp3",
+    "sha256": "38cfa85d0ec242b13da23fdca2152fdb76c3a271b321665ee339f5cdcae9b859",
+    "script": "パスには、達成するミッションと報酬があるよ。無料でもらえるものと、解放が必要なものを確認してから選んでね。",
+    "duration": 9.77,
+    "peak": 0.83872,
+    "clippingPct": 0.0,
+    "rms": 0.17781,
+    "leadingSilence": 0.12,
+    "trailingSilence": 0.388,
+    "levelStep": 0.04,
+    "transcript": "パスには達成するミッションと報酬があるよ無料でもらえるものと 開放が必要なものを確認してから選んでね",
+    "secondPass": null,
+    "selectedIndex": 3
+  },
+  "sidebar_stats": {
+    "source": "Furina-2026-10-23-07-16-[soft]-カピバラの調子が気になる？-ステータスで能力を確認できるよ。次に何を鍛えるか考える.mp3",
+    "sha256": "0807bf071307e9feedc2e68f0606d12389a599431e5807f1b2835a049e941ce2",
+    "script": "カピバラの調子が気になる？ ステータスで能力を確認できるよ。次に何を鍛えるか考えるときに便利だね。",
+    "duration": 8.829,
+    "peak": 0.87409,
+    "clippingPct": 0.0,
+    "rms": 0.1622,
+    "leadingSilence": 0.117,
+    "trailingSilence": 0.229,
+    "levelStep": 0.04,
+    "transcript": "カピバラの調子が気になる? ステータスで能力を確認できるよ次に何を期待るか考えるときに便利だね",
+    "secondPass": null,
+    "selectedIndex": 4
+  },
+  "sidebar_shortcuts": {
+    "source": "Furina-2026-10-23-07-16-[soft]-ボタンが多くて見づらい？-これを押すとショートカットをしまえるよ。戻したくなったら.mp3",
+    "sha256": "86e9bfdf5482cddd65b5345004c14805703337a518977fd299d53b7da2b67444",
+    "script": "ボタンが多くて見づらい？ これを押すとショートカットをしまえるよ。戻したくなったら、もう一度押してね。",
+    "duration": 8.986,
+    "peak": 0.83929,
+    "clippingPct": 0.0,
+    "rms": 0.15281,
+    "leadingSilence": 0.104,
+    "trailingSilence": 0.172,
+    "levelStep": 0.04,
+    "transcript": "ボタンが多くてみずらい?これを押すとショートカットをしまえるよ戻したくなったらもう一度押してね",
+    "secondPass": null,
+    "selectedIndex": 5
+  },
+  "sidebar_clean": {
+    "source": "Furina-2026-10-23-07-15-[soft]-景色をすっきり見たい？-設定を開いて、クリーンＵＩをオンにしてね。操作ボタンを戻し.mp3",
+    "sha256": "8c299671baee73be34ac5d635dd7424a92104c7ceffb97113253567f27a1ca5a",
+    "script": "景色をすっきり見たい？ 設定を開いて、クリーンＵＩをオンにしてね。操作ボタンを戻したいときは、画面をタップ。簡単でしょ！",
+    "duration": 11.494,
+    "peak": 0.87924,
+    "clippingPct": 0.0,
+    "rms": 0.15372,
+    "leadingSilence": 0.128,
+    "trailingSilence": 0.342,
+    "levelStep": 0.04,
+    "transcript": "景色をすっきり見たい 設定を開いてクリーンU-Iを温にしてね操作ボタンを戻したいときは画面をタップ 簡単でしょ",
+    "secondPass": null,
+    "selectedIndex": 6
+  },
+  "angry": {
+    "source": "Furina-2026-10-23-07-08-[angry]-休まずに戦いに行ったの？！.mp3",
+    "sha256": "5e8dfa9f4cda3e7c3180afead171f2d0bad0acb8b0e17b70d67b9499d04381d0",
+    "script": "休まずに戦いに行ったの？！",
+    "duration": 2.377,
+    "peak": 0.84889,
+    "clippingPct": 0.0,
+    "rms": 0.16398,
+    "leadingSilence": 0.102,
+    "trailingSilence": 0.299,
+    "levelStep": 0.04,
+    "transcript": "やすまずに戦いに行ったの!?",
+    "secondPass": null,
+    "selectedIndex": 7
+  },
+  "gift": {
+    "source": "Furina-2026-10-23-08-46-[happy]-あなたに、ちょっとしたプレゼント！-ほら、受け取って。頑張ったご褒美だよ。.mp3",
+    "sha256": "3d3d2a46d5c47ec085a7d95a5e614983763e3a770e1c6aebdc028c5df3f26c67",
+    "script": "あなたに、ちょっとしたプレゼント！ ほら、受け取って。頑張ったご褒美だよ。",
+    "duration": 6.113,
+    "peak": 0.84979,
+    "clippingPct": 0.0,
+    "rms": 0.17565,
+    "leadingSilence": 0.088,
+    "trailingSilence": 0.27,
+    "levelStep": 0.04,
+    "transcript": "あなたにちょっとしたプレゼントを、ほら、受け取って、頑張ったご労備だよ!",
+    "secondPass": null,
+    "selectedIndex": 9
+  },
+  "laugh": {
+    "source": "Furina-2026-10-23-08-46-[chuckling]-ふふっ……あらら、うまくいかなかったね。.mp3",
+    "sha256": "3a7373988b0ab34a6b836cb08713c95f98b524a98bb428490b6a5b90fc664b48",
+    "script": "ふふっ……あらら、うまくいかなかったね。",
+    "duration": 4.754,
+    "peak": 0.82901,
+    "clippingPct": 0.0,
+    "rms": 0.16256,
+    "leadingSilence": 0.107,
+    "trailingSilence": 0.331,
+    "levelStep": 0.04,
+    "transcript": "フフフフフ、あらら、うまくいかなかったね",
+    "secondPass": null,
+    "selectedIndex": 10
+  },
+  "nervous": {
+    "source": "Furina-2026-10-23-07-45-[nervous]-あっ！-ちょっと近いね。ううん、離れなくていいよ。そういう意味じゃなくて。.mp3",
+    "sha256": "2ea5a34bca08b629ee339193d860e0c436e5eae35ab68e075a6329c4ff12a800",
+    "script": "あっ！ ちょっと近いね。ううん、離れなくていいよ。そういう意味じゃなくて。",
+    "duration": 7.367,
+    "peak": 0.77277,
+    "clippingPct": 0.0,
+    "rms": 0.13878,
+    "leadingSilence": 0.089,
+    "trailingSilence": 0.197,
+    "levelStep": 0.04,
+    "transcript": "う…ちょっと近いね…うん!離れなくていいよ!そういう意味じゃなくて…",
+    "secondPass": null,
+    "selectedIndex": 11
+  },
+  "rank": {
+    "source": "Furina-2026-10-23-07-45-[excited]-やったね！-新しいランクだよ！-こんなに成長したんだね。私もすっごく嬉しい！.mp3",
+    "sha256": "08ef1ce137977197a16cec72071c0bc7474ade14003533d7e89cc660b0df1e47",
+    "script": "やったね！ 新しいランクだよ！ こんなに成長したんだね。私もすっごく嬉しい！",
+    "duration": 8.568,
+    "peak": 0.81913,
+    "clippingPct": 0.0,
+    "rms": 0.1714,
+    "leadingSilence": 0.091,
+    "trailingSilence": 0.358,
+    "levelStep": 0.04,
+    "transcript": "やったね! 新しいランクだよ! こんなに成長したんだね!私もすっごく嬉しい!",
+    "secondPass": null,
+    "selectedIndex": 12
+  },
+  "sad": {
+    "source": "Furina-2026-10-23-07-42-[soft]-ああ……思ったようにはいかなかったね。こっちにおいで。また明日、一緒に挑戦しよう。.mp3",
+    "sha256": "4526f1d963d07553910d8cd9dc60183add6fd5745715d236a9a3003bbd3e1f06",
+    "script": "ああ……思ったようにはいかなかったね。こっちにおいで。また明日、一緒に挑戦しよう。",
+    "duration": 8.829,
+    "peak": 0.54607,
+    "clippingPct": 0.0,
+    "rms": 0.08231,
+    "leadingSilence": 0.085,
+    "trailingSilence": 0.278,
+    "levelStep": 0.04,
+    "transcript": "ああ、思ったようにはいかなかったね。こっちにおいで、また明日、一緒に挑戦しよう。",
+    "secondPass": null,
+    "selectedIndex": 14
+  },
+  "shy": {
+    "source": "Furina-2026-10-23-07-41-[embarrassed]-これ……あなたのために作ったの。大したものじゃないけど、気に入ってく.mp3",
+    "sha256": "ac8f056e544df410fc2babf64bf94c09af820a5a6283fc1d6f7504e3ab8a20ec",
+    "script": "これ……あなたのために作ったの。大したものじゃないけど、気に入ってくれるかなって。",
+    "duration": 8.803,
+    "peak": 0.70754,
+    "clippingPct": 0.0,
+    "rms": 0.11415,
+    "leadingSilence": 0.092,
+    "trailingSilence": 0.315,
+    "levelStep": 0.04,
+    "transcript": "これ、あなたのために作ったの、対したものじゃないけど、気に入ってくれるかなって。",
+    "secondPass": null,
+    "selectedIndex": 15
+  },
+  "tip": {
+    "source": "Furina-2026-10-23-07-40-[soft]-次のプレゼントは、見習いランク３になると自動で届くよ。.mp3",
+    "sha256": "64e96699099cb12cadc606b34e98207a96dd120fd67cb22b6d738a72f4290211",
+    "script": "次のプレゼントは、見習いランク３になると自動で届くよ。",
+    "duration": 5.224,
+    "peak": 0.78449,
+    "clippingPct": 0.0,
+    "rms": 0.1486,
+    "leadingSilence": 0.116,
+    "trailingSilence": 0.309,
+    "levelStep": 0.04,
+    "transcript": "次のプレゼントは、みんなライランク3になると自動で届くよ!",
+    "secondPass": null,
+    "selectedIndex": 16
+  },
+  "welcome": {
+    "source": "Furina-2026-10-23-07-40-[happy]-おかえり、大切な冒険者さん！-さあ、冒険の話を聞かせて。.mp3",
+    "sha256": "dc1457d63fb59c062370a9ffcca9e21e54e1ba820ca2a99321d32362678b21c9",
+    "script": "おかえり、大切な冒険者さん！ さあ、冒険の話を聞かせて。",
+    "duration": 6.295,
+    "peak": 0.82442,
+    "clippingPct": 0.0,
+    "rms": 0.14219,
+    "leadingSilence": 0.093,
+    "trailingSilence": 0.293,
+    "levelStep": 0.04,
+    "transcript": "おかえり、大切な冒険者さん!さあ、冒険の話を聞かせて!",
+    "secondPass": null,
+    "selectedIndex": 17
+  },
+  "guide_welcome": {
+    "source": "Furina-2026-10-23-07-39-[soft]-やっほー、エルヴァだよ。ここは初めて？-おいで、案内するね。すぐ終わるから。.mp3",
+    "sha256": "4f673f7e2053fc004e8c03b507f9f044ba5e641cd4ab7d16b1f5b7a646249c37",
+    "script": "やっほー、エルヴァだよ。ここは初めて？ おいで、案内するね。すぐ終わるから。",
+    "duration": 7.393,
+    "peak": 0.7542,
+    "clippingPct": 0.0,
+    "rms": 0.1275,
+    "leadingSilence": 0.095,
+    "trailingSilence": 0.18,
+    "levelStep": 0.04,
+    "transcript": "やほー、エルバだよ。ここは初めて。おいで、案内するね。すぐ終わるから。",
+    "secondPass": null,
+    "selectedIndex": 18
+  },
+  "guide_start": {
+    "source": "Furina-2026-10-23-07-39-[soft]-ここから冒険に出発できるよ。エネルギーは５つ必要なの。先にマップを選んで、さあ、出.mp3",
+    "sha256": "5f9fb82278258768ebfd6cb195c4fd1d5df6abf1ec46426ac75d7f21a8f6f7b9",
+    "script": "ここから冒険に出発できるよ。エネルギーは５つ必要なの。先にマップを選んで、さあ、出発！",
+    "duration": 8.699,
+    "peak": 0.77961,
+    "clippingPct": 0.0,
+    "rms": 0.13169,
+    "leadingSilence": 0.135,
+    "trailingSilence": 0.356,
+    "levelStep": 0.04,
+    "transcript": "ここから冒険に出発できるよ エネルギーは一つ必要なの先に真っ暗でさぁ 出発",
+    "secondPass": {
+      "transcript": "ここから冒険に出発できるよ エネルギーはいつつ必要なの先にマップを選んでさあ出発",
+      "words": [
+        {
+          "word": "ここ",
+          "start": 0.0,
+          "end": 0.28
+        },
+        {
+          "word": "から",
+          "start": 0.28,
+          "end": 0.58
+        },
+        {
+          "word": "冒",
+          "start": 0.58,
+          "end": 0.86
+        },
+        {
+          "word": "険",
+          "start": 0.86,
+          "end": 1.06
+        },
+        {
+          "word": "に",
+          "start": 1.06,
+          "end": 1.24
+        },
+        {
+          "word": "出",
+          "start": 1.24,
+          "end": 1.38
+        },
+        {
+          "word": "発",
+          "start": 1.38,
+          "end": 1.6
+        },
+        {
+          "word": "でき",
+          "start": 1.6,
+          "end": 1.8
+        },
+        {
+          "word": "る",
+          "start": 1.8,
+          "end": 2.02
+        },
+        {
+          "word": "よ",
+          "start": 2.02,
+          "end": 2.28
+        },
+        {
+          "word": "エ",
+          "start": 2.92,
+          "end": 3.1
+        },
+        {
+          "word": "ネル",
+          "start": 3.1,
+          "end": 3.26
+        },
+        {
+          "word": "ギ",
+          "start": 3.26,
+          "end": 3.46
+        },
+        {
+          "word": "ー",
+          "start": 3.46,
+          "end": 3.54
+        },
+        {
+          "word": "はい",
+          "start": 3.54,
+          "end": 3.82
+        },
+        {
+          "word": "つ",
+          "start": 3.82,
+          "end": 3.96
+        },
+        {
+          "word": "つ",
+          "start": 3.96,
+          "end": 4.12
+        },
+        {
+          "word": "必",
+          "start": 4.12,
+          "end": 4.28
+        },
+        {
+          "word": "要",
+          "start": 4.28,
+          "end": 4.52
+        },
+        {
+          "word": "な",
+          "start": 4.52,
+          "end": 4.64
+        },
+        {
+          "word": "の",
+          "start": 4.64,
+          "end": 4.88
+        },
+        {
+          "word": "先",
+          "start": 4.88,
+          "end": 5.52
+        },
+        {
+          "word": "に",
+          "start": 5.52,
+          "end": 5.76
+        },
+        {
+          "word": "マ",
+          "start": 5.76,
+          "end": 5.92
+        },
+        {
+          "word": "ップ",
+          "start": 5.92,
+          "end": 6.12
+        },
+        {
+          "word": "を",
+          "start": 6.12,
+          "end": 6.24
+        },
+        {
+          "word": "選",
+          "start": 6.24,
+          "end": 6.4
+        },
+        {
+          "word": "んで",
+          "start": 6.4,
+          "end": 6.68
+        },
+        {
+          "word": "さ",
+          "start": 6.68,
+          "end": 7.34
+        },
+        {
+          "word": "あ",
+          "start": 7.34,
+          "end": 7.62
+        },
+        {
+          "word": "出",
+          "start": 7.62,
+          "end": 7.9
+        },
+        {
+          "word": "発",
+          "start": 7.9,
+          "end": 8.16
+        }
+      ]
+    },
+    "selectedIndex": 19
+  },
+  "guide_gear": {
+    "source": "Furina-2026-10-23-07-32-[soft]-新しい装備を手に入れた？-ここで装備してみて。ぴかぴかの剣も、バッグに入れたままじ.mp3",
+    "sha256": "05d0857a4a7d810f0d05b392bf4c942e3765d938ae5938764de4f5c67cc07b76",
+    "script": "新しい装備を手に入れた？ ここで装備してみて。ぴかぴかの剣も、バッグに入れたままじゃもったいないよ。",
+    "duration": 8.986,
+    "peak": 0.64977,
+    "clippingPct": 0.0,
+    "rms": 0.11925,
+    "leadingSilence": 0.083,
+    "trailingSilence": 0.283,
+    "levelStep": 0.04,
+    "transcript": "新しい装備を手に入れた ここで装備してみてピカピカのツルギもバックに入れたままじゃもったいないよ",
+    "secondPass": null,
+    "selectedIndex": 20
+  },
+  "guide_camp": {
+    "source": "Furina-2026-10-23-07-32-[soft]-ここが私たちのキャンプ。食事で体力が増えて、切り株で攻撃力、ベンチで防御力を鍛えら.mp3",
+    "sha256": "b137b3d8cf11844d040ef9a0cc1ec7604428998d34d4926972927b68fceae2e0",
+    "script": "ここが私たちのキャンプ。食事で体力が増えて、切り株で攻撃力、ベンチで防御力を鍛えられるよ。",
+    "duration": 9.117,
+    "peak": 0.8038,
+    "clippingPct": 0.0,
+    "rms": 0.12691,
+    "leadingSilence": 0.102,
+    "trailingSilence": 0.26,
+    "levelStep": 0.04,
+    "transcript": "ここが私たちのキャンテン 食事で体力が増えてキリカブで攻撃力メンチで防げ力を期待されるよ。",
+    "secondPass": {
+      "transcript": "ここが私たちのキャンプ 食事で体力が増えて切りかぶで攻撃力ベンチで防御力を鍛えられるよ",
+      "words": [
+        {
+          "word": "ここ",
+          "start": 0.0,
+          "end": 0.28
+        },
+        {
+          "word": "が",
+          "start": 0.28,
+          "end": 0.52
+        },
+        {
+          "word": "私",
+          "start": 0.52,
+          "end": 0.82
+        },
+        {
+          "word": "た",
+          "start": 0.82,
+          "end": 1.02
+        },
+        {
+          "word": "ち",
+          "start": 1.02,
+          "end": 1.16
+        },
+        {
+          "word": "の",
+          "start": 1.16,
+          "end": 1.26
+        },
+        {
+          "word": "キ",
+          "start": 1.26,
+          "end": 1.44
+        },
+        {
+          "word": "ャ",
+          "start": 1.44,
+          "end": 1.5
+        },
+        {
+          "word": "ンプ",
+          "start": 1.5,
+          "end": 1.72
+        },
+        {
+          "word": "食",
+          "start": 2.18,
+          "end": 2.7
+        },
+        {
+          "word": "事",
+          "start": 2.7,
+          "end": 2.92
+        },
+        {
+          "word": "で",
+          "start": 2.92,
+          "end": 3.08
+        },
+        {
+          "word": "体",
+          "start": 3.08,
+          "end": 3.24
+        },
+        {
+          "word": "力",
+          "start": 3.24,
+          "end": 3.48
+        },
+        {
+          "word": "が",
+          "start": 3.48,
+          "end": 3.68
+        },
+        {
+          "word": "増",
+          "start": 3.68,
+          "end": 3.86
+        },
+        {
+          "word": "えて",
+          "start": 3.86,
+          "end": 4.24
+        },
+        {
+          "word": "切",
+          "start": 4.24,
+          "end": 4.76
+        },
+        {
+          "word": "り",
+          "start": 4.76,
+          "end": 4.9
+        },
+        {
+          "word": "か",
+          "start": 4.9,
+          "end": 4.98
+        },
+        {
+          "word": "ぶ",
+          "start": 4.98,
+          "end": 5.1
+        },
+        {
+          "word": "で",
+          "start": 5.1,
+          "end": 5.24
+        },
+        {
+          "word": "攻",
+          "start": 5.24,
+          "end": 5.54
+        },
+        {
+          "word": "撃",
+          "start": 5.54,
+          "end": 5.72
+        },
+        {
+          "word": "力",
+          "start": 5.72,
+          "end": 6.0
+        },
+        {
+          "word": "ベ",
+          "start": 6.42,
+          "end": 6.8
+        },
+        {
+          "word": "ンチ",
+          "start": 6.8,
+          "end": 7.04
+        },
+        {
+          "word": "で",
+          "start": 7.04,
+          "end": 7.18
+        },
+        {
+          "word": "防",
+          "start": 7.18,
+          "end": 7.44
+        },
+        {
+          "word": "御",
+          "start": 7.44,
+          "end": 7.54
+        },
+        {
+          "word": "力",
+          "start": 7.54,
+          "end": 7.72
+        },
+        {
+          "word": "を",
+          "start": 7.72,
+          "end": 7.9
+        },
+        {
+          "word": "鍛",
+          "start": 7.9,
+          "end": 8.12
+        },
+        {
+          "word": "え",
+          "start": 8.12,
+          "end": 8.22
+        },
+        {
+          "word": "ら",
+          "start": 8.22,
+          "end": 8.34
+        },
+        {
+          "word": "れる",
+          "start": 8.34,
+          "end": 8.5
+        },
+        {
+          "word": "よ",
+          "start": 8.5,
+          "end": 8.7
+        }
+      ]
+    },
+    "selectedIndex": 21
+  },
+  "guide_risk": {
+    "source": "Furina-2026-10-23-07-31-[soft]-ひとつだけ気をつけてね。トレーニングは失敗することもあるの。ステディは成功しやすく.mp3",
+    "sha256": "14570ff18247190641570898a6f71d7fc4dcff9437a961386787c300ab7e0724",
+    "script": "ひとつだけ気をつけてね。トレーニングは失敗することもあるの。ステディは成功しやすくて、デアリングは効果が大きいぶん失敗も多いよ。どちらも、失敗してもゴールドは消費されるからね。",
+    "duration": 15.621,
+    "peak": 0.81607,
+    "clippingPct": 0.0,
+    "rms": 0.13121,
+    "leadingSilence": 0.081,
+    "trailingSilence": 0.274,
+    "levelStep": 0.04,
+    "transcript": "ひとつだけ気をつけてね トレーニングは失敗することもあるのステディは成功しやすくて デアリングは効果が大きい分失敗も多いよどちらも失敗してもゴールドは消費されるからね",
+    "secondPass": null,
+    "selectedIndex": 22
+  },
+  "guide_gift": {
+    "source": "Furina-2026-10-23-07-31-[soft]-トレーニングを続けてくれたら、節目のプレゼントは私が届けるよ。受け取りボタンを探さ.mp3",
+    "sha256": "e1b2107214a358712b83958485b4f91ada8ec8fe3f53c220a567d1384875f022",
+    "script": "トレーニングを続けてくれたら、節目のプレゼントは私が届けるよ。受け取りボタンを探さなくても大丈夫！",
+    "duration": 8.516,
+    "peak": 0.70908,
+    "clippingPct": 0.0,
+    "rms": 0.12713,
+    "leadingSilence": 0.122,
+    "trailingSilence": 0.269,
+    "levelStep": 0.04,
+    "transcript": "トレーニングを続けてくれたら不姫のプレゼントは私が届けるよ 受け取りボタンを探さなくても大丈夫",
+    "secondPass": null,
+    "selectedIndex": 23
+  },
+  "guide_shop": {
+    "source": "Furina-2026-10-23-07-30-[soft]-お店はこっち。気になったら、のぞいてみてね。これで案内はおしまい。また困ったら、エ.mp3",
+    "sha256": "7d745c0142e4c539a19abdacc7e7b4cb22434bc8c529394dff2cc2efcb8bd8f5",
+    "script": "お店はこっち。気になったら、のぞいてみてね。これで案内はおしまい。また困ったら、エルヴァズ・ガイドを押してね。ほら、カピバラが待ってるよ。",
+    "duration": 12.46,
+    "peak": 0.88175,
+    "clippingPct": 0.0,
+    "rms": 0.15788,
+    "leadingSilence": 0.094,
+    "trailingSilence": 0.37,
+    "levelStep": 0.04,
+    "transcript": "とみせはこっち 気になったら覗いてみてねこれで案内はおしまい また困ったらエルバズガイドを押してねほら カピバラが待ってるよ",
+    "secondPass": null,
+    "selectedIndex": 24
+  },
+  "event_intro": {
+    "source": "Furina-2026-10-23-07-30-[soft]-あっ、何か起きたみたい！-何があるのか見てみよう！.mp3",
+    "sha256": "68b5eb64a99b91068489baf5b5acefd9043efd11dc52beb5928b621b5162c84b",
+    "script": "あっ、何か起きたみたい！ 何があるのか見てみよう！",
+    "duration": 4.754,
+    "peak": 0.82662,
+    "clippingPct": 0.0,
+    "rms": 0.19133,
+    "leadingSilence": 0.052,
+    "trailingSilence": 0.42,
+    "levelStep": 0.04,
+    "transcript": "あ、何か起きたみたい。何があるのか見てみよう。",
+    "secondPass": null,
+    "selectedIndex": 25
+  },
+  "event_choices": {
+    "source": "Furina-2026-10-23-07-29-[soft]-ここから行動を選べるよ。選ぶ前に、それぞれの下にある説明を読んでね。助けになるもの.mp3",
+    "sha256": "b78d7b6444d2a898692032261da7015a8b7ae406588c3d1489e72936d5fcc6c7",
+    "script": "ここから行動を選べるよ。選ぶ前に、それぞれの下にある説明を読んでね。助けになるものもあれば、ちょっと厄介なことになるものもあるから。",
+    "duration": 12.278,
+    "peak": 0.78618,
+    "clippingPct": 0.0,
+    "rms": 0.17051,
+    "leadingSilence": 0.094,
+    "trailingSilence": 0.358,
+    "levelStep": 0.04,
+    "transcript": "ここから行動を選べるよ 選ぶ前にそれぞれの下にある説明を読んでね助けになるものもあれば、ちょっとやっかいなことになるものもあるから。",
+    "secondPass": null,
+    "selectedIndex": 26
+  },
+  "event_gold": {
+    "source": "Furina-2026-10-23-07-26-[soft]-これはゴールドが必要だよ。先に値段を確認してね。いらないものに最後の１枚まで使っち.mp3",
+    "sha256": "02b1763f141d6f24024e9d09f0f8f04f5bd9b81051d310b6af0d238b09be2ba7",
+    "script": "これはゴールドが必要だよ。先に値段を確認してね。いらないものに最後の１枚まで使っちゃったら、悲しいもん。",
+    "duration": 10.606,
+    "peak": 0.66808,
+    "clippingPct": 0.0,
+    "rms": 0.12073,
+    "leadingSilence": 0.089,
+    "trailingSilence": 0.301,
+    "levelStep": 0.04,
+    "transcript": "これはゴールドが必要だよ先に値段を確認してねいらないものに最後の一枚まで使っちゃったら悲しいもん",
+    "secondPass": null,
+    "selectedIndex": 27
+  },
+  "event_risk": {
+    "source": "Furina-2026-10-23-07-25-[soft]-うーん、これは賭けだね。すごくいい結果になるかもしれないし、痛い目を見るかもしれな.mp3",
+    "sha256": "4ecdea44f5e0f2712ff329b850f1311d5b75d40f20f249ca0483190eb438cfeb",
+    "script": "うーん、これは賭けだね。すごくいい結果になるかもしれないし、痛い目を見るかもしれない。決めるのは、あなた。",
+    "duration": 10.736,
+    "peak": 0.78068,
+    "clippingPct": 0.0,
+    "rms": 0.1459,
+    "leadingSilence": 0.093,
+    "trailingSilence": 0.256,
+    "levelStep": 0.04,
+    "transcript": "うーん、これはかけだね。すごくいい結果になるかもしれないし、痛い目を見るかもしれない。決めるのはあなた。",
+    "secondPass": null,
+    "selectedIndex": 28
+  },
+  "event_rest": {
+    "source": "Furina-2026-10-23-07-23-[soft]-ひと休みできるみたい。カピバラが疲れているなら、ちょうどいいかもしれないね。.mp3",
+    "sha256": "c52c09958c7f66f896110784bc0eec6647f08e2addae48aa8738e3bcdebf96e5",
+    "script": "ひと休みできるみたい。カピバラが疲れているなら、ちょうどいいかもしれないね。",
+    "duration": 6.531,
+    "peak": 0.68527,
+    "clippingPct": 0.0,
+    "rms": 0.1206,
+    "leadingSilence": 0.081,
+    "trailingSilence": 0.327,
+    "levelStep": 0.04,
+    "transcript": "ひとやすみできるみたい カピバラが疲れているならちょうどいいかもしれないね",
+    "secondPass": null,
+    "selectedIndex": 29
+  },
+  "event_fight": {
+    "source": "Furina-2026-10-23-07-23-[soft]-戦う勇気はある？-これを選ぶと戦闘が始まるよ。でも、その前に体力を確認してね。お願.mp3",
+    "sha256": "0db67199a08daa6f7885f3ecad26efa4f3f8c5c366b56c04d7e2ff6273e7b6f4",
+    "script": "戦う勇気はある？ これを選ぶと戦闘が始まるよ。でも、その前に体力を確認してね。お願い。",
+    "duration": 11.024,
+    "peak": 0.69082,
+    "clippingPct": 0.0,
+    "rms": 0.13986,
+    "leadingSilence": 0.095,
+    "trailingSilence": 0.252,
+    "levelStep": 0.04,
+    "transcript": "戦う勇気はある?あははは、これを選ぶと戦闘が始まるよ!でも、その前に体力を確認してね、お願い!",
+    "secondPass": null,
+    "selectedIndex": 30
+  },
+  "event_chosen": {
+    "source": "Furina-2026-10-23-07-21-[soft]-よし、どうなるか見てみよう。.mp3",
+    "sha256": "a18e0f3ebc98786a5b3e45c705425dfdd86104a089afd261bf1653ab0d2717bb",
+    "script": "よし、どうなるか見てみよう。",
+    "duration": 2.717,
+    "peak": 0.49602,
+    "clippingPct": 0.0,
+    "rms": 0.1003,
+    "leadingSilence": 0.093,
+    "trailingSilence": 0.155,
+    "levelStep": 0.04,
+    "transcript": "よし、どうなるか見てみよう。",
+    "secondPass": null,
+    "selectedIndex": 31
+  },
+  "event_travel": {
+    "source": "Furina-2026-10-23-07-21-[soft]-ここでの用事は済んだ？-準備ができたら、トラベルボタンを押してね。私もすぐ後ろにつ.mp3",
+    "sha256": "b86e148672bd1352d06a64bf45104ebdb59d4e8cd7b75f0a0d053209ac7e847f",
+    "script": "ここでの用事は済んだ？ 準備ができたら、トラベルボタンを押してね。私もすぐ後ろについていくよ。",
+    "duration": 7.785,
+    "peak": 0.74385,
+    "clippingPct": 0.0,
+    "rms": 0.1188,
+    "leadingSilence": 0.111,
+    "trailingSilence": 0.319,
+    "levelStep": 0.04,
+    "transcript": "ここでの様子は済んだ 準備ができたらトラベルボタンを押したね私もすぐ後ろについていくよ",
+    "secondPass": {
+      "transcript": "ここでの用事は済んだ 準備ができたらトラベルボタンを押してね私もすぐ後ろについていくよ",
+      "words": [
+        {
+          "word": "ここ",
+          "start": 0.0,
+          "end": 0.28
+        },
+        {
+          "word": "で",
+          "start": 0.28,
+          "end": 0.44
+        },
+        {
+          "word": "の",
+          "start": 0.44,
+          "end": 0.56
+        },
+        {
+          "word": "用",
+          "start": 0.56,
+          "end": 0.76
+        },
+        {
+          "word": "事",
+          "start": 0.76,
+          "end": 0.9
+        },
+        {
+          "word": "は",
+          "start": 0.9,
+          "end": 1.04
+        },
+        {
+          "word": "済",
+          "start": 1.04,
+          "end": 1.16
+        },
+        {
+          "word": "んだ",
+          "start": 1.16,
+          "end": 1.44
+        },
+        {
+          "word": "準備",
+          "start": 2.24,
+          "end": 2.56
+        },
+        {
+          "word": "が",
+          "start": 2.56,
+          "end": 2.74
+        },
+        {
+          "word": "でき",
+          "start": 2.74,
+          "end": 2.88
+        },
+        {
+          "word": "た",
+          "start": 2.88,
+          "end": 3.06
+        },
+        {
+          "word": "ら",
+          "start": 3.06,
+          "end": 3.24
+        },
+        {
+          "word": "ト",
+          "start": 3.24,
+          "end": 3.6
+        },
+        {
+          "word": "ラ",
+          "start": 3.6,
+          "end": 3.7
+        },
+        {
+          "word": "ベ",
+          "start": 3.7,
+          "end": 3.8
+        },
+        {
+          "word": "ル",
+          "start": 3.8,
+          "end": 3.9
+        },
+        {
+          "word": "ボ",
+          "start": 3.9,
+          "end": 4.06
+        },
+        {
+          "word": "タ",
+          "start": 4.06,
+          "end": 4.18
+        },
+        {
+          "word": "ン",
+          "start": 4.18,
+          "end": 4.24
+        },
+        {
+          "word": "を",
+          "start": 4.24,
+          "end": 4.36
+        },
+        {
+          "word": "押",
+          "start": 4.36,
+          "end": 4.44
+        },
+        {
+          "word": "して",
+          "start": 4.44,
+          "end": 4.6
+        },
+        {
+          "word": "ね",
+          "start": 4.6,
+          "end": 4.84
+        },
+        {
+          "word": "私",
+          "start": 4.84,
+          "end": 5.66
+        },
+        {
+          "word": "も",
+          "start": 5.66,
+          "end": 5.9
+        },
+        {
+          "word": "す",
+          "start": 5.9,
+          "end": 6.1
+        },
+        {
+          "word": "ぐ",
+          "start": 6.1,
+          "end": 6.24
+        },
+        {
+          "word": "後",
+          "start": 6.24,
+          "end": 6.46
+        },
+        {
+          "word": "ろ",
+          "start": 6.46,
+          "end": 6.6
+        },
+        {
+          "word": "に",
+          "start": 6.6,
+          "end": 6.68
+        },
+        {
+          "word": "つ",
+          "start": 6.68,
+          "end": 6.86
+        },
+        {
+          "word": "いて",
+          "start": 6.86,
+          "end": 6.98
+        },
+        {
+          "word": "いく",
+          "start": 6.98,
+          "end": 7.18
+        },
+        {
+          "word": "よ",
+          "start": 7.18,
+          "end": 7.36
+        }
+      ]
+    },
+    "selectedIndex": 32
+  },
+  "sidebar_newbie": {
+    "source": "Furina-2026-10-23-07-20-[soft]-始めたばかり？-ニュービーギフトをのぞいてみて。残り時間と、まだ受け取れるプレゼン.mp3",
+    "sha256": "7056eb4b574c6fc952f07612124c67b7c9d9ef6248e7589609671c98063a5b6e",
+    "script": "始めたばかり？ ニュービーギフトをのぞいてみて。残り時間と、まだ受け取れるプレゼントを確認しよう。",
+    "duration": 8.411,
+    "peak": 0.81848,
+    "clippingPct": 0.0,
+    "rms": 0.15832,
+    "leadingSilence": 0.079,
+    "trailingSilence": 0.295,
+    "levelStep": 0.04,
+    "transcript": "初めたばかり? ニュービーギフトを覗いてみて残り時間とまだ受け取れるプレゼントを確認しよう",
+    "secondPass": null,
+    "selectedIndex": 33
+  },
+  "sidebar_pets": {
+    "source": "C:\\Users\\ThinkPad\\Downloads\\Furina-2026-10-23-09-03-[soft]-そして、ここがペット！-仲間や乗り物を確認して、誰を連れていくか選んでみてね。.mp3",
+    "sha256": "6a178d6a01a9497073b9661e1c34db8cb5fd8cbbf1ebcc77ef28ce5d729dd6f4",
+    "duration": 7.575,
+    "peak": 0.8468088507652283,
+    "clippingPct": 0.0,
+    "rms": 0.14757680892944336,
+    "transcript": "そしてここがペット 仲間や乗り物を確認して誰を連れていくか選んでみてね",
+    "levelStep": 0.04,
+    "script": "そして、ここがペット！ 仲間や乗り物を確認して、誰を連れていくか選んでみてね。"
+  }
+}

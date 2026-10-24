@@ -1,0 +1,72 @@
+.capy-talents-screen.capy-camp{background:#f3eddb!important;background-image:radial-gradient(#b9c5aa40 1px,transparent 1px)!important;background-size:15px 15px!important;padding:12px 15px 22px!important;overflow-y:auto;color:#344b3b;display:flex;flex-direction:column;gap:8px}
+.capy-camp .capy-talents-header{padding:0;margin:0;min-height:28px;flex-shrink:0}
+.capy-camp .talents-cur-pill{background:#385442;border:1px solid #243d2d;box-shadow:inset 0 1px #ffffff25}
+.capy-camp .talents-preview-btn{width:auto;height:30px;display:flex;align-items:center;gap:5px;color:#42634b;background:#e2e8d2;border:1px solid #9caa88;border-radius:8px;padding:4px 8px}
+.capy-camp .talents-preview-btn small{font-size:10px}
+.camp-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 0;flex-shrink:0}
+.camp-heading small{font-size:8px;letter-spacing:1.8px;color:#7a886c}.camp-heading h1{margin:2px 0 0;font-size:29px;color:#344f3b;line-height:1.1;text-shadow:0 1px #fff}
+.camp-power{font-size:13px;color:#695132;background:#eae0bc;border:1px solid #c8b78b;border-radius:8px;padding:6px 8px;white-space:nowrap}
+.capy-camp .camp-rank{font-size:11px;text-align:left;color:#6a7f60;text-shadow:none;-webkit-text-stroke:0;margin:0 0 2px;padding:0}
+.capy-camp .camp-clearing{height:235px;width:100%;border:2px solid #6d8666;border-radius:22px;overflow:hidden;background:#bed1ac;box-shadow:inset 0 2px #fff8,0 4px 0 #c7c5a8;flex-shrink:0}
+.camp-scenery{position:absolute;inset:0;pointer-events:none}.camp-scenery svg{width:100%;height:100%;display:block}
+.capy-camp .talents-capy-hero-wrap{position:absolute;bottom:17px;left:50%;translate:-50% 0;margin:0;width:120px;z-index:3}
+.capy-camp .talents-capy-hero-img{width:106px;height:109px}
+.capy-camp .talents-capy-ground-shadow{display:none}
+.camp-scene-label{position:absolute;left:50%;top:12px;translate:-50% 0;padding:5px 12px;background:#f7efd9da;border:1px solid #fff8;border-radius:20px;color:#5e7350;font-size:10px;white-space:nowrap;transition:background .2s}
+.camp-action-active{background:#fff0b7;color:#624b27}
+.camp-stations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:3px;flex-shrink:0}
+.camp-station{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;padding:10px 4px 8px;border:1px solid #b8b593;border-bottom:3px solid #a6a783;border-radius:13px;background:linear-gradient(#fffdf1,#ece4cd);color:#3a513c;cursor:pointer;transition:transform .15s,filter .15s;touch-action:manipulation}
+.camp-station:hover{transform:translateY(-2px);filter:brightness(1.03)}.camp-station:active{transform:translateY(1px)}.camp-station:focus-visible{outline:3px solid #4e8a70;outline-offset:2px}
+.camp-station-art{display:grid;place-items:center;width:40px;height:35px;border-radius:12px;background:#e3ebd1;color:#688450;font-size:24px;border:1px solid #b8c39b;box-shadow:inset 0 1px #fffb}
+.training .camp-station-art{background:#eddbc2;color:#936946;border-color:#c8ab83}.armor .camp-station-art{background:#d5e4dd;color:#52796d;border-color:#a8c2b4}.kitchen .camp-station-art{background:#f2ddce;color:#b36759;border-color:#d3ad97}
+.camp-station strong{font-size:11px;line-height:1.15;text-align:center}.camp-station small{font-size:10px;color:#829173}.camp-station-cta{font-size:10px;color:#6b795e}
+.capy-camp .camp-journal{box-sizing:border-box;width:100%;border:1px solid #c7b994;border-radius:12px;background:linear-gradient(90deg,#eee3c6,#fff8e8 48%,#e4d4ad 50%,#fff7e6 52%,#f5ead0);padding:10px!important;margin:5px 0 0;box-shadow:0 3px 0 #c9bea1;flex-shrink:0}
+.camp-journal-heading{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#705c3d;margin-bottom:8px}.camp-journal-heading small{font-size:10px;color:#928365}
+.capy-camp .talents-milestone-badges-row{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:15px;height:auto;margin:0;align-items:stretch;justify-content:normal}
+.capy-camp .camp-stamp{position:relative;inset:auto!important;transform:none!important;width:auto!important;height:auto;min-height:65px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:7px;border:1px dashed #ad9d76;border-radius:10px;cursor:pointer;filter:none;opacity:1!important;background:#fff8e340}
+.camp-stamp-icon{font-size:23px;color:#758b60}.camp-stamp strong{font-size:10px;color:#736044}.camp-stamp small{font-size:8px;color:#8a795c;text-align:center}.capy-camp .camp-stamp.can-claim{border-color:#61835c;background:#dbedc475;box-shadow:inset 0 0 0 1px #90ac77}
+.capy-camp .milestone-claim-tag{font-size:8px;bottom:-6px;padding:2px 5px;background:#517c57;color:#fff8d7}
+.capy-camp .talents-track-container{position:relative;margin:12px 4px 6px;width:calc(100% - 8px);height:8px}
+.capy-camp .talents-track-bar{height:6px;border:0;background:#d3c6a5;border-radius:6px;box-shadow:none}.capy-camp .talents-track-fill{height:100%;background:linear-gradient(90deg,#739268,#a1ba7f);border-radius:6px}.capy-camp .talents-track-shimmer,.capy-camp .talents-star-indicator,.capy-camp .talents-track-numbers{display:none}
+.camp-upgrade-dialog{box-sizing:border-box;width:min(340px,88vw);max-height:85dvh;overflow-y:auto;border:2px solid #78916c;border-radius:20px;padding:23px;background:#f8f1de;color:#40543e;box-shadow:0 20px 70px #11251c55}
+.camp-upgrade-dialog::backdrop{background:#172a24a8;backdrop-filter:blur(4px)}.camp-dialog-close{position:absolute;right:12px;top:12px;width:28px;height:28px;border:1px solid #bbc4a5;border-radius:50%;background:#e4e9d5;color:#54704d;cursor:pointer}
+.camp-dialog-eyebrow{font-size:9px;letter-spacing:1.5px;color:#879275}.camp-upgrade-dialog h2{font-size:24px;margin:8px 0;color:#3d5b42}.camp-dialog-hint{font-size:12px;line-height:1.5;color:#7e876b;margin:0 0 14px}.camp-next-gain{font-size:11px;color:#72895e;text-align:center;margin:14px 0 0}
+.camp-dialog-card .stat-upgrade-card{position:relative;display:flex;flex-direction:column;align-items:center;width:100%;height:auto;min-height:175px;background:#fffdf0;border:1px solid #cabf9e;border-radius:14px;padding:16px;box-shadow:none;box-sizing:border-box;gap:8px}
+.camp-dialog-card .stat-upgrade-card[hidden]{display:none!important}.camp-dialog-card .stat-card-header,.camp-dialog-card .stat-card-icon-wrap,.camp-dialog-card .stat-card-value-wrap{position:static;transform:none;margin:0;padding:0}.camp-dialog-card .stat-card-icon{width:42px;height:42px}.camp-dialog-card .stat-card-lvl{color:#6b8056;text-shadow:none;-webkit-text-stroke:0}.camp-dialog-card .stat-card-btn{position:static;width:100%;min-height:40px;height:auto;background:linear-gradient(#6f9568,#527b50);border:1px solid #3c643f;border-bottom:3px solid #39583c;border-radius:10px;color:#fff6d5;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:inset 0 1px #ffffff35;padding:8px;font-size:17px}.camp-dialog-card .stat-card-btn:disabled{filter:grayscale(.6);opacity:.55}.camp-dialog-card .stat-card-bonus{color:#608950;text-shadow:none;-webkit-text-stroke:0}.camp-dialog-card .stat-card-label{color:#8f987a;text-shadow:none}
+.camp-upgraded{animation:camp-dialog-pulse .4s ease-out}@keyframes camp-dialog-pulse{50%{box-shadow:0 0 0 4px #cde3ad,0 20px 70px #11251c55}}
+@media(max-height:750px){.capy-camp .camp-clearing{height:185px}.camp-heading h1{font-size:25px}.camp-station{padding:7px 3px;gap:3px}.camp-station-art{width:32px;height:28px;font-size:19px}.capy-camp .camp-stamp{min-height:54px;padding:5px}.capy-camp .talents-capy-hero-wrap{bottom:12px}.capy-camp .talents-capy-hero-img{width:88px;height:91px}}
+@media(prefers-reduced-motion:reduce){.camp-station,.camp-scene-label{transition:none}.camp-upgraded{animation:none}}
+.capy-camp .talents-capy-hero-wrap{position:absolute!important}
+.camp-upgrade-dialog{position:fixed;inset:0;margin:auto!important}
+/* Keep the workshop fully inside the viewport, independent of the game frame. */
+dialog.camp-upgrade-dialog{position:fixed!important;inset:auto!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;margin:0!important;width:min(340px,calc(100vw - 32px))!important;max-width:calc(100vw - 32px)!important;max-height:calc(100dvh - 32px)!important;min-width:0;padding:20px;overflow-x:hidden;overflow-y:auto;box-sizing:border-box}
+.camp-upgrade-dialog h2{padding-right:24px;overflow-wrap:anywhere;font-size:22px}
+.camp-dialog-card{min-width:0;width:100%;box-sizing:border-box}
+.camp-dialog-card .stat-upgrade-card{max-width:100%;min-width:0;box-sizing:border-box}
+.camp-dialog-card .stat-card-btn{box-sizing:border-box;max-width:100%;min-width:0}
+@media(max-width:360px){dialog.camp-upgrade-dialog{padding:17px}.camp-upgrade-dialog h2{font-size:20px}}
+/* Woodland retreat: illustrated scene, enamel accents and tactile paper cards. */
+.capy-talents-screen.capy-camp{background-color:#eee8d6!important;background-image:radial-gradient(ellipse at 10% 0,#d9e1c6 0,transparent 55%),radial-gradient(#b5b79a35 .8px,transparent .8px)!important;background-size:100% 100%,7px 7px!important;padding:13px 15px 20px!important;gap:8px}
+.camp-heading{padding:5px 0 0}.camp-heading small{color:#7f8b68;font-size:8px;letter-spacing:2.4px}.camp-heading h1{font-size:32px;color:#284e3c;letter-spacing:-.3px;text-shadow:0 2px #fffc}
+.camp-power{background:linear-gradient(#456c50,#2e4c3b);border:1px solid #244330;color:#f6e5b7;padding:8px 10px;border-radius:10px;box-shadow:inset 0 1px #d9efbc40,0 2px 0 #b7b799;font-size:14px}
+.capy-camp .camp-rank{display:inline-block;align-self:flex-start;font-size:10px;background:#e2dac0;border:1px solid #c7c1a2;border-radius:20px;padding:3px 10px;margin-bottom:3px;color:#6b7857}
+.capy-camp .camp-clearing{height:244px;border:3px solid #456750;border-radius:19px;box-shadow:0 4px 0 #9b9c79,0 8px 16px #42513a22,inset 0 0 0 1px #f2e2a4;overflow:hidden}
+.camp-scenery{background:url('assets/ui/camp/woodland-retreat.png') center 64%/cover no-repeat;background-color:#9eb18b}
+.camp-scenery svg{display:none}
+.camp-clearing::after{content:'';position:absolute;inset:0;border-radius:15px;box-shadow:inset 0 0 25px #38462f30;pointer-events:none;z-index:4}
+.capy-camp .talents-capy-hero-wrap{bottom:18px}
+.camp-scene-label{top:12px;background:linear-gradient(#fff2cd,#efdfac);border:1px solid #b79b5e;box-shadow:0 2px 0 #3b492c55;color:#705d39;font-size:10px;padding:5px 16px;letter-spacing:.3px}
+.camp-stations{gap:9px;margin-top:7px}
+.camp-station{padding:5px 5px 7px;border:1px solid #b6ad88;border-bottom:4px solid #a29a76;border-radius:12px;background:linear-gradient(155deg,#fffcf0,#e9e0c6);gap:3px;box-shadow:inset 0 1px #fff,0 3px 7px #6d654519;overflow:hidden}
+.camp-station::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#b37c61}.camp-station.training::before{background:#b58d4a}.camp-station.armor::before{background:#668c7a}
+.camp-station-art{height:57px;width:70px;border:0;background:none!important;box-shadow:none!important;border-radius:0;margin:0}
+.camp-station-art img{width:70px;height:64px;object-fit:contain;filter:drop-shadow(0 2px 1px #5a533422)}
+.camp-station strong{color:#3e513b;font-size:11px}.camp-station small{font-size:9px;color:#8a8d70}.camp-station-gain{font-size:10px;color:#63804d;background:#dfe7cb;border-radius:5px;padding:2px 6px;margin:2px 0}
+.camp-station-cta{display:flex;align-items:center;justify-content:center;gap:10px;width:calc(100% - 8px);padding:4px 0;border-radius:6px;background:#506f49;color:#fff3d2;border-bottom:2px solid #344d31;font-size:10px;margin-top:2px}.camp-station-cta b{font-size:13px;line-height:1}
+.capy-camp .camp-journal{border:1px solid #b6a67c;border-bottom:3px solid #b6a67c;border-radius:13px;padding:11px!important;box-shadow:0 3px 5px #6b593d12;background:linear-gradient(90deg,#ece0bd,#fff6df 47%,#ddcba0 49.5%,#ede0bb 51%,#fff7e3 54%,#f2e6c8)}
+.camp-journal-heading{font-size:13px;padding:0 2px 5px;border-bottom:1px solid #bdac842e;margin-bottom:8px}.camp-journal-heading small{font-size:9px;background:#e7dbba;border-radius:5px;padding:3px 5px}
+.capy-camp .camp-stamp{border-color:#b29e78;background:#faf0d733;border-radius:9px;gap:3px}.camp-stamp-icon{height:23px;width:23px;border:2px solid #8e9b70;border-radius:50%;display:grid;place-items:center;font-size:16px;opacity:.85;transform:rotate(-8deg)}
+.capy-camp .box-20 .camp-stamp-icon{transform:rotate(8deg);border-color:#aa8a50;color:#a18149}.camp-stamp strong{font-size:10px}.camp-stamp small{font-size:8px}
+.camp-upgrade-dialog{background:radial-gradient(ellipse at 50% 0,#fff9df,#f1e7cc);border:3px solid #527354!important;box-shadow:0 6px 0 #263d2f,0 20px 70px #11251c77}
+.camp-dialog-eyebrow{color:#8e9975;font-size:8px;letter-spacing:2px}.camp-upgrade-dialog h2{color:#315740}.camp-dialog-card .stat-upgrade-card{background:#fffaf0;border:1px solid #d0c39f;border-bottom:3px solid #c2b58e;box-shadow:inset 0 2px #fff}.camp-dialog-card .stat-card-btn{background:linear-gradient(#7c9e61,#4f7647);border-radius:9px;border-bottom:3px solid #344d31;box-shadow:inset 0 1px #d8f3a552}
+@media(max-height:750px){.capy-camp .camp-clearing{height:187px}.camp-heading h1{font-size:27px}.camp-station-art{height:43px}.camp-station-art img{width:57px;height:49px}.camp-station{gap:2px}.camp-station-gain{font-size:9px;padding:1px 5px}.capy-camp .camp-journal{padding:9px!important}.capy-camp .camp-stamp{min-height:50px}.camp-station-cta{padding:3px 0}.capy-camp .talents-capy-hero-wrap{bottom:12px}}

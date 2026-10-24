@@ -1,0 +1,19 @@
+/* Illustrated RPG icon skin. Explicit sizes preserve compact mobile layouts. */
+.bold-ui-icon{display:inline-block;width:1.25em;height:1.25em;vertical-align:-.25em;object-fit:contain;flex-shrink:0;pointer-events:none;image-rendering:auto}
+.bold-ui-art{object-fit:contain;image-rendering:auto}
+.qbtn-icon{display:flex;align-items:center;justify-content:center;height:17px;line-height:17px}
+.qbtn-icon .bold-ui-icon{width:20px;height:20px}
+.quick-sidebar-btn>span:last-child{line-height:9px}
+.quick-sidebar-btn .qbtn-icon{filter:drop-shadow(0 1px 0 #241b2266)}
+.cur-bolt-icon .bold-ui-icon,.cur-gem-icon .bold-ui-icon,.cur-gold-icon .bold-ui-icon{width:17px;height:17px}
+.core-stat-icon .bold-ui-icon{width:26px;height:26px}
+.bottom-nav-authentic .nav-tab-img{filter:drop-shadow(0 2px 1px #12121c80)}
+.bold-ui-icon.svg-heart-icon,.bold-ui-icon.svg-sword-icon,.bold-ui-icon.svg-shield-icon{width:29px;height:29px}
+.bold-ui-icon.svg-gear-icon{width:28px;height:28px}
+.gear-h-icon .bold-ui-icon{width:20px;height:20px}
+.btn-stat-details-icon .bold-ui-icon{width:24px;height:24px}
+.node-svg-icon.bold-ui-icon{width:24px;height:24px}
+button>.bold-ui-icon:only-child{vertical-align:middle;width:1.2em;height:1.2em}
+.gear-sub-svg.bold-ui-icon{width:32px;height:32px}
+.bold-ui-icon.boss-emblem-skull{width:40px;height:40px}
+.bold-ui-icon.svg-hex-badge{width:28px;height:32px}

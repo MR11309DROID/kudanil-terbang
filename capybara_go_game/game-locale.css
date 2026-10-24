@@ -1,0 +1,30 @@
+html[lang="ja"] body { font-family: "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif; }
+html[lang="ja"] button { line-height: 1.3; }
+html[lang="ja"] .setting-name { white-space: normal; }
+html[lang="ja"] .erva-guide-card p { font-size: 13px; }
+html[lang="ja"] .traveler-workshop .paperdoll-container::before { content: '冒険の装備'; font-family: "Yu Gothic", Meiryo, sans-serif; }
+html[lang="ja"] .traveler-workshop .paperdoll-slot::after { font-family: "Yu Gothic", Meiryo, sans-serif; }
+/* Crisp Start typography in both languages; avoid scaling rasterized glyphs. */
+#btn-start-run { animation: none; }
+#btn-start-run .btn-start-text {
+  font-family: "Segoe UI", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: .3px;
+  color: #392408;
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+  font-synthesis: none;
+}
+#btn-start-run .btn-start-content { gap: 3px; }
+#btn-start-run .tag-cost {
+  font-family: "Segoe UI", "Yu Gothic UI", Meiryo, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #392408;
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+  letter-spacing: 0;
+}
+#btn-start-run .tag-bolt { text-shadow: none; }

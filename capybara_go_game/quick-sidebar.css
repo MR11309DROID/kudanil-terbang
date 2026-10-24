@@ -1,0 +1,33 @@
+/* Compact enamel buttons: shared silhouette, clear labels, restrained movement. */
+.menu-left-widgets{top:7px;bottom:8px;left:5px;gap:6px;width:52px;min-height:0;isolation:isolate}
+.menu-left-widgets>.btn-menu-drawer,.menu-left-widgets>.newbie-gifts-widget,.menu-left-widgets>.btn-toggle-quick-stack{flex-shrink:0}
+.menu-left-widgets .btn-menu-drawer{width:34px;height:32px;border:2px solid #20323b;border-radius:9px;background:#344f57;box-shadow:0 3px 0 #172b32,inset 0 1px 0 #8da5a6;padding:4px}
+.menu-left-widgets .drawer-icon-img{width:23px;height:23px;filter:none}
+.menu-left-widgets .widget-notif-dot{width:13px;height:13px;top:-5px;right:-5px;border:2px solid #fff4df;background:#e94c48;box-shadow:0 1px 0 #69312b;font:900 9px 'Nunito',sans-serif}
+.menu-left-widgets .newbie-gifts-widget{position:relative;width:44px;min-height:44px;padding:1px 1px 3px;border:2px solid #6d4526;border-radius:11px;background:#ffedb9;box-shadow:0 3px 0 #5a3926,inset 0 1px 0 #fff9e1;gap:0;overflow:visible}
+.menu-left-widgets .newbie-gifts-img{width:32px;height:32px;filter:drop-shadow(0 1px 0 #7a41272a);transform-origin:50% 85%;animation:sidebar-gift-wiggle 6s ease-in-out infinite}
+.menu-left-widgets .newbie-timer-badge{position:relative;z-index:1;margin-top:-5px;padding:2px 4px;border:1px solid #78522a;border-radius:5px;background:#fff9e9;color:#553e25;text-shadow:none;box-shadow:none;font:900 8px/1 'Nunito',sans-serif;white-space:nowrap}
+.menu-left-widgets .btn-toggle-quick-stack{width:44px;min-height:20px;margin:0;padding:2px 0;display:flex;align-items:center;justify-content:center;gap:3px;border:1px solid #415c58;border-radius:6px;background:#f3f1d9;color:#344e47;box-shadow:0 2px 0 #243d35;font:900 8px/1 'Nunito',sans-serif;transition:transform 120ms}
+.menu-left-widgets .quick-btn-stack{gap:6px;margin:0;padding:2px 3px 5px;width:54px;flex:0 1 auto;min-height:0;max-height:232px;overflow-x:hidden;overflow-y:auto;transition:opacity 180ms ease,transform 220ms ease,max-height 220ms ease;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:#9aad7d #233b3d33}
+.menu-left-widgets .quick-btn-stack::-webkit-scrollbar{display:block;width:3px}
+.menu-left-widgets .quick-btn-stack::-webkit-scrollbar-thumb{background:#9aad7d;border-radius:3px}
+.menu-left-widgets .quick-btn-stack::-webkit-scrollbar-track{background:#233b3d33;border-radius:3px}
+.menu-left-widgets .quick-btn-stack.collapsed{max-height:0;opacity:0;padding:0;transform:translateY(-5px) scale(.96);pointer-events:none}
+.menu-left-widgets .quick-sidebar-btn{--tile:#fff2c7;--depth:#79512c;--rim:#b78f49;position:relative;width:44px;height:38px;min-height:38px;flex-shrink:0;padding:1px;gap:1px;border:2px solid #263e45;border-bottom:2px solid #263e45;border-radius:9px;background:var(--tile);box-shadow:0 3px 0 var(--depth),inset 0 1px 0 #fffaf0;color:#283d43;overflow:visible;transition:transform 130ms cubic-bezier(.2,.8,.25,1)}
+.menu-left-widgets .quick-sidebar-btn::after{inset:2px 4px auto;height:2px;border-radius:2px;background:#fff9;pointer-events:none}
+.menu-left-widgets .quick-sidebar-btn .qbtn-icon{height:22px;min-height:22px;line-height:22px;filter:drop-shadow(0 1px 0 #263e4525);transition:transform 160ms ease}
+.menu-left-widgets .qbtn-icon .bold-ui-icon{width:22px;height:22px;object-fit:contain;vertical-align:middle}
+.menu-left-widgets .quick-sidebar-btn>span:last-child{font:900 8.5px/9px 'Nunito',sans-serif;letter-spacing:0;color:#283d43;text-shadow:none;white-space:nowrap}
+.menu-left-widgets .qbtn-daily{--tile:#ffedbb;--depth:#8b6531}
+.menu-left-widgets .qbtn-wheel{--tile:#ede1ff;--depth:#68517e}
+.menu-left-widgets .qbtn-achieve{--tile:#fff4c6;--depth:#8d7433}
+.menu-left-widgets .qbtn-pass{--tile:#ffe2d6;--depth:#8b5d57}
+.menu-left-widgets .qbtn-stats{--tile:#d9f0f4;--depth:#4b7580}
+.menu-left-widgets .qbtn-pets{--tile:#e1efd4;--depth:#5b7751}
+.menu-left-widgets .quick-sidebar-btn:active{transform:translateY(2px) scale(.98);box-shadow:0 1px 0 var(--depth),inset 0 1px 0 #ffffff70}
+.menu-left-widgets button:focus-visible{outline:2px solid #fff7cf;outline-offset:3px}
+@media(hover:hover){.menu-left-widgets .quick-sidebar-btn:hover{transform:translateY(-1px);box-shadow:0 4px 0 var(--depth),inset 0 1px 0 #fffaf0}.menu-left-widgets .quick-sidebar-btn:hover .qbtn-icon{transform:translateY(-1px) rotate(-5deg)}}
+@keyframes sidebar-gift-wiggle{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-6deg)}90%{transform:rotate(5deg)}95%{transform:rotate(-2deg)}}
+@media(max-height:620px){.menu-left-widgets{gap:5px;top:5px}.menu-left-widgets .quick-btn-stack{gap:5px;max-height:180px}}
+@media(prefers-reduced-motion:reduce){.menu-left-widgets *{animation:none!important;transition:none!important}}
+html[data-graphics=low] .menu-left-widgets .newbie-gifts-img{animation:none}

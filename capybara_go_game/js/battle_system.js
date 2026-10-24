@@ -17,6 +17,14 @@ class BattleSystem {
     this.onBattleEnd = null;
   }
 
+  calculateBasicAttackDamage(attacker, defender, isCrit = false, skillMultiplier = 1) {
+    const attack = Math.max(0, Number(attacker.atk) || 0);
+    const defense = Math.max(0, Number(defender.def) || 0);
+    const crit = isCrit ? Math.min(2.5, Math.max(1, Number(attacker.critDmg) || 1.5)) : 1;
+    // Physical attacks: 80% ATK, then armor mitigation; skills keep their own damage.
+    return Math.max(1, Math.round(attack * .8 * Math.max(1, skillMultiplier) * crit - defense * .65));
+  }
+
   setSpeed(mult) {
     this.speedMultiplier = mult;
   }
@@ -151,6 +159,23 @@ class BattleSystem {
     const e = this.enemyCombat;
     const r = this.renderer;
 
+    // Show passive transformations one at a time before opener skills, never over Dragon Roar.
+    if (this.turnCount === 1 && !c._mythicIntroShown) {
+      c._mythicIntroShown = true;
+      const introductions = [];
+      if (c.skills.some(sk => sk.id === 406) && r.launchDemonForm) introductions.push(r.launchDemonForm.bind(r));
+      if (c.skills.some(sk => sk.id === 404) && r.launchAngelBlessing) introductions.push(r.launchAngelBlessing.bind(r));
+      if (introductions.length) {
+        const next = () => {
+          if (!this.inBattle) return;
+          const launch = introductions.shift();
+          if (launch) launch(next, this.speedMultiplier);
+          else this.executePlayerTurn(callback);
+        };
+        next();
+        return;
+      }
+    }
     // Apply Passive Turn Regen & Periodic Shields
     let statChanged = false;
     for (const sk of c.skills) {
@@ -269,7 +294,7 @@ class BattleSystem {
     }
 
     // Periodic Skill Procs (Thunder Hammer & Lightning bolts every 3 turns)
-    const thunderSkill = c.skills.find(s => (s.key === "legendary_02_thunder_hammer" || s.effect === "thunder" || (s.name && s.name.includes("Thunder"))) && this.turnCount % (s.procEvery || 3) === 0);
+    const thunderSkill = c.skills.find(s => (s.id === 302 || s.key === "legendary_02_thunder_hammer") && this.turnCount > 0 && this.turnCount % (s.procEvery || 3) === 0);
     if (thunderSkill && r.enemyState) {
       const mult = Math.min(0.55, thunderSkill.dmgMult || 0.55);
       const boltDmg = Math.max(1, Math.round((c.atk * mult) - (e.def * 0.30)));
@@ -453,14 +478,16 @@ class BattleSystem {
       return;
     }
 
-    // Normal Attack Lunge (Physical Punch Strike - Normal Clean Hit Effects)
-    r.performPlayerAttack(
+    // Blood Blade uses a ranged crescent cast; basic attack math stays unchanged.
+    const attackAnimation = c.skills.some(sk => sk.id === 401) && r.launchBloodBlade
+      ? r.launchBloodBlade.bind(r) : r.performPlayerAttack.bind(r);
+    attackAnimation(
       // On Impact
       () => {
         const isCrit = Math.random() < c.critRate;
         const swordSlashSkill = c.skills.find(s => s.id === 201 || s.key === "common_01_sword_slash" || (s.name && s.name.toLowerCase().includes("sword slash")));
         const swordMult = swordSlashSkill ? (swordSlashSkill.dmgMult || 1.30) : 1.0;
-        let dmg = Math.max(1, Math.round(((c.atk * swordMult) * (isCrit ? c.critDmg : 1.0)) - (e.def * 0.4)));
+        let dmg = this.calculateBasicAttackDamage(c, e, isCrit, swordMult);
 
         if (e.isBoss) {
           const giantSlayer = c.skills.find(s => s.bossDmgBonus);
@@ -480,15 +507,13 @@ class BattleSystem {
             Sound.playSfx("attackHeavy");
             // Clean cartoon hit spark for crit strike with neon cyan energy flecks
             r.addVisualEffect("hitSpark", r.enemyState.x, targetCenterY, 0.95);
-            r.addMagicImpactSparks(r.enemyState.x, targetCenterY, ["#38bdf8", "#0284c7", "#ffffff"]);
+            // Basic critical hits use a compact physical impact, not elemental arcs.
             r.addFloatingText(dmg, r.enemyState.x, targetCenterY - 15, "crit");
           } else {
             Sound.playSfx("slash");
             // Clean subtle hit spark for sword strike
             r.addVisualEffect("hitSpark", r.enemyState.x, targetCenterY, 0.7);
-            if (swordSlashSkill) {
-              r.addMagicImpactSparks(r.enemyState.x, targetCenterY, ["#38bdf8", "#7dd3fc"]);
-            }
+            // Ordinary sword hits do not emit lightning-like magic sparks.
             r.addFloatingText(dmg, r.enemyState.x, targetCenterY - 15, "normal");
           }
         }
@@ -729,7 +754,8 @@ class BattleSystem {
       r.addFloatingText(reviveName, r.playerState.x, r.groundY - 60, "heal");
       r.setPlayerAnim("idle", true);
       this.syncPlayerRunStats();
-      this.nextTurn();
+      if (r.launchAngelBlessing) r.launchAngelBlessing(() => { if (this.inBattle) this.nextTurn(); }, this.speedMultiplier);
+      else this.nextTurn();
       return;
     }
 

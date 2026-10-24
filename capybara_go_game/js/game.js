@@ -1,5 +1,10 @@
 // Capybara Go! - Main Game Entry Point
 function initGame() {
+  // Refresh saved skill artwork from the current catalog without changing run stats.
+  for (const skill of (Character.activeRun?.skills || [])) {
+    const current = GameData.skills.find(entry => entry.id === skill.id);
+    if (current) skill.icon = current.icon;
+  }
   const canvas = document.getElementById("stage-canvas");
   if (!canvas) return;
 

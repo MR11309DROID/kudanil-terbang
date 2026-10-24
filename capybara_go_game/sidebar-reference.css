@@ -1,0 +1,36 @@
+/* Supplied artwork is shown through SVG masks; buttons retain their original actions. */
+.menu-left-widgets{width:80px}
+.menu-left-widgets .quick-btn-stack{width:84px;padding:3px 3px 6px;gap:7px;scrollbar-color:#98714e #38231924}
+.menu-left-widgets .quick-btn-stack::-webkit-scrollbar-thumb{background:#98714e}
+.menu-left-widgets .quick-sidebar-btn.sidebar96{position:relative;width:64px;height:61px;min-height:61px;padding:0;border:0;background:transparent!important;box-shadow:none;overflow:visible;isolation:isolate;transition:transform .16s ease;transform-origin:50% 80%}
+.menu-left-widgets .sidebar96 .sidebar-ref-art,.menu-left-widgets .sidebar96 .sidebar-wheel-disc{position:absolute;inset:0;display:block;width:100%;height:100%;margin:0;object-fit:contain;pointer-events:none;filter:none;backface-visibility:hidden}
+.menu-left-widgets .sidebar96 .sidebar-ref-label{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.menu-left-widgets .quick-sidebar-btn.sidebar96::after{content:none}
+.menu-left-widgets .sidebar96:active{transform:translate3d(0,2px,0) scale(.97);box-shadow:none}
+@media(hover:hover){.menu-left-widgets .sidebar96:hover{transform:translate3d(0,-1px,0);box-shadow:none}}
+.menu-left-widgets .quick-sidebar-btn.sidebar96:active{transform:translate3d(0,2px,0) scale(.97);box-shadow:none}
+.menu-left-widgets .btn-toggle-quick-stack{position:relative;width:64px;height:36px;min-height:36px;gap:3px;padding:1px 0 0;border:0;border-radius:0;background:transparent;box-shadow:none;color:#472714;font-family:CapyDisplay,'Lilita One',sans-serif;font-size:12px;line-height:1;isolation:isolate}
+.sidebar-hide-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:-1;pointer-events:none}
+.btn-toggle-quick-stack .toggle-stack-icon{font-size:8px;line-height:1}.btn-toggle-quick-stack .toggle-stack-label{font:13px/1 CapyDisplay,'Lilita One',sans-serif;text-transform:uppercase;letter-spacing:.2px}
+.menu-left-widgets .btn-toggle-quick-stack .toggle-stack-icon{transform:none}
+.menu-left-widgets .qbtn-pets{width:64px;height:61px;min-height:61px;background:#c1e5d9;border:3px solid #593820;border-radius:14px;box-shadow:0 4px #688d80,inset 0 2px #edf8e8;gap:2px;padding:3px}
+.menu-left-widgets .qbtn-pets .qbtn-icon{height:32px;min-height:32px;line-height:32px}.menu-left-widgets .qbtn-pets .bold-ui-icon{width:31px;height:31px}.menu-left-widgets .qbtn-pets>span:last-child{font:12px/13px CapyDisplay,'Lilita One',sans-serif;color:#492c19;text-transform:uppercase}
+/* Short, infrequent motion: wheel peeks, a medal sway, gift breathing, a floating jar. */
+.sidebar96.qbtn-daily .sidebar-ref-art{animation:sidebar96-gift 8s ease-in-out infinite;transform-origin:50% 85%;will-change:transform}
+.sidebar96 .sidebar-wheel-disc{animation:sidebar96-wheel 9s ease-in-out infinite;transform-origin:51.087% 38.012%;will-change:transform}
+.sidebar96.qbtn-pass .sidebar-ref-art{animation:sidebar96-medal 10s ease-in-out infinite;transform-origin:50% 25%;will-change:transform}
+.sidebar96.qbtn-gacha .sidebar-ref-art{animation:sidebar96-jar 7s ease-in-out infinite;will-change:transform}
+.quick-btn-stack.collapsed .sidebar-ref-art,.quick-btn-stack.collapsed .sidebar-wheel-disc,.menu-left-widgets .quick-btn-stack.collapsed .sidebar96::after{animation-play-state:paused}
+.menu-left-widgets .sidebar96.qbtn-daily::after,.menu-left-widgets .sidebar96.qbtn-achieve::after{content:'';position:absolute;left:auto;right:11px;top:5px;bottom:auto;width:7px;height:7px;background:#fff5be;clip-path:polygon(50% 0,62% 37%,100% 50%,62% 63%,50% 100%,38% 63%,0 50%,38% 37%);pointer-events:none;opacity:0;animation:sidebar96-spark 6.5s ease-in-out infinite;will-change:transform,opacity}
+.menu-left-widgets .sidebar96.qbtn-achieve::after{right:14px;top:3px;animation-delay:2.2s}
+@keyframes sidebar96-gift{0%,76%,100%{transform:scale(1)}82%{transform:scale(1.018)}88%{transform:scale(1)}93%{transform:scale(1.009)}}
+@keyframes sidebar96-wheel{0%,73%,100%{transform:rotate(0)}79%{transform:rotate(7deg)}87%{transform:rotate(-4deg)}94%{transform:rotate(2deg)}}
+@keyframes sidebar96-medal{0%,78%,100%{transform:rotate(0)}83%{transform:rotate(-.8deg)}90%{transform:rotate(.7deg)}96%{transform:rotate(-.3deg)}}
+@keyframes sidebar96-jar{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-1px,0)}}
+@keyframes sidebar96-spark{0%,66%,89%,100%{opacity:0;transform:scale(.5) rotate(0)}76%{opacity:.9;transform:scale(1) rotate(8deg)}83%{opacity:.3;transform:scale(.7) rotate(15deg)}}
+/* The reference has baked English lettering. A localized caption covers only that strip. */
+html[lang="ja"] .menu-left-widgets .sidebar96 .sidebar-ref-label{inset:auto 5px 7px;width:auto;height:16px;display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;clip-path:none;background:var(--sidebar96-caption);border-radius:3px;font:800 10px/1 "Yu Gothic UI",Meiryo,sans-serif;color:#492b19;white-space:nowrap}
+.sidebar96.qbtn-daily{--sidebar96-caption:#ffdc69}.sidebar96.qbtn-wheel{--sidebar96-caption:#e8d9ed}.sidebar96.qbtn-achieve{--sidebar96-caption:#ffd078}.sidebar96.qbtn-pass{--sidebar96-caption:#f6b8a2}.sidebar96.qbtn-gacha{--sidebar96-caption:#a4cfc4}
+html[lang="ja"] .btn-toggle-quick-stack .toggle-stack-label{font:800 11px/1 "Yu Gothic UI",Meiryo,sans-serif;letter-spacing:0}
+html[data-graphics="low"] .sidebar96 .sidebar-ref-art,html[data-graphics="low"] .sidebar96 .sidebar-wheel-disc,html[data-graphics="low"] .menu-left-widgets .sidebar96::after{animation:none;will-change:auto}
+@media(prefers-reduced-motion:reduce){.menu-left-widgets .sidebar96 .sidebar-ref-art,.menu-left-widgets .sidebar96 .sidebar-wheel-disc,.menu-left-widgets .sidebar96::after{animation:none;will-change:auto}.menu-left-widgets .sidebar96{transition:none}}

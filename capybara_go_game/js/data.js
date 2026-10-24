@@ -1,5 +1,7 @@
 // Capybara Go! - Game Database & Manifest
+const CHAPTER_ROUNDS = 60;
 const GameData = {
+  roundsPerChapter: CHAPTER_ROUNDS,
   chapters: [
     {
       id: 1,
@@ -8,7 +10,7 @@ const GameData = {
       bg: "assets/backgrounds/panoramas/village_road_bg.png",
       enemies: ["sprout", "slime_green", "mushroom_red", "flower_red"],
       bossDays: { 20: "boss_crown_warrior", 40: "boss_blue_knight", 60: "boss_capbara_king" },
-      maxDays: 60,
+      maxDays: CHAPTER_ROUNDS,
       rewardGold: 1000,
       rewardGems: 100
     },
@@ -19,7 +21,7 @@ const GameData = {
       bg: "assets/backgrounds/panoramas/forest_woods_bg.png",
       enemies: ["sprout", "slime_green", "mushroom_red", "flower_red"],
       bossDays: { 20: "boss_skeleton_guard", 40: "boss_crown_warrior", 60: "boss_purple_mage" },
-      maxDays: 60,
+      maxDays: CHAPTER_ROUNDS,
       rewardGold: 1500,
       rewardGems: 120
     },
@@ -30,7 +32,7 @@ const GameData = {
       bg: "assets/backgrounds/panoramas/desert_dunes_bg.png",
       enemies: ["cactus_mimic", "bee", "purple_boar", "stone_golem"],
       bossDays: { 20: "boss_skeleton_guard", 40: "boss_crown_warrior", 60: "boss_purple_mage" },
-      maxDays: 60,
+      maxDays: CHAPTER_ROUNDS,
       rewardGold: 2500,
       rewardGems: 180
     },
@@ -41,7 +43,7 @@ const GameData = {
       bg: "assets/backgrounds/panoramas/frozen_peak_bg.png",
       enemies: ["blue_flyer", "stone_golem", "slime_green", "pink_flower"],
       bossDays: { 20: "boss_blue_knight", 40: "boss_skeleton_guard", 60: "boss_capbara_king" },
-      maxDays: 60,
+      maxDays: CHAPTER_ROUNDS,
       rewardGold: 4000,
       rewardGems: 250
     },
@@ -52,7 +54,7 @@ const GameData = {
       bg: "assets/backgrounds/panoramas/volcano_core_bg.png",
       enemies: ["purple_boar", "stone_golem", "bee", "cactus_mimic"],
       bossDays: { 20: "boss_crown_warrior", 40: "boss_purple_mage", 60: "boss_skeleton_guard" },
-      maxDays: 60,
+      maxDays: CHAPTER_ROUNDS,
       rewardGold: 6000,
       rewardGems: 350
     },
@@ -63,7 +65,7 @@ const GameData = {
       bg: "assets/backgrounds/panoramas/moonlit_night_bg.png",
       enemies: ["sprout", "slime_green", "mushroom_red", "flower_red", "pink_flower", "bee", "cactus_mimic", "blue_flyer", "purple_boar", "stone_golem"],
       bossDays: { 20: "boss_blue_knight", 40: "boss_purple_mage", 60: "boss_capbara_king" },
-      maxDays: 60,
+      maxDays: CHAPTER_ROUNDS,
       rewardGold: 10000,
       rewardGems: 500
     }
@@ -148,55 +150,55 @@ const GameData = {
   // Full Skill Roster: 26 Authentic Skills from Reference Grid + Classic Variants
   skills: [
     // --- 10 Authentic Common Skills ---
-    { id: 201, key: "common_01_sword_slash", name: "Sword Slash", icon: "assets/skills/skill_common_01_sword_slash.png", cardImg: "assets/skills/card_common_01_sword_slash.png", rarity: "common", badgeVal: "115%", desc: "A swift sword slash dealing 115% physical damage and +8% ATK.", type: "attack", atkBonus: 0.08, dmgMult: 1.15 },
-    { id: 202, key: "common_02_fire_slash", name: "Fire Slash", icon: "assets/skills/skill_common_02_fire_slash.png", cardImg: "assets/skills/card_common_02_fire_slash.png", rarity: "common", badgeVal: "120%", desc: "Enchant blade with flames, dealing 120% ATK damage and burning enemy.", type: "element", dmgMult: 1.20, dotBurn: 0.10 },
-    { id: 203, key: "common_03_shield", name: "Shield", icon: "assets/skills/skill_common_03_shield.png", cardImg: "assets/skills/card_common_03_shield.png", rarity: "common", badgeVal: "15%", desc: "Summon a protective shield equal to 15% Max HP. DEF +10.", type: "defense", defBonus: 10, shieldRatio: 0.15 },
-    { id: 204, key: "common_04_heal", name: "Heal", icon: "assets/skills/skill_common_04_heal.png", cardImg: "assets/skills/card_common_04_heal.png", rarity: "common", badgeVal: "5%", desc: "Instantly restore 30 HP and regenerate 5% Max HP each turn.", type: "defense", turnRegen: 0.05, instantHeal: 30 },
-    { id: 205, key: "common_05_throwing_knife", name: "Throwing Knife", icon: "assets/skills/skill_common_05_throwing_knife.png", cardImg: "assets/skills/card_common_05_throwing_knife.png", rarity: "common", badgeVal: "30%", desc: "Fling razor daggers at combat start for 30% ATK. +8% Crit Rate.", type: "attack", critBonus: 0.08, startCombatDmg: 0.30 },
-    { id: 206, key: "common_06_rock", name: "Rock", icon: "assets/skills/skill_common_06_rock.png", cardImg: "assets/skills/card_common_06_rock.png", rarity: "common", badgeVal: "20%", desc: "Hurl heavy stones dealing 110% ATK damage with 20% chance to stun.", type: "element", stunChance: 0.20, dmgMult: 1.10 },
-    { id: 207, key: "common_07_vortex", name: "Vortex", icon: "assets/skills/skill_common_07_vortex.png", cardImg: "assets/skills/card_common_07_vortex.png", rarity: "common", badgeVal: "+10%", desc: "Conjure a swirling mini vortex granting +10% Speed and +8% Dodge.", type: "element", speedBonus: 0.10, dodgeBonus: 0.08 },
-    { id: 208, key: "common_08_water_wave", name: "Water Wave", icon: "assets/skills/skill_common_08_water_wave.png", cardImg: "assets/skills/card_common_08_water_wave.png", rarity: "common", badgeVal: "115%", desc: "Crash a water tidal wave for 115% ATK damage, slowing attacker.", type: "element", dmgMult: 1.15, chillAttacker: 0.15 },
-    { id: 209, key: "common_09_bow", name: "Bow", icon: "assets/skills/skill_common_09_bow.png", cardImg: "assets/skills/card_common_09_bow.png", rarity: "common", badgeVal: "+10%", desc: "Equip a hunting bow. +10% ATK and +20% Critical Damage.", type: "attack", atkBonus: 0.10, critDmgBonus: 0.20 },
-    { id: 210, key: "common_10_bomb", name: "Bomb", icon: "assets/skills/skill_common_10_bomb.png", cardImg: "assets/skills/card_common_10_bomb.png", rarity: "common", badgeVal: "35%", desc: "Toss an explosive bomb dealing 35% blast damage at battle start.", type: "utility", startCombatDmg: 0.35, dotBurn: 0.10 },
+    { id: 201, key: "common_01_sword_slash", name: "Sword Slash", icon: "assets/skills/painted-v2/skill_201.png", cardImg: "assets/skills/card_common_01_sword_slash.png", rarity: "common", badgeVal: "115%", desc: "A swift sword slash dealing 115% physical damage and +8% ATK.", type: "attack", atkBonus: 0.08, dmgMult: 1.15 },
+    { id: 202, key: "common_02_fire_slash", name: "Fire Slash", icon: "assets/skills/painted-v2/skill_202.png", cardImg: "assets/skills/card_common_02_fire_slash.png", rarity: "common", badgeVal: "120%", desc: "Enchant blade with flames, dealing 120% ATK damage and burning enemy.", type: "element", dmgMult: 1.20, dotBurn: 0.10 },
+    { id: 203, key: "common_03_shield", name: "Shield", icon: "assets/skills/painted-v2/skill_203.png", cardImg: "assets/skills/card_common_03_shield.png", rarity: "common", badgeVal: "15%", desc: "Summon a protective shield equal to 15% Max HP. DEF +10.", type: "defense", defBonus: 10, shieldRatio: 0.15 },
+    { id: 204, key: "common_04_heal", name: "Heal", icon: "assets/skills/painted-v2/skill_204.png", cardImg: "assets/skills/card_common_04_heal.png", rarity: "common", badgeVal: "5%", desc: "Instantly restore 30 HP and regenerate 5% Max HP each turn.", type: "defense", turnRegen: 0.05, instantHeal: 30 },
+    { id: 205, key: "common_05_throwing_knife", name: "Throwing Knife", icon: "assets/skills/painted-v2/skill_205.png", cardImg: "assets/skills/card_common_05_throwing_knife.png", rarity: "common", badgeVal: "30%", desc: "Fling razor daggers at combat start for 30% ATK. +8% Crit Rate.", type: "attack", critBonus: 0.08, startCombatDmg: 0.30 },
+    { id: 206, key: "common_06_rock", name: "Rock", icon: "assets/skills/painted-v2/skill_206.png", cardImg: "assets/skills/card_common_06_rock.png", rarity: "common", badgeVal: "20%", desc: "Hurl heavy stones dealing 110% ATK damage with 20% chance to stun.", type: "element", stunChance: 0.20, dmgMult: 1.10 },
+    { id: 207, key: "common_07_vortex", name: "Vortex", icon: "assets/skills/painted-v2/skill_207.png", cardImg: "assets/skills/card_common_07_vortex.png", rarity: "common", badgeVal: "+10%", desc: "Conjure a swirling mini vortex granting +10% Speed and +8% Dodge.", type: "element", speedBonus: 0.10, dodgeBonus: 0.08 },
+    { id: 208, key: "common_08_water_wave", name: "Water Wave", icon: "assets/skills/painted-v2/skill_208.png", cardImg: "assets/skills/card_common_08_water_wave.png", rarity: "common", badgeVal: "115%", desc: "Crash a water tidal wave for 115% ATK damage, slowing attacker.", type: "element", dmgMult: 1.15, chillAttacker: 0.15 },
+    { id: 209, key: "common_09_bow", name: "Bow", icon: "assets/skills/painted-v2/skill_209.png", cardImg: "assets/skills/card_common_09_bow.png", rarity: "common", badgeVal: "+10%", desc: "Equip a hunting bow. +10% ATK and +20% Critical Damage.", type: "attack", atkBonus: 0.10, critDmgBonus: 0.20 },
+    { id: 210, key: "common_10_bomb", name: "Bomb", icon: "assets/skills/painted-v2/skill_210.png", cardImg: "assets/skills/card_common_10_bomb.png", rarity: "common", badgeVal: "35%", desc: "Toss an explosive bomb dealing 35% blast damage at battle start.", type: "utility", startCombatDmg: 0.35, dotBurn: 0.10 },
 
     // --- 10 Authentic Legendary Skills ---
-    { id: 301, key: "legendary_01_flaming_sword", name: "Flaming Sword", icon: "assets/skills/skill_legendary_01_flaming_sword.png", cardImg: "assets/skills/card_legendary_01_flaming_sword.png", rarity: "legendary", badgeVal: "+15%", desc: "Engulf weapon in eternal hellfire: +15% ATK, strikes deal 125% fire damage & burn.", type: "legendary", atkBonus: 0.15, dotBurn: 0.15, dmgMult: 1.25 },
-    { id: 302, key: "legendary_02_thunder_hammer", name: "Thunder Hammer", icon: "assets/skills/skill_legendary_02_thunder_hammer.png", cardImg: "assets/skills/card_legendary_02_thunder_hammer.png", rarity: "legendary", badgeVal: "55%", desc: "Every 3 turns, smite foe with Thunder Hammer dealing 55% Shock damage & 20% Stun!", type: "legendary", procEvery: 3, dmgMult: 0.55, stunChance: 0.20, effect: "thunder" },
-    { id: 303, key: "legendary_03_guardian_shield", name: "Guardian Shield", icon: "assets/skills/skill_legendary_03_guardian_shield.png", cardImg: "assets/skills/card_legendary_03_guardian_shield.png", rarity: "legendary", badgeVal: "20%", desc: "Golden winged aegis: +20 DEF, 20% Max HP shield, reflects 15% damage.", type: "legendary", defBonus: 20, shieldRatio: 0.20, reflectRatio: 0.15 },
-    { id: 304, key: "legendary_04_healing_aura", name: "Healing Aura", icon: "assets/skills/skill_legendary_04_healing_aura.png", cardImg: "assets/skills/card_legendary_04_healing_aura.png", rarity: "legendary", badgeVal: "6%", desc: "Sacred golden light surrounds you: restore 6% Max HP every turn, Max HP +15%.", type: "legendary", turnRegen: 0.06, hpBonus: 0.15 },
-    { id: 305, key: "legendary_05_tornado", name: "Tornado", icon: "assets/skills/skill_legendary_05_tornado.png", cardImg: "assets/skills/card_legendary_05_tornado.png", rarity: "legendary", badgeVal: "+15%", desc: "Howling twin cyclones grant +15% Dodge, counterattack on dodge with double strikes!", type: "legendary", dodgeBonus: 0.15, counterOnDodge: true, multiHits: 2 },
-    { id: 306, key: "legendary_06_dark_pulse", name: "Dark Pulse", icon: "assets/skills/skill_legendary_06_dark_pulse.png", cardImg: "assets/skills/card_legendary_06_dark_pulse.png", rarity: "legendary", badgeVal: "12%", desc: "Emanate void waves: 12% Lifesteal, execute non-boss monsters below 10% HP.", type: "legendary", lifesteal: 0.12, dmgMult: 1.15, executeThreshold: 0.10 },
-    { id: 307, key: "legendary_07_multi_arrow", name: "Multi Arrow", icon: "assets/skills/skill_legendary_07_multi_arrow.png", cardImg: "assets/skills/card_legendary_07_multi_arrow.png", rarity: "legendary", badgeVal: "3x", desc: "Fire a barrage of 3 magic arrows for 40% damage each. +10% Crit Rate.", type: "legendary", multiHits: 3, hitDmgRatio: 0.40, critBonus: 0.10 },
-    { id: 308, key: "legendary_08_fireball", name: "Fireball", icon: "assets/skills/skill_legendary_08_fireball.png", cardImg: "assets/skills/card_legendary_08_fireball.png", rarity: "legendary", badgeVal: "50%", desc: "Every 3 turns, launch a blazing fireball dealing 50% splash fire damage.", type: "legendary", procEvery: 3, dmgMult: 0.50, dotBurn: 0.12 },
-    { id: 309, key: "legendary_09_earthquake", name: "Earthquake", icon: "assets/skills/skill_legendary_09_earthquake.png", cardImg: "assets/skills/card_legendary_09_earthquake.png", rarity: "legendary", badgeVal: "60%", desc: "Rupture the ground dealing 60% damage with 20% Stun chance. DEF +15.", type: "legendary", stunChance: 0.20, dmgMult: 0.60, defBonus: 15 },
-    { id: 310, key: "legendary_10_magic_book", name: "Magic Book", icon: "assets/skills/skill_legendary_10_magic_book.png", cardImg: "assets/skills/card_legendary_10_magic_book.png", rarity: "legendary", badgeVal: "+25%", desc: "Ancient floating grimoire: +25% Rage gain, +8% all stats, +40% Ultimate power!", type: "legendary", rageBoost: 0.25, ultMult: 1.40, allStatsBonus: 0.08 },
+    { id: 301, key: "legendary_01_flaming_sword", name: "Flaming Sword", icon: "assets/skills/painted-v2/skill_301.png", cardImg: "assets/skills/card_legendary_01_flaming_sword.png", rarity: "legendary", badgeVal: "+15%", desc: "Engulf weapon in eternal hellfire: +15% ATK, strikes deal 125% fire damage & burn.", type: "legendary", atkBonus: 0.15, dotBurn: 0.15, dmgMult: 1.25 },
+    { id: 302, key: "legendary_02_thunder_hammer", name: "Thunder Hammer", icon: "assets/skills/painted-v2/skill_302.png", cardImg: "assets/skills/card_legendary_02_thunder_hammer.png", rarity: "legendary", badgeVal: "55%", desc: "Every 3 turns, smite foe with Thunder Hammer dealing 55% Shock damage & 20% Stun!", type: "legendary", procEvery: 3, dmgMult: 0.55, stunChance: 0.20, effect: "thunder" },
+    { id: 303, key: "legendary_03_guardian_shield", name: "Guardian Shield", icon: "assets/skills/painted-v2/skill_303.png", cardImg: "assets/skills/card_legendary_03_guardian_shield.png", rarity: "legendary", badgeVal: "20%", desc: "Golden winged aegis: +20 DEF, 20% Max HP shield, reflects 15% damage.", type: "legendary", defBonus: 20, shieldRatio: 0.20, reflectRatio: 0.15 },
+    { id: 304, key: "legendary_04_healing_aura", name: "Healing Aura", icon: "assets/skills/painted-v2/skill_304.png", cardImg: "assets/skills/card_legendary_04_healing_aura.png", rarity: "legendary", badgeVal: "6%", desc: "Sacred golden light surrounds you: restore 6% Max HP every turn, Max HP +15%.", type: "legendary", turnRegen: 0.06, hpBonus: 0.15 },
+    { id: 305, key: "legendary_05_tornado", name: "Tornado", icon: "assets/skills/painted-v2/skill_305.png", cardImg: "assets/skills/card_legendary_05_tornado.png", rarity: "legendary", badgeVal: "+15%", desc: "Howling twin cyclones grant +15% Dodge, counterattack on dodge with double strikes!", type: "legendary", dodgeBonus: 0.15, counterOnDodge: true, multiHits: 2 },
+    { id: 306, key: "legendary_06_dark_pulse", name: "Dark Pulse", icon: "assets/skills/painted-v2/skill_306.png", cardImg: "assets/skills/card_legendary_06_dark_pulse.png", rarity: "legendary", badgeVal: "12%", desc: "Emanate void waves: 12% Lifesteal, execute non-boss monsters below 10% HP.", type: "legendary", lifesteal: 0.12, dmgMult: 1.15, executeThreshold: 0.10 },
+    { id: 307, key: "legendary_07_multi_arrow", name: "Multi Arrow", icon: "assets/skills/painted-v2/skill_307.png", cardImg: "assets/skills/card_legendary_07_multi_arrow.png", rarity: "legendary", badgeVal: "3x", desc: "Fire a barrage of 3 magic arrows for 40% damage each. +10% Crit Rate.", type: "legendary", multiHits: 3, hitDmgRatio: 0.40, critBonus: 0.10 },
+    { id: 308, key: "legendary_08_fireball", name: "Fireball", icon: "assets/skills/painted-v2/skill_308.png", cardImg: "assets/skills/card_legendary_08_fireball.png", rarity: "legendary", badgeVal: "50%", desc: "Every 3 turns, launch a blazing fireball dealing 50% splash fire damage.", type: "legendary", procEvery: 3, dmgMult: 0.50, dotBurn: 0.12 },
+    { id: 309, key: "legendary_09_earthquake", name: "Earthquake", icon: "assets/skills/painted-v2/skill_309.png", cardImg: "assets/skills/card_legendary_09_earthquake.png", rarity: "legendary", badgeVal: "60%", desc: "Rupture the ground dealing 60% damage with 20% Stun chance. DEF +15.", type: "legendary", stunChance: 0.20, dmgMult: 0.60, defBonus: 15 },
+    { id: 310, key: "legendary_10_magic_book", name: "Magic Book", icon: "assets/skills/painted-v2/skill_310.png", cardImg: "assets/skills/card_legendary_10_magic_book.png", rarity: "legendary", badgeVal: "+25%", desc: "Ancient floating grimoire: +25% Rage gain, +8% all stats, +40% Ultimate power!", type: "legendary", rageBoost: 0.25, ultMult: 1.40, allStatsBonus: 0.08 },
 
     // --- 6 Authentic Mythic Skills (EXCLUSIVE TO GOLDEN CHESTS!) ---
-    { id: 401, key: "mythic_01_blood_blade", name: "Blood Blade", icon: "assets/skills/skill_mythic_01_blood_blade.png", cardImg: "assets/skills/card_mythic_01_blood_blade.png", rarity: "mythic", isChestExclusive: true, badgeVal: "15%", desc: "Cursed sanguis scythe: +15% ATK, 15% Lifesteal on all hits, restore 12% HP on kill!", type: "mythic", lifesteal: 0.15, atkBonus: 0.15, onKillHeal: 0.12 },
-    { id: 402, key: "mythic_02_dragon_roar", name: "Dragon Roar", icon: "assets/skills/skill_mythic_02_dragon_roar.png", cardImg: "assets/skills/card_mythic_02_dragon_roar.png", rarity: "mythic", isChestExclusive: true, badgeVal: "+15%", desc: "Summon the fiery avatar of an ancient dragon! +15% ATK, +10% Crit, 40% opener roar!", type: "mythic", atkBonus: 0.15, startCombatDmg: 0.40, critBonus: 0.10 },
-    { id: 403, key: "mythic_03_black_hole", name: "Black Hole", icon: "assets/skills/skill_mythic_03_black_hole.png", cardImg: "assets/skills/card_mythic_03_black_hole.png", rarity: "mythic", isChestExclusive: true, badgeVal: "25%", desc: "Spawn a cosmic gravity singularity every 4 turns, dealing 25% ATK damage & granting -8% incoming damage.", type: "mythic", dmgReduction: 0.08, dmgMult: 0.25, procEvery: 4 },
-    { id: 404, key: "mythic_04_angel_blessing", name: "Angel Blessing", icon: "assets/skills/skill_mythic_04_angel_blessing.png", cardImg: "assets/skills/card_mythic_04_angel_blessing.png", rarity: "mythic", isChestExclusive: true, badgeVal: "40%", desc: "Golden wings & halo: Revive with 40% HP upon defeat! +6% HP regen each turn, +20% Holy Shield.", type: "mythic", reviveOnce: true, reviveHpRatio: 0.40, turnRegen: 0.06, shieldRatio: 0.20 },
-    { id: 405, key: "mythic_05_meteor_strike", name: "Meteor Strike", icon: "assets/skills/skill_mythic_05_meteor_strike.png", cardImg: "assets/skills/card_mythic_05_meteor_strike.png", rarity: "mythic", isChestExclusive: true, badgeVal: "160%", desc: "Summon colossal apocalyptic meteors! Ultimate deals 160% calamity damage and burns for 20% ATK.", type: "mythic", ultMult: 1.60, startCombatDmg: 0.35, dotBurn: 0.20 },
-    { id: 406, key: "mythic_06_demon_form", name: "Demon Form", icon: "assets/skills/skill_mythic_06_demon_form.png", cardImg: "assets/skills/card_mythic_06_demon_form.png", rarity: "mythic", isChestExclusive: true, badgeVal: "+20%", desc: "Transform into horned Shadow Demon Capybara! +20% ATK, +25% Crit DMG, +20% ATK when low HP!", type: "mythic", atkBonus: 0.20, critDmgBonus: 0.25, allStatsBonus: 0.10, lowHpAtkBonus: 0.20 },
+    { id: 401, key: "mythic_01_blood_blade", name: "Blood Blade", icon: "assets/skills/painted-v2/skill_401.png", cardImg: "assets/skills/card_mythic_01_blood_blade.png", rarity: "mythic", isChestExclusive: true, badgeVal: "15%", desc: "Cursed sanguis scythe: +15% ATK, 15% Lifesteal on all hits, restore 12% HP on kill!", type: "mythic", lifesteal: 0.15, atkBonus: 0.15, onKillHeal: 0.12 },
+    { id: 402, key: "mythic_02_dragon_roar", name: "Dragon Roar", icon: "assets/skills/painted-v2/skill_402.png", cardImg: "assets/skills/card_mythic_02_dragon_roar.png", rarity: "mythic", isChestExclusive: true, badgeVal: "+15%", desc: "Summon the fiery avatar of an ancient dragon! +15% ATK, +10% Crit, 40% opener roar!", type: "mythic", atkBonus: 0.15, startCombatDmg: 0.40, critBonus: 0.10 },
+    { id: 403, key: "mythic_03_black_hole", name: "Black Hole", icon: "assets/skills/painted-v2/skill_403.png", cardImg: "assets/skills/card_mythic_03_black_hole.png", rarity: "mythic", isChestExclusive: true, badgeVal: "25%", desc: "Spawn a cosmic gravity singularity every 4 turns, dealing 25% ATK damage & granting -8% incoming damage.", type: "mythic", dmgReduction: 0.08, dmgMult: 0.25, procEvery: 4 },
+    { id: 404, key: "mythic_04_angel_blessing", name: "Angel Blessing", icon: "assets/skills/painted-v2/skill_404.png", cardImg: "assets/skills/card_mythic_04_angel_blessing.png", rarity: "mythic", isChestExclusive: true, badgeVal: "40%", desc: "Golden wings & halo: Revive with 40% HP upon defeat! +6% HP regen each turn, +20% Holy Shield.", type: "mythic", reviveOnce: true, reviveHpRatio: 0.40, turnRegen: 0.06, shieldRatio: 0.20 },
+    { id: 405, key: "mythic_05_meteor_strike", name: "Meteor Strike", icon: "assets/skills/painted-v2/skill_405.png", cardImg: "assets/skills/card_mythic_05_meteor_strike.png", rarity: "mythic", isChestExclusive: true, badgeVal: "160%", desc: "Summon colossal apocalyptic meteors! Ultimate deals 160% calamity damage and burns for 20% ATK.", type: "mythic", ultMult: 1.60, startCombatDmg: 0.35, dotBurn: 0.20 },
+    { id: 406, key: "mythic_06_demon_form", name: "Demon Form", icon: "assets/skills/painted-v2/skill_406.png", cardImg: "assets/skills/card_mythic_06_demon_form.png", rarity: "mythic", isChestExclusive: true, badgeVal: "+20%", desc: "Transform into horned Shadow Demon Capybara! +20% ATK, +25% Crit DMG, +20% ATK when low HP!", type: "mythic", atkBonus: 0.20, critDmgBonus: 0.25, allStatsBonus: 0.10, lowHpAtkBonus: 0.20 },
 
     // Classic & Utility Roguelike Skills
-    { id: 0, name: "Rage Heal", icon: "assets/skills/skill_003.png", rarity: "rare", badgeVal: "15%", desc: "Whenever Rage hits 100%, immediately restore 15% Max HP.", type: "defense", rageHealRatio: 0.15 },
-    { id: 1, name: "Thunderclap", icon: "assets/skills/skill_001.png", rarity: "rare", badgeVal: "50%", desc: "Every 3 turns, strike a bolt dealing 50% ATK damage.", type: "element", procEvery: 3, dmgMult: 0.50, effect: "thunder" },
-    { id: 3, name: "Vampire Bite", icon: "assets/skills/skill_003.png", rarity: "epic", badgeVal: "12%", desc: "Heal for 12% of all physical damage dealt.", type: "passive", lifesteal: 0.12 },
-    { id: 4, name: "Iron Hide", icon: "assets/skills/skill_004.png", rarity: "common", badgeVal: "+15%", desc: "Increase Max HP by 15% and DEF by 8.", type: "stat", hpBonus: 0.15, defBonus: 8 },
-    { id: 5, name: "Sharp Claws", icon: "assets/skills/skill_005.png", rarity: "common", badgeVal: "+10%", desc: "Increase ATK by 10% and Crit Rate by +6%.", type: "stat", atkBonus: 0.10, critBonus: 0.06 },
-    { id: 6, name: "Frost Nova", icon: "assets/skills/skill_006.png", rarity: "rare", badgeVal: "15%", desc: "15% chance to freeze enemy for 1 turn upon attacking.", type: "element", freezeChance: 0.15 },
-    { id: 7, name: "Wind Dash", icon: "assets/skills/skill_007.png", rarity: "uncommon", badgeVal: "+10%", desc: "Increase Dodge chance by +10%. Counterattack on dodge!", type: "passive", dodgeBonus: 0.10, counterOnDodge: true },
-    { id: 9, name: "Citrus Blessing", icon: "assets/skills/skill_009.png", rarity: "legendary", badgeVal: "+15%", desc: "Balance a Yuzu fruit on head: +15% ATK, +15% HP, +8% Crit!", type: "legendary", atkBonus: 0.15, hpBonus: 0.15, critBonus: 0.08 },
-    { id: 11, name: "Double Strike", icon: "assets/skills/skill_011.png", rarity: "epic", badgeVal: "20%", desc: "20% chance to attack twice in a single turn.", type: "attack", doubleHitChance: 0.20 },
-    { id: 14, name: "Gold Miner", icon: "assets/skills/skill_014.png", rarity: "common", badgeVal: "+25%", desc: "Increase Gold earned from all encounters by +25%.", type: "utility", goldBonus: 0.25 },
-    { id: 16, name: "Phoenix Heart", icon: "assets/skills/skill_016.png", rarity: "legendary", badgeVal: "35%", desc: "Revive once per adventure run with 35% HP!", type: "legendary", reviveOnce: true },
-    { id: 25, name: "Lucky Clover", icon: "assets/skills/skill_025.png", rarity: "rare", badgeVal: "+20%", desc: "Increase chance of finding higher tier equipment by 20%.", type: "utility", lootQuality: 0.20 },
-    { id: 30, name: "Capybara Zen", icon: "assets/skills/skill_030.png", rarity: "legendary", badgeVal: "+10%", desc: "Maximum chill: Immune to Freeze, Stun, and Burn. +10% All Stats.", type: "legendary", crowdControlImmune: true, allStatsBonus: 0.10 },
-    { id: 40, name: "King's Mandate", icon: "assets/skills/skill_040.png", rarity: "legendary", badgeVal: "+50%", desc: "Increase gold & gem drops by +50%. +15% ATK and +15 DEF.", type: "legendary", goldBonus: 0.50, gemBonus: 0.50, atkBonus: 0.15, defBonus: 15 },
-    { id: 41, name: "Critical Recovery", icon: "assets/skills/skill_common_04_heal.png", badge: "assets/skills/badge_crit_recovery.svg", rarity: "common", badgeVal: "30%", desc: "At <30% HP for the 1st time, restore 10% HP each round for 3 rounds.", type: "defense" },
-    { id: 42, name: "Critical Frenzy", icon: "assets/skills/skill_common_01_sword_slash.png", badge: "assets/skills/badge_crit_frenzy.svg", rarity: "common", badgeVal: "50%", desc: "At <50% HP, ATK, DEF ↑ ↑ .", type: "stat" },
-    { id: 43, name: "Swift Revenge", icon: "assets/skills/skill_common_07_vortex.png", badge: "assets/skills/badge_swift_revenge.svg", rarity: "common", badgeVal: "100%", desc: "Round 1 Counter Rate +100%.", type: "passive" }
+    { id: 0, name: "Rage Heal", icon: "assets/skills/painted-v2/skill_0.png", rarity: "rare", badgeVal: "15%", desc: "Whenever Rage hits 100%, immediately restore 15% Max HP.", type: "defense", rageHealRatio: 0.15 },
+    { id: 1, name: "Thunderclap", icon: "assets/skills/painted-v2/skill_1.png", rarity: "rare", badgeVal: "50%", desc: "Every 3 turns, strike a bolt dealing 50% ATK damage.", type: "element", procEvery: 3, dmgMult: 0.50, effect: "thunder" },
+    { id: 3, name: "Vampire Bite", icon: "assets/skills/painted-v2/skill_3.png", rarity: "epic", badgeVal: "12%", desc: "Heal for 12% of all physical damage dealt.", type: "passive", lifesteal: 0.12 },
+    { id: 4, name: "Iron Hide", icon: "assets/skills/painted-v2/skill_4.png", rarity: "common", badgeVal: "+15%", desc: "Increase Max HP by 15% and DEF by 8.", type: "stat", hpBonus: 0.15, defBonus: 8 },
+    { id: 5, name: "Sharp Claws", icon: "assets/skills/painted-v2/skill_5.png", rarity: "common", badgeVal: "+10%", desc: "Increase ATK by 10% and Crit Rate by +6%.", type: "stat", atkBonus: 0.10, critBonus: 0.06 },
+    { id: 6, name: "Frost Nova", icon: "assets/skills/painted-v2/skill_6.png", rarity: "rare", badgeVal: "15%", desc: "15% chance to freeze enemy for 1 turn upon attacking.", type: "element", freezeChance: 0.15 },
+    { id: 7, name: "Wind Dash", icon: "assets/skills/painted-v2/skill_7.png", rarity: "uncommon", badgeVal: "+10%", desc: "Increase Dodge chance by +10%. Counterattack on dodge!", type: "passive", dodgeBonus: 0.10, counterOnDodge: true },
+    { id: 9, name: "Citrus Blessing", icon: "assets/skills/painted-v2/skill_9.png", rarity: "legendary", badgeVal: "+15%", desc: "Balance a Yuzu fruit on head: +15% ATK, +15% HP, +8% Crit!", type: "legendary", atkBonus: 0.15, hpBonus: 0.15, critBonus: 0.08 },
+    { id: 11, name: "Double Strike", icon: "assets/skills/painted-v2/skill_11.png", rarity: "epic", badgeVal: "20%", desc: "20% chance to attack twice in a single turn.", type: "attack", doubleHitChance: 0.20 },
+    { id: 14, name: "Gold Miner", icon: "assets/skills/painted-v2/skill_14.png", rarity: "common", badgeVal: "+25%", desc: "Increase Gold earned from all encounters by +25%.", type: "utility", goldBonus: 0.25 },
+    { id: 16, name: "Phoenix Heart", icon: "assets/skills/painted-v2/skill_16.png", rarity: "legendary", badgeVal: "35%", desc: "Revive once per adventure run with 35% HP!", type: "legendary", reviveOnce: true },
+    { id: 25, name: "Lucky Clover", icon: "assets/skills/painted-v2/skill_25.png", rarity: "rare", badgeVal: "+20%", desc: "Increase chance of finding higher tier equipment by 20%.", type: "utility", lootQuality: 0.20 },
+    { id: 30, name: "Capybara Zen", icon: "assets/skills/painted-v2/skill_30.png", rarity: "legendary", badgeVal: "+10%", desc: "Maximum chill: Immune to Freeze, Stun, and Burn. +10% All Stats.", type: "legendary", crowdControlImmune: true, allStatsBonus: 0.10 },
+    { id: 40, name: "King's Mandate", icon: "assets/skills/painted-v2/skill_40.png", rarity: "legendary", badgeVal: "+50%", desc: "Increase gold & gem drops by +50%. +15% ATK and +15 DEF.", type: "legendary", goldBonus: 0.50, gemBonus: 0.50, atkBonus: 0.15, defBonus: 15 },
+    { id: 41, name: "Critical Recovery", icon: "assets/skills/painted-v2/skill_41.png", badge: "assets/skills/badge_crit_recovery.svg", rarity: "common", badgeVal: "30%", desc: "At <30% HP for the 1st time, restore 10% HP each round for 3 rounds.", type: "defense" },
+    { id: 42, name: "Critical Frenzy", icon: "assets/skills/painted-v2/skill_42.png", badge: "assets/skills/badge_crit_frenzy.svg", rarity: "common", badgeVal: "50%", desc: "At <50% HP, ATK, DEF ↑ ↑ .", type: "stat" },
+    { id: 43, name: "Swift Revenge", icon: "assets/skills/painted-v2/skill_43.png", badge: "assets/skills/badge_swift_revenge.svg", rarity: "common", badgeVal: "100%", desc: "Round 1 Counter Rate +100%.", type: "passive" }
   ],
 
   // Equipment Database
@@ -355,7 +357,7 @@ const GameData = {
     { id: "t_vitality", name: "Sturdy Resilience", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_armor.png", desc: "+45 Base HP per rank", costBase: 100, costMult: 1.5, maxRank: 20, stat: "hp", valPerRank: 45 },
     { id: "t_fur", name: "Thick Fur Armor", icon: "assets/ui/capybara_cartoon_kit/equipment_icons/equipment_helmet.png", desc: "+3 Base DEF per rank", costBase: 120, costMult: 1.5, maxRank: 20, stat: "def", valPerRank: 3 },
     { id: "t_greed", name: "Treasure Sniffer", icon: "assets/items/loot/loot_001.png", desc: "+6% Gold gain per rank", costBase: 150, costMult: 1.6, maxRank: 10, stat: "goldBonus", valPerRank: 0.06 },
-    { id: "t_spirit", name: "Fiery Spirit", icon: "assets/ui/capybara_cartoon_kit/bars/rage_fill.png", desc: "Start runs with +10 initial Rage", costBase: 200, costMult: 1.8, maxRank: 5, stat: "startRage", valPerRank: 10 },
+    { id: "t_spirit", name: "Fiery Spirit", icon: "assets/ui/cartoon-painted-v2/fire.png", desc: "Start runs with +10 initial Rage", costBase: 200, costMult: 1.8, maxRank: 5, stat: "startRage", valPerRank: 10 },
     { id: "t_fortune", name: "Citrus Fortune", icon: "assets/skills/skill_009.png", desc: "+3% Epic/Legendary drop chance", costBase: 300, costMult: 2.0, maxRank: 5, stat: "luck", valPerRank: 0.03 }
   ],
 

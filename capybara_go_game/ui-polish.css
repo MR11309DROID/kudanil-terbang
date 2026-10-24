@@ -1,0 +1,72 @@
+/* UI motion stays on transforms/opacity; gameplay and skill artwork are untouched. */
+:root{--ui-ease:cubic-bezier(.2,.75,.25,1)}
+#game-container{min-height:0}
+#game-body{min-height:0}
+@media(max-width:480px){#game-container{height:100dvh;max-height:100dvh}}
+.menu-left-widgets{align-items:center;gap:8px;left:7px;width:72px}
+.menu-left-widgets .quick-btn-stack{align-self:flex-start;margin-left:-3px;max-height:220px;gap:10px;padding:5px 4px 12px;scroll-snap-type:y proximity;scroll-padding-block:6px;transition:opacity .24s var(--ui-ease),transform .28s var(--ui-ease)}
+.menu-left-widgets .quick-sidebar-btn{scroll-snap-align:start}
+.menu-left-widgets .quick-btn-stack{mask-image:linear-gradient(to bottom,#000 calc(100% - 8px),transparent)}
+.menu-left-widgets .quick-sidebar-btn.sidebar96{transition:transform .23s var(--ui-ease)}
+.menu-left-widgets .btn-menu-drawer{width:38px;height:36px;border-radius:10px}
+.menu-left-widgets .newbie-gifts-widget{width:49px;min-height:49px}
+.menu-left-widgets .newbie-gifts-img{width:36px;height:36px}
+.sidebar96.qbtn-daily .sidebar-ref-art{animation:ui98-gift 4.8s ease-in-out infinite}
+.sidebar96 .sidebar-wheel-disc{animation:ui98-wheel 5.6s var(--ui-ease) infinite}
+.sidebar96.qbtn-achieve .sidebar-ref-art{animation:ui98-trophy 5.2s ease-in-out infinite;transform-origin:50% 85%;will-change:transform}
+.sidebar96.qbtn-pass .sidebar-ref-art{animation:ui98-medal 5.8s ease-in-out infinite}
+.sidebar96.qbtn-gacha .sidebar-ref-art{animation:ui98-jar 3.8s ease-in-out infinite}
+.menu-left-widgets .sidebar96.qbtn-daily::after,.menu-left-widgets .sidebar96.qbtn-achieve::after{width:9px;height:9px;animation-duration:3.6s}
+.menu-left-widgets .qbtn-pets .qbtn-icon{animation:ui98-paw 5s ease-in-out infinite;transform-origin:50% 90%}
+.menu-left-widgets .sidebar96.qbtn-achieve .sidebar-ref-art{animation-delay:-1.4s}
+.menu-left-widgets .sidebar96.qbtn-pass .sidebar-ref-art{animation-delay:-2.7s}
+.menu-left-widgets .sidebar96.qbtn-gacha .sidebar-ref-art{animation-delay:-1s}
+.menu-left-widgets .quick-btn-stack.collapsed *{animation-play-state:paused!important}
+@keyframes ui98-gift{0%,55%,100%{transform:scale(1) rotate(0)}65%{transform:translate3d(0,-2px,0) scale(1.045) rotate(-2deg)}75%{transform:scale(1.015) rotate(2deg)}85%{transform:scale(1) rotate(-.6deg)}}
+@keyframes ui98-wheel{0%,42%,100%{transform:rotate(0)}60%{transform:rotate(24deg)}76%{transform:rotate(-10deg)}90%{transform:rotate(3deg)}}
+@keyframes ui98-trophy{0%,55%,100%{transform:translate3d(0,0,0) rotate(0)}67%{transform:translate3d(0,-2px,0) rotate(-2deg)}80%{transform:translate3d(0,-1px,0) rotate(1.5deg)}}
+@keyframes ui98-medal{0%,48%,100%{transform:rotate(0)}61%{transform:rotate(-3deg)}74%{transform:rotate(2.5deg)}87%{transform:rotate(-1deg)}}
+@keyframes ui98-jar{0%,100%{transform:translate3d(0,0,0) rotate(-.6deg)}50%{transform:translate3d(0,-3px,0) rotate(.6deg)}}
+@keyframes ui98-paw{0%,62%,100%{transform:rotate(0)}72%{transform:rotate(-8deg)}82%{transform:rotate(6deg)}92%{transform:rotate(-2deg)}}
+
+/* A single aligned row, with enough room between the secondary actions and Start. */
+.menu-action-center-col{gap:0}
+.ev-home-shortcuts{gap:22px;margin-bottom:20px;align-items:flex-end}
+.ev-home-shortcut{height:76px;gap:4px;padding:0 0 2px;transition:transform .22s var(--ui-ease)}
+.ev-home-shortcut>span{font-size:12px;line-height:15px;letter-spacing:.1px}
+.ev-home-shortcuts .menu-milestone-chest-wrap{height:76px!important}
+.ev-home-shortcuts .milestone-chest-img{animation:ui98-chest 5.5s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes ui98-chest{0%,65%,100%{transform:translate3d(0,0,0) rotate(0)}76%{transform:translate3d(0,-3px,0) rotate(-3deg)}87%{transform:translate3d(0,-1px,0) rotate(2deg)}}
+#btn-start-run{animation:ui98-start 3.4s ease-in-out infinite;transition:transform .22s var(--ui-ease);will-change:transform}
+#btn-start-run::after{content:'';position:absolute;inset:4px;border:1px solid #fff5b1;border-radius:inherit;pointer-events:none;animation:ui98-start-rim 3.4s ease-in-out infinite;will-change:transform,opacity}
+#btn-start-run:active{animation-play-state:paused;transform:translate3d(0,3px,0) scale(.97)}
+@keyframes ui98-start{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(0,-2px,0) scale(1.025)}}
+@keyframes ui98-start-rim{0%,20%,100%{opacity:0;transform:scale(1)}55%{opacity:.75;transform:scale(1.045,1.14)}85%{opacity:0;transform:scale(1.07,1.23)}}
+
+/* Equal nav hit areas and visible captions, without the old map chevrons. */
+#bottom-nav{gap:4px;padding:5px 8px 7px;height:74px;flex-shrink:0}
+#bottom-nav .nav-tab-btn{min-width:0;min-height:58px;gap:1px;border-radius:11px;transition:transform .22s var(--ui-ease)}
+#bottom-nav .tab-adventure-btn{flex:1.25}
+#bottom-nav .nav-adv-chevron-left,#bottom-nav .nav-adv-chevron-right{display:none}
+#bottom-nav .nav-tab-icon-wrap{width:38px;height:36px}
+#bottom-nav .nav-tab-img{width:34px;height:34px;transition:transform .24s var(--ui-ease)}
+#bottom-nav .nav-adventure-capsule{margin-top:0;padding:4px 5px;min-height:58px;width:100%;box-sizing:border-box;gap:0;transition:none}
+#bottom-nav .nav-adventure-img{width:46px;height:33px}
+#bottom-nav .nav-tab-label{font:11px/14px CapyDisplay,'Lilita One',sans-serif;font-weight:400;letter-spacing:0;margin:0;color:#c8ced6;text-shadow:0 1px #101623;white-space:nowrap}
+#bottom-nav .nav-tab-btn.active .nav-tab-label{color:#ffe090;text-shadow:0 1px #40301c}
+#bottom-nav .nav-tab-btn.active::before{top:1px;height:2px;box-shadow:none}
+#bottom-nav .tab-adventure-btn.active::before{content:none}
+#game-container>.erva-guide-help{margin:9px auto 11px;padding:8px 17px;min-height:34px;line-height:16px}
+.ev-scroll{overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#a58b63 transparent}
+.ev-heading h2{overflow-wrap:anywhere}
+.ev-button{min-height:40px;transition:transform .2s var(--ui-ease)}
+.ev-heading .ev-close{flex-shrink:0;min-width:36px;min-height:36px}
+@media(hover:hover){.menu-left-widgets .quick-sidebar-btn.sidebar96:hover,.ev-home-shortcut:hover{transform:translate3d(0,-3px,0) scale(1.035)}#bottom-nav .nav-tab-btn:hover{transform:translate3d(0,-2px,0)}}
+@media(max-width:360px){#bottom-nav{gap:2px;padding-inline:5px}#bottom-nav .nav-tab-label{font-size:9px}.ev-home-shortcuts{gap:18px;margin-bottom:16px}#game-container>.erva-guide-help{margin:6px auto 8px;padding:6px 15px}}
+@media(max-height:650px){.menu-left-widgets{gap:5px}.menu-left-widgets .quick-btn-stack{gap:8px;max-height:147px}#bottom-nav{height:64px;padding-block:3px}#bottom-nav .nav-tab-btn,#bottom-nav .nav-adventure-capsule{min-height:52px}#game-container>.erva-guide-help{margin:4px auto 6px;flex-basis:28px;min-height:28px;padding:4px 14px}.ev-home-shortcuts{margin-bottom:12px}.ev-home-shortcut{height:64px}.ev-home-shortcut>img{width:48px;height:44px}.ev-home-shortcuts .menu-milestone-chest-wrap{height:64px!important}.ev-home-shortcuts .milestone-chest-img{width:52px!important;height:48px!important}#btn-start-run{height:60px}}
+@media(max-height:650px){.menu-left-widgets{gap:4px;width:64px}.menu-left-widgets .btn-menu-drawer{width:32px;height:30px}.menu-left-widgets .newbie-gifts-widget{width:43px;min-height:41px}.menu-left-widgets .newbie-gifts-img{width:30px;height:30px}.menu-left-widgets .btn-toggle-quick-stack{width:54px;height:28px;min-height:28px}.menu-left-widgets .btn-toggle-quick-stack .toggle-stack-label{font-size:11px}.menu-left-widgets .quick-btn-stack{width:74px;max-height:114px;gap:6px;padding:4px 4px 8px}.menu-left-widgets .quick-sidebar-btn.sidebar96,.menu-left-widgets .qbtn-pets{width:52px;height:50px;min-height:50px}.menu-left-widgets .qbtn-pets .qbtn-icon{height:26px;min-height:26px;line-height:26px}.menu-left-widgets .qbtn-pets .bold-ui-icon{width:25px;height:25px}.menu-left-widgets .qbtn-pets>span:last-child{font-size:10px}}
+html[data-graphics=low] .menu-left-widgets .sidebar96 .sidebar-ref-art,html[data-graphics=low] .menu-left-widgets .sidebar96 .sidebar-wheel-disc,html[data-graphics=low] .menu-left-widgets .sidebar96::after,html[data-graphics=low] .qbtn-pets .qbtn-icon,html[data-graphics=low] #btn-start-run,html[data-graphics=low] #btn-start-run::after,html[data-graphics=low] .ev-home-shortcuts .milestone-chest-img{animation:none;will-change:auto}
+html.ui98-paused .menu-left-widgets *,html.ui98-paused #btn-start-run,html.ui98-paused #btn-start-run::after,html.ui98-paused .ev-home-shortcuts .milestone-chest-img{animation-play-state:paused!important}
+html.ui98-guiding .menu-left-widgets *,html.ui98-guiding #btn-start-run,html.ui98-guiding #btn-start-run::after,html.ui98-guiding .ev-home-shortcuts .milestone-chest-img,.quick-sidebar-btn.ui98-sleep *,.quick-sidebar-btn.ui98-sleep::after{animation-play-state:paused!important}
+html[lang=ja] #bottom-nav .nav-tab-label{font-family:'Yu Gothic UI',Meiryo,sans-serif;font-size:10px;font-weight:700}
+@media(prefers-reduced-motion:reduce){.menu-left-widgets *,.ev-home-shortcuts *,#btn-start-run,#btn-start-run::after{animation:none!important;will-change:auto}#bottom-nav *,#btn-start-run,.ev-home-shortcut,.ev-button{transition:none!important}}

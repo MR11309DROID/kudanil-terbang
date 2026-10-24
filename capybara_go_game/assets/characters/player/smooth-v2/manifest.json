@@ -1,0 +1,31 @@
+{
+  "fps": 120,
+  "cell": 128,
+  "columns": 12,
+  "animations": {
+    "idle": {
+      "file": "assets/characters/player/smooth-v2/idle.png",
+      "frames": 240,
+      "duration": 2000,
+      "loop": true
+    },
+    "walk": {
+      "file": "assets/characters/player/smooth-v2/walk.png",
+      "frames": 96,
+      "duration": 800,
+      "loop": true
+    },
+    "attack": {
+      "file": "assets/characters/player/smooth-v2/attack.png",
+      "frames": 72,
+      "duration": 600,
+      "loop": false
+    },
+    "hurt": {
+      "file": "assets/characters/player/smooth-v2/hurt.png",
+      "frames": 60,
+      "duration": 500,
+      "loop": false
+    }
+  }
+}

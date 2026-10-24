@@ -299,6 +299,9 @@ class UIManager {
       let touchStartX = 0;
       let touchStartY = 0;
       stageVp.addEventListener("touchstart", (e) => {
+        touchStartX = 0;
+        touchStartY = 0;
+        if (e.target.closest?.(".menu-left-widgets,button")) return;
         if (e.touches && e.touches.length === 1) {
           touchStartX = e.touches[0].clientX;
           touchStartY = e.touches[0].clientY;
@@ -342,7 +345,7 @@ class UIManager {
       btnNewbie.addEventListener("click", (e) => {
         e.stopPropagation();
         Sound.playSfx("click");
-        this.showToast("🎁 Hadiah Pemula: Hari ke-1 telah diklaim! Hadiah berikutnya dalam 6h 23j.");
+        this.openPlaytimeGifts?.();
       });
     }
 
@@ -352,7 +355,7 @@ class UIManager {
       btnMilestone.addEventListener("click", (e) => {
         e.stopPropagation();
         Sound.playSfx("click");
-        this.showToast("🎁 Milestone Hari 40: Bertahan hingga Hari 40 untuk klaim 500 🪙 & 50 💎!");
+        this.openJourneyRewards?.();
       });
     }
 
@@ -404,8 +407,12 @@ class UIManager {
     const toggleMaster = document.getElementById("toggle-sound-master");
     const toggleBgm = document.getElementById("toggle-sound-bgm");
     const toggleSfx = document.getElementById("toggle-sound-sfx");
+    const toggleClean = document.getElementById("toggle-clean-ui");
+    toggleClean?.addEventListener("click",()=>this.toggleFullUI());
 
     const syncUI = () => {
+      const clean = document.getElementById("game-container")?.classList.contains("zen-ui-hidden") || false;
+      if(toggleClean){toggleClean.classList.toggle("active",clean);toggleClean.setAttribute("aria-checked",String(clean));toggleClean.querySelector(".switch-label").textContent=clean?"ON":"OFF";}
       if (toggleMaster) {
         const isOn = !Sound.muted;
         toggleMaster.classList.toggle("active", isOn);
@@ -603,6 +610,11 @@ class UIManager {
 
     if (btnOpen) {
       btnOpen.addEventListener("click", () => {
+        if (btnOpen.disabled || this._chestOpening) return;
+        this._chestOpening = true;
+        btnOpen.disabled = true;
+        btnOpen.textContent = "Opening…";
+        const openingRun = Character.activeRun;
         const closedImg = document.getElementById("treasure-img-closed");
         if (closedImg) {
           closedImg.style.animation = "chestImpactShake 0.22s ease-in-out";
@@ -610,6 +622,8 @@ class UIManager {
         Sound.playSfx("chestOpen");
 
         setTimeout(() => {
+          this._chestOpening = false;
+          if (Character.activeRun !== openingRun || !modal || modal.style.display === "none") return;
           const findPhase = document.getElementById("treasure-phase-find");
           const openPhase = document.getElementById("treasure-phase-open");
           if (findPhase) findPhase.style.display = "none";
@@ -633,6 +647,8 @@ class UIManager {
           modal.classList.remove("open");
         }
 
+        // Persist collection before any later travel or reload.
+        if (Character.activeRun) Character.activeRun.chapterChestPending = false;
         // Clear chest flags
         this.hasPendingChest = false;
         if (this.engine) this.engine.hasPendingChest = false;
@@ -718,16 +734,22 @@ class UIManager {
     const pickedOthers = [];
     for (const sk of shuffledOthers) {
       if (pickedOthers.length >= 2) break;
-      if (sk.id !== pickedMythic.id && !pickedOthers.some(o => o.id === sk.id)) {
+      if (sk.id !== pickedMythic?.id && !pickedOthers.some(o => o.id === sk.id)) {
         pickedOthers.push(sk);
       }
     }
 
     // Combine 3 distinct cards (1 Mythic + 2 High-Tier)
-    const candidates = [pickedMythic, ...pickedOthers];
+    const candidates = [pickedMythic, ...pickedOthers].filter(Boolean);
+    if (candidates.length < 3) {
+      for (const skill of GameData.skills) {
+        if (candidates.length >= 3) break;
+        if (!candidates.some(s => s.id === skill.id)) candidates.push(skill);
+      }
+    }
     candidates.sort((a, b) => {
       const order = { mythic: 0, legendary: 1, epic: 2, rare: 3, uncommon: 4, common: 5 };
-      return (order[a.rarity] || 9) - (order[b.rarity] || 9);
+      return (order[a.rarity] ?? 9) - (order[b.rarity] ?? 9);
     });
 
     this._currentChestOfferedCards = candidates;
@@ -795,6 +817,9 @@ class UIManager {
     const btnClaim = document.getElementById("btn-treasure-claim");
 
     this._selectedChestSkill = null;
+    this._chestOpening = false;
+    const btnOpen = document.getElementById("btn-treasure-open");
+    if (btnOpen) { btnOpen.disabled = false; btnOpen.textContent = "Open"; }
     if (btnClaim) {
       btnClaim.disabled = true;
       btnClaim.textContent = "Select a Skill";
@@ -814,8 +839,16 @@ class UIManager {
   }
 
   triggerFallingChest(options = {}) {
+    const chapterRun = Character.activeRun;
+    if (!chapterRun) return false;
+    if (chapterRun.chapterChestSpawned && !options.resume) return false;
+    if (!options.resume && chapterRun.day < Math.max(1, (chapterRun.maxDays || 60) - 5)) return false;
     const renderer = this.engine && this.engine.renderer;
     if (!renderer) return;
+
+    chapterRun.chapterChestSpawned = true;
+    chapterRun.chapterChestPending = true;
+    Character.save();
 
     // Set pending chest flags immediately so neither auto-advance nor Next Day skips it
     this.hasPendingChest = true;
@@ -1044,7 +1077,7 @@ class UIManager {
     list.querySelectorAll(".chapter-select-item").forEach(item => {
       item.addEventListener("click", () => {
         const chId = parseInt(item.getAttribute("data-chid"), 10);
-        if (chId) {
+        if (chId && chId <= Character.unlockedChapters) {
           Sound.playSfx("click");
           Character.selectedChapter = chId;
           Character.save();
@@ -1163,7 +1196,11 @@ class UIManager {
 
     const chapterId = run.chapterId || 1;
     // Format: Chapter-Day like 1-1, 2-1 or Day number
-    if (startNode) startNode.textContent = `${chapterId}-${Math.max(1, run.day)}`;
+    if (startNode) startNode.textContent = Math.max(1, run.day);
+    const dayLabel = document.querySelector(".stage-day-label");
+    if (dayLabel) dayLabel.textContent = `Day ${Math.min(run.day, run.maxDays || 60)}`;
+    const track = document.querySelector(".stage-day-capsule");
+    if (track) track.setAttribute("aria-label", `Day ${run.day} of ${run.maxDays || 60}`);
     
     // Milestones ahead: next boss, elite combat, chapter boss
     const nextBossDay = Math.min(run.maxDays || 60, Math.ceil(run.day / 20) * 20);
@@ -1175,7 +1212,7 @@ class UIManager {
     if (bossNode) bossNode.textContent = nextBossDay;
 
     if (fillBar) {
-      const pct = Math.min(100, Math.max(10, Math.round(((run.day % 20 || 1) / 20) * 100)));
+      const pct = Math.min(100, Math.max(0, Math.round((((Math.max(1, run.day) - 1) % 20 + 1) / 20) * 100)));
       fillBar.style.width = `${pct}%`;
     }
   }
@@ -1365,6 +1402,22 @@ class UIManager {
     });
   }
 
+  getEventChoiceAppearance(opt) {
+    const action = opt.action || "nothing";
+    const heal = ["heal_pct", "heal_full", "hp_boost", "yuzu_spa"].includes(action);
+    const gold = ["gold_reward", "add_gold"].includes(action);
+    const gems = ["gems_reward", "add_gems"].includes(action);
+    const power = ["atk_boost", "skill_select", "def_boost"].includes(action);
+    const risk = /gamble|curse|sacrifice/.test(action);
+    const tone = heal ? "mint" : gold ? "gold" : gems ? "violet" : power ? "peach" : risk ? "rose" : "sky";
+    const icon = heal ? "♥" : gold ? "◈" : gems ? "✦" : power ? "⚔" : risk ? "⚄" : "➜";
+    const percent = Math.round((opt.val || 0) * 100);
+    const details = {heal_pct: "Restore " + percent + "% HP", heal_full: "Restore HP and gain a blessing", hp_boost: "+" + percent + "% Max HP", yuzu_spa: "Restore all HP · Fill Rage", gold_reward: "+" + (opt.val || 0) + " Gold", gems_reward: "+" + (opt.val || 0) + " Gems", add_gems: "+" + (opt.val || 0) + " Gems", atk_boost: "+" + percent + "% ATK", skill_select: "Choose a new skill"};
+    let description = opt.desc || details[action] || (risk ? "Take a chance on a surprise reward" : "Continue your adventure");
+    if (opt.costGold) description += " · " + opt.costGold + " Gold";
+    return {tone, icon, description};
+  }
+
   renderAdventureEvent(event) {
     const feed = document.getElementById("event-cards-feed");
     const deck = document.getElementById("adventure-event-deck");
@@ -1529,9 +1582,10 @@ class UIManager {
       let optionsHtml = `<div class="event-choice-list" style="margin-top: 6px;">`;
       def.options.forEach((opt, idx) => {
         optionsHtml += `
-          <button class="event-choice-capsule-btn" data-choice="${idx}">
-            <strong>${opt.label}</strong>
-            <small>${opt.desc}</small>
+          <button type="button" class="event-choice-capsule-btn choice-${this.getEventChoiceAppearance(opt).tone}" data-choice="${idx}">
+            <span class="choice-emblem" aria-hidden="true">${this.getEventChoiceAppearance(opt).icon}</span>
+            <span class="choice-copy"><strong>${opt.label}</strong><small>${this.getEventChoiceAppearance(opt).description}</small></span>
+            <span class="choice-arrow" aria-hidden="true">›</span>
           </button>
         `;
       });
@@ -1552,18 +1606,22 @@ class UIManager {
         btn.addEventListener("click", (e) => {
           const idx = parseInt(btn.dataset.choice, 10);
           Sound.playSfx("click");
+          const choiceList = btn.parentElement;
+          if (!choiceList || choiceList.dataset.resolved === "true") return;
           const res = this.engine.resolveNarrativeChoice(idx);
           if (res && res.success) {
-            btn.parentElement.innerHTML = `<div class="event-choice-resolved">✨ <span class="highlight-blue">${res.msg || 'Success'}</span></div>`;
+            choiceList.dataset.resolved = "true";
+            choiceList.innerHTML = `<div class="event-choice-resolved">✨ <span class="highlight-blue">${res.msg || 'Success'}</span></div>`;
             this.renderRunStatsBar();
             this.renderStageFloatingHeader();
             if (res.goldWon) {
-              this.triggerCoinFountain(btn.parentElement, res.goldWon);
+              this.triggerCoinFountain(choiceList, res.goldWon);
             }
             if (res.gemsWon) {
-              this.triggerGemFountain(btn.parentElement, res.gemsWon);
+              this.triggerGemFountain(choiceList, res.gemsWon);
             }
-            this.setTravelButtonState("ready", "Next Day");
+            if (res.pendingSkill) { this.setTravelButtonState("combat", "Choose a Skill"); const travel=document.getElementById("btn-travel-next"); if(travel)travel.disabled=true; }
+            else this.setTravelButtonState("ready", "Next Day");
           } else if (res && !res.success) {
             this.showToast(res.msg);
           }
@@ -1652,91 +1710,64 @@ class UIManager {
 
   playFortuneWinSequence(fortune, onComplete) {
     const banner = document.getElementById("fortune-win-banner");
-    const container = document.querySelector(".adventure-run-container");
-
-    if (!banner) {
-      if (onComplete) onComplete();
+    const button = document.getElementById("btn-travel-next");
+    if (!banner) { if (onComplete) onComplete(); return; }
+    // A single reveal owns the button and callback until the next card arrives.
+    if (this._winRevealCleanup) this._winRevealCleanup();
+    const run = Character.activeRun;
+    const timers = [];
+    let finished = false;
+    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+    const cleanup = () => {
+      timers.forEach(clearTimeout);
+      banner.style.display = "none";
+      banner.className = "fortune-win-banner";
+      banner.style.removeProperty("--win-bottom");
+      this._winRevealCleanup = null;
+    };
+    this._winRevealCleanup = cleanup;
+    // The reference shows the event card underneath the win title from the start.
+    if (onComplete) onComplete();
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      cleanup();
+      if (Character.activeRun === run) this.setTravelButtonState("ready", "Next Day");
+    };
+    const category = fortune?.category || "Minor Fortune";
+    if (button) {
+      button.disabled = true;
+      // Anchor the title to the actual button, including small-screen layouts.
+      const parent = banner.offsetParent || banner.parentElement;
+      const parentRect = parent.getBoundingClientRect();
+      const buttonRect = button.getBoundingClientRect();
+      banner.style.setProperty("--win-bottom", Math.max(40, parentRect.bottom - buttonRect.top - 2) + "px");
+    }
+    if (category === "Bad Luck" || category === "Misfortune") {
+      Sound.playBadLuckThud();
+      later(finish, 240);
       return;
     }
-
-    const cat = fortune ? (fortune.category || "Minor Fortune") : "Minor Fortune";
-
-    if (cat === "Major Fortune") {
-      // 1. Initial State: Minor Win with cyan light aura, rotating sunburst & chime (Matches Video 0:04)
-      banner.style.display = "flex";
-      banner.className = "fortune-win-banner state-minor-win";
-      this.setWinBannerText("Minor Win");
-      Sound.playMinorWin();
-
-      // 2. Sudden Dramatic Escalation at 460ms -> Big Win (Matches Video 0:05-0:07)
-      setTimeout(() => {
-        // Shockwave expansion ring
-        const ring = banner.querySelector(".win-shockwave-ring");
-        if (ring) {
-          ring.classList.remove("trigger");
-          void ring.offsetWidth;
-          ring.classList.add("trigger");
-        }
-
-        // Screen rumble & flash
-        if (container) {
-          container.classList.remove("win-flash-fx", "win-rumble-fx");
-          void container.offsetWidth;
-          container.classList.add("win-flash-fx", "win-rumble-fx");
-          setTimeout(() => container.classList.remove("win-flash-fx", "win-rumble-fx"), 400);
-        }
-
-        // Transform into Big Win (Golden rays + punchy bounce + fanfare)
+    banner.style.opacity = "";
+    banner.style.transform = "";
+    banner.style.transition = "";
+    banner.className = "fortune-win-banner state-minor-win";
+    this.setWinBannerText("Minor Win");
+    banner.style.display = "flex";
+    Sound.playMinorWin();
+    const major = category === "Major Fortune";
+    if (major) {
+      // The cyan title dips into the button before the gold title bursts upward.
+      later(() => banner.classList.add("win-upgrading"), 560);
+      later(() => {
+        if (Character.activeRun !== run) { cleanup(); return; }
         banner.className = "fortune-win-banner state-big-win";
         this.setWinBannerText("Big Win");
         Sound.playBigWin();
-
-        // 3. Fade out smoothly and reveal card at ~1350ms
-        setTimeout(() => {
-          banner.style.transition = "opacity 0.22s ease-out, transform 0.22s ease-out";
-          banner.style.opacity = "0";
-          banner.style.transform = "translateX(-50%) translateY(-18px) scale(1.08)";
-          setTimeout(() => {
-            banner.style.display = "none";
-            banner.style.opacity = "";
-            banner.style.transform = "";
-            banner.style.transition = "";
-            if (onComplete) onComplete();
-          }, 220);
-        }, 900);
-      }, 460);
-
-    } else if (cat === "Bad Luck" || cat === "Misfortune") {
-      // Bad Luck: quick ominous flash & thud
-      Sound.playBadLuckThud();
-      if (container) {
-        container.classList.add("win-flash-fx");
-        setTimeout(() => container.classList.remove("win-flash-fx"), 250);
-      }
-      setTimeout(() => {
-        if (onComplete) onComplete();
-      }, 250);
-
-    } else {
-      // Minor Fortune: stays Minor Win
-      banner.style.display = "flex";
-      banner.className = "fortune-win-banner state-minor-win";
-      this.setWinBannerText("Minor Win");
-      Sound.playMinorWin();
-
-      setTimeout(() => {
-        banner.style.transition = "opacity 0.22s ease-out, transform 0.22s ease-out";
-        banner.style.opacity = "0";
-        banner.style.transform = "translateX(-50%) translateY(-15px) scale(1.05)";
-        setTimeout(() => {
-          banner.style.display = "none";
-          banner.style.opacity = "";
-          banner.style.transform = "";
-          banner.style.transition = "";
-          if (onComplete) onComplete();
-        }, 220);
-      }, 750);
+      }, 700);
     }
+    later(() => banner.classList.add("win-exit"), major ? 1380 : 850);
+    later(finish, major ? 1600 : 1070);
   }
 
   showStageGoldPill(duration = 2400) {
@@ -1811,7 +1842,7 @@ class UIManager {
         let targetInner = null;
         const allPills = sourceElementOrPoint.querySelectorAll ? sourceElementOrPoint.querySelectorAll(".card-pill-capsule") : [];
         for (const p of allPills) {
-          if (p.textContent.toLowerCase().includes("gold") || p.textContent.includes("🪙")) {
+          if ((window.GameLocale?.originalText(p)||p.textContent).toLowerCase().includes("gold") || p.textContent.includes("🪙")) {
             targetInner = p;
             break;
           }
@@ -1968,7 +1999,7 @@ class UIManager {
         let targetInner = null;
         const allPills = sourceElementOrPoint.querySelectorAll ? sourceElementOrPoint.querySelectorAll(".card-pill-capsule") : [];
         for (const p of allPills) {
-          if (p.textContent.toLowerCase().includes("gem") || p.textContent.includes("💎")) {
+          if ((window.GameLocale?.originalText(p)||p.textContent).toLowerCase().includes("gem") || p.textContent.includes("💎")) {
             targetInner = p;
             break;
           }
@@ -2096,6 +2127,7 @@ class UIManager {
     const travelBtn = document.getElementById("btn-travel-next");
     const btnText = document.getElementById("next-day-btn-text");
     if (!travelBtn || !btnText) return;
+    if (this._winRevealCleanup && state === "ready") { travelBtn.disabled = true; return; }
 
     travelBtn.classList.remove("state-ready", "state-moving", "state-chest");
 
@@ -2144,6 +2176,12 @@ class UIManager {
       }
     }
 
+    if (this.engine.currentEvent?.type === "narrative") {
+      this.setTravelButtonState("combat", "Make a Choice");
+      const button = document.getElementById("btn-travel-next");
+      if (button) button.disabled = true;
+      return;
+    }
     this.setTravelButtonState("moving");
     this.engine.travelNextDay();
   }
@@ -2435,6 +2473,13 @@ class UIManager {
     for (const [slot, item] of Object.entries(Character.equipped)) {
       const slotEl = document.getElementById(`slot-${slot}`);
       if (!slotEl) continue;
+      this._gearSlotSnapshots??=new WeakMap();
+      const snapshot=JSON.stringify(item);
+      if(this._gearSlotSnapshots.get(slotEl)===snapshot&&slotEl.firstChild){
+        slotEl.onclick=item?()=>this.showItemDetailsModal(item,true):null;
+        continue;
+      }
+      this._gearSlotSnapshots.set(slotEl,snapshot);
 
       if (item) {
         const displayImg = item.icon || item.cardImg;
@@ -2491,8 +2536,11 @@ class UIManager {
 
     // 6. Fill Inventory Grid (Sorted by Quality & Filtered by Category)
     const invGrid = document.getElementById("inventory-grid");
-    if (invGrid) {
-      invGrid.innerHTML = "";
+    const inventorySnapshot=JSON.stringify([this.inventoryFilter||'all',Character.inventory]);
+    if (invGrid && (this._gearInventorySnapshot!==inventorySnapshot || !invGrid.firstChild)) {
+      this._gearInventorySnapshot=inventorySnapshot;
+      const inventoryFragment=document.createDocumentFragment();
+      invGrid.replaceChildren();
       if (!Character.inventory || Character.inventory.length === 0) {
         invGrid.innerHTML = `<div class="empty-inv-msg">🎒 Tas perlengkapan kosong. Buka peti di Shop untuk mendapatkan gear!</div>`;
       } else {
@@ -2561,7 +2609,7 @@ class UIManager {
               Sound.playSfx("click");
               this.showItemDetailsModal(it, false);
             });
-            invGrid.appendChild(itemEl);
+            inventoryFragment.appendChild(itemEl);
           });
 
           // Pad out with aesthetic empty slot placeholders so grid fills cleanly to a multiple of 5 (min 15 slots)
@@ -2570,10 +2618,12 @@ class UIManager {
             const emptyTile = document.createElement("div");
             emptyTile.className = "inv-empty-slot-tile";
             emptyTile.innerHTML = `<span class="empty-slot-cross">+</span>`;
-            invGrid.appendChild(emptyTile);
+            inventoryFragment.appendChild(emptyTile);
           }
         }
       }
+      if(inventoryFragment.childNodes.length)invGrid.append(inventoryFragment);
+      this.prepareEquipmentImages();
     }
 
     // 7. Update Center Paperdoll Avatar if Common Showcase Gear is Equipped
@@ -2581,12 +2631,27 @@ class UIManager {
     if (avatarImg) {
       const showcaseSrc = this.getEquippedShowcaseAvatar();
       if (showcaseSrc) {
-        avatarImg.src = showcaseSrc;
+        if(avatarImg.getAttribute('src')!==showcaseSrc)avatarImg.src = showcaseSrc;
         avatarImg.classList.add("equipped-showcase");
       } else {
         avatarImg.classList.remove("equipped-showcase");
       }
     }
+  }
+
+  prepareEquipmentImages() {
+    if(this._gearDecodeQueued)return;
+    this._gearDecodeQueued=true;
+    const warm=()=>{
+      this._gearDecodeQueued=false;this._gearDecodedSources??=new Set();
+      for(const img of document.querySelectorAll('#tab-equipment img')){
+        const source=img.getAttribute('src');if(!source||!img.decode||this._gearDecodedSources.has(source))continue;
+        img.decoding='async';this._gearDecodedSources.add(source);
+        img.decode().catch(()=>this._gearDecodedSources.delete(source));
+      }
+    };
+    const schedule=()=>{if(window.requestIdleCallback)window.requestIdleCallback(warm,{timeout:2000});else setTimeout(warm,250);};
+    if(window.IconIntegrity?.ready)window.IconIntegrity.ready.then(schedule);else schedule();
   }
 
   getEquippedShowcaseAvatar() {
@@ -2906,7 +2971,7 @@ class UIManager {
       const btnEl = document.getElementById(`btn-upgrade-${st.key}`);
 
       if (lvlEl) lvlEl.textContent = `Lv.${lvl}`;
-      if (bonusEl) bonusEl.textContent = `${st.bonusPrefix}${lvl * st.perLvl}`;
+      if (bonusEl) bonusEl.textContent = `${st.bonusPrefix}${Character.getCoreStatBonus(st.key)}`;
       if (costEl) costEl.textContent = cost.toLocaleString();
       if (btnEl) btnEl.disabled = !canAfford;
     });
@@ -2921,22 +2986,32 @@ class UIManager {
       return;
     }
 
-    if (Character.upgradeCoreStat(statKey)) {
+    const beforePower = Character.getCombatPower();
+    const approach = this.coreUpgradeApproaches?.[statKey] || 'steady';
+    if (Character.upgradeCoreStat(statKey, approach)) {
       Sound.playSfx("confirm");
       const statNames = { hp: "HP", atk: "ATK", def: "DEF" };
       const card = document.getElementById(`card-upgrade-${statKey}`);
       if (card) {
         const floatEl = document.createElement("div");
         floatEl.className = "stat-float-text";
-        floatEl.textContent = `+${statKey === 'atk' ? 3 : (statKey === 'hp' ? 30 : 1)} ${statNames[statKey]}!`;
+        floatEl.textContent = `+${Character.lastCoreUpgradeResult.gain} ${statNames[statKey]}!`;
         card.appendChild(floatEl);
         setTimeout(() => floatEl.remove(), 800);
       }
 
       this.renderTalentsScreen();
       this.renderHeader();
+      this.playTalentUpgrade(statKey, beforePower, Character.getCombatPower());
       if (this.renderEquipmentScreen) this.renderEquipmentScreen();
+    } else if (Character.lastCoreUpgradeResult?.attempted) {
+      Sound.playSfx('cancel');
+      this.showToast(`Training failed · ${cost} Gold spent. Existing stats are safe.`, 'info');
+      this.renderTalentsScreen();
+      this.renderHeader();
+      return Character.lastCoreUpgradeResult;
     }
+    return Character.lastCoreUpgradeResult;
   }
 
   claimMilestone(milestone) {
@@ -3576,6 +3651,7 @@ class UIManager {
       if (this.showToast) this.showToast("Already claimed today! Come back tomorrow! 🌟", "info");
       return;
     }
+    window.dispatchEvent(new CustomEvent("erva-reward-claimed"));
     Sound.playSfx && Sound.playSfx("chest");
     this.renderDailyLoginModal();
     this.renderHeader();
@@ -3910,9 +3986,9 @@ class UIManager {
       ctx.font = "900 12px 'Lilita One', 'Fredoka', cursive, sans-serif";
       ctx.lineWidth = 3;
       ctx.strokeStyle = "#271104";
-      ctx.strokeText(slot.label, innerR - 9, 4);
+      ctx.strokeText(window.GameLocale?.text(slot.label) ?? slot.label, innerR - 9, 4);
       ctx.fillStyle = slot.textColor || "#271104";
-      ctx.fillText(slot.label, innerR - 9, 4);
+      ctx.fillText(window.GameLocale?.text(slot.label) ?? slot.label, innerR - 9, 4);
 
       // --- Custom Vector Icon (inner slice area) ---
       const iconX = 42;
@@ -4633,12 +4709,14 @@ class UIManager {
     const btn = document.getElementById("btn-toggle-quick-stack");
     if (!stack) return;
     const isCollapsed = stack.classList.toggle("collapsed");
+    stack.inert = isCollapsed;
     if (btn) {
+      btn.setAttribute("aria-expanded", String(!isCollapsed));
       btn.classList.toggle("collapsed", isCollapsed);
       const icon = btn.querySelector(".toggle-stack-icon");
       const label = btn.querySelector(".toggle-stack-label");
       if (icon) icon.textContent = isCollapsed ? "▼" : "▲";
-      if (label) label.textContent = isCollapsed ? "Menu" : "Sembunyi";
+      if (label) label.textContent = isCollapsed ? "Tampilkan" : "Sembunyi";
       btn.title = isCollapsed ? "Tampilkan Menu Pintas" : "Sembunyikan Menu Pintas";
     }
   }
@@ -4649,6 +4727,8 @@ class UIManager {
     const container = document.getElementById("game-container");
     if (!container) return;
     const isHidden = container.classList.toggle("zen-ui-hidden");
+    const cleanSwitch = document.getElementById("toggle-clean-ui");
+    if(cleanSwitch){cleanSwitch.classList.toggle("active",isHidden);cleanSwitch.setAttribute("aria-checked",String(isHidden));cleanSwitch.querySelector(".switch-label").textContent=isHidden?"ON":"OFF";}
     const zenBtn = document.getElementById("btn-toggle-zen-ui");
     if (zenBtn) {
       zenBtn.classList.toggle("active", isHidden);
@@ -4659,7 +4739,7 @@ class UIManager {
       zenBtn.title = isHidden ? "Kembalikan Tampilan UI" : "Sembunyikan Seluruh UI (Mode Bersih)";
     }
     if (this.showToast && isHidden) {
-      this.showToast("Mode Bersih aktif! Ketuk tombol atau panggung untuk menampilkan UI ✨", "info");
+      this.showToast("Clean UI is on. Tap the scene to show controls again.", "info");
     }
   }
 }
